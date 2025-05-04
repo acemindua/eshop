@@ -10,34 +10,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Клонуємо репозиторій
       - name: 📥 Checkout code
         uses: actions/checkout@v3
 
+      # Встановлюємо Node.js для фронтенду
       - name: 🧰 Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: 📦 Install frontend dependencies
+      # Встановлюємо залежності фронтенду і збираємо Vite
+      - name: 📦 Install frontend dependencies and build
         run: |
-          cd resources/frontend
+          cd resources/js
           npm install
           npm run build
 
+      # Встановлюємо PHP для бекенду
       - name: 🧪 Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
 
+      # Встановлюємо залежності Laravel через Composer
       - name: 📦 Install composer dependencies
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      # Встановлюємо SSH-ключ для доступу до сервера
       - name: 🔐 Install SSH key
         uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # Деплой через rsync
       - name: 🚀 Deploy via rsync over SSH
         run: |
           rsync -avz --delete \
