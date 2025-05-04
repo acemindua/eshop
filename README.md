@@ -1,0 +1,260 @@
+## API Податкова
+
+## Install
+
+-   npm install
+-   composer install
+-   php artisan optimize:clear
+-   composer run dev
+-   npm run dev
+-   php artisan reverb:start --debug
+-   php artisan storage:link
+
+
+## v2.00.00
+
+## v1.01.02 Chat Update
+
+## v1.01.01 Update Layout
+
+-   npm i lodash.debounce
+-   composer require rinvex/countries
+
+## v1.01.00 Chat Laravel Reverb (websocket)
+
+-   php artisan make:controller \App\Http\Controllers\App\TelegramController
+-   php artisan install:broadcasting
+-   php artisan reverb:start --debug
+-   php artisan make:model -m Message
+-   php artisan make:controller API\MessageController --model=Message --resource --requests --api
+-   php artisan make:event MessageEvent
+
+## v1.00.26
+
+-   php artisan make:controller API\ProductVariantController --model=ProductVariant --resource --api
+
+## v1.00.25 Images Collections Product
+
+-   npm i sortablejs
+-   npm i swiper
+-   php artisan make:controller API/ProductMediaController --model=Product --resource --api
+
+## v1.00.24 Product Variants & Attributes
+
+-   php artisan make:model Attribute -m
+-   php artisan make:model AttributeTranslation -m
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\AttributeController --model=Attribute --resource --requests
+-   php artisan make:resource AttributeResource
+
+-   php artisan make:model AttributeValue -m
+-   php artisan make:model AttributeValueTranslation -m
+-   php artisan make:controller API\AttributeValueController --api --resource
+
+-   php artisan make:model ProductVariant -m
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\ProductVariantController --model=ProductVariant --resource --requests
+-   php artisan make:resource ProductVariantResource
+
+## v1.00.23 Manufacturers
+
+-   php artisan make:model Manufacturer -m
+-   php artisan make:model ManufacturerTranslation -m
+-   php artisan make:policy ManufacturerPolicy --model=Manufacturer
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\ManufacturerController --model=Manufacturer --resource --requests
+-   php artisan make:resource ManufacturerResource
+-   php artisan make:migration add_manufacturer_column_to_products_table --table=products
+-   php artisan migrate
+-   php artisan make:seeder ManufacturerSeeder
+-   php artisan make:factory ManufacturerFactory
+-   php artisan db:seed --class=ManufacturerSeeder
+
+## v1.00.22 Laravel-breadcrumbs [Instruction](https://velog.io/@corean/Laravel-9-inertia-1.0-breadcrumbs)
+
+-   composer require diglactic/laravel-breadcrumbs
+-   php artisan vendor:publish --tag=breadcrumbs-config
+
+-   composer require robertboes/inertia-breadcrumbs
+-   php artisan vendor:publish --tag="inertia-breadcrumbs-config"
+
+## v1.00.21 Combobox
+
+## v1.00.20 CKEditor
+
+-   npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic
+-   php artisan make:controller API/UploadImageController
+-   php artisan storage:link
+-   npm update
+-   php artisan optimize:clear
+
+## v1.00.19
+
+-   npm install -g npm@11.2.0
+
+## v1.00.18 Login/Registration Form
+
+## v1.00.17 Country
+
+-   php artisan make:model Country -m
+-   php artisan make:seeder CountrySeeder
+-   php artisan make:migration add_column_to_products_table --table=products
+-   php artisan db:seed --class=CountrySeeder
+-   php artisan make:resource CountryResource
+
+## v1.00.16 Google Auth
+
+-   composer require laravel/socialite
+-   php artisan make:controller GoogleAuthController
+
+## v1.00.15 Alert Message
+
+## v1.00.14 Api
+
+-   php artisan install:api
+-   php artisan make:controller API/UserController --model=User --resource --api
+-   php artisan make:controller API/ProductController --model=Product --resource --api
+
+## v1.00.13 Localization
+
+-   php artisan make:middleware Localization
+-   php artisan make:controller LanguageController
+
+## v1.00.12 Policies
+
+-   php artisan make:policy UserPolicy --model=User
+-   php artisan make:policy RolePolicy --model=Role
+-   php artisan make:policy LanguagePolicy --model=Language
+-   php artisan make:policy CategoryPolicy --model=Category
+-   php artisan make:policy OrderPolicy --model=Order
+-   php artisan make:policy ProductPolicy --model=Product
+
+## v1.00.11 zodexnl/spatie-permission-to-vue-inertia
+
+-   composer require zodexnl/spatie-permission-to-vue-inertia
+-   npm run build
+-   php artisan optimize:clear
+
+## v1.00.10 Автоматичне створення Laravel Permissions при створенні нових моделей
+
+-   php artisan make:model Order -m
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\OrderController --model=Order --resource --requests
+-   php artisan make:resource OrderResource
+
+````
+```
+    $modelName = 'order'; // Тут можна змінити
+    $permissions = ['view', 'create', 'update', 'delete'];
+
+    foreach ($permissions as $action) {
+        $permissionName = "{$modelName}-{$action}";
+        if (!Permission::where('name', $permissionName)->exists()) {
+            Permission::create(['name' => $permissionName, 'guard_name' => 'web']);
+        }
+    }
+
+```
+````
+
+## v1.00.9
+
+-   php artisan make:controller \App\Http\Controllers\App\Settings\RolePermissionController --resource
+
+## v1.00.8
+
+-   php artisan make:factory CategoryFactory
+-   php artisan make:seeder CategorySeeder
+-   php artisan db:seed --class=CategorySeeder
+
+-   php artisan make:factory ProductFactory
+-   php artisan make:seeder ProductSeeder
+-   php artisan db:seed --class=ProductSeeder
+
+-   php artisan make:seeder PostsAndCategoriesTableSeeder
+-   php artisan db:seed --class=PostsAndCategoriesTableSeeder
+
+## v1.00.7 e-Commerce
+
+-   php artisan make:model Category -m
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\CategoryController --model=Category --resource --requests
+-   php artisan make:model Product -m
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\ProductController --model=Product --resource --requests
+-   php artisan make:resource CategoryResource
+-   php artisan make:resource ProductResource
+
+## translatable
+
+-   php artisan make:model CategoryTranslation -m
+-   php artisan make:model ProductTranslation -m
+
+## v1.00.6
+
+-   npm install -D tailwindcss postcss autoprefixer
+-   Profile Login
+
+## v1.00.5 Laravel-medialibrary
+
+[Laravel-medialibrary](https://spatie.be/docs/laravel-medialibrary/v11/installation-setup)
+
+-   composer require "spatie/laravel-medialibrary"
+-   php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
+-   php artisan migrate
+-   php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-config"
+
+-   php artisan storage:link
+
+## v1.00.4
+
+-   npm i @headlessui/vue
+-   npm i vue-the-mask
+
+## v1.00.3
+
+[Add Locales](https://laravel-lang.com/usage-add-locales.html)
+
+-   composer require laravel-lang/common
+-   composer require laravel-lang/locales
+-   php artisan lang:update
+-   php artisan lang:publish
+
+-   npm i laravel-vue-i18n
+
+## v1.00.2 Laravel Localization & translatable
+
+-   php artisan make:model Language -m
+-   php artisan make:controller \App\Http\Controllers\App\LanguageController --model=Language --resource --requests
+-   php artisan make:resource LanguageResource
+
+-   composer require astrotomic/laravel-translatable
+-   php artisan vendor:publish --tag=translatable
+
+-   composer require mcamara/laravel-localization
+-   php artisan vendor:publish --provider="Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider"
+
+**[VUE FLAGS](https://www.npmjs.com/package/vue-flag-icon)**
+
+-   npm i --save vue-flag-icon
+
+## v1.00.1
+
+-   php artisan make:migration add_column_to_users_table --table=users
+-   php artisan make:seeder UserSeeder
+-   php artisan make:seeder CreateSuperUserSeeder
+-   php artisan make:seeder CreateRolesAndPermissionsSeeder
+
+-   php artisan make:resource UserResource
+
+-   composer require spatie/laravel-permission
+-   php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+-   php artisan optimize:clear
+-   php artisan config:clear
+
+-   php artisan make:middleware LastUserActivity
+
+## v1.00.0
+
+-   npm i @tabler/icons-vue
+
+-   php artisan make:controller \App\Http\Controllers\App\UserController --model=User --resource --requests
+
+-   php artisan make:controller \App\Http\Controllers\App\DashboardController
+-   php artisan make:controller \App\Http\Controllers\Main\HomeController
+
+## Laravel v11.30.0 (PHP v8.2.12)
