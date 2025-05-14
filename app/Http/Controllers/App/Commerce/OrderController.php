@@ -13,13 +13,7 @@ use Inertia\Response;
 
 class OrderController extends Controller
 {
-
-    public $data;
-
-    public function __construct()
-    {
-        $this->data = [];
-    }
+    function __construct(public int $pages = 15,  public array $data = []) {}
 
     /**
      * Display a listing of the resource.

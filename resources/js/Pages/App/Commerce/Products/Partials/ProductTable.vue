@@ -72,7 +72,7 @@ const props = defineProps({
                     <td class="p-2">
                         <Link :href="route('admin.products.edit', item.id)">
                             <IconEdit
-                                :stroke="2"
+                                :stroke="1"
                                 size="18"
                                 class="text-indigo-500 mx-auto"
                             />

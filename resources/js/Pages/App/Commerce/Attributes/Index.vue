@@ -1,120 +1,109 @@
+<!-- app/Commerce/Products/Index -->
+<script setup>
+import { ref, computed, watch } from "vue";
+import { router } from "@inertiajs/vue3";
+import debounce from "lodash.debounce";
+
+// Tabler icons
+import { IconCloudDown, IconPlus } from "@tabler/icons-vue";
+
+// Layouts & Components
+import Layout from "@/Shared/Themes/Layouts/CommerceLayout.vue";
+import VarDump from "@/Shared/VarDump.vue";
+
+// UI Components
+import FilterInput from "@/Shared/Themes/App/Components/Inputs/FilterInput.vue";
+import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.vue";
+import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";
+
+// Table Component
+import AttributeTable from "./Partials/AttributeTable.vue";
+
+const props = defineProps({
+    data: Object,
+    filters: Object,
+});
+
+const items = computed(() => props.data.items.data || []);
+const meta = computed(() => props.data.items.meta || []);
+
+const searchText = ref(props.filters.search);
+const loading = ref(false);
+
+watch(
+    searchText,
+    debounce((value) => {
+        router.get(
+            route("admin.attributes.index"),
+            { search: value },
+            { preserveState: true, replace: true }
+        );
+    }, 500)
+);
+
+const importRequest = () => {
+    // TODO: Implement import logic
+    return false;
+};
+</script>
+
 <template>
     <Layout>
-        <section>
-            <div>
-                <Link :href="route('admin.attributes.create')">{{
-                    $t("Create")
-                }}</Link>
+        <section class="flex w-full items-start justify-between">
+            <div class="flex flex-col w-full max-w-sm space-y-2">
+                <div class="inline-flex rounded-md shadow-xs" role="group">
+                    <button
+                        type="button"
+                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+                    >
+                        Profile
+                    </button>
+                    <button
+                        type="button"
+                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+                    >
+                        Settings
+                    </button>
+                    <button
+                        type="button"
+                        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+                    >
+                        Messages
+                    </button>
+                </div>
+                <div class="w-full max-w-sm">
+                    <FilterInput v-model="searchText" class="w-full" />
+                </div>
             </div>
 
-            <div>
-                <section class="overflow-x-auto m-4 border bg-white">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr
-                                class="text-xs uppercase text-slate-600 text-thin divide-x"
-                            >
-                                <th scope="col" class="p-2 text-start">
-                                    Title
-                                </th>
+            <div class="flex flex-col w-full max-w-sm space-y-2">
+                <div class="inline-flex items-center space-x-2 justify-end">
+                    <SecondaryButton
+                        @click="importRequest"
+                        :disabled="loading"
+                        :class="{ 'opacity-50': loading }"
+                    >
+                        <template #icon><IconCloudDown :stroke="2" /></template>
+                        <span>Import</span>
+                    </SecondaryButton>
 
-                                <th scope="col" class="p-2">Status</th>
-                                <th scope="col" class="p-2">
-                                    <IconSettings
-                                        stroke="{2}"
-                                        size="18"
-                                        class="mx-auto"
-                                    />
-                                </th>
-                                <th scope="col" class="p-2">Id</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-if="items.length > 0"
-                                v-for="item in items"
-                                :key="item.id"
-                                class="hover:bg-slate-50 border-t border-slate-200 dark:border-slate-700 dark:hover:bg-slate-950/25 odd:bg-white dark:odd:bg-slate-900 even:bg-slate-50 dark:even:bg-slate-800"
-                            >
-                                <td scope="row" class="p-2">
-                                    {{ item.title }}
-                                </td>
-
-                                <td scope="row" class="p-2">
-                                    <div class="flex justify-center w-ful">
-                                        <BadgeStatus :active="item.status" />
-                                    </div>
-                                </td>
-                                <td
-                                    scope="row"
-                                    class="flex space-x-2 items-center justify-center p-2"
-                                >
-                                    <Link
-                                        :href="
-                                            route(
-                                                'admin.attributes.edit',
-                                                item.id
-                                            )
-                                        "
-                                    >
-                                        <IconEdit
-                                            stroke="{2}"
-                                            size="18"
-                                            class="text-blue-500"
-                                        />
-                                    </Link>
-                                </td>
-                                <td
-                                    scope="row"
-                                    class="p-2 text-center text-slate-500"
-                                >
-                                    {{ item.id }}
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot v-if="meta.links && meta.links.length > 3">
-                            <tr>
-                                <td
-                                    scope="row"
-                                    colspan="100%"
-                                    class="border-t px-4"
-                                >
-                                    <Pagination
-                                        :links="meta.links"
-                                        :total="meta.total"
-                                        :from="meta.from"
-                                        :to="meta.to"
-                                    />
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </section>
+                    <PrimaryButton
+                        as="Link"
+                        :href="route('admin.attributes.create')"
+                        :disabled="loading"
+                        :class="{ 'opacity-50': loading }"
+                    >
+                        <template #icon><IconPlus :stroke="2" /></template>
+                        <span>{{ $t("Add") }}</span>
+                    </PrimaryButton>
+                </div>
             </div>
         </section>
+
+        <AttributeTable :items="items" :meta="meta" />
+
         <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="data" />
         </section>
     </Layout>
 </template>
-
-<script setup>
-import BadgeStatus from "@/Components/BadgeStatus.vue";
-import Pagination from "@/Components/Pagination.vue";
-import Layout from "@/Layouts/AppLayout.vue";
-import VarDump from "@/Shared/VarDump.vue";
-import { computed } from "vue";
-import { IconSettings, IconEdit } from "@tabler/icons-vue";
-
-const props = defineProps({
-    data: Object,
-});
-
-const items = computed(() => {
-    return props.data.items.data || [];
-});
-
-const meta = computed(() => {
-    return props.data.items.meta || [];
-});
-</script>

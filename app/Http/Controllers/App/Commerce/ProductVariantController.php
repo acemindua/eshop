@@ -14,6 +14,9 @@ use Illuminate\Support\Str;
 
 class ProductVariantController extends Controller
 {
+
+    function __construct(public int $pages = 15,  public array $data = []) {}
+
     /**
      * Display a listing of the resource.
      */

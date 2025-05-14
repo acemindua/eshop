@@ -1,16 +1,7 @@
 <template>
     <ChatLayout>
         <section class="flex flex-col space-y-2 h-full">
-            <ul
-                class="inline-block text-sm font-semibold tracking-wide rounded-lg border-2 border-dashed p-1"
-            >
-                <li
-                    class="inline-flex items-center gap-2 p-2 pr-4 bg-white rounded-lg shadow-sm"
-                >
-                    <TelegramIcon /> Telegram
-                </li>
-            </ul>
-
+            
             <!-- Scrollable messages area -->
             <div class="bg-white p-2 rounded-lg grow overflow-hidden">
                 <div
@@ -38,7 +29,6 @@
 
 <script setup>
 import { onMounted, ref, watch, nextTick } from "vue";
-import TelegramIcon from "@/Shared/Themes/Icons/TelegramIcon.vue";
 import ChatLayout from "@/Shared/Themes/Layouts/ChatLayout.vue";
 
 const messagesContainer = ref(null);

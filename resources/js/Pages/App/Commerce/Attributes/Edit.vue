@@ -1,149 +1,191 @@
 <template>
     <Layout>
-        <Head :title="$t('Edit')" />
-        <h1 class="font-semibold border-b p-4">{{ $t("Edit") }}</h1>
-
-        <section class="flex gap-2">
-            <div class="border bg-white rounded my-4 w-full">
-                <div class="p-2">
-                    <form @submit.prevent="submit">
-                        <LanguagesTabs
-                            v-model="selectedLocale"
-                            :errors="errors"
-                        >
-                            <StoreAttributesForm
-                                :code="selectedLocale"
-                                v-model="form[selectedLocale]"
-                                :errors="errors"
-                            />
-                        </LanguagesTabs>
-
-                        <div class="px-4">
-                            <InputLabel
-                                for="order"
-                                :value="`Order`"
-                                class="flex leading-6 items-center"
-                            />
-                            <div>
-                                <TextInput
-                                    type="number"
-                                    v-model="form.order"
-                                    class="block w-full text-end pr-4"
-                                />
-                                <InputError
-                                    class="mt-2"
-                                    :message="errors[`order`]"
-                                />
-                            </div>
-                        </div>
-                        <div class="px-4">
-                            <InputLabel
-                                for="public"
-                                :value="$t('Status')"
-                                class="flex leading-6 items-center"
-                            />
-                            <div>
-                                <CheckBoxSwitcher v-model="form.public" />
-                                <InputError
-                                    class="mt-2"
-                                    :message="errors[`public`]"
-                                />
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <PrimaryButton
-                                class=""
-                                :class="{ 'opacity-25': form.processing }"
-                                :disabled="form.processing"
-                            >
-                                {{ $t("Save") }}
-                            </PrimaryButton>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="w-1/2 border bg-white rounded my-4">
-                <AttributeValues :id="data.item.id" :errors="errors" />
+        <!-- Header Buttons -->
+        <section class="flex w-full items-center justify-between">
+            <div></div>
+            <div class="inline-flex items-center space-x-2">
+                <SecondaryButton
+                    as="Link"
+                    :href="route('admin.attributes.index')"
+                    :disabled="loading"
+                    :class="{ 'opacity-50': loading }"
+                >
+                    <template #icon><IconCancel :stroke="2" /></template>
+                    <span>{{ $t("Cancel") }}</span>
+                </SecondaryButton>
+                <PrimaryButton
+                    @click="submit"
+                    :disabled="loading"
+                    :class="{ 'opacity-50': loading }"
+                >
+                    <template #icon><IconDeviceFloppy :stroke="2" /></template>
+                    <span>{{ $t("Save") }}</span>
+                </PrimaryButton>
             </div>
         </section>
 
-        <section v-if="$page.props.app.env === 'local'">
+        <!-- Tabs -->
+        <section>
+            <TabGroup :selectedIndex="activeTab" @change="changeTab">
+                <TabList
+                    class="flex items-center w-full bg-white border rounded-lg mt-4 p-2"
+                >
+                    <Tab
+                        v-for="tab in tabs"
+                        :key="tab.key"
+                        as="template"
+                        v-slot="{ selected }"
+                    >
+                        <ButtonTabGroup :selected="selected">
+                            {{ $t(tab.label) }}
+                        </ButtonTabGroup>
+                    </Tab>
+                </TabList>
+
+                <TabPanels class="mt-2">
+                    <TabPanel>
+                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
+                            <div class="w-full md:w-1/4">
+                                <h2 class="uppercase font-semibold">General</h2>
+                                <span class="py-2 text-sm text-gray-600">
+                                    Manage general info
+                                </span>
+                            </div>
+                            <GeneralForm
+                                :form="form"
+                                :errors="errors"
+                                :is-editing="true"
+                            />
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
+                            <ValuesForm
+                                :errors="errors"
+                                :attribute-id="data.item.id"
+                            />
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
+                            <div class="w-full md:w-1/4">
+                                <h2 class="uppercase font-semibold">Data</h2>
+                                <span class="py-2 text-sm text-gray-600">
+                                    General settings
+                                </span>
+                            </div>
+                            <DataForm
+                                :form="form"
+                                :errors="errors"
+                                :data="data"
+                            />
+                        </div>
+                    </TabPanel>
+                </TabPanels>
+            </TabGroup>
+        </section>
+
+        <!-- Debug (Only outside local) -->
+        <section v-if="$page.props.app.env !== 'local'">
             <VarDump :data="data" />
         </section>
     </Layout>
 </template>
 
 <script setup>
-import Layout from "@/Layouts/AppLayout.vue";
-import LanguagesTabs from "@/Shared/LanguagesTabs.vue";
-import { router, usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
-import StoreAttributesForm from "./Partials/StoreAttributesForm.vue";
-import { reactive, onBeforeMount } from "vue";
-import VarDump from "@/Shared/VarDump.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
-import CheckBoxSwitcher from "@/Components/CheckBoxSwitcher.vue";
-import AttributeValues from "./Partials/AttributeValues.vue";
+// Vue & Inertia Core
+import { ref, reactive, onBeforeMount, watch } from "vue";
+import { usePage, router } from "@inertiajs/vue3";
 
+// UI Components
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import { IconCancel, IconDeviceFloppy } from "@tabler/icons-vue";
+import Layout from "@/Shared/Themes/Layouts/CommerceLayout.vue";
+import ButtonTabGroup from "@/Components/ButtonTabGroup.vue";
+import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.vue";
+import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";
+import VarDump from "@/Shared/VarDump.vue";
+
+// Partials
+import GeneralForm from "./Partials/GeneralForm.vue";
+import DataForm from "./Partials/DataForm.vue";
+import ValuesForm from "./Partials/ValuesForm.vue";
+
+// Props
 const props = defineProps({
-    data: { type: Object },
-    errors: { type: Object },
+    data: Object,
+    errors: Object,
 });
 
-const selectedLocale = ref(usePage().props.lang.default);
+// Tabs logic
+const activeTab = ref(0);
+const tabs = ref([
+    { key: "general", label: "General" },
+    { key: "value", label: "Values" },
+    { key: "data", label: "Data" },
+]);
+
+// Form init
+const page = usePage();
+const translatedAttributes = ["title", "slug", "description"];
 const form = reactive({
     _method: "put",
-    order: props.data.item.order,
-    public: props.data.item.public ? true : false,
-    type: "text",
+    order: page.props.data.item.order,
+    public: page.props.data.item.public,
+    user_id: page.props.auth.user.id,
 });
 
-const translatedAttributes = ["title", "description"];
+// Add i18n fields
 onBeforeMount(() => {
-    // translatedAttributes
-    for (let [code] of Object.entries(usePage().props.lang.locales)) {
-        Object.assign(form, { [code]: {} });
-        for (let [k, label] of Object.entries(translatedAttributes)) {
-            Object.assign(form[code], {
-                [label]: "",
-            });
-        }
+    const locales = page.props.lang.locales;
+    for (const code in locales) {
+        form[code] = {};
+        translatedAttributes.forEach((attr) => {
+            form[code][attr] = "";
+        });
     }
 
-    // translatedAttributes varibals
-    for (let [key, ObjTranslations] of Object.entries(
-        props.data.item.translations
-    )) {
-        for (let [index, val] of Object.entries(ObjTranslations)) {
-            for (let [code] of Object.entries(usePage().props.lang.locales)) {
-                if (code == ObjTranslations.locale) {
-                    Object.assign(form[code], {
-                        [index]: val ?? "",
-                    });
-                }
+    if (props.data.item.translations) {
+        for (const trans of props.data.item.translations) {
+            if (!form[trans.locale]) continue;
+            for (const attr of translatedAttributes) {
+                form[trans.locale][attr] = trans[attr] ?? "";
             }
         }
     }
 });
-
-// Функція для надсилання форми
-const submit = () => {
+// Form submission
+const loading = ref(false);
+function submit() {
+    loading.value = true;
     router.post(route("admin.attributes.update", props.data.item.id), form, {
         forceFormData: true,
         preserveState: true,
-        onStart: () => {
-            // Дії перед початком відправки форми
-        },
-        onSuccess: () => {
-            // Дії при успішній відправці
-            setTimeout(() => {}, 3000);
-        },
-        onFinish: () => {
-            // Дії після завершення відправки
-        },
+        onFinish: () => (loading.value = false),
     });
-};
+}
+
+// Error-driven tab navigation
+watch(
+    () => props.errors,
+    (errors) => {
+        const keys = Object.keys(errors);
+        if (
+            keys.some((key) =>
+                translatedAttributes.some((attr) => key.endsWith(attr))
+            )
+        ) {
+            activeTab.value = 0;
+        }
+        if (keys.some((key) => ["order"].includes(key))) {
+            activeTab.value = 1;
+        }
+    },
+    { immediate: true }
+);
+
+// Tab switch
+function changeTab(index) {
+    activeTab.value = index;
+}
 </script>

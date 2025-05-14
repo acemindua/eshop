@@ -18,7 +18,8 @@ class ProductVariantResource extends JsonResource
             'id'        => $this->id,
             'title'     => $this->attribute_value_title,
             'image'     => $this->image,
-            'slug'      => $this->slug,
+            'slug'      => $this->product ?  $this->product->slug : null,
+            'status'    => $this->public ? true : false,
             /* 'product'   => $this->product ? [
                 'id'    => $this->product->id,
                 'title' => $this->product->title,
@@ -30,7 +31,7 @@ class ProductVariantResource extends JsonResource
             'title'     => $this->attribute_value_title,
             
             
-            'status'    => $this->public, */
+             */
         ];
     }
 }

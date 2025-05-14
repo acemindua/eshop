@@ -10,8 +10,13 @@
 -   php artisan reverb:start --debug
 -   php artisan storage:link
 
+## v2.00.00 debug
 
-## v2.00.00
+[Telescope](https://laravel.com/docs/12.x/telescope)
+
+## v1.01.03 Attribute Values
+
+- php artisan make:controller Api\AttributeController --model=Attribute --resource --api
 
 ## v1.01.02 Chat Update
 
@@ -49,6 +54,7 @@
 -   php artisan make:model AttributeValue -m
 -   php artisan make:model AttributeValueTranslation -m
 -   php artisan make:controller API\AttributeValueController --api --resource
+-   php artisan make:resource AttributeValueResource
 
 -   php artisan make:model ProductVariant -m
 -   php artisan make:controller \App\Http\Controllers\App\Commerce\ProductVariantController --model=ProductVariant --resource --requests

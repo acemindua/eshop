@@ -30,7 +30,6 @@ class StoreAttributeRequest extends FormRequest
                 $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
             })],
             '%description%' => ['nullable', 'string'],
-            'type' => ['nullable', 'string', 'min:3'],
             'order' => ['required', 'integer'],
             'public' => ['required', 'boolean'],
         ]);

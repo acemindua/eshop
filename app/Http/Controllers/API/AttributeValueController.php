@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\AttributeValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 class AttributeValueController extends Controller
 {
@@ -21,7 +20,7 @@ class AttributeValueController extends Controller
             $query->where('attribute_id', $request->attribute_id);
         }
 
-        return response()->json($query->get(), Response::HTTP_OK);
+        return response()->json($query->orderByDesc('public')->orderBy('order')->latest()->get(), Response::HTTP_OK);
     }
 
     /**
@@ -30,16 +29,14 @@ class AttributeValueController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $attributeValue = AttributeValue::create($request->all());
-            return response()->json($attributeValue, Response::HTTP_CREATED);
-        } catch (ValidationException $e) {
-            // Якщо є помилки валідації, повертаємо їх у відповіді
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        $data = $request->all();
+        $data['public'] = filter_var($data['public'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+
+        $attr = new AttributeValue();
+        $attr->fill($data);
+        $attr->save();
+
+        return response()->json($attr);
     }
 
     /**
@@ -56,29 +53,43 @@ class AttributeValueController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $data = $request->all();
+        $data['public'] = filter_var($data['public'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        $attr = AttributeValue::find($id);
+
+        $attr->fill($data);
+        $attr->save();
+
+        return response()->json($attr);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, $id = null)
     {
-        // Знаходимо атрибут за ID
+        $ids = $request->input('ids', []);
+
+        if ($ids && is_array($ids)) {
+            AttributeValue::whereIn('id', $ids)->delete();
+
+            return response()->json([
+                'message' => 'Attribute values deleted successfully',
+            ], Response::HTTP_OK);
+        }
+
         $attributeValue = AttributeValue::find($id);
 
-        // Якщо атрибут не знайдено, повертаємо помилку 404
         if (!$attributeValue) {
             return response()->json([
-                'message' => 'Attribute value not found'
+                'message' => 'Attribute value not found',
             ], Response::HTTP_NOT_FOUND);
         }
 
-        // Видаляємо атрибут
         $attributeValue->delete();
 
-        // Повертаємо успішну відповідь
         return response()->json([
-            'message' => 'Attribute value deleted successfully'
+            'message' => 'Attribute value deleted successfully',
         ], Response::HTTP_OK);
     }
 }

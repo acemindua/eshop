@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\API\AttributeValueController;
 use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\ProductController;
@@ -9,7 +10,6 @@ use App\Http\Controllers\API\UploadImageController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Broadcast;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,6 +29,7 @@ Route::prefix('v1')->group(function () {
 
 Route::post('/store/upload/image', [UploadImageController::class, 'store'])->name('api.upload.image');
 
+Route::apiResource('attributes', AttributeController::class);
 Route::apiResource('attribute-values', AttributeValueController::class);
 Route::apiResource('product-variants', ProductVariantController::class);
 Route::apiResource('chat-message', MessageController::class);

@@ -14,7 +14,16 @@
 
         <span>{{ $t("Orders") }}</span>
     </NavigationLink>
-
+    <NavigationLink
+        v-if="can('product-view') || is('super-user')"
+        :href="route('admin.products.index')"
+        :active="$page.url.startsWith('/commerce/products')"
+    >
+        <template #icon>
+            <IconSitemap :stroke="1" width="20" />
+        </template>
+        <span>{{ $t("Products") }}</span>
+    </NavigationLink>
     <NavigationLink
         v-if="can('category-view') || is('super-user')"
         :href="route('admin.categories.index')"
@@ -33,20 +42,20 @@
         :active="$page.url.startsWith('/commerce/manufacturers')"
     >
         <template #icon>
-            <IconBuildingFactory :stroke="1" width="20" />
+            <IconBrandApple :stroke="1" width="20" />
         </template>
         <span>{{ $t("Manufacturers") }}</span>
     </NavigationLink>
 
     <NavigationLink
-        v-if="can('product-view') || is('super-user')"
-        :href="route('admin.products.index')"
-        :active="$page.url.startsWith('/commerce/products')"
+        v-if="can('attribute-view') || is('super-user')"
+        :href="route('admin.attributes.index')"
+        :active="$page.url.startsWith('/commerce/attributes')"
     >
         <template #icon>
-            <IconBrandSuperhuman :stroke="1" width="20" />
+            <IconBrandSteam :stroke="1" width="20" />
         </template>
-        <span>{{ $t("Products") }}</span>
+        <span>{{ $t("Attributes") }}</span>
     </NavigationLink>
 </template>
 
@@ -54,8 +63,9 @@
 import {
     IconShoppingBag,
     IconCategory,
-    IconBrandSuperhuman,
-    IconBuildingFactory,
+    IconSitemap,
+    IconBrandApple,
+    IconBrandSteam,
 } from "@tabler/icons-vue";
 import NavigationLink from "../Components/NavigationLink.vue";
 </script>

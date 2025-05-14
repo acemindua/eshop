@@ -9,6 +9,7 @@
             <IconUserCircle stroke="{2}" :size="24" />
         </button>
     </div>
+    
     <Transition name="modal-fade">
         <Modal :show="open" @close="open = !open">
             <div class="flex w-full min-h-screen items-center justify-center">

@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('locale')->index();
 
             $table->string('title');
+            $table->string('slug');
             $table->text('description')->nullable();
 
             $table->timestamps();
+
+            $table->unique(['slug', 'locale']);
             $table->unique(['attribute_id', 'locale']);
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
         });

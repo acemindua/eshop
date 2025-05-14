@@ -45,6 +45,9 @@
 
                 <TabPanels class="mt-2">
                     <TabPanel>
+                        <VariantForm :data-id="data.item.id" :errors="errors" />
+                    </TabPanel>
+                    <TabPanel>
                         <div class="border bg-white p-4 md:p-8 flex rounded-lg">
                             <div class="w-full md:w-1/4">
                                 <h2 class="uppercase font-semibold">General</h2>
@@ -77,9 +80,6 @@
                     <TabPanel>
                         <ImagesForm :data="data.item" :errors="errors" />
                     </TabPanel>
-                    <TabPanel>
-                     
-                    </TabPanel>
                 </TabPanels>
             </TabGroup>
         </section>
@@ -104,6 +104,7 @@ import ButtonTabGroup from "@/Components/ButtonTabGroup.vue";
 import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.vue";
 import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";
 import VarDump from "@/Shared/VarDump.vue";
+import VariantForm from "./Partials/VariantForm.vue";
 
 // Пропси
 const props = defineProps({
@@ -114,10 +115,10 @@ const props = defineProps({
 // Вкладки
 const activeTab = ref(0);
 const tabs = ref([
+    { key: "variants", label: "Variants" },
     { key: "general", label: "General" },
     { key: "data", label: "Data" },
     { key: "images", label: "Images" },
-    { key: "variants", label: "Variants" },
 ]);
 
 // Ініціалізація форми

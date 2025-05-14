@@ -18,6 +18,8 @@ use Inertia\Response;
 
 class ManufacturerController extends Controller
 {
+    function __construct(public int $pages = 15) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -30,7 +32,7 @@ class ManufacturerController extends Controller
             ->orderByDesc('public')
             ->orderBy('order')
             ->latest('updated_at')
-            ->paginate(17)
+            ->paginate($this->pages)
             ->withQueryString();
 
         return Inertia::render(

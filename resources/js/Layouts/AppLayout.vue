@@ -62,6 +62,12 @@ const title = computed(() => {
                         :active="$page.url.startsWith('/messages')"
                     >
                         <IconMessageCircle :stroke="1" class="w-6 h-6" />
+
+                        <span
+                            class="text-xs bg-orange-600 text-white font-semibold w-4 h-4 shadow-sm absolute bottom-1 right-1 rounded-full text-center"
+                        >
+                            5
+                        </span>
                     </AppAsideButton>
                 </nav>
 
@@ -92,7 +98,9 @@ const title = computed(() => {
         <!-- Main content -->
         <div class="flex flex-col flex-grow h-screen overflow-x-auto">
             <!-- Header -->
-            <header class="flex items-start justify-between px-4 py-4 md:px-8 mb-4">
+            <header
+                class="flex items-start justify-between px-4 py-4 md:px-8 mb-4"
+            >
                 <div>
                     <h1 class="font-semibold text-xl">
                         {{ title !== "Dashboard" ? $t(title) : "Dashboard" }}
@@ -102,10 +110,24 @@ const title = computed(() => {
                         class="mt-1"
                     />
                 </div>
+                <div class="flex items-center space-x-2">
+                    <AppAsideButton
+                        :href="route('admin.chat.rooms')"
+                        :active="$page.url.startsWith('/messages')"
+                    >
+                        <IconMessageCircle :stroke="1" class="w-6 h-6" />
 
-                <Link :href="route('admin.users.edit', user)">
-                    <UserAvatar :data-user="user" :max-width="34" />
-                </Link>
+                        <span
+                            class="text-xs bg-orange-600 text-white font-semibold w-4 h-4 shadow-sm absolute bottom-1 right-1 rounded-full text-center"
+                        >
+                            5
+                        </span>
+                    </AppAsideButton>
+
+                    <Link :href="route('admin.users.edit', user)">
+                        <UserAvatar :data-user="user" :max-width="34" />
+                    </Link>
+                </div>
             </header>
 
             <!-- Page content -->

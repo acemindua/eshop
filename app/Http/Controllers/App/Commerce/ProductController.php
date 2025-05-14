@@ -22,6 +22,9 @@ use Inertia\Response;
 
 class ProductController extends Controller
 {
+
+    function __construct(public int $pages = 15,  public array $data = []) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -32,7 +35,7 @@ class ProductController extends Controller
         $products = Product::filter($filter)
             ->orderBy('public', 'desc')
             ->latest('updated_at')
-            ->paginate(14)
+            ->paginate($this->pages)
             ->withQueryString();
 
         return Inertia::render(

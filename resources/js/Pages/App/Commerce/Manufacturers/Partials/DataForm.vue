@@ -3,7 +3,6 @@
 import { onMounted, ref } from "vue";
 import { router } from "@inertiajs/vue3";
 import CheckBoxSwitcher from "@/Components/CheckBoxSwitcher.vue";
-import ComboboxSelect from "@/Components/ComboboxSelect.vue";
 import ImagePreview from "@/Components/ImagePreview.vue";
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";

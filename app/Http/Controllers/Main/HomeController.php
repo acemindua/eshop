@@ -4,14 +4,12 @@ namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
-use App\Http\Resources\ManufacturerResource;
 use App\Http\Resources\ProductResource;
-use App\Http\Resources\ProductVariantResource;
 use App\Models\Category;
-use App\Models\Manufacturer;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -61,7 +59,7 @@ class HomeController extends Controller
                             'data' => [
                                 'id' => $product->id,
                                 'title' => $product->title . " (" . $variant->attribute_value_title . ")",
-                                'slug' => $variant->slug,
+                                'slug' => $product->slug . '-' . Str::slug($variant->attribute_value_title),
                                 'image' => $variant->image,
                                 'images' => $product->sorted_images
                             ]

@@ -49,7 +49,14 @@ class ProductVariantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $data['public'] = filter_var($data['public'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+
+        $query = new ProductVariant();
+        $query->fill($data);
+        $query->save();
+
+        return response()->json($query);
     }
 
     /**

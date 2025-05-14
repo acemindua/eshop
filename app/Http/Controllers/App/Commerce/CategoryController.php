@@ -17,6 +17,8 @@ use Inertia\Response;
 
 class CategoryController extends Controller
 {
+    function __construct(public int $pages = 15) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +29,7 @@ class CategoryController extends Controller
         $categories = Category::filter($filter)
             ->orderByDesc('public')
             ->latest('updated_at')
-            ->paginate(17)
+            ->paginate($this->pages)
             ->withQueryString();
 
         return Inertia::render('App/Commerce/Categories/Index', [
