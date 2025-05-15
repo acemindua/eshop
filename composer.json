@@ -19,6 +19,7 @@
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.18",
+        "laravel/telescope": "^5.7",
         "laravel/tinker": "^2.9",
         "mcamara/laravel-localization": "^2.2",
         "rinvex/countries": "^9.0",

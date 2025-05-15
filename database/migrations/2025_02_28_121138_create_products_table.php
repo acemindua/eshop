@@ -15,6 +15,10 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->unsigned();
+
+            $table->decimal('price', 8, 2);
+            $table->integer('quantity')->default(0);
+
             $table->boolean('public')->default(false);
             $table->integer('order')->default(1);
             $table->integer('user_id')->unsigned();

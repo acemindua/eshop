@@ -27,7 +27,14 @@ class ProductVariant extends Model implements HasMedia
      *
      * @var list<string>
      */
-    protected $fillable = ['product_id', 'attribute_id', 'attribute_value_id', 'slug', 'public', 'order'];
+    protected $fillable = [
+        'product_id',
+        'sku',
+        'price',
+        'quantity',
+        'public',
+        'order'
+    ];
 
     /**
      * The attributes that should be cast.
@@ -118,5 +125,10 @@ class ProductVariant extends Model implements HasMedia
     public function attributeValue(): BelongsTo
     {
         return $this->belongsTo(AttributeValue::class, 'attribute_value_id');
+    }
+
+    public function values()
+    {
+        return $this->hasMany(ProductVariantValue::class);
     }
 }

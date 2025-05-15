@@ -14,7 +14,7 @@ export default function useApiResourceService(translatedAttributes = []) {
     const loading = ref(false);
 
     // Помилки (не для відображення форми, а глобальні/під запити)
-    const errorsRequests = ref({});
+    const errorsRequests = ref();
 
     // Основна реактивна форма
     const form = reactive({});
@@ -36,14 +36,30 @@ export default function useApiResourceService(translatedAttributes = []) {
         try {
             return await fn();
         } catch (e) {
-            if (e.response?.status === 422) {
-                // Витягуємо помилки в одну строку (можна переробити під об'єкт за потреби)
-                errorsRequests.value = Object.values(e.response.data.errors)
-                    .flat()
-                    .join(", ");
+            const response = e.response;
+
+            if (response?.status === 422 && response.data?.errors) {
+                // Валідаційні помилки — зберігаємо як є
+                errorsRequests.value = response.data.errors;
             } else {
-                errorsRequests.value = e.response?.data?.message || fallback;
+                // Для інших випадків — беремо повідомлення, якщо є
+                let message = "An unknown error occurred.";
+
+                if (typeof response?.data === "string") {
+                    message = response.data;
+                } else if (typeof response?.data?.message === "string") {
+                    message = response.data.message;
+                } else if (e.message) {
+                    message = e.message;
+                } else {
+                    message = fallback;
+                }
+
+                errorsRequests.value = {
+                    general: [message],
+                };
             }
+
             throw e;
         } finally {
             loading.value = false;
@@ -92,10 +108,13 @@ export default function useApiResourceService(translatedAttributes = []) {
      * @param {Object} data - дані для відправки
      * @returns {Promise}
      */
-    const storeData = (url, data) => {
+    const storeData = async (url, data) => {
+        await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
         return handleRequest(() =>
             axios.post(url, data, {
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             })
         );
     };

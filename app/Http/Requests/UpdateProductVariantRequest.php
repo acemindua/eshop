@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Astrotomic\Translatable\Validation\RuleFactory;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class UpdateProductVariantRequest extends FormRequest
 {
@@ -14,22 +11,47 @@ class UpdateProductVariantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        return RuleFactory::make(
-            [
-                'product_id' => ['required', 'integer'],
-                'slug'       => ['required', 'min:3', 'string', 'max:255', Rule::unique('product_variants', 'slug')->ignore($this->route('product_variant'))],
-                'public'    => ['required', 'boolean'],
-            ]
-        );
+        return [
+            'product_id' => 'required|exists:products,id',
+            // Exclude current product variant ID from unique check on SKU
+            'sku'        => 'required|string|max:255|unique:product_variants,sku,' . $this->route('product-ariants')->id,
+            'price'      => 'required|numeric|min:0|max:999999.99',
+            'quantity'   => 'required|integer|min:0',
+            'order'      => 'nullable|integer|min:1',
+            'public'     => 'required|boolean',
+        ];
+    }
+
+    /**
+     * Custom error messages for validation.
+     */
+    public function messages(): array
+    {
+        return [
+            'product_id.required' => 'Product ID is required.',
+            'product_id.exists'   => 'Selected product does not exist.',
+            'sku.required'        => 'SKU is required.',
+            'sku.unique'          => 'SKU must be unique.',
+            'price.required'      => 'Price is required.',
+            'price.numeric'       => 'Price must be a number.',
+            'quantity.required'   => 'Quantity is required.',
+            'quantity.integer'    => 'Quantity must be an integer.',
+            'public.boolean'      => 'Public must be true or false.',
+        ];
+    }
+
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'public' => filter_var($this->public, FILTER_VALIDATE_BOOLEAN),
+        ]);
     }
 }

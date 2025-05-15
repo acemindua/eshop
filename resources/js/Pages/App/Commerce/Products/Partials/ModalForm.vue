@@ -82,7 +82,7 @@ const onSave = () => {
                     :key="model.attribute_value_id"
                 />
                 <InputError class="mt-2" :message="errors.attribute_value_id" />
-            </div>
+            </div> 
             <div class="space-y-4 mt-4">
                 <!-- Порядок -->
                 <div>

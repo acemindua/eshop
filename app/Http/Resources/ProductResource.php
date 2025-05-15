@@ -17,13 +17,15 @@ class ProductResource extends JsonResource
         return [
             'id'        => $this->id,
             'title'     => $this->title,
+            'price'     => $this->price,
+            'quantity'  => $this->quantity,
             'slug'      => $this->slug,
             'images'    => $this->sorted_images,
-            'category'  => $this->category ? new CategoryResource($this->category) : null,
             'status'    => $this->public ? true : false,
+            //'category'  => $this->category ? new CategoryResource($this->category) : null,
             //'country'   => $this->country ? new CountryResource($this->country) : null,
             //'manufacturer'  => $this->manufacturer ? new ManufacturerResource($this->manufacturer) : null,
-            'variants'      =>  $this->variants ? ProductVariantResource::collection($this->variants)  : null
+            //'variants'      =>  $this->variants ? ProductVariantResource::collection($this->variants)  : null
         ];
     }
 }

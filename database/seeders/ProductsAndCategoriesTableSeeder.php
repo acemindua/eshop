@@ -4,10 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PostsAndCategoriesTableSeeder extends Seeder
+class ProductsAndCategoriesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +14,8 @@ class PostsAndCategoriesTableSeeder extends Seeder
     public function run(): void
     {
         Category::factory()
-            ->has(Product::factory()->count(10))
-            ->count(10)
+            ->has(Product::factory()->count(5))
+            ->count(3)
             ->create();
     }
 }

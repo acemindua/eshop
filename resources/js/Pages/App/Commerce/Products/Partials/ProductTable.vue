@@ -60,9 +60,9 @@ const props = defineProps({
                             }}</span>
                         </p>
                     </td>
-                    <td class="p-2 text-end">0</td>
+                    <td class="p-2 text-end">{{ item.price }}</td>
                     <td class="p-2 text-end">
-                        <BadgeCountStatus :count="0" />
+                        <BadgeCountStatus :count="item.stock" />
                     </td>
                     <td class="p-2">
                         <div class="flex justify-center">

@@ -5,7 +5,6 @@ use App\Http\Controllers\App\Commerce\ManufacturerController;
 use App\Http\Controllers\App\Commerce\OrderController;
 use App\Http\Controllers\App\Commerce\ProductController;
 use App\Http\Controllers\App\Commerce\AttributeController;
-use App\Http\Controllers\App\Commerce\ProductVariantController;
 use App\Http\Controllers\App\DashboardController;
 use App\Http\Controllers\App\Settings\LanguageController;
 use App\Http\Controllers\App\Settings\RolePermissionController;
@@ -31,7 +30,6 @@ Route::prefix('commerce')->group(function () {
         'products'      => ProductController::class,
         'manufacturers' => ManufacturerController::class,
         'attributes'        => AttributeController::class,
-        'product-variants'  => ProductVariantController::class,
     ]);
 });
 Route::prefix('messages')->group(function () {

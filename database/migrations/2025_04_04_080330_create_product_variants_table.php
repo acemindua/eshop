@@ -13,24 +13,20 @@ return new class extends Migration
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->increments('id');
-
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('attribute_id');
-            $table->unsignedInteger('attribute_value_id');
 
-            $table->string('slug')->unique()->nullable();
+            $table->string('sku')->nullable()->unique()->comment('Stock Keeping Unit - unique identifier');
+
+            $table->decimal('price', 8, 2);
+            $table->integer('quantity')->default(0);
+
             $table->unsignedInteger('order')->default(1);
             $table->boolean('public')->default(false);
 
             $table->timestamps();
             $table->softDeletes();
 
-            // Вказуємо коротку назву для унікального індексу
-            $table->unique(['product_id', 'attribute_id', 'attribute_value_id'], 'prod_attr_val_unique');
-
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
-            $table->foreign('attribute_value_id')->references('id')->on('attribute_values')->onDelete('cascade');
         });
     }
 

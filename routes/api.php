@@ -5,11 +5,18 @@ use App\Http\Controllers\API\AttributeValueController;
 use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\ProductMediaController;
-use App\Http\Controllers\API\ProductVariantController;
 use App\Http\Controllers\API\UploadImageController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\V1\ProductVariantController;
+use App\Http\Controllers\API\V1\ProductVariantValueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('v1')->group(function () {
+    Route::apiResource('product-variants', ProductVariantController::class);
+    Route::apiResource('product-variant-values', ProductVariantValueController::class);
+});
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -29,7 +36,8 @@ Route::prefix('v1')->group(function () {
 
 Route::post('/store/upload/image', [UploadImageController::class, 'store'])->name('api.upload.image');
 
+Route::apiResource('products', ProductController::class);
 Route::apiResource('attributes', AttributeController::class);
 Route::apiResource('attribute-values', AttributeValueController::class);
-Route::apiResource('product-variants', ProductVariantController::class);
+
 Route::apiResource('chat-message', MessageController::class);

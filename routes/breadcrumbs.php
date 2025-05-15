@@ -6,6 +6,7 @@ use App\Models\ProductVariant;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
+
 // Головна сторінка
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push(__('Home'), route('home'));

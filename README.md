@@ -10,13 +10,26 @@
 -   php artisan reverb:start --debug
 -   php artisan storage:link
 
-## v2.00.00 debug
+## v2.00.00
+
+## v1.01.05 ProductVariantValue
+
+-   php artisan make:model ProductVariantValue -m
+-   php artisan make:controller API\ProductVariantValueController --model=ProductVariantValue --resource --requests --api
+-   php artisan make:resource ProductVariantValueResource
+
+## v1.01.04 Telescope
 
 [Telescope](https://laravel.com/docs/12.x/telescope)
 
+-   composer require laravel/telescope
+-   php artisan telescope:install
+
+-   php artisan migrate
+
 ## v1.01.03 Attribute Values
 
-- php artisan make:controller Api\AttributeController --model=Attribute --resource --api
+-   php artisan make:controller Api\AttributeController --model=Attribute --resource --api
 
 ## v1.01.02 Chat Update
 
@@ -57,7 +70,6 @@
 -   php artisan make:resource AttributeValueResource
 
 -   php artisan make:model ProductVariant -m
--   php artisan make:controller \App\Http\Controllers\App\Commerce\ProductVariantController --model=ProductVariant --resource --requests
 -   php artisan make:resource ProductVariantResource
 
 ## v1.00.23 Manufacturers
@@ -173,8 +185,8 @@
 -   php artisan make:seeder ProductSeeder
 -   php artisan db:seed --class=ProductSeeder
 
--   php artisan make:seeder PostsAndCategoriesTableSeeder
--   php artisan db:seed --class=PostsAndCategoriesTableSeeder
+-   php artisan make:seeder ProductsAndCategoriesTableSeeder
+-   php artisan db:seed --class=ProductsAndCategoriesTableSeeder
 
 ## v1.00.7 e-Commerce
 

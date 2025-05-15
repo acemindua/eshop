@@ -38,6 +38,8 @@ class Product extends Model implements TranslatableContract, HasMedia
      */
     protected $fillable = [
         'category_id',
+        'price',
+        'quantity',
         'manufacturer_id',
         'country_id',
         'public',

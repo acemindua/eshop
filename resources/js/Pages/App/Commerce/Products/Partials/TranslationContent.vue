@@ -4,7 +4,7 @@
             <span class="text-red-500">*</span>
             <InputLabel
                 :for="`${code}[title]`"
-                :value="`Product Name (${code})`"
+                :value="`Title (${code})`"
                 class="flex leading-6 items-center font-semibold"
             />
         </div>

@@ -42,9 +42,9 @@ const title = computed(() => {
             >
                 <Link
                     :href="route('admin.dashboard')"
-                    class="flex justify-center"
+                    class="flex justify-center items-center bg-slate-800 w-10 h-10 rounded-lg text-white p-1"
                 >
-                    <ApplicationLogo class="h-9 w-auto fill-current" />
+                    <ApplicationLogo class="h-7 w-auto fill-current" />
                 </Link>
 
                 <!-- Main nav buttons -->
