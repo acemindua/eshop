@@ -1,7 +1,10 @@
 <template>
-    <pre>
-        {{ item }}
-    </pre>
+    <div class="text-xs overflow-x-auto">
+        <pre>
+        {{ data }}
+    </pre
+        >
+    </div>
 </template>
 
 <script setup>

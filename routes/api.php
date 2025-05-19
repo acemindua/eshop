@@ -2,19 +2,20 @@
 
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\API\AttributeValueController;
+use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\ProductMediaController;
 use App\Http\Controllers\API\UploadImageController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\V1\ProductVariantController;
-use App\Http\Controllers\API\V1\ProductVariantValueController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::apiResource('product-variants', ProductVariantController::class);
-    Route::apiResource('product-variant-values', ProductVariantValueController::class);
+    Route::apiResource('media', MediaController::class);
+    Route::post('/media/sort', [MediaController::class, 'sort'])->name('media.sort');
 });
 
 

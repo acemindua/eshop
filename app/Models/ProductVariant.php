@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use App\Filters\QueryFilter;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\HasMedia;
@@ -29,6 +26,8 @@ class ProductVariant extends Model implements HasMedia
      */
     protected $fillable = [
         'product_id',
+        'attribute_id',
+        'attribute_value_id',
         'sku',
         'price',
         'quantity',
@@ -37,37 +36,25 @@ class ProductVariant extends Model implements HasMedia
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get sorted image media items with preview URLs.
      *
-     * @var array<string, string>
+     * @return array|null
      */
-    public function getImageAttribute()
+    public function getSortedImagesAttribute(): ?array
     {
-        /* if ($image = $this->getFirstMediaUrl('images', 'preview')) {
-            $mediaImage = $this->getMedia('images')->first();
-            if (File::exists($mediaImage->getPath())) {
-                return $image;
-            }
-        } */
-
-        if ($image = $this->getFirstMediaUrl('images', 'preview')) {
+        if ($this->getFirstMediaUrl('images', 'preview')) {
             return $this->getMedia('images')
-                ->sortBy('order_column') // сортування за order_column
-                ->filter(function ($media) {
-                    return File::exists($media->getPath()); // перевірка існування файлу
-                })
-                ->map(function ($media) {
-                    return [
-                        'id' => $media->id,
-                        'url' => $media->getUrl(),
-                        'preview' => $media->getUrl('preview'), // ось тут прев’ю
-                        //'path' => $media->getPath(),
-                        'name' => $media->file_name,
-                        'order_column' => $media->order_column,
-                    ];
-                })
+                ->sortBy('order_column')
+                ->filter(fn($media) => File::exists($media->getPath()))
+                ->map(fn($media) => [
+                    'id' => $media->id,
+                    'url' => $media->getUrl(),
+                    'preview' => $media->getUrl('preview'),
+                    'name' => $media->file_name,
+                    'order_column' => $media->order_column,
+                ])
                 ->values()
-                ->all(); // повертає звичайний масив
+                ->all();
         }
 
         return null;
@@ -84,6 +71,7 @@ class ProductVariant extends Model implements HasMedia
             ->fit(Fit::Contain, 256, 256)
             ->nonQueued();
     }
+
 
     /**
      * 
@@ -125,10 +113,5 @@ class ProductVariant extends Model implements HasMedia
     public function attributeValue(): BelongsTo
     {
         return $this->belongsTo(AttributeValue::class, 'attribute_value_id');
-    }
-
-    public function values()
-    {
-        return $this->hasMany(ProductVariantValue::class);
     }
 }

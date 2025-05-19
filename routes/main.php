@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/category__{slug}', [HomeController::class, 'category'])->name('category');
-Route::get('/{slug}/p{id}/', [HomeController::class, 'show'])->name('product.show');
+Route::get('/{productSlug}/{variantSlug?}', [HomeController::class, 'show'])->name('product.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/account', [ProfileController::class, 'edit'])->name('profile.edit');

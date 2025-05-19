@@ -7,16 +7,21 @@
                 : 'bg-gray-50 text-slate-400'
         "
     >
-        <div class="bg-gray-100 rounded-lg w-full h-60 mb-2">
+        <div class="bg-gray-100 rounded-lg w-full h-60 mb-2 relative">
             <Link
-                :href="route('product.show', { slug: data.slug, id: data.id })"
+                :href="
+                    route('product.show', {
+                        productSlug: data.slug.product,
+                        variantSlug: data.slug.variant,
+                    })
+                "
                 class="flex items-center justify-center text-slate-300 overflow-hidden h-full"
             >
                 <img
                     v-if="data.images && data.images.length"
                     :src="data.images[0].preview"
                     :alt="data.title"
-                    class="w-[60%] h-auto object-cover object-center"
+                    class="w-[100%] h-auto object-cover object-center"
                 />
 
                 <div v-else>

@@ -103,9 +103,9 @@ class AttributeController extends Controller
         }
 
         // Create new attribute
-        Attribute::create(array_merge($commonFields, $translations));
+        $attr = Attribute::create(array_merge($commonFields, $translations));
 
-        return redirect()->route('admin.attributes.index')->with([
+        return redirect()->route('admin.attributes.edit', $attr->id)->with([
             'alert' => [
                 'type' => 'success',
                 'message' => "Attribute successfully created!",

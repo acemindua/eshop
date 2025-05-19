@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Image\Enums\Fit;
@@ -25,7 +27,7 @@ class AttributeValue extends Model implements TranslatableContract, HasMedia
     use InteractsWithMedia;
     use HasFactory;
 
-    public $translatedAttributes = ['title', 'description'];
+    public $translatedAttributes = ['title', 'slug', 'description'];
 
     /**
      * The attributes that are mass assignable.
@@ -34,4 +36,23 @@ class AttributeValue extends Model implements TranslatableContract, HasMedia
      */
     protected $fillable = ['attribute_id', 'order', 'public'];
     //
+
+    /**
+     * Boot the model.
+     * Automatically generates slugs from titles if not set.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($product) {
+            foreach (LaravelLocalization::getSupportedLocales() as $locale => $properties) {
+                $translated = $product->translateOrNew($locale);
+
+                if (empty($translated->slug) && !empty($translated->title)) {
+                    $translated->slug = Str::slug($translated->title);
+                }
+            }
+        });
+    }
 }

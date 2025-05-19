@@ -20,7 +20,7 @@ class ProductVariantController extends Controller
     {
 
         // Знайдемо продукт
-        $product = Product::with('variants.values')->find($request->product_id);
+        $product = Product::with('variants')->find($request->product_id);
 
         // Перевірка, чи є продукт
         if (!$product) {
@@ -37,25 +37,15 @@ class ProductVariantController extends Controller
     {
         $validated = $request->validated();
 
-        // Використання транзакції для цілісності даних
-        DB::beginTransaction();
-
         try {
             // Створення самого варіанту продукту
             $productVariant = ProductVariant::create($validated);
-
-            // Збереження зв'язку атрибута з варіантом
-            ProductVariantValue::create([
-                'product_variant_id'   => $productVariant->id,
-                'attribute_id'         => $validated['attribute_id'],
-                'attribute_value_id'   => $validated['attribute_value_id'],
-            ]);
 
             DB::commit();
 
             return response()->json([
                 'message' => 'Product variant created successfully.',
-                'data'    => $productVariant->fresh('values'), // якщо потрібен зв'язок одразу
+                'data'    => $productVariant, // якщо потрібен зв'язок одразу
             ], 201);
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -63,6 +53,36 @@ class ProductVariantController extends Controller
             return response()->json([
                 'message' => 'Failed to create product variant.',
                 'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function upload(Request $request, ProductVariant $product)
+    {
+        $request->validate([
+            'images.*' => 'required|image|max:2048',
+        ]);
+
+        try {
+            $uploadedMedia = [];
+
+            foreach ($request->file('images', []) as $image) {
+                $media = $product->addMedia($image)->toMediaCollection('images');
+
+                $uploadedMedia[] = [
+                    'url' => $media->getUrl(),
+                    'preview' => $media->getUrl('preview'),
+                ];
+            }
+
+            return response()->json(['media' => $uploadedMedia], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Помилка під час завантаження зображень.',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -88,6 +108,17 @@ class ProductVariantController extends Controller
      */
     public function destroy(ProductVariant $productVariant)
     {
-        //
+        try {
+            $productVariant->delete();
+
+            return response()->json([
+                'message' => 'Product variant deleted successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to delete product variant.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
 }

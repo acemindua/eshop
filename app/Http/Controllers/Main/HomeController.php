@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Main;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductVariantResource;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
@@ -78,31 +79,26 @@ class HomeController extends Controller
         );
     }
 
-    public function show(string $slug, int $id): Response
+    public function show(string $slug, ?string $variantSlug = null): Response
     {
-        $product = Product::whereTranslation('slug', $slug)->first();
+        $product = Product::whereTranslation('slug', $slug)
+            ->with(['variants.attribute_value'])
+            ->firstOrFail();
 
-        /* $product = Product::whereTranslation('slug', $slug)->first();
+        $variant = null;
 
-        if (!$product) { // Перевірка на null, якщо продукт не знайдений
-            $variant = ProductVariant::where('slug', $slug)->first();
-
-            if ($variant) { // Перевірка, чи існує варіант
-                $product = $variant->product; // Отримуємо продукт через варіант
-
-                // Оновлюємо атрибут 'title' з додатковою інформацією
-                $product->title = $product->title . " (" . $variant->attribute_value_title . ")";
-                $product->slug = $variant->slug;
-            }
+        if ($variantSlug) {
+            $variant = $product->variants
+                ->first(function ($variant) use ($variantSlug) {
+                    return optional($variant->attribute_value)->slug === $variantSlug;
+                });
         }
- */
-        return Inertia::render(
-            'Main/Commerce/PrdoductShow',
-            [
-                'data' => [
-                    'item' =>  new ProductResource($product)
-                ]
-            ]
-        );
+
+        return Inertia::render('Main/Commerce/ProductShow', [
+            'data' => [
+                'item' => new ProductResource($product),
+                'variant' => $variant ? new ProductVariantResource($variant) : null,
+            ],
+        ]);
     }
 }

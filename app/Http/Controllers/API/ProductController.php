@@ -40,10 +40,13 @@ class ProductController extends Controller
                             [
 
                                 'id'        => $variant->id,
-                                'title'     => $product->title,
+                                'title' => $product->title . (optional($variant->attribute_value)->title ? ' (' . $variant->attribute_value->title . ')' : ''),
                                 'price'     => $variant->price,
                                 'quantity'  => $variant->quantity,
-                                'slug'      => $product->slug,
+                                'slug' => [
+                                    'product' => $product->slug,
+                                    'variant' => optional($variant->attribute_value)->slug,
+                                ],
                                 'images'    => array_merge(
                                     $variant->sorted_images ?? [],
                                     $product->sorted_images ?? []
@@ -77,11 +80,18 @@ class ProductController extends Controller
                             [
 
                                 'id'        => $variant->id,
-                                'title'     => $product->title . " (" . $variant->attribute_value_title . ")",
-                                'slug'      => $product->slug,
-                                'images'    => $product->sorted_images,
-                                'status'    => $product->public ? true : false,
-
+                                'title' => $product->title . (optional($variant->attribute_value)->title ? ' (' . $variant->attribute_value->title . ')' : ''),
+                                'price'     => $variant->price,
+                                'quantity'  => $variant->quantity,
+                                'slug' => [
+                                    'product' => $product->slug,
+                                    'variant' => optional($variant->attribute_value)->slug,
+                                ],
+                                'images'    => array_merge(
+                                    $variant->sorted_images ?? [],
+                                    $product->sorted_images ?? []
+                                ),
+                                'status'    => $variant->public ? true : false,
                             ]
                         );
                     }

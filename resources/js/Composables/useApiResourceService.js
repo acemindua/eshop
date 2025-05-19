@@ -1,32 +1,20 @@
 // useApiResourceService.js
-import { ref, reactive } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { ref } from "vue";
 import axios from "axios";
 
 /**
- * Компонент-обгортка для роботи з API ресурсами.
- * Підтримує локалізовані поля, форму, помилки, запити на збереження та оновлення.
- *
- * @param {Array} translatedAttributes - список локалізованих полів (наприклад: ["title", "description"])
+ * Composable for working with API resources.
+ * Handles loading state, global errors, and common CRUD requests.
  */
-export default function useApiResourceService(translatedAttributes = []) {
-    // Стан завантаження запиту
-    const loading = ref(false);
-
-    // Помилки (не для відображення форми, а глобальні/під запити)
-    const errorsRequests = ref();
-
-    // Основна реактивна форма
-    const form = reactive({});
-
-    // Локалі з глобального props через Inertia
-    const page = usePage();
-    const locales = page.props.lang.locales;
+export default function useApiResourceService() {
+    const loading = ref(false); // true when request is in progress
+    const errorsRequests = ref(); // global errors (not form validation errors)
 
     /**
-     * Обробник запиту з try-catch-логікою
-     * @param {Function} fn - async функція, яка повертає axios-запит
-     * @param {String} fallback - повідомлення за замовчуванням при помилці
+     * Helper for handling async requests with error capturing
+     *
+     * @param {Function} fn - async function that makes an API request
+     * @param {String} fallback - default error message
      * @returns {Promise<*>}
      */
     const handleRequest = async (fn, fallback = "Something went wrong.") => {
@@ -39,25 +27,12 @@ export default function useApiResourceService(translatedAttributes = []) {
             const response = e.response;
 
             if (response?.status === 422 && response.data?.errors) {
-                // Валідаційні помилки — зберігаємо як є
+                // Validation errors
                 errorsRequests.value = response.data.errors;
             } else {
-                // Для інших випадків — беремо повідомлення, якщо є
-                let message = "An unknown error occurred.";
-
-                if (typeof response?.data === "string") {
-                    message = response.data;
-                } else if (typeof response?.data?.message === "string") {
-                    message = response.data.message;
-                } else if (e.message) {
-                    message = e.message;
-                } else {
-                    message = fallback;
-                }
-
-                errorsRequests.value = {
-                    general: [message],
-                };
+                // General error handling
+                let message = response?.data?.message || e.message || fallback;
+                errorsRequests.value = { general: [message] };
             }
 
             throw e;
@@ -67,98 +42,55 @@ export default function useApiResourceService(translatedAttributes = []) {
     };
 
     /**
-     * Ініціалізує форму з порожніми полями для кожної мови та локалізованих атрибутів
-     * @param {Object} defaultValues - поля форми не пов'язані з перекладами (наприклад: { order: 1, public: true })
-     */
-    const initForm = (defaultValues = {}) => {
-        // Очищуємо попередні дані
-        Object.keys(form).forEach((key) => delete form[key]);
-
-        // Задаємо значення не перекладених полів
-        Object.assign(form, defaultValues);
-
-        // Додаємо перекладені поля для кожної мови
-        for (const code in locales) {
-            form[code] = {};
-            translatedAttributes.forEach((attr) => {
-                form[code][attr] = "";
-            });
-        }
-    };
-
-    /**
-     * Заповнює перекладені поля форми з переданого елемента
-     * @param {Object} item - об'єкт з translations
-     */
-    const fillForm = (item) => {
-        if (item.translations) {
-            for (const trans of item.translations) {
-                if (!form[trans.locale]) continue;
-
-                translatedAttributes.forEach((attr) => {
-                    form[trans.locale][attr] = trans[attr] ?? "";
-                });
-            }
-        }
-    };
-
-    /**
-     * POST запит на створення ресурсу
+     * Send POST request to create a resource
+     *
      * @param {String} url - API endpoint
-     * @param {Object} data - дані для відправки
+     * @param {Object} data - form data or plain object
      * @returns {Promise}
      */
-    const storeData = async (url, data) => {
-        await axios.get("/sanctum/csrf-cookie", { withCredentials: true });
-        return handleRequest(() =>
-            axios.post(url, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            })
-        );
-    };
-
-    /**
-     * PUT запит на оновлення ресурсу
-     * @param {String} url - API endpoint
-     * @param {Object|FormData} data - дані для відправки
-     * @returns {Promise}
-     */
-    const updateData = (url, data) => {
-        return handleRequest(() =>
+    const storeData = (url, data) =>
+        handleRequest(() =>
             axios.post(url, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             })
         );
-    };
 
     /**
-     * GET запит на отримання ресурсу
+     * Send POST request to update a resource
+     *
+     * @param {String} url - API endpoint
+     * @param {Object} data - form data or plain object
+     * @returns {Promise}
+     */
+    const updateData = (url, data) =>
+        handleRequest(() =>
+            axios.post(url, data, {
+                headers: { "Content-Type": "multipart/form-data" },
+            })
+        );
+
+    /**
+     * Send GET request to fetch data from API
+     *
      * @param {String} url - API endpoint
      * @returns {Promise}
      */
-    const fetchData = (url) => {
-        return handleRequest(() => axios.get(url), "Failed to fetch data.");
-    };
+    const fetchData = (url) =>
+        handleRequest(() => axios.get(url), "Failed to fetch data.");
 
     /**
-     * DELETE запит з масивом ID для видалення
+     * Send DELETE request to remove resources by IDs
+     *
      * @param {String} url - API endpoint
-     * @param {Array} ids - масив ID для видалення
+     * @param {Array} ids - array of IDs to delete
      * @returns {Promise}
      */
-    const deleteData = (url, ids = []) => {
-        return handleRequest(() => axios.delete(url, { data: { ids } }));
-    };
+    const deleteData = (url, ids = []) =>
+        handleRequest(() => axios.delete(url, { data: { ids } }));
 
     return {
         loading,
         errorsRequests,
-        form,
-        locales,
-        initForm,
-        fillForm,
         storeData,
         updateData,
         fetchData,

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('locale')->index();
 
             $table->string('title'); // Наприклад, "25кг (мішок)" або "Red"
+            $table->string('slug');
             $table->string('description')->nullable();
 
             $table->timestamps();

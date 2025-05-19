@@ -12,11 +12,10 @@
 
 ## v2.00.00
 
-## v1.01.05 ProductVariantValue
+## v1.01.06 MediaController
 
--   php artisan make:model ProductVariantValue -m
--   php artisan make:controller API\ProductVariantValueController --model=ProductVariantValue --resource --requests --api
--   php artisan make:resource ProductVariantValueResource
+-   php artisan make:controller Api\MediaController --model=Media --resource --api
+-   npm i sweetalert2
 
 ## v1.01.04 Telescope
 

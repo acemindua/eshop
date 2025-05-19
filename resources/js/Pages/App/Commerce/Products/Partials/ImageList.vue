@@ -36,7 +36,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps({
     loading: Boolean,
-    errors: String,
+    errors: Object,
     images: Array,
 });
 

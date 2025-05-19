@@ -45,7 +45,10 @@
 
                 <TabPanels class="mt-2">
                     <TabPanel>
-                        <TabVariant :data-id="data.item.id" :errors="errors" />
+                        <VariantList
+                            :product-id="data.item.id"
+                            :errors="errors"
+                        />
                     </TabPanel>
                     <TabPanel>
                         <div class="border bg-white p-4 md:p-8 flex rounded-lg">
@@ -104,7 +107,7 @@ import ButtonTabGroup from "@/Components/ButtonTabGroup.vue";
 import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.vue";
 import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";
 import VarDump from "@/Shared/VarDump.vue";
-import TabVariant from "./Partials/TabVariant.vue";
+import VariantList from "./Partials/Variant/VariantList.vue";
 
 // Пропси
 const props = defineProps({

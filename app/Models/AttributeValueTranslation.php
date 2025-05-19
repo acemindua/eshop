@@ -9,5 +9,5 @@ class AttributeValueTranslation extends Model
     //
     public $timestamps = false;
 
-    protected $fillable = ['title', 'description'];
+    protected $fillable = ['title', 'slug', 'description'];
 }

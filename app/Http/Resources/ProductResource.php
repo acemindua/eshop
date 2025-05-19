@@ -19,9 +19,13 @@ class ProductResource extends JsonResource
             'title'     => $this->title,
             'price'     => $this->price,
             'quantity'  => $this->quantity,
-            'slug'      => $this->slug,
+            'slug'      => [
+                'product' => $this->slug,
+                'variant' => null, // <-- завжди є ключ variant
+            ],
             'images'    => $this->sorted_images,
             'status'    => $this->public ? true : false,
+            'variants'  => ProductVariantResource::collection($this->variants)
             //'category'  => $this->category ? new CategoryResource($this->category) : null,
             //'country'   => $this->country ? new CountryResource($this->country) : null,
             //'manufacturer'  => $this->manufacturer ? new ManufacturerResource($this->manufacturer) : null,

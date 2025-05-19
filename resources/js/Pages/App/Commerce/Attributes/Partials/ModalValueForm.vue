@@ -82,6 +82,34 @@ const onSave = () => {
                         :message="errors[`${currentLocale}.title`]"
                     />
                 </div>
+
+                <div class="mb-3" v-if="isEditing">
+                    <div class="flex items-center space-x-1">
+                        <span class="text-red-500">*</span>
+                        <InputLabel
+                            :for="`${currentLocale}[title]`"
+                            :value="`Slug (${currentLocale})`"
+                            class="flex font-semibold"
+                        />
+                    </div>
+
+                    <TextInput
+                        v-if="model[currentLocale]"
+                        :id="`${currentLocale}[slug]`"
+                        type="text"
+                        v-model="model[currentLocale].slug"
+                        class="block w-full"
+                        :placeholder="`Slug (${currentLocale})`"
+                        :class="{
+                            'border-red-500': errors[`${currentLocale}.slug`],
+                        }"
+                        required
+                    />
+                    <InputError
+                        class="mt-2"
+                        :message="errors[`${currentLocale}.slug`]"
+                    />
+                </div>
             </LanguagesTabs>
 
             <div class="space-y-4 mt-4">

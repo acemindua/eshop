@@ -14,12 +14,9 @@ const props = defineProps({
     },
     data: {
         type: Object,
-        default: () => ({ images: [] }),
+        default: () => ({ images: [], variants: [] }),
     },
 });
-
-// Preview state (decoupled from readonly prop)
-const previewRef = ref(props.preview);
 
 // Styles for image container
 const styles = computed(() => ({
@@ -27,21 +24,32 @@ const styles = computed(() => ({
     height: `${props.config.height}px`,
 }));
 
-// Extracted image array
-const images = computed(() => props.data.images || []);
+// Об'єднані зображення: продукт + всі варіанти
+const allImages = computed(() => {
+    const main = props.data.images || [];
+    const variants = props.data.variants || [];
 
-// Auto-update preview from data if no external preview passed
+    const variantImages = variants.flatMap((v) => v.images || []);
+    return [...main, ...variantImages];
+});
+
+// Preview (reactive)
+const previewRef = ref("");
+
+// Update previewRef від props.preview
 watch(
     () => props.preview,
-    () => {
-        previewRef.value = props.preview;
+    (newVal) => {
+        previewRef.value = newVal || "";
     },
     { immediate: true }
 );
 
+// Якщо preview не задано — беремо перший із зображень
 onMounted(() => {
-    if (!previewRef.value && images.value.length > 0) {
-        previewRef.value = images.value[0]?.url || "";
+    if (!previewRef.value && allImages.value.length > 0) {
+        previewRef.value =
+            allImages.value[0].preview || allImages.value[0].url || "";
     }
 });
 
@@ -60,7 +68,7 @@ const iconSize = computed(() => props.config.width / 2);
             class="w-[80%] h-auto mx-auto object-cover"
         />
         <div v-else class="text-gray-400 text-sm text-center">
-            <IconPhoto stroke="{2}" :size="iconSize" />
+            <IconPhoto :stroke="2" :size="iconSize" />
         </div>
     </div>
 </template>

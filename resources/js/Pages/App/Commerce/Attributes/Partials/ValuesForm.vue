@@ -2,6 +2,7 @@
 import { onBeforeMount, ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import useApiResourceService from "@/Composables/useApiResourceService";
+import useTranslatableForm from "@/Composables/useTranslatableForm";
 
 // Компоненти
 import DataValueTable from "./DataValueTable.vue";
@@ -26,16 +27,18 @@ const items = ref([]);
 // API-сервіс
 const {
     loading,
-    form,
     errorsRequests,
-    locales,
-    initForm,
-    fillForm,
     storeData,
     fetchData,
     updateData,
     deleteData,
-} = useApiResourceService(["title"]);
+} = useApiResourceService();
+useApiResourceService();
+
+const { form, locales, initForm, fillForm } = useTranslatableForm([
+    "title",
+    "slug",
+]);
 
 // Завантажити початкові дані
 onBeforeMount(() => {

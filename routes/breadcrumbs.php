@@ -25,31 +25,26 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail, string $slug) {
 });
 
 
-Breadcrumbs::for(
-    'product.show',
-    function (BreadcrumbTrail $trail, string $slug, int $id) {
-        $product = Product::whereTranslation('slug', $slug)->first();
+Breadcrumbs::for('product.show', function (BreadcrumbTrail $trail, string $productSlug, ?string $variantSlug = null) {
+    $product = Product::whereTranslation('slug', $productSlug)->firstOrFail();
 
-        if (!$product) { // Перевірка на null, якщо продукт не знайдений
-            $variant = ProductVariant::where('slug', $slug)->first();
+    if ($variantSlug) {
+        $variant = $product->variants
+            ->first(fn($variant) => optional($variant->attribute_value)->slug === $variantSlug);
 
-            if ($variant) { // Перевірка, чи існує варіант
-                $product = $variant->product; // Отримуємо продукт через варіант
-
-                // Оновлюємо атрибут 'title' з додатковою інформацією
-                $product->title = $product->title . " (" . $variant->attribute_value_title . ")";
-                $product->slug = $variant->slug;
-            }
+        if ($variant) {
+            $product->title .= " (" . $variant->attribute_value_title . ")";
         }
-        // Передаємо категорію як об'єкт
-        $category = Category::find($product->category->id);
-        $trail->parent('category', $category->slug);
-        $trail->push(
-            $product->title,
-            route('product.show', compact('id', 'slug'))
-        );
     }
-);
+
+    $category = $product->category;
+
+    $trail->parent('category', $category->slug);
+    $trail->push($product->title, route('product.show', [
+        'productSlug' => $productSlug,
+        'variantSlug' => $variantSlug
+    ]));
+});
 
 // Dashboard
 Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
