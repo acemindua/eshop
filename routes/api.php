@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Api\AttributeController;
 use App\Http\Controllers\API\AttributeValueController;
-use App\Http\Controllers\Api\V1\MediaController;
-use App\Http\Controllers\API\MessageController;
+use App\Http\Controllers\API\ChatRooms\TelegramController;
+use App\Http\Controllers\API\V1\MediaController;
+use App\Http\Controllers\API\V1\MessageController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\ProductMediaController;
 use App\Http\Controllers\API\UploadImageController;
@@ -13,6 +14,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
+    Route::prefix('chat')->group(function () {
+        Route::apiResource('messages', MessageController::class);
+        Route::apiResource('telegram-messages', TelegramController::class);
+    });
+
     Route::apiResource('product-variants', ProductVariantController::class);
     Route::apiResource('media', MediaController::class);
     Route::post('/media/sort', [MediaController::class, 'sort'])->name('media.sort');
@@ -40,5 +46,3 @@ Route::post('/store/upload/image', [UploadImageController::class, 'store'])->nam
 Route::apiResource('products', ProductController::class);
 Route::apiResource('attributes', AttributeController::class);
 Route::apiResource('attribute-values', AttributeValueController::class);
-
-Route::apiResource('chat-message', MessageController::class);

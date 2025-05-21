@@ -31,4 +31,9 @@ class MessageSent implements ShouldBroadcast
             new Channel('test'),
         ];
     }
+
+    public function broadcastAs(): string
+    {
+        return 'MessageSent';
+    }
 }

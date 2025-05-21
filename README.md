@@ -10,13 +10,17 @@
 -   php artisan reverb:start --debug
 -   php artisan storage:link
 
-## v1.02.00
+## v1.02.00 Chat Rooms -> Telegram
 
 -   mpm install --save-dev laravel-echo pusher-js
+-   composer require irazasyed/telegram-bot-sdk
+-   php artisan vendor:publish --tag="telegram-config"
+-   php artisan make:controller API\ChatRooms\TelegramController --model=Message --resource --api
+
 
 ## v1.01.06 MediaController
 
--   php artisan make:controller Api\MediaController --model=Media --resource --api
+-   php artisan make:controller API\MediaController --model=Media --resource --api
 -   npm i sweetalert2
 
 ## v1.01.04 Telescope

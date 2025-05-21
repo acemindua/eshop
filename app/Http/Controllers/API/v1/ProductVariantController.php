@@ -7,7 +7,6 @@ use App\Http\Requests\StoreProductVariantRequest;
 use App\Http\Resources\ProductVariantResource;
 use App\Models\Product;
 use App\Models\ProductVariant;
-use App\Models\ProductVariantValue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

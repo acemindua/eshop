@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\V1;
 
-use App\Events\MessageEvent;
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
@@ -30,6 +30,7 @@ class MessageController extends Controller
         ]);
 
         broadcast(new MessageSent($message));
+        //Log::info('Подія MessageSent викликана!', ['message' => $message]);
     }
 
     /**

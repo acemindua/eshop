@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\API\ChatRooms\TelegramController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\RoomsController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+
+Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
 
 Route::group(['middleware' => ['auth', 'verified', 'role:super-user|admin|moder|auth']], function () {
     Route::domain('app.' . parse_url(config('app.url'), PHP_URL_HOST))->name('admin.')->group(base_path('routes/app.php'));

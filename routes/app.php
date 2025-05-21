@@ -34,12 +34,6 @@ Route::prefix('commerce')->group(function () {
 });
 Route::prefix('messages')->group(function () {
     Route::get('/', [ChatController::class, 'index'])->name('chat.rooms');
-
-
-
-
-    Route::get('telegram', [TelegramController::class, 'index'])->name('telegram.index');
-    Route::post('telegram', [TelegramController::class, 'store'])->name('telegram.store');
 });
 Route::prefix('settings')->group(function () {
     Route::resources([
