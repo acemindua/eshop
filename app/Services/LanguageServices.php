@@ -5,10 +5,11 @@ namespace App\Services;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Models\Language;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Cache;
+
 
 class LanguageServices
 {
-
     /**
      * Отримує всі доступні мови.
      *
@@ -82,21 +83,28 @@ class LanguageServices
      *
      * @return array
      */
+    /**
+     * Витягує "ключі" доступних мов.
+     *
+     * @return array
+     */
     public function getActiveLanguageKeys(): array
     {
         $locale = config('app.locale');
 
-        // Перевіряємо, чи існує таблиця 'languages'
         if (!Schema::hasTable('languages')) {
-            return [$locale]; // Повертаємо лише поточну локаль, щоб уникнути помилки
+            return [$locale];
         }
 
-        $default = Language::query()->where('code', $locale)->first();
+        // Використовуємо кешування на 60 хвилин
+        return Cache::remember('active_language_keys', 3600, function () use ($locale) {
+            $default = Language::query()->where('code', $locale)->first();
 
-        if (!$default) {
-            $this->createActiveLanguages($locale);
-        }
+            if (!$default) {
+                $this->createActiveLanguages($locale);
+            }
 
-        return Language::where('public', true)->pluck('code')->toArray();
+            return Language::where('public', true)->pluck('code')->toArray();
+        });
     }
 }

@@ -10,7 +10,9 @@
 -   php artisan reverb:start --debug
 -   php artisan storage:link
 
-## v2.00.00
+## v1.02.00
+
+-   mpm install --save-dev laravel-echo pusher-js
 
 ## v1.01.06 MediaController
 

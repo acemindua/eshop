@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //URL::forceScheme('https');
-        config()->set('translatable.locales', (new \App\Services\LanguageServices())->getActiveLanguageKeys());
+
 
         Vite::prefetch(concurrency: 3);
 
@@ -55,6 +55,8 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
+
+        config()->set('translatable.locales', (new \App\Services\LanguageServices())->getActiveLanguageKeys());
 
         DB::whenQueryingForLongerThan(500, function (Connection $connection) {
             //TODO
