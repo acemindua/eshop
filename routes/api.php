@@ -5,10 +5,11 @@ use App\Http\Controllers\API\AttributeValueController;
 use App\Http\Controllers\API\ChatRooms\TelegramController;
 use App\Http\Controllers\API\V1\MediaController;
 use App\Http\Controllers\API\V1\MessageController;
-use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\ProductMediaController;
 use App\Http\Controllers\API\UploadImageController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\V1\DataController;
+use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\ProductVariantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,10 +22,16 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('messages', MessageController::class);
         Route::apiResource('telegram-messages', TelegramController::class);
     });
-
+    // E-Commerce
+    Route::apiResource('products', ProductController::class);
     Route::apiResource('product-variants', ProductVariantController::class);
+    Route::apiResource('attributes', AttributeController::class);
+    Route::apiResource('attribute-values', AttributeValueController::class);
     Route::apiResource('media', MediaController::class);
     Route::post('/media/sort', [MediaController::class, 'sort'])->name('media.sort');
+
+    // DataController
+    Route::get('/data', [DataController::class, 'index'])->name('api.data');
 });
 
 
@@ -45,7 +52,3 @@ Route::prefix('v1')->group(function () {
 });
 
 Route::post('/store/upload/image', [UploadImageController::class, 'store'])->name('api.upload.image');
-
-Route::apiResource('products', ProductController::class);
-Route::apiResource('attributes', AttributeController::class);
-Route::apiResource('attribute-values', AttributeValueController::class);

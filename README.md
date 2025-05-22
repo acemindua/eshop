@@ -9,6 +9,30 @@
 -   npm run dev
 -   php artisan reverb:start --debug
 -   php artisan storage:link
+-   composer install --optimize-autoloader --no-dev
+
+## v3 Laravel Octane (для максимуму)
+
+-   composer require laravel/octane
+-   php artisan octane:install
+-   php artisan octane:start
+
+## v2 Blog
+
+## v1.06.00 SEO-теги у Vue 3 + Inertia
+
+
+## v1.05.00 Api Data Controller
+
+-   php artisan make:controller API\V1\DataController --api
+
+## v1.04.00 App Settings
+
+-   php artisan make:model Setting -m
+-   php artisan make:controller \App\Http\Controllers\App\Settings\SettingController --model=Setting --resource
+-   php artisan make:policy SettingPolicy --model=Setting
+-   php artisan make:seeder SettingsSeeder
+-   php artisan make:resource SettingResource
 
 ## v1.03.00 Options Product
 

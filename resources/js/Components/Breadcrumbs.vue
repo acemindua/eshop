@@ -1,7 +1,7 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import { computed } from "vue";
-import { IconHome2 } from "@tabler/icons-vue";
+import { IconHomeFilled } from "@tabler/icons-vue";
 import { Link } from "@inertiajs/vue3"; // Підключаємо Link
 
 const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
@@ -33,7 +33,7 @@ const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
                         'hover:underline': !page.current,
                     }"
                 >
-                    <IconHome2
+                    <IconHomeFilled
                         v-if="page.title === $t('Home')"
                         class="w-4 h-4"
                         stroke="{1}"

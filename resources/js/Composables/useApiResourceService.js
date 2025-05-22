@@ -75,8 +75,9 @@ export default function useApiResourceService() {
      * @param {String} url - API endpoint
      * @returns {Promise}
      */
-    const fetchData = (url) =>
-        handleRequest(() => axios.get(url), "Failed to fetch data.");
+    const fetchData = (url) => {
+        return handleRequest(() => axios.get(url), "Failed to fetch data.");
+    };
 
     /**
      * Send DELETE request to remove resources by IDs

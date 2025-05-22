@@ -32,7 +32,7 @@
         </div>
 
         <h4 class="grow px-3">{{ data.title }}</h4>
-        <small class="px-3 text-xs text-slate-400">/{{ data.slug }}</small>
+        <!--    <small class="px-3 text-xs text-slate-400">/{{ data.slug }}</small> -->
         <div class="flex items-center justify-between px-3">
             <span class="text-xl">{{ data.price }} $</span>
         </div>

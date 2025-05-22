@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ProductsAndCategoriesTableSeeder::class,
             ManufacturerSeeder::class,
             CountrySeeder::class,
+            SettingsSeeder::class,
         ]);
     }
 }

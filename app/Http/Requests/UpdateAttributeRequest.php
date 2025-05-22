@@ -29,6 +29,9 @@ class UpdateAttributeRequest extends FormRequest
             '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('attribute_translations', 'title')->using(function ($q) {
                 $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
             })],
+            '%slug%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('attribute_translations', 'slug')->using(function ($q) {
+                $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
+            })],
             '%description%' => ['nullable', 'string'],
             'type' => ['nullable', 'string', 'min:3'],
             'order' => ['required', 'integer'],

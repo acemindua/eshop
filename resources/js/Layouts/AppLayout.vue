@@ -74,8 +74,8 @@ const title = computed(() => {
                 <!-- Bottom nav -->
                 <div class="flex flex-col items-center space-y-4">
                     <AppAsideButton
-                        v-if="can('role-view') || is('super-user')"
-                        :href="route('admin.messangers.index')"
+                        v-if="can('setting-view') || is('super-user')"
+                        :href="route('admin.settings.index')"
                         :active="$page.url.startsWith('/settings')"
                     >
                         <IconSettings :stroke="1" class="w-6 h-6" />

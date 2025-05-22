@@ -1,25 +1,26 @@
 <template>
-    <Layout>
-        <div class="grid grid-cols-4 w-full gap-1">
-            <div v-for="item in items" :key="item.id" class="relative">
-                <CardProduct :product="item" />
+    <MainLayout>
+        <section>
+            <div class="grid grid-cols-4 gap-4">
+                <ProductCard
+                    v-for="item in items"
+                    :key="item.id"
+                    :data="item"
+                />
             </div>
-        </div>
-
-        <section
-            v-if="$page.props.app.env === 'local'"
-            class="mx-auto max-w-7xl"
-        >
-            <VarDump :data="data" />
         </section>
-    </Layout>
+        <section v-if="$page.props.app.env === 'local'">
+            <VarDump :data="data.item.data" />
+        </section>
+    </MainLayout>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import Layout from "@/Layouts/MainLayout.vue";
-import CardProduct from "@/Shared/Commerce/CardProduct.vue";
+import { ref, onMounted } from "vue";
+import useApiResourceService from "@/Composables/useApiResourceService";
 import VarDump from "@/Shared/VarDump.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
+import ProductCard from "@/Components/Themes/Ecommerce/ProductCard.vue";
 
 const props = defineProps({
     data: {
@@ -27,7 +28,19 @@ const props = defineProps({
     },
 });
 
-const items = computed(() => {
-    return props.data.items || [];
+const items = ref([]);
+
+onMounted(() => {
+    getItems();
 });
+
+// API-сервіс
+const { loading, errorsRequests, fetchData } = useApiResourceService();
+
+const getItems = async () => {
+    const url = new URL(route("products.index"));
+    url.searchParams.append("category_id", props.data.item.data.id);
+    const response = await fetchData(url.toString());
+    items.value = response.data;
+};
 </script>

@@ -6,12 +6,14 @@ use App\Models\Category;
 use App\Models\Language;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\User;
 use App\Policies\CategoryPolicy;
 use App\Policies\LanguagePolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
+use App\Policies\SettingPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +57,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(Setting::class, SettingPolicy::class);
 
         config()->set('translatable.locales', (new \App\Services\LanguageServices())->getActiveLanguageKeys());
 

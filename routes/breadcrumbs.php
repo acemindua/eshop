@@ -93,6 +93,7 @@ Breadcrumbs::resource('admin.manufacturers', __('Manufacturers'));
 Breadcrumbs::resource('admin.attributes', __('Attributes'));
 Breadcrumbs::resource('admin.options', __('Options'));
 //Settings
+Breadcrumbs::resource('admin.settings', __('Settings'));
 Breadcrumbs::resource('admin.messengers', __('Messengers'));
 Breadcrumbs::resource('admin.roles', __('Roles'));
 Breadcrumbs::resource('admin.languages', __('Languages'));

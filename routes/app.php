@@ -10,6 +10,7 @@ use App\Http\Controllers\App\DashboardController;
 use App\Http\Controllers\App\Settings\LanguageController;
 use App\Http\Controllers\App\Settings\MessengerController;
 use App\Http\Controllers\App\Settings\RolePermissionController;
+use App\Http\Controllers\App\Settings\SettingController;
 use App\Http\Controllers\App\UserController;
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,7 @@ Route::prefix('messages')->group(function () {
 });
 Route::prefix('settings')->group(function () {
     Route::resources([
+        'settings'          => SettingController::class,
         'messangers'        => MessengerController::class,
         'languages'         => LanguageController::class,
         'roles'             => RolePermissionController::class,
