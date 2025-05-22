@@ -30,7 +30,7 @@ class MessageController extends Controller
         ]);
 
         broadcast(new MessageSent($message));
-        //Log::info('Подія MessageSent викликана!', ['message' => $message]);
+        Log::info('Подія MessageSent викликана!', ['message' => $message]);
     }
 
     /**

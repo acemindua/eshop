@@ -57,6 +57,16 @@
         </template>
         <span>{{ $t("Attributes") }}</span>
     </NavigationLink>
+    <NavigationLink
+        v-if="can('options-view') || is('super-user')"
+        :href="route('admin.options.index')"
+        :active="$page.url.startsWith('/commerce/options')"
+    >
+        <template #icon>
+            <IconAdjustmentsHorizontal :stroke="1" width="20" />
+        </template>
+        <span>{{ $t("Options") }}</span>
+    </NavigationLink>
 </template>
 
 <script setup>
@@ -66,6 +76,7 @@ import {
     IconSitemap,
     IconBrandApple,
     IconBrandSteam,
+    IconAdjustmentsHorizontal,
 } from "@tabler/icons-vue";
 import NavigationLink from "../Components/NavigationLink.vue";
 </script>

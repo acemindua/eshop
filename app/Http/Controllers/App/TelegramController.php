@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App;
 
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,4 +18,6 @@ class TelegramController extends Controller
             []
         );
     }
+
+   
 }

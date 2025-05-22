@@ -13,6 +13,9 @@ use App\Http\Controllers\API\V1\ProductVariantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
+
 Route::prefix('v1')->group(function () {
     Route::prefix('chat')->group(function () {
         Route::apiResource('messages', MessageController::class);

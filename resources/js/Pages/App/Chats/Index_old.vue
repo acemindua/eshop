@@ -18,7 +18,7 @@
                             }"
                         >
                             <div
-                                class="p-4 rounded-lg shadow-md"
+                                class="w-3/4 p-4 rounded-lg shadow-md"
                                 :class="{
                                     'bg-stone-300':
                                         message.user_id !== form.user_id,
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="col-span-3 bg-white p-2 rounded-lg">
+            <div class="col-span-2 bg-white p-2 rounded-lg">
                 <form
                     @submit.prevent="submit"
                     class="flex flex-row items-center space-x-2"
@@ -68,12 +68,6 @@
                     </button>
                 </form>
             </div>
-        </div>
-
-        <div>
-            <pre>
-                {{ messages }}
-            </pre>
         </div>
     </ChatLayout>
 </template>

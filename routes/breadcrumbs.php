@@ -84,12 +84,15 @@ Breadcrumbs::macro('resource', function (string $name, string $title) {
     });
 });
 
-// Реєструємо ресурси
+// Admin
 Breadcrumbs::resource('admin.users', __('Users'));
 Breadcrumbs::resource('admin.orders', __('Orders'));
 Breadcrumbs::resource('admin.categories', __('Categories'));
 Breadcrumbs::resource('admin.products', __('Products'));
 Breadcrumbs::resource('admin.manufacturers', __('Manufacturers'));
+Breadcrumbs::resource('admin.attributes', __('Attributes'));
+Breadcrumbs::resource('admin.options', __('Options'));
+//Settings
+Breadcrumbs::resource('admin.messengers', __('Messengers'));
 Breadcrumbs::resource('admin.roles', __('Roles'));
 Breadcrumbs::resource('admin.languages', __('Languages'));
-Breadcrumbs::resource('admin.attributes', __('Attributes'));

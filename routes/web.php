@@ -1,14 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\ChatRooms\TelegramController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\RoomsController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-
-Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
 
 Route::group(['middleware' => ['auth', 'verified', 'role:super-user|admin|moder|auth']], function () {
     Route::domain('app.' . parse_url(config('app.url'), PHP_URL_HOST))->name('admin.')->group(base_path('routes/app.php'));
@@ -37,7 +34,6 @@ Route::middleware(['web'])->group(
         Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
     }
 );
-
 
 Route::get('/rooms', [RoomsController::class, 'index'])->name('rooms.index');
 Route::get('/rooms/{room}', [RoomsController::class, 'show'])->name('rooms.show');

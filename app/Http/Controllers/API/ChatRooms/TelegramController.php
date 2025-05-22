@@ -6,6 +6,7 @@ use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Api;
 
 class TelegramController extends Controller
@@ -30,24 +31,36 @@ class TelegramController extends Controller
 
     public function webhook(Request $request)
     {
-        $data = $request->all();
+        $update = $request->all();
 
-        if (!isset($data['message']['text'])) {
-            return response()->json(['status' => 'no message'], 400);
+        // лог для перевірки
+        Log::info('Telegram webhook', $update);
+
+        // перевірка чи є повідомлення
+        if (isset($update['message'])) {
+            $messageData = $update['message'];
+
+            $chatId = $messageData['chat']['id'];
+            $text = $messageData['text'] ?? '';
+            $username = $messageData['from']['username'] ?? 'Unknown';
+
+            // Зберігаємо в базу (опціонально створити користувача по chatId)
+            $message = Message::create([
+                'user_id' => 9999, // або знайди user_id по chatId
+                'text' => $text,
+            ]);
+
+            // Трансляція через Pusher
+            broadcast(new MessageSent($message));
+
+            // Відповідь користувачеві
+            $this->telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Привіт, @$username! Ви написали: \"$text\"",
+            ]);
         }
 
-        $text = $data['message']['text'];
-        $telegramUserId = $data['message']['from']['id'];
-
-        // Ти можеш тут створювати user_id динамічно або хардкодити для тесту
-        $message = Message::create([
-            'user_id' => $telegramUserId, // або знайди user_id по telegramUserId
-            'text' => $text,
-        ]);
-
-        broadcast(new MessageSent($message))->toOthers();
-
-        return response()->json(['status' => 'ok']);
+        return response()->json(['status' => 'received']);
     }
 
     /**
@@ -56,10 +69,7 @@ class TelegramController extends Controller
     public function store(Request $request)
     {
         //
-
         $chatId = '1145581773'; // Replace with your chat ID
-
-
         $message = Message::create([
             'user_id' => $request->user_id,
             'text' => $request->message,

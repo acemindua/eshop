@@ -1,8 +1,5 @@
 <template>
     <Layout>
-        <Head title="Languages" />
-        <h1 class="font-semibold border-b p-4">Languages</h1>
-
         <div>
             <section class="overflow-x-auto m-4 border bg-white">
                 <table class="w-full text-sm">

@@ -19,6 +19,16 @@ class LoginRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        $cleanPhone = preg_replace('/[^\d]/', '', $this->phone);
+        $cleanPhone = preg_replace('/^38/', '', $cleanPhone);
+
+        $this->merge([
+            'phone' => $cleanPhone,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,12 +36,9 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        $this->merge(['phone' => preg_replace('/[^\d]/', '', $this->phone)]); // Видаляємо всі нечислові символи
-        $this->merge(['phone' => preg_replace('/^38/', '', $this->phone)]);   // Видаляємо тільки 38 на початку
-
         return [
-            'phone' => ['nullable', 'string', 'regex:/^0\d{9}$/'], // Очікуємо формат 0671234567 (10 цифр, починається з 0)
-            'email' => ['nullable', 'string', 'email'],
+            'phone' => ['nullable', 'string', 'regex:/^0\d{9}$/', 'required_without:email'],
+            'email' => ['nullable', 'string', 'email', 'required_without:phone'],
             'password' => ['required', 'string'],
         ];
     }
@@ -49,20 +56,21 @@ class LoginRequest extends FormRequest
 
         if ($this->filled('email')) {
             $credentials['email'] = $this->input('email');
+            $field = 'email';
         } elseif ($this->filled('phone')) {
-            $phone = preg_replace('/[^\d]/', '', $this->input('phone')); // Видаляємо зайві символи
-            $phone = preg_replace('/^38/', '', $phone); // Видаляємо тільки 38 на початку
-            $credentials['phone'] = $phone;
+            $credentials['phone'] = $this->input('phone'); // вже нормалізований у prepareForValidation()
+            $field = 'phone';
         } else {
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => __('auth.failed'), // залишаємо для сумісності, але теоретично не потрібно
             ]);
         }
 
         if (!Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                $field => __('auth.failed'),
             ]);
         }
 

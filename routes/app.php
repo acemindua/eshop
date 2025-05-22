@@ -5,10 +5,11 @@ use App\Http\Controllers\App\Commerce\ManufacturerController;
 use App\Http\Controllers\App\Commerce\OrderController;
 use App\Http\Controllers\App\Commerce\ProductController;
 use App\Http\Controllers\App\Commerce\AttributeController;
+use App\Http\Controllers\App\Commerce\OptionController;
 use App\Http\Controllers\App\DashboardController;
 use App\Http\Controllers\App\Settings\LanguageController;
+use App\Http\Controllers\App\Settings\MessengerController;
 use App\Http\Controllers\App\Settings\RolePermissionController;
-use App\Http\Controllers\App\TelegramController;
 use App\Http\Controllers\App\UserController;
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,8 @@ Route::prefix('commerce')->group(function () {
         'categories'    => CategoryController::class,
         'products'      => ProductController::class,
         'manufacturers' => ManufacturerController::class,
-        'attributes'        => AttributeController::class,
+        'attributes'    => AttributeController::class,
+        'options'       => OptionController::class,
     ]);
 });
 Route::prefix('messages')->group(function () {
@@ -37,6 +39,7 @@ Route::prefix('messages')->group(function () {
 });
 Route::prefix('settings')->group(function () {
     Route::resources([
+        'messangers'        => MessengerController::class,
         'languages'         => LanguageController::class,
         'roles'             => RolePermissionController::class,
 

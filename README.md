@@ -10,13 +10,24 @@
 -   php artisan reverb:start --debug
 -   php artisan storage:link
 
+## v1.03.00 Options Product
+
+-   php artisan make:model Option -m
+-   php artisan make:model OptionTranslation -m
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\OptionController --model=Option --resource --requests
+-   php artisan make:resource OptionResource
+
+## v1.02.01 Messenger
+
+-   php artisan make:model Messenger -m
+-   php artisan make:controller \App\Http\Controllers\App\Settings\MessengerController --model=Messenger --resource --requests
+
 ## v1.02.00 Chat Rooms -> Telegram
 
 -   mpm install --save-dev laravel-echo pusher-js
 -   composer require irazasyed/telegram-bot-sdk
 -   php artisan vendor:publish --tag="telegram-config"
 -   php artisan make:controller API\ChatRooms\TelegramController --model=Message --resource --api
-
 
 ## v1.01.06 MediaController
 
@@ -34,7 +45,7 @@
 
 ## v1.01.03 Attribute Values
 
--   php artisan make:controller Api\AttributeController --model=Attribute --resource --api
+-   php artisan make:controller API\AttributeController --model=Attribute --resource --api
 
 ## v1.01.02 Chat Update
 
