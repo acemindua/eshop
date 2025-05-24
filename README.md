@@ -19,6 +19,10 @@
 
 ## v2 Blog
 
+## v1.09.00 Optimize translatable
+
+- php artisan make:provider TranslatableServiceProvider
+
 ## v1.08.00 SettingsServiceProvider
 
 -   php artisan make:provider SettingsServiceProvider

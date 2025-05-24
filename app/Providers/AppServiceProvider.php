@@ -29,8 +29,6 @@ class AppServiceProvider extends ServiceProvider
 
         Vite::prefetch(concurrency: 3);
 
-        config()->set('translatable.locales', (new \App\Services\LanguageServices())->getActiveLanguageKeys());
-
         DB::whenQueryingForLongerThan(500, function (Connection $connection) {
             //TODO
         });
