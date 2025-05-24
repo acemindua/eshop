@@ -7,6 +7,7 @@ use App\Http\Controllers\App\Commerce\ProductController;
 use App\Http\Controllers\App\Commerce\AttributeController;
 use App\Http\Controllers\App\Commerce\OptionController;
 use App\Http\Controllers\App\DashboardController;
+use App\Http\Controllers\App\PageController;
 use App\Http\Controllers\App\Settings\LanguageController;
 use App\Http\Controllers\App\Settings\MessengerController;
 use App\Http\Controllers\App\Settings\RolePermissionController;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::resources([
+    'pages'         => PageController::class,
     'users'         => UserController::class,
 ]);
 

@@ -15,8 +15,10 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'        => $this->id,
-            'title'     => $this->title,
+            'id'            => $this->id,
+            'title'         => $this->title,
+            'description'   => $this->description,
+            'content'       => $this->content,
             'price'     => $this->price,
             'quantity'  => $this->quantity,
             'slug'      => [
@@ -29,7 +31,6 @@ class ProductResource extends JsonResource
             //'category'  => $this->category ? new CategoryResource($this->category) : null,
             //'country'   => $this->country ? new CountryResource($this->country) : null,
             //'manufacturer'  => $this->manufacturer ? new ManufacturerResource($this->manufacturer) : null,
-            //'variants'      =>  $this->variants ? ProductVariantResource::collection($this->variants)  : null
         ];
     }
 }

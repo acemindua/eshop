@@ -25,9 +25,19 @@
         </template>
         <span>{{ $t("Users") }}</span>
     </NavigationLink>
+    <NavigationLink
+        v-if="can('page-view') || is('super-user')"
+        :href="route('admin.pages.index')"
+        :active="$page.url.startsWith('/pages')"
+    >
+        <template #icon>
+            <IconToiletPaper :stroke="1" width="20" />
+        </template>
+        <span>{{ $t("Pages") }}</span>
+    </NavigationLink>
 </template>
 
 <script setup>
-import { IconDashboard, IconUsers } from "@tabler/icons-vue";
+import { IconDashboard, IconUsers, IconToiletPaper } from "@tabler/icons-vue";
 import NavigationLink from "../Components/NavigationLink.vue";
 </script>

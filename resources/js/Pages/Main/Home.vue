@@ -9,11 +9,16 @@
                 <TopProducts />
             </div>
         </div>
+
+        <section v-if="$page.props.app.env === 'local'">
+            <VarDump :data="data" />
+        </section>
     </MainLayout>
 </template>
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import TopProducts from "@/Components/Themes/Ecommerce/TopProducts.vue";
+import VarDump from "@/Shared/VarDump.vue";
 
 const props = defineProps({
     data: {

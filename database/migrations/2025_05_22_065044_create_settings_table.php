@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('key')->unique();
-            $table->string('label')->nullable(); // нове поле для підпису
+            $table->string('label')->nullable();
+            $table->enum('type', ['text', 'bool', 'int', 'float', 'json'])->default('text'); // <- новий стовпець
             $table->text('value')->nullable();
             $table->timestamps();
         });

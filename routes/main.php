@@ -1,14 +1,16 @@
 <?php
 
 use App\Http\Controllers\Main\HomeController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/category__{slug}', [HomeController::class, 'category'])->name('category');
-Route::get('/{productSlug}/{variantSlug?}', [HomeController::class, 'show'])->name('product.show');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/account', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::delete('/account', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Окремий маршрут для категорій (із префіксом)
+    Route::get('/category__{slug}', 'showCategoryPage')->name('category');
+
+    // Універсальний маршрут: продукт або сторінка
+    Route::get('/{slug}/{optional?}', 'resolveDynamicRoute')
+        ->where('slug', '[a-z0-9-]+')
+        ->name('dynamic.route');
 });

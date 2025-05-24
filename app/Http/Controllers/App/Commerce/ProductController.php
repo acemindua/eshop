@@ -23,7 +23,12 @@ use Inertia\Response;
 class ProductController extends Controller
 {
 
-    function __construct(public int $pages = 15,  public array $data = []) {}
+    public $pages;
+
+    function __construct(?int $pages = null,  public array $data = [])
+    {
+        $this->pages = $pages ?? (int) config('settings.items_per_page', 12);
+    }
 
     /**
      * Display a listing of the resource.

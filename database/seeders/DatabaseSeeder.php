@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ManufacturerSeeder::class,
             CountrySeeder::class,
             SettingsSeeder::class,
+            PageSeeder::class,
         ]);
     }
 }

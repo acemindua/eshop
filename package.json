@@ -25,6 +25,7 @@
         "@ckeditor/ckeditor5-vue": "^7.3.0",
         "@headlessui/vue": "^1.7.23",
         "@tabler/icons-vue": "^3.30.0",
+        "@vueuse/head": "^2.0.0",
         "ckeditor5": "^44.3.0",
         "ckeditor5-premium-features": "^44.3.0",
         "laravel-vue-i18n": "^2.7.8",

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Setting;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
@@ -17,21 +16,34 @@ class SettingsSeeder extends Seeder
         // --- Параметри налаштувань ---
         $settings = [
             [
-                'key' => 'show_inactive_products',
+                'key'   => 'show_inactive_products',
                 'value' => '0',
-                'label' => 'Показувати неактивні товари',
+                'label' => 'Show inactive products',
+                'type'  => 'bool',
             ],
-            /*   [
-                'key' => 'enable_reviews',
+            [
+                'key'   => 'enable_reviews',
                 'value' => '1',
-                'label' => 'Увімкнути відгуки',
-            ], */
+                'label' => 'Enable product reviews',
+                'type'  => 'bool',
+            ],
+            [
+                'key'   => 'items_per_page',
+                'value' => '12',
+                'label' => 'Quantity of items per page',
+                'type'  => 'int',
+            ],
+
         ];
 
         foreach ($settings as $setting) {
             Setting::firstOrCreate(
                 ['key' => $setting['key']],
-                ['value' => $setting['value'], 'label' => $setting['label']]
+                [
+                    'value' => $setting['value'],
+                    'label' => $setting['label'],
+                    'type'  => $setting['type'],
+                ]
             );
         }
 

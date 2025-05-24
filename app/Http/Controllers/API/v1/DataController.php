@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\PageResource;
 use App\Models\Category;
+use App\Models\Page;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -49,8 +51,13 @@ class DataController extends Controller
         // Фільтруємо дерево категорій
         $filteredCategories = $filterCategoriesWithActiveProducts($categories);
 
+
+        // Pages 
+        $pages = Page::where('public', true)->get();
+
         return response()->json([
-            'categories' => CategoryResource::collection($filteredCategories)
+            'categories' => CategoryResource::collection($filteredCategories),
+            'pages' => PageResource::collection($pages),
         ]);
     }
 }

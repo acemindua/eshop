@@ -1,7 +1,13 @@
 <template>
     <MainLayout>
-        <section>
+        <Head>
+            <title>{{ item.title }}</title>
+        </Head>
+        <section class="bg-white p-8 rounded-lg">
             <h1 class="text-xl font-semibold">{{ item.title }}</h1>
+            <div class="py-4">
+                <div v-html="item.content" />
+            </div>
         </section>
         <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="data" />
@@ -9,31 +15,19 @@
     </MainLayout>
 </template>
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { useHead } from "@vueuse/head";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import VarDump from "@/Shared/VarDump.vue";
+import { computed, ref, onMounted } from "vue";
+import { useHead } from "@vueuse/head";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-    data: Object,
+    data: {
+        type: Object,
+    },
 });
-
 const isLoading = ref(true);
 const item = computed(() => props.data.item.data || {});
-const variant = computed(() => props.data.variant?.data ?? null);
-
-// Отримуємо перше зображення відповідно до наявності variant
-const imageUrl = computed(() => {
-    if (variant.value && variant.value.images?.length) {
-        return variant.value.images[0].url;
-    }
-    if (item.value.images?.length) {
-        return item.value.images[0].url;
-    }
-    return null;
-});
-
 // SEO
 const headMeta = computed(() => ({
     title: () => (isLoading.value ? "Loading..." : item.value.title),
@@ -60,10 +54,6 @@ const headMeta = computed(() => ({
             property: "og:description",
             content:
                 item.value.description ?? item.value.content?.slice(0, 160),
-        },
-        {
-            property: "og:image",
-            content: imageUrl.value,
         },
     ],
 }));

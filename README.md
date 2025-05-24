@@ -19,8 +19,46 @@
 
 ## v2 Blog
 
+## v1.08.00 SettingsServiceProvider
+
+-   php artisan make:provider SettingsServiceProvider
+
+```
+public function boot()
+{
+    if (Schema::hasTable('settings')) {
+    $settings = \App\Models\Setting::all()->pluck('value', 'key')->toArray();
+        config(['settings' => $settings]);
+    }
+}
+```
+
+config('settings.products_per_page'); // поверне 12
+
+## v1.07.00 Pages & Optimize Policy
+
+1.
+
+-   php artisan make:model Page -m
+-   php artisan make:model PageTranslation -m
+-   php artisan make:controller \App\Http\Controllers\App\PageController --model=Page --resource --requests
+-   php artisan make:policy PagePolicy --model=Page
+-   php artisan make:seeder PageSeeder
+-   php artisan make:resource PageResource
+-   php artisan make:factory PageFactory --model=Page
+
+2.
+
+-   php artisan make:provider PolicyServiceProvider
+-   composer require fakerphp/faker --dev
+
 ## v1.06.00 SEO-теги у Vue 3 + Inertia
 
+-   rm -rf node_modules
+-   rm package-lock.json # або yarn.lock
+-   npm cache clean --force
+-   npm install
+-   npm install @vueuse/head
 
 ## v1.05.00 Api Data Controller
 
@@ -197,6 +235,7 @@
 -   php artisan make:resource OrderResource
 
 ````
+
 ```
     $modelName = 'order'; // Тут можна змінити
     $permissions = ['view', 'create', 'update', 'delete'];
@@ -209,7 +248,8 @@
     }
 
 ```
-````
+
+```
 
 ## v1.00.9
 
@@ -316,3 +356,5 @@
 -   php artisan make:controller \App\Http\Controllers\Main\HomeController
 
 ## Laravel v11.30.0 (PHP v8.2.12)
+```
+````

@@ -9,12 +9,9 @@
     >
         <div class="bg-gray-100 rounded-lg w-full h-60 mb-2 relative">
             <Link
-                :href="
-                    route('product.show', {
-                        productSlug: data.slug.product,
-                        variantSlug: data.slug.variant,
-                    })
-                "
+                :href="`/${data.slug.product}${
+                    data.slug.variant ? '/' + data.slug.variant : ''
+                }`"
                 class="flex items-center justify-center text-slate-300 overflow-hidden h-full"
             >
                 <img

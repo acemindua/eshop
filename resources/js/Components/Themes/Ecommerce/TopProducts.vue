@@ -16,12 +16,12 @@
 
 <script setup>
 import useApiResourceService from "@/Composables/useApiResourceService";
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
 import ProductCard from "./ProductCard.vue";
 
 const items = ref([]);
 
-onMounted(() => {
+onBeforeMount(() => {
     getItems();
 });
 

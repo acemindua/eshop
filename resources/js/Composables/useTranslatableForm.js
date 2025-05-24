@@ -41,6 +41,8 @@ export default function useTranslatableForm(translatedAttributes = []) {
      * @param {Object} item - an object that contains a `translations` array
      */
     const fillForm = (item) => {
+        initForm(item);
+
         if (!item.translations) return;
 
         for (const trans of item.translations) {

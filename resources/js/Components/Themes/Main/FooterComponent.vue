@@ -8,11 +8,13 @@ import CategoryTree from "../Ecommerce/CategoryTree.vue";
 // API-сервіс
 const { loading, errorsRequests, fetchData } = useApiResourceService();
 const categories = ref({});
+const pages = ref({});
 const getData = async () => {
     const url = new URL(route("api.data"));
     // url.searchParams.append("attribute_id", props.attributeId);
     const response = await fetchData(url.toString());
     categories.value = response.data.categories;
+    pages.value = response.data.pages;
 };
 
 onMounted(() => {
@@ -22,12 +24,30 @@ onMounted(() => {
 
 <template>
     <div class="flex items-center justify-between py-6">
-        <div class="flex gap-4 items-start">
+        <div
+            v-if="categories && categories.length > 0"
+            class="flex gap-4 items-start"
+        >
             <h4 class="text-gray-600 text-sm font-semibold">
                 {{ $t("Category") }}:
             </h4>
             <CategoryTree :categories="categories" />
         </div>
+        <div v-if="pages && pages.length > 0" class="flex gap-4 items-start">
+            <h4 class="text-gray-600 text-sm font-semibold">
+                {{ $t("Pages") }}:
+            </h4>
+
+            <ul class="text-sm text-gray-600">
+                <li>
+                    <Link href="/">{{ $t("Home") }}</Link>
+                </li>
+                <li v-for="page in pages" :key="page.id">
+                    <Link :href="`/${page.slug}`">{{ page.title }}</Link>
+                </li>
+            </ul>
+        </div>
+
         <Link href="/" class="inline-flex items-center space-x-2">
             <ApplicationLogo
                 class="block h-9 w-auto fill-current text-gray-600"
