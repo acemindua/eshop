@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\SeoService;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Vite;
@@ -14,6 +15,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        //
+        $this->app->singleton(SeoService::class, function ($app) {
+            return new SeoService();
+        });
+
         if ($this->app->environment('local') && class_exists(\Laravel\Telescope\TelescopeServiceProvider::class)) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             $this->app->register(TelescopeServiceProvider::class);

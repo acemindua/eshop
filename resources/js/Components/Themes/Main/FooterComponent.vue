@@ -1,25 +1,26 @@
 <script setup>
-import { onMounted, ref } from "vue";
-import { Link } from "@inertiajs/vue3";
-import useApiResourceService from "@/Composables/useApiResourceService";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import CategoryTree from "../Ecommerce/CategoryTree.vue";
 
-// API-сервіс
-const { loading, errorsRequests, fetchData } = useApiResourceService();
-const categories = ref({});
-const pages = ref({});
-const getData = async () => {
-    const url = new URL(route("api.data"));
-    // url.searchParams.append("attribute_id", props.attributeId);
-    const response = await fetchData(url.toString());
-    categories.value = response.data.categories;
-    pages.value = response.data.pages;
-};
-
-onMounted(() => {
-    getData();
+import { ref } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
+const props = defineProps({
+    data: {
+        type: Object,
+        default: () => ({}),
+    },
 });
+
+const categories = ref(props.data.categories.data || {});
+const pages = ref(props.data.pages.data || {});
+
+// Дані сторінки
+const currentPage = usePage();
+
+// Активна сторінка
+const isActivePage = (slug) => {
+    return currentPage.url.startsWith(`/${slug}`);
+};
 </script>
 
 <template>
@@ -38,12 +39,16 @@ onMounted(() => {
                 {{ $t("Pages") }}:
             </h4>
 
-            <ul class="text-sm text-gray-600">
+            <ul class="text-sm text-gray-600 capitalize">
                 <li>
                     <Link href="/">{{ $t("Home") }}</Link>
                 </li>
                 <li v-for="page in pages" :key="page.id">
-                    <Link :href="`/${page.slug}`">{{ page.title }}</Link>
+                    <Link
+                        :href="`/${page.slug}`"
+                        :class="{ underline: isActivePage(page.slug) }"
+                        >{{ page.title }}</Link
+                    >
                 </li>
             </ul>
         </div>

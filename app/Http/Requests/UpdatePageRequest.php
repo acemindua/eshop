@@ -25,12 +25,13 @@ class UpdatePageRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return RuleFactory::make([
-            '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('page_translations', 'title')->using(function ($q) {
-                $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
+            '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('page_translations', 'title')->using(function ($q)  {
+                $q->where('locale',  'in_array',  config('translatable.locales'));
             })],
-            '%slug%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('page_translations', 'slug')->using(function ($q) {
-                $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
+            '%slug%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('page_translations', 'slug')->using(function ($q)  {
+                $q->where('locale',  'in_array',  config('translatable.locales'));
             })],
             '%description%' => ['nullable', 'string'],
             '%content%' => ['nullable', 'string'],

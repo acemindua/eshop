@@ -19,9 +19,14 @@
 
 ## v2 Blog
 
+## v1.11.00 SEO
+
+## v1.10.00 Оптимізація SPA Layout в Inertia.js + Vue 3
+
+
 ## v1.09.00 Optimize translatable
 
-- php artisan make:provider TranslatableServiceProvider
+-   php artisan make:provider TranslatableServiceProvider
 
 ## v1.08.00 SettingsServiceProvider
 

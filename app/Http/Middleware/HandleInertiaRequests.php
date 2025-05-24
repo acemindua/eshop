@@ -49,11 +49,11 @@ class HandleInertiaRequests extends Middleware
                 'env'               => config('app.env', 'local'),
                 'version'           => config('app.version', '1.0.0'),
                 'laravelVersion'    => \Illuminate\Foundation\Application::VERSION,
-                'phpVersion'        => PHP_VERSION,
+                'phpVersion'        => PHP_VERSION
             ],
             'lang' => [
-                'default'   => app()->getLocale(),
-                'locales'   => (new \App\Services\LanguageServices())->getActiveLanguages(),
+                'default'       => app()->getLocale(),
+                'locales'       => (new \App\Services\LanguageServices())->getActiveLanguages(),
             ],
             'permissions' => json_decode(Auth::user()?->jsPermissions() ?? '{}', true),
             'flash' => [

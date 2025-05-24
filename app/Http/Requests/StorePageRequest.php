@@ -17,7 +17,6 @@ class StorePageRequest extends FormRequest
 
     public function rules(): array
     {
-        $locales = array_keys(LaravelLocalization::getSupportedLocales());
 
         return RuleFactory::make([
             '%title%' => [
@@ -25,8 +24,8 @@ class StorePageRequest extends FormRequest
                 'string',
                 'min:3',
                 'max:255',
-                Rule::unique('page_translations', 'title')->where(function ($query) use ($locales) {
-                    $query->whereIn('locale', $locales);
+                Rule::unique('page_translations', 'title')->where(function ($query) {
+                    $query->whereIn('locale', config('translatable.locales'));
                 }),
             ],
             '%description%' => ['nullable', 'string', 'max:255'],

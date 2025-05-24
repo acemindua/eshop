@@ -56,9 +56,9 @@ class Page extends Model implements TranslatableContract, HasMedia
     {
         parent::boot();
 
-        static::saving(function ($product) {
+        static::saving(function ($model) {
             foreach (LaravelLocalization::getSupportedLocales() as $locale => $properties) {
-                $translated = $product->translateOrNew($locale);
+                $translated = $model->translateOrNew($locale);
 
                 if (empty($translated->slug) && !empty($translated->title)) {
                     $translated->slug = Str::slug($translated->title);

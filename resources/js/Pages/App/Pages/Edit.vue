@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <DashboardLayout>
         <!-- Header Buttons -->
         <section class="flex w-full items-center justify-between">
             <div></div>
@@ -97,7 +97,7 @@
         <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="form" />
         </section>
-    </Layout>
+    </DashboardLayout>
 </template>
 
 <script setup>
@@ -109,7 +109,8 @@ import useTranslatableForm from "@/Composables/useTranslatableForm";
 // UI Components
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { IconCancel, IconDeviceFloppy } from "@tabler/icons-vue";
-import Layout from "@/Shared/Themes/Layouts/CommerceLayout.vue";
+// Layouts & Components
+import DashboardLayout from "@/Shared/Themes/Layouts/DashboardLayout.vue";
 import ButtonTabGroup from "@/Components/ButtonTabGroup.vue";
 import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.vue";
 import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";

@@ -101,15 +101,13 @@ const title = computed(() => {
             <header
                 class="flex items-start justify-between px-4 py-4 md:px-8 mb-4"
             >
-                <div>
+                <div v-if="!route().current('admin.dashboard')">
                     <h1 class="font-semibold text-xl">
                         {{ title !== "Dashboard" ? $t(title) : "Dashboard" }}
                     </h1>
-                    <Breadcrumbs
-                        v-if="!route().current('admin.dashboard')"
-                        class="mt-1"
-                    />
+                    <Breadcrumbs class="mt-1" />
                 </div>
+                <div></div>
                 <div class="flex items-center space-x-2">
                     <AppAsideButton
                         :href="route('admin.chat.rooms')"

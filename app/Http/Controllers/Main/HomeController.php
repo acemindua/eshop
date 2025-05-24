@@ -10,6 +10,7 @@ use App\Http\Resources\ProductVariantResource;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\Product;
+use App\Services\SeoService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,9 +20,14 @@ class HomeController extends Controller
     /**
      * Головна сторінка сайту
      */
-    public function index(Request $request): Response
+    public function index(SeoService $seoService): Response
     {
-        return Inertia::render('Main/Home', []);
+        $page = Page::whereTranslation('slug', 'home')->firstOrFail();
+
+        // Якщо хочеш передати ресурс у вигляді масиву (зазвичай PageResource очікує модель або колекцію)
+        $seo = $seoService->generate(new PageResource($page));
+
+        return Inertia::render('Main/Home', compact('seo'));
     }
 
     /**

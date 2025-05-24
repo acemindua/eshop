@@ -34,7 +34,10 @@
                             :placeholder="`slug (${code})`"
                             :class="{
                                 'border-red-500': errors[`${code}.slug`],
+                                'bg-gray-100 text-gray-500':
+                                    Number(form.id) === 1,
                             }"
+                            :disabled="Number(form.id) === 1"
                         />
                     </div>
 

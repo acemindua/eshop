@@ -46,7 +46,13 @@ function handleDelete(id) {
                     <td class="p-2">{{ item.title }}</td>
                     <td class="p-2">
                         <div class="flex justify-center">
-                            <BadgeStatus :active="item.status" />
+                            <BadgeStatus
+                                :active="item.status"
+                                v-if="item.id !== 1"
+                            />
+                            <div v-else class="text-xs text-gray-500">
+                                default (SEO page)
+                            </div>
                         </div>
                     </td>
                     <td class="p-2">
@@ -59,6 +65,7 @@ function handleDelete(id) {
                                 />
                             </Link>
                             <button
+                                v-if="item.id !== 1"
                                 class="text-red-500"
                                 preserve-scroll
                                 preserve-state

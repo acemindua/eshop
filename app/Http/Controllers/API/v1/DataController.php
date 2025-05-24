@@ -53,7 +53,7 @@ class DataController extends Controller
 
 
         // Pages 
-        $pages = Page::where('public', true)->get();
+        $pages = Page::where('public', true)->orderBy('order')->get();
 
         return response()->json([
             'categories' => CategoryResource::collection($filteredCategories),

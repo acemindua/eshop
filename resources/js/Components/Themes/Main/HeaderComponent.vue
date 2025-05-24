@@ -1,5 +1,12 @@
 <script setup>
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+
+const props = defineProps({
+    data: {
+        type: Object,
+        default: () => ({}),
+    },
+});
 </script>
 
 <template>

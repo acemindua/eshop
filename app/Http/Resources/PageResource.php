@@ -21,6 +21,9 @@ class PageResource extends JsonResource
             'description'   => $this->description,
             'content'       => $this->content,
             'status'        => $this->public ? true : false,
+            'meta_title'         => $this->meta_title,
+            'meta_description'   => $this->meta_description,
+            'meta_keywords'      => $this->meta_keywords,
         ];
     }
 }

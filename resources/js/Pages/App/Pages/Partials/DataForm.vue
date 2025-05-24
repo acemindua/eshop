@@ -41,7 +41,7 @@ const booleanPublic = computed({
         </div>
 
         <!-- Status Toggle -->
-        <div>
+        <div v-if="form.id && form.id !== 1">
             <InputLabel
                 for="public"
                 :value="$t('Status')"

@@ -1,6 +1,6 @@
 <template>
-    <Layout
-        ><section class="flex w-full items-start justify-between">
+    <DashboardLayout>
+        <section class="flex w-full items-start justify-between">
             <div class="flex flex-col w-full max-w-sm space-y-2">
                 <div class="inline-flex rounded-md shadow-xs" role="group">
                     <button
@@ -56,7 +56,7 @@
         <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="data" />
         </section>
-    </Layout>
+    </DashboardLayout>
 </template>
 
 <script setup>
@@ -68,7 +68,7 @@ import debounce from "lodash.debounce";
 import { IconCloudDown, IconPlus } from "@tabler/icons-vue";
 
 // Layouts & Components
-import Layout from "@/Shared/Themes/Layouts/DashboardLayout.vue";
+import DashboardLayout from "@/Shared/Themes/Layouts/DashboardLayout.vue";
 import VarDump from "@/Shared/VarDump.vue";
 
 // UI Components

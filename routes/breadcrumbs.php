@@ -6,12 +6,16 @@ use App\Models\Product;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
-// Головна сторінка
-Breadcrumbs::for(
-    'home',
-    fn(BreadcrumbTrail $trail) =>
-    $trail->push(__('Home'), route('home'))
-);
+
+// Home page
+Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
+    $page = Page::find(1);
+
+    $trail->push(
+        $page->title ?? __('Home'),
+        route('home')
+    );
+});
 
 // Категорія
 Breadcrumbs::for('category', function (BreadcrumbTrail $trail, string $slug) {
@@ -27,8 +31,6 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail, string $slug) {
 });
 
 Breadcrumbs::for('dynamic.route', function (BreadcrumbTrail $trail, string $slug, ?string $optional = null) {
-
-
     // Спроба знайти продукт
     $product = Product::whereTranslation('slug', $slug)->first();
     if ($product) {
@@ -57,6 +59,7 @@ Breadcrumbs::for('dynamic.route', function (BreadcrumbTrail $trail, string $slug
     $page = Page::whereTranslation('slug', $slug)->first();
     if ($page) {
         $trail->parent('home');
+
         $trail->push($page->title, route('dynamic.route', [
             'slug' => $slug,
             'optional' => $optional,
@@ -67,26 +70,6 @@ Breadcrumbs::for('dynamic.route', function (BreadcrumbTrail $trail, string $slug
 
     // Якщо нічого не знайдено — додати заглушку
     $trail->push(__('Not found'), '#');
-});
-
-// Продукт + варіант
-Breadcrumbs::for('product.show', function (BreadcrumbTrail $trail, string $productSlug, ?string $variantSlug = null) {
-    $product = Product::whereTranslation('slug', $productSlug)->firstOrFail();
-
-    if ($variantSlug) {
-        $variant = $product->variants
-            ->first(fn($v) => optional($v->attribute_value)->slug === $variantSlug);
-
-        if ($variant) {
-            $product->title .= " ({$variant->attribute_value_title})";
-        }
-    }
-
-    $trail->parent('category', $product->category->slug);
-    $trail->push($product->title, route('product.show', [
-        'productSlug' => $productSlug,
-        'variantSlug' => $variantSlug
-    ]));
 });
 
 // Admin-панель

@@ -116,10 +116,12 @@ class PageController extends Controller
         //
         Gate::authorize('update', $page);
 
+
+
         $page->fill($request->validated());
         $page->save();
 
-        return redirect()->route('admin.pages.index')->with([
+        return redirect()->route('admin.pages.edit', $page->id)->with([
             'alert' => [
                 'type' => 'success',
                 'message' => "Page successfully updated!",

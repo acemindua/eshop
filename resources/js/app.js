@@ -12,10 +12,7 @@ import { i18nVue } from "laravel-vue-i18n";
 import VueTheMask from "vue-the-mask";
 import LaravelPermissionToVueJS from "../../vendor/zodexnl/spatie-permission-to-vue-inertia/src/js";
 
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
-
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.vue`,
