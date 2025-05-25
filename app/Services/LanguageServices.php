@@ -78,11 +78,7 @@ class LanguageServices
         return $langs;
     }
 
-    /**
-     * Витягує "ключі" доступних мов.
-     *
-     * @return array
-     */
+
     /**
      * Витягує "ключі" доступних мов.
      *
@@ -90,21 +86,6 @@ class LanguageServices
      */
     public function getActiveLanguageKeys(): array
     {
-        $locale = config('app.locale');
-
-        if (!Schema::hasTable('languages')) {
-            return [$locale];
-        }
-
-        // Використовуємо кешування на 60 хвилин
-        return Cache::remember('active_language_keys', 3600, function () use ($locale) {
-            $default = Language::query()->where('code', $locale)->first();
-
-            if (!$default) {
-                $this->createActiveLanguages($locale);
-            }
-
-            return Language::where('public', true)->pluck('code')->toArray();
-        });
+        return Language::where('public', true)->pluck('code')->toArray();
     }
 }

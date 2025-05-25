@@ -1,19 +1,25 @@
-import { getCanonicalUrl, generateHreflangs } from "./index";
+import { getCanonicalUrl, generateHreflangs } from "./url";
 
 /**
- * Генерує head-мета для useHead()
- * @param {Object} item - об'єкт з title, description, content, status
- * @param {String} appName - назва застосунку
+ * Generates full <head> metadata object for useHead() or similar
+ * @param {Object} item - Metadata source object
+ * @param {string} appName - Application name for titleTemplate
+ * @param {string[]} localeKeys - Supported locale keys
  * @returns {Object}
  */
-export const generateHeadMeta = (item, appName = "Laravel") => {
+export const generateHeadMeta = (
+    item,
+    appName = "Laravel",
+    localeKeys = []
+) => {
+    const locales = localeKeys;
     const description =
         item.meta_description ??
         item.description ??
         item.content?.slice(0, 160) ??
         "";
-    const canonical = getCanonicalUrl();
-    const image = item.image ?? "/images/logo.jpg"; // 🔁 якщо немає зображення — логотип
+    const canonical = getCanonicalUrl(locales);
+    const image = item.image ?? "/images/logo.jpg";
 
     return {
         title: item.meta_title ?? item.title,
@@ -31,9 +37,8 @@ export const generateHeadMeta = (item, appName = "Laravel") => {
             },
             {
                 name: "description",
-                content: item.description,
+                content: description,
             },
-            // Open Graph
             {
                 property: "og:title",
                 content: item.meta_title ?? item.title,
@@ -42,19 +47,17 @@ export const generateHeadMeta = (item, appName = "Laravel") => {
                 property: "og:description",
                 content: description,
             },
-
-            /* {
+            {
                 property: "og:image",
                 content: image,
-            }, */
-
+            },
             {
                 property: "og:url",
                 content: canonical,
             },
             {
                 property: "og:type",
-                content: "website", // або "article" — залежно від типу сторінки
+                content: "website",
             },
             {
                 property: "og:site_name",
@@ -66,7 +69,7 @@ export const generateHeadMeta = (item, appName = "Laravel") => {
                 rel: "canonical",
                 href: canonical,
             },
-            ...generateHreflangs().map((link) => ({
+            ...generateHreflangs(locales).map((link) => ({
                 rel: "alternate",
                 hreflang: link.hreflang,
                 href: link.href,
@@ -76,10 +79,13 @@ export const generateHeadMeta = (item, appName = "Laravel") => {
 };
 
 /**
- * Генерує ключові слова з тексту (до 10 слів, більше 3 символів)
+ * Extracts up to 10 keywords (4+ characters) from title + description
+ * @param {string} title
+ * @param {string} description
+ * @returns {string}
  */
 export const generateKeywords = (title = "", description = "") => {
-    const text = `${title}, ${description ?? ""}`.toLowerCase();
+    const text = `${title}, ${description}`.toLowerCase();
     return [
         ...new Set(
             text

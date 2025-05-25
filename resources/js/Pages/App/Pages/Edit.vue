@@ -167,6 +167,13 @@ watch(
         if (keys.some((key) => ["order", "category_id"].includes(key))) {
             activeTab.value = 1;
         }
+        if (
+            keys.some((key) =>
+                translatedAttributes.some((attr) => key.endsWith("slug"))
+            )
+        ) {
+            activeTab.value = 2;
+        }
     },
     { immediate: true }
 );

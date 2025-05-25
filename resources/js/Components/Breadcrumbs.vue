@@ -33,12 +33,12 @@ const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
                         'hover:underline': !page.current,
                     }"
                 >
-                    <IconHomeFilled
+                    <!--  <IconHomeFilled
                         v-if="page.title === $t('Home')"
                         class="w-4 h-4"
                         stroke="{1}"
-                    />
-                    <span v-else>{{ page.title }}</span>
+                    /> -->
+                    <span>{{ page.title }}</span>
                 </component>
             </li>
         </ol>

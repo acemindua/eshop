@@ -53,6 +53,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'lang' => [
                 'default'       => app()->getLocale(),
+                'keys'          => config('translatable.locales'),
                 'locales'       => (new \App\Services\LanguageServices())->getActiveLanguages(),
             ],
             'permissions' => json_decode(Auth::user()?->jsPermissions() ?? '{}', true),

@@ -1,52 +1,60 @@
-// resources/js/helpers/url.js
-import { usePage } from "@inertiajs/vue3";
-import { isLocale, availableLocales } from "./index";
+import { isLocale, availableLocales } from "./locale";
+
 /**
- * Видаляє мовний префікс з URL-шляху
+ * Removes the locale prefix from a given path
  * @param {string} path
+ * @param {string[]} validLocales
+ * @returns {string}
  */
-export const stripLocaleFromPath = (path) => {
+export const stripLocaleFromPath = (path, validLocales = []) => {
     const segments = path.split("/").filter(Boolean);
-    if (isLocale(segments[0])) segments.shift();
+    if (isLocale(segments[0], validLocales)) segments.shift();
     return "/" + segments.join("/");
 };
 
 /**
- * Повертає canonical URL без мовного префікса
+ * Returns the canonical URL without a locale prefix
+ * @param {string[]} validLocales
+ * @returns {string}
  */
-export const getCanonicalUrl = () => {
-    const fullPath = window.location ?? "";
-    const origin = fullPath.origin;
-    const segments = stripLocaleFromPath(fullPath.pathname);
-    return origin + segments;
+export const getCanonicalUrl = (validLocales = []) => {
+    const origin = window.location.origin;
+    const cleanPath = stripLocaleFromPath(
+        window.location.pathname,
+        validLocales
+    );
+    return origin + cleanPath;
 };
 
 /**
- * Генерує URL для певної локалі, замінюючи мовний префікс або додаючи його
+ * Builds a localized version of the current URL
+ * @param {string} locale
+ * @param {string} currentPath
+ * @param {string[]} validLocales
+ * @returns {string}
  */
-export const buildUrlForLocale = (locale, currentPath) => {
-    const url = new URL(window.location.href);
-    let segments = url.pathname.split("/").filter(Boolean);
+export const buildUrlForLocale = (locale, currentPath, validLocales = []) => {
+    const cleanPath = stripLocaleFromPath(currentPath, validLocales);
+    const segments = cleanPath.split("/").filter(Boolean);
+    segments.unshift(locale);
 
-    if (segments.length && isLocale(segments[0])) {
-        segments[0] = locale; // замінюємо існуючий префікс
-    } else {
-        segments.unshift(locale); // додаємо префікс, якщо нема
-    }
-
+    const url = new URL(window.location.origin);
     url.pathname = "/" + segments.join("/");
+
     return url.toString();
 };
 
 /**
- * Генерує масив об'єктів для тега hreflang
+ * Generates an array of alternate hreflang links
+ * @param {string[]} localeKeys
+ * @returns {{ hreflang: string, href: string }[]}
  */
-export const generateHreflangs = () => {
-    const locales = availableLocales();
+export const generateHreflangs = (localeKeys = []) => {
+    const locales = availableLocales(localeKeys);
     const currentPath = window.location.pathname;
 
     return locales.map((locale) => ({
         hreflang: locale,
-        href: buildUrlForLocale(locale, currentPath),
+        href: buildUrlForLocale(locale, currentPath, locales),
     }));
 };

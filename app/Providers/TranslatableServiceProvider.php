@@ -10,10 +10,7 @@ class TranslatableServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public function register(): void
-    {
-        //
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap services.
@@ -21,7 +18,8 @@ class TranslatableServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (Schema::hasTable('languages')) {
-            config()->set('translatable.locales', (new \App\Services\LanguageServices())->getActiveLanguageKeys());
+            $localesKey = (new \App\Services\LanguageServices())->getActiveLanguageKeys();
+            config()->set('translatable.locales', $localesKey);
         }
     }
 }

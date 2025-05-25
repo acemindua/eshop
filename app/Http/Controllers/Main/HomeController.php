@@ -22,7 +22,8 @@ class HomeController extends Controller
      */
     public function index(SeoService $seoService): Response
     {
-        $page = Page::whereTranslation('slug', 'home')->firstOrFail();
+        $config = config('translatable.locales');
+        $page = Page::find(1);
 
         // Якщо хочеш передати ресурс у вигляді масиву (зазвичай PageResource очікує модель або колекцію)
         $seo = $seoService->generate(new PageResource($page));

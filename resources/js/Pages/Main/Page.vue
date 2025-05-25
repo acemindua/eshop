@@ -13,7 +13,7 @@
     </div>
 </template>
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed } from "vue";
 import { useHead } from "@vueuse/head";
 import { usePage } from "@inertiajs/vue3";
 import { generateHeadMeta } from "@/helpers";
@@ -31,7 +31,11 @@ const props = defineProps({
 const item = computed(() => props.data.item.data || {});
 //
 const headMeta = computed(() =>
-    generateHeadMeta(item.value, usePage().props.app.name)
+    generateHeadMeta(
+        item.value,
+        usePage().props.app.name,
+        usePage().props.lang.keys
+    )
 );
 //
 useHead(headMeta);

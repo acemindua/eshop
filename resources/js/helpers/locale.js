@@ -1,19 +1,32 @@
-// resources/js/helpers/locale.js
+/**
+ * Maps input locale keys to actual locale codes used in URLs (e.g., 'uk' → 'ua')
+ * @param {string[]} locales
+ * @returns {string[]}
+ */
+export const availableLocales = (locales = []) => {
+    const localeMap = {
+        uk: "ua",
+        // Add more mappings as needed
+    };
+    return locales.map((key) => localeMap[key] || key);
+};
 
 /**
- * Повертає список підтримуваних мов
+ * Checks if a given code is a valid locale prefix
+ * @param {string} code
+ * @param {string[]} validLocales
+ * @returns {boolean}
  */
-export const availableLocales = () => ["ua", "en" /* "pl", "ru" */];
+export const isLocale = (code, validLocales = []) => {
+    return availableLocales(validLocales).includes(code);
+};
 
 /**
- * Перевіряє, чи переданий код — підтримувана мова
+ * Extracts the locale from the current URL path, if valid
+ * @param {string[]} validLocales
+ * @returns {string|null}
  */
-export const isLocale = (code) => availableLocales().includes(code);
-
-/**
- * Витягує мовний префікс з URL, якщо є
- */
-export const getCurrentLocaleFromPath = () => {
+export const getCurrentLocaleFromPath = (validLocales = []) => {
     const segments = window.location.pathname.split("/").filter(Boolean);
-    return isLocale(segments[0]) ? segments[0] : null;
+    return isLocale(segments[0], validLocales) ? segments[0] : null;
 };

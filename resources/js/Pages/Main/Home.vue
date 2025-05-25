@@ -32,7 +32,7 @@ const props = defineProps({
 const page = usePage();
 
 const headMeta = computed(() =>
-    generateHeadMeta(page.props.seo, page.props.app.name)
+    generateHeadMeta(page.props.seo, page.props.app.name, page.props.lang.keys)
 );
 //
 useHead(headMeta);

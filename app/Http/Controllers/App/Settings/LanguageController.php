@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class LanguageController extends Controller 
+class LanguageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,7 +33,7 @@ class LanguageController extends Controller
         );
     }
 
-     /**
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -84,7 +84,7 @@ class LanguageController extends Controller
         Gate::authorize('update', $language);
     }
 
-     /**
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Language $language)
