@@ -17,6 +17,7 @@ import UserAvatar from "@/Components/UserAvatar.vue";
 
 // Спільні компоненти
 import AppAsideButton from "@/Shared/Themes/App/Components/AppAsideButton.vue";
+import Footer from "@/Components/Themes/Admin/Layout/Footer.vue";
 
 const page = usePage();
 
@@ -135,6 +136,7 @@ const title = computed(() => {
 
             <!-- Footer -->
             <footer class="mt-4 md:mt-8">
+                <Footer />
                 <AlertMessage />
             </footer>
         </div>

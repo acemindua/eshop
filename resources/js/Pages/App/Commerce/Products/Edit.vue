@@ -45,12 +45,6 @@
 
                 <TabPanels class="mt-2">
                     <TabPanel>
-                        <VariantList
-                            :product-id="data.item.id"
-                            :errors="errors"
-                        />
-                    </TabPanel>
-                    <TabPanel>
                         <div class="border bg-white p-4 md:p-8 flex rounded-lg">
                             <div class="w-full md:w-1/4">
                                 <h2 class="uppercase font-semibold">General</h2>
@@ -64,6 +58,12 @@
                                 :is-editing="true"
                             />
                         </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <VariantList
+                            :product-id="data.item.id"
+                            :errors="errors"
+                        />
                     </TabPanel>
                     <TabPanel>
                         <div class="border bg-white p-4 md:p-8 flex rounded-lg">
@@ -118,8 +118,8 @@ const props = defineProps({
 // Вкладки
 const activeTab = ref(0);
 const tabs = ref([
-    { key: "variants", label: "Variants" },
     { key: "general", label: "General" },
+    { key: "variants", label: "Variants" },
     { key: "data", label: "Data" },
     { key: "images", label: "Images" },
 ]);
