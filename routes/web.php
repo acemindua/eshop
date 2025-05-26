@@ -7,6 +7,8 @@ use App\Http\Controllers\RoomsController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
+
+
 Route::group(['middleware' => ['auth', 'verified', 'role:super-user|admin|moder|auth']], function () {
     Route::domain('app.' . parse_url(config('app.url'), PHP_URL_HOST))->name('admin.')->group(base_path('routes/app.php'));
 });

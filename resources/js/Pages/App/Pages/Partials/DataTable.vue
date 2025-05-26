@@ -1,5 +1,6 @@
 <script setup>
-import { router } from "@inertiajs/vue3";
+import { watch, ref } from "vue";
+import Swal from "sweetalert2";
 import { IconEdit, IconSettings, IconTrash } from "@tabler/icons-vue";
 import Checkbox from "@/Components/Checkbox.vue";
 import BadgeStatus from "@/Components/BadgeStatus.vue";
@@ -7,14 +8,50 @@ import Pagination from "@/Components/Pagination.vue";
 
 const props = defineProps({
     items: Array,
+    selectedItems: Array,
     meta: Object,
 });
 
-function handleDelete(id) {
-    if (confirm("Are you sure you want to delete this item?")) {
-        router.delete(route("admin.attributes.destroy", id));
+const emit = defineEmits(["update:selectedItems", "edit", "delete"]);
+
+const toggleAll = ref(false);
+
+watch(toggleAll, (val) => {
+    if (val) {
+        emit(
+            "update:selectedItems",
+            props.items.map((i) => i.id)
+        );
+    } else {
+        emit("update:selectedItems", []);
     }
-}
+});
+
+const toggleItem = (id) => {
+    const updated = props.selectedItems.includes(id)
+        ? props.selectedItems.filter((itemId) => itemId !== id)
+        : [...props.selectedItems, id];
+    emit("update:selectedItems", updated);
+};
+
+/**
+ * Confirm before delete
+ */
+const confirmDelete = async (item) => {
+    const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "This item will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+        emit("delete", item);
+    }
+};
 </script>
 
 <template>
@@ -23,7 +60,7 @@ function handleDelete(id) {
             <thead>
                 <tr class="text-xs uppercase text-slate-600 text-thin divide-x">
                     <th class="p-3 w-12">
-                        <Checkbox class="mx-auto" :checked="false" />
+                        <Checkbox class="mx-auto" v-model:checked="toggleAll" />
                     </th>
 
                     <th class="p-3 text-start">Title</th>
@@ -41,7 +78,11 @@ function handleDelete(id) {
                     class="hover:bg-slate-50 border-t border-slate-200 dark:border-slate-700 dark:hover:bg-slate-950/25 odd:bg-white dark:odd:bg-slate-900 even:bg-slate-50 dark:even:bg-slate-800"
                 >
                     <td class="p-2 text-center">
-                        <Checkbox class="mx-auto" :checked="false" />
+                        <Checkbox
+                            class="mx-auto"
+                            :checked="selectedItems.includes(item.id)"
+                            @update:checked="() => toggleItem(item.id)"
+                        />
                     </td>
                     <td class="p-2">{{ item.title }}</td>
                     <td class="p-2">
@@ -64,19 +105,21 @@ function handleDelete(id) {
                                     class="text-indigo-500"
                                 />
                             </Link>
-                            <button
+                            <IconTrash
                                 v-if="item.id !== 1"
-                                class="text-red-500"
+                                :stroke="1"
+                                size="18"
+                                class="text-red-500 cursor-pointer"
                                 preserve-scroll
                                 preserve-state
-                                @click.prevent="handleDelete(item.id)"
-                            >
-                                <IconTrash
-                                    :stroke="1"
-                                    size="18"
-                                    class="text-red-500"
-                                />
-                            </button>
+                                @click.prevent="confirmDelete(item)"
+                            />
+                            <IconTrash
+                                v-else
+                                :stroke="1"
+                                size="18"
+                                class="text-gray-500"
+                            />
                         </div>
                     </td>
                 </tr>

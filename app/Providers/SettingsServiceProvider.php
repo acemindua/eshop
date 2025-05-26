@@ -22,6 +22,7 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         if (Schema::hasTable('settings')) {
             $settings = \App\Models\Setting::all()->pluck('value', 'key')->toArray();
             config()->set('settings', $settings);
@@ -35,5 +36,6 @@ class SettingsServiceProvider extends ServiceProvider
                 ],
             ]);
         }
+        
     }
 }

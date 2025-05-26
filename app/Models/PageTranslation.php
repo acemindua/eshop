@@ -20,7 +20,6 @@ class PageTranslation extends Model
      */
     protected $fillable = [
         'title',
-        'slug',
         'description',
         'content',
         'meta_title',

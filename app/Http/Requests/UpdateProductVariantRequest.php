@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateProductVariantRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateProductVariantRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -21,7 +22,6 @@ class UpdateProductVariantRequest extends FormRequest
     {
         return [
             'product_id' => 'required|exists:products,id',
-            // Exclude current product variant ID from unique check on SKU
             'sku'        => 'required|string|max:255|unique:product_variants,sku,' . $this->route('product-ariants')->id,
             'price'      => 'required|numeric|min:0|max:999999.99',
             'quantity'   => 'required|integer|min:0',

@@ -30,14 +30,18 @@ class UpdatePageRequest extends FormRequest
             '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('page_translations', 'title')->using(function ($q) {
                 $q->where('locale',  'in_array',  config('translatable.locales'));
             })],
-            '%slug%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('page_translations', 'slug')->using(function ($q) {
-                $q->where('locale',  'in_array',  config('translatable.locales'));
-            })],
             '%description%' => ['nullable', 'string'],
             '%content%' => ['nullable', 'string'],
             '%meta_title%' => ['nullable', 'string', 'max:255'],
             '%meta_description%' => ['nullable', 'string', 'max:255'],
             '%meta_keywords%' => ['nullable', 'string', 'max:255'],
+            'slug' => [
+                'required',
+                'min:3',
+                'string',
+                'max:255',
+                Rule::unique('pages', 'slug')->ignore($this->id),
+            ],
             'public' => ['required', 'boolean'],
             'order' => ['required', 'integer'],
         ]);

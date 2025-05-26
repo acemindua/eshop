@@ -56,7 +56,7 @@ Breadcrumbs::for('dynamic.route', function (BreadcrumbTrail $trail, string $slug
     }
 
     // Спроба знайти сторінку
-    $page = Page::whereTranslation('slug', $slug)->first();
+    $page = Page::where('slug', $slug)->first();
     if ($page) {
         $trail->parent('home');
 

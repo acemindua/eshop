@@ -22,12 +22,9 @@ class HomeController extends Controller
      */
     public function index(SeoService $seoService): Response
     {
-        $config = config('translatable.locales');
         $page = Page::find(1);
 
-        // Якщо хочеш передати ресурс у вигляді масиву (зазвичай PageResource очікує модель або колекцію)
         $seo = $seoService->generate(new PageResource($page));
-
         return Inertia::render('Main/Home', compact('seo'));
     }
 
@@ -46,9 +43,9 @@ class HomeController extends Controller
         }
 
         // Пошук сторінки
-        $page = Page::whereTranslation('slug', $slug)->first();
+        $page = Page::where('slug', $slug)->first();
         if ($page) {
-            return $this->showStaticPage($slug);
+            return $this->showStaticPage($page);
         }
 
 
@@ -60,11 +57,8 @@ class HomeController extends Controller
     /**
      * Показ однієї статичної сторінки (наприклад: "Про нас")
      */
-    public function showStaticPage(Request|string $requestOrSlug, ?string $slug = null): Response
+    public function showStaticPage(Page  $page): Response
     {
-        $slug = is_string($requestOrSlug) ? $requestOrSlug : $slug;
-        $page = Page::whereTranslation('slug', $slug)->first();
-
         if (!$page) abort(404);
 
         return Inertia::render('Main/Page', [

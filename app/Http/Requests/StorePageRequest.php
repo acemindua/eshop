@@ -33,6 +33,13 @@ class StorePageRequest extends FormRequest
             '%meta_title%' => ['nullable', 'string', 'max:255'],
             '%meta_description%' => ['nullable', 'string', 'max:255'],
             '%meta_keywords%' => ['nullable', 'string', 'max:255'],
+            'slug' => [
+                'required',
+                'min:3',
+                'string',
+                'max:255',
+                'unique:pages,slug',
+            ],
             'public' => ['required', 'boolean'],
             'order' => ['required', 'integer'],
         ]);

@@ -18,7 +18,7 @@ class LanguageServices
     public function getAllLanguages(): array
     {
         $langs = [];
-
+        
         $locales = LaravelLocalization::getSupportedLocales();
         foreach ($locales as $code => $description) {
             $langs[$code] = [

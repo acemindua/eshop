@@ -1,7 +1,5 @@
 <template>
-    <ul
-        class="capitalize text-sm font-semibold inline-flex items-center space-x-3"
-    >
+    <ul class="text-sm font-semibold inline-flex items-center space-x-3">
         <!-- Статичні сторінки -->
         <li v-for="page in pages" :key="page.id">
             <Link
@@ -33,6 +31,8 @@ const currentPage = usePage();
 
 // Активна сторінка
 const isActivePage = (slug) => {
-    return currentPage.url.startsWith(`/${slug}`);
+    const locale = currentPage.props.lang.default;
+    const urls = [`/${slug}`, `/${locale}/${slug}`];
+    return urls.includes(currentPage.url);
 };
 </script>

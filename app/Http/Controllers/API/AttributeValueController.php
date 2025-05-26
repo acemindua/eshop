@@ -66,7 +66,7 @@ class AttributeValueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, $id = null)
+    public function destroy(Request $request, $id = null) 
     {
         $ids = $request->input('ids', []);
 

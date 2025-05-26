@@ -116,8 +116,6 @@ class PageController extends Controller
         //
         Gate::authorize('update', $page);
 
-
-
         $page->fill($request->validated());
         $page->save();
 
@@ -135,5 +133,22 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         //
+        Gate::authorize('delete', $page);
+        if ($page->id === 1) {
+            return redirect()->back()->with([
+                'alert' => [
+                    'type' => 'danger',
+                    'message' => "Default Page dont deleted!",
+                ],
+            ]);
+        }
+        $page->delete();
+
+        return redirect()->back()->with([
+            'alert' => [
+                'type' => 'success',
+                'message' => "Page successfully deleted!",
+            ],
+        ]);
     }
 }

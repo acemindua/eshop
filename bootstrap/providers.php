@@ -5,5 +5,5 @@ return [
     App\Providers\PolicyServiceProvider::class,
     App\Providers\SettingsServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
-    App\Providers\TranslatableServiceProvider::class,
+    App\Providers\LocalesServiceProvider::class,
 ];

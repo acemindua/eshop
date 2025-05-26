@@ -19,7 +19,9 @@ const currentPage = usePage();
 
 // Активна сторінка
 const isActivePage = (slug) => {
-    return currentPage.url.startsWith(`/${slug}`);
+    const locale = currentPage.props.lang.default;
+    const urls = [`/${slug}`, `/${locale}/${slug}`];
+    return urls.includes(currentPage.url);
 };
 </script>
 
@@ -39,10 +41,7 @@ const isActivePage = (slug) => {
                 {{ $t("Pages") }}:
             </h4>
 
-            <ul class="text-sm text-gray-600 capitalize">
-                <li>
-                    <Link href="/">{{ $t("Home") }}</Link>
-                </li>
+            <ul class="text-sm text-gray-600">
                 <li v-for="page in pages" :key="page.id">
                     <Link
                         :href="`/${page.slug}`"

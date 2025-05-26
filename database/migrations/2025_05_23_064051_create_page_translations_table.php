@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('locale')->index();
 
             $table->string('title');
-            $table->string('slug');
+           
             $table->text('description')->nullable();
             $table->text('content')->nullable();
 
@@ -28,7 +28,6 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['slug', 'locale']);
             $table->unique(['page_id', 'locale']);
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
         });

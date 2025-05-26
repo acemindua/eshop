@@ -29,7 +29,6 @@ class Page extends Model implements TranslatableContract, HasMedia
      */
     public $translatedAttributes = [
         'title',
-        'slug',
         'description',
         'content',
         'meta_title',
@@ -44,6 +43,7 @@ class Page extends Model implements TranslatableContract, HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
+        'slug',
         'public',
         'order',
     ];
@@ -52,17 +52,13 @@ class Page extends Model implements TranslatableContract, HasMedia
      * Boot the model.
      * Automatically generates slugs from titles if not set.
      */
-    protected static function boot()
+    public static function boot()
     {
         parent::boot();
 
         static::saving(function ($model) {
-            foreach (LaravelLocalization::getSupportedLocales() as $locale => $properties) {
-                $translated = $model->translateOrNew($locale);
-
-                if (empty($translated->slug) && !empty($translated->title)) {
-                    $translated->slug = Str::slug($translated->title);
-                }
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->title);
             }
         });
     }

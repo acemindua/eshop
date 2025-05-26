@@ -22,7 +22,6 @@ class PageSeeder extends Seeder
         foreach (config('translatable.locales') as $locale) {
             $page->translateOrNew($locale)->fill([
                 'title' => 'Головна сторінка',
-                'slug' => 'home',
                 'description' => 'Опис головної сторінки для SEO',
                 'content' => '<p>Вітальний контент на головній сторінці</p>',
                 'meta_title' => 'Головна сторінка - My App',

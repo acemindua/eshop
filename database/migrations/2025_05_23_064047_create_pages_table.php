@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->increments('id');
-            
+
+            $table->string('slug')->unique();
             $table->boolean('public')->default(false);
             $table->integer('order')->default(1);
 

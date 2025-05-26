@@ -21,7 +21,6 @@ class PageFactory extends Factory
             'title' => $title = $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
             'content' => $this->faker->paragraph(),
-            'slug' => Str::slug($title),
         ];
     }
 }

@@ -84,7 +84,6 @@
                             <SeoForm
                                 :form="form"
                                 :errors="errors"
-                                :locales="locales"
                                 :isEditing="true"
                             />
                         </div>
@@ -138,7 +137,6 @@ const tabs = ref([
 
 const translatedAttributes = [
     "title",
-    "slug",
     "description",
     "content",
     "meta_title",
@@ -167,11 +165,7 @@ watch(
         if (keys.some((key) => ["order", "category_id"].includes(key))) {
             activeTab.value = 1;
         }
-        if (
-            keys.some((key) =>
-                translatedAttributes.some((attr) => key.endsWith("slug"))
-            )
-        ) {
+        if (keys.some((key) => ["slug"].includes(key))) {
             activeTab.value = 2;
         }
     },
