@@ -32,7 +32,7 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail, string $slug) {
 
 Breadcrumbs::for('dynamic.route', function (BreadcrumbTrail $trail, string $slug, ?string $optional = null) {
     // Спроба знайти продукт
-    $product = Product::whereTranslation('slug', $slug)->first();
+    $product = Product::where('slug', $slug)->first();
     if ($product) {
         $trail->parent('category', $product->category->slug);
 

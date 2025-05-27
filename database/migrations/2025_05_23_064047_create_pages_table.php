@@ -18,11 +18,8 @@ return new class extends Migration
             $table->boolean('public')->default(false);
             $table->integer('order')->default(1);
 
-
             $table->timestamps();
             $table->softDeletes();
-
-          
         });
     }
 
@@ -31,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('pages');
     }
 };

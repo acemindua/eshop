@@ -18,9 +18,9 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $title = $this->faker->sentence(3),
-            'description' => $this->faker->paragraph(),
-            'content' => $this->faker->paragraph(),
+            'title'         => $this->faker->sentence(3),
+            'description'   => $this->faker->paragraph(),
+            'content'       => $this->faker->paragraph(),
         ];
     }
 }

@@ -19,6 +19,8 @@
 
 ## v2 Blog
 
+
+## v1.11.04 Оптимізація SPA Layout в Inertia.js + Vue 3
 ## v1.11.03 Оптимізація SPA Layout в Inertia.js + Vue 3
 ## v1.11.02 Оптимізація SPA Layout в Inertia.js + Vue 3
 ## v1.11.01 Оптимізація SPA Layout в Inertia.js + Vue 3

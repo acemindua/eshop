@@ -16,13 +16,17 @@ return new class extends Migration
             $table->integer('product_id')->unsigned();
             $table->string('locale')->index();
             $table->string('title');
-            $table->string('slug');
+
             $table->text('description')->nullable();
             $table->text('content')->nullable();
 
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->string('meta_keywords')->nullable();
+
             $table->timestamps();
 
-            $table->unique(['slug', 'locale']);
+
             $table->unique(['product_id', 'locale']);
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });

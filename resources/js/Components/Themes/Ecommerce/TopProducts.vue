@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!loading">
+    <div>
         <h3 class="uppercase font-semibold">
             {{ $t("The best products") }}
         </h3>
@@ -7,10 +7,6 @@
         <div class="grid grid-cols-4 gap-4">
             <ProductCard v-for="item in items" :key="item.id" :data="item" />
         </div>
-    </div>
-
-    <div v-else>
-        <div class="bg-white/50 absolute top-0 left-0 w-full h-screen"></div>
     </div>
 </template>
 
@@ -26,7 +22,7 @@ onBeforeMount(() => {
 });
 
 // API-сервіс
-const { loading, errorsRequests, fetchData } = useApiResourceService();
+const { fetchData } = useApiResourceService();
 
 const getItems = async () => {
     const url = new URL(route("products.index"));

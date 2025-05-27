@@ -17,7 +17,6 @@ class ProductVariantController extends Controller
      */
     public function index(Request $request)
     {
-
         // Знайдемо продукт
         $product = Product::with('variants')->find($request->product_id);
 
@@ -57,36 +56,6 @@ class ProductVariantController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function upload(Request $request, ProductVariant $product)
-    {
-        $request->validate([
-            'images.*' => 'required|image|max:2048',
-        ]);
-
-        try {
-            $uploadedMedia = [];
-
-            foreach ($request->file('images', []) as $image) {
-                $media = $product->addMedia($image)->toMediaCollection('images');
-
-                $uploadedMedia[] = [
-                    'url' => $media->getUrl(),
-                    'preview' => $media->getUrl('preview'),
-                ];
-            }
-
-            return response()->json(['media' => $uploadedMedia], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Помилка під час завантаження зображень.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(ProductVariant $productVariant)
@@ -99,7 +68,21 @@ class ProductVariantController extends Controller
      */
     public function update(Request $request, ProductVariant $productVariant)
     {
-        //
+        try {
+            $data = $request->all();
+            $data['public'] = filter_var($data['public'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+            $productVariant->fill($data);
+            $productVariant->save();
+
+            return response()->json([
+                'message' => 'Product variant updated successfully.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to update Product variant.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

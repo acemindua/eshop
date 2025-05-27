@@ -32,12 +32,15 @@
                     class="flex items-center w-full bg-white border rounded-lg mt-4 p-2"
                 >
                     <Tab
-                        v-for="tab in tabs"
+                        v-for="(tab, index) in tabs"
                         :key="tab.key"
                         as="template"
                         v-slot="{ selected }"
                     >
-                        <ButtonTabGroup :selected="selected">
+                        <ButtonTabGroup
+                            :selected="selected"
+                            :has-error="tabErrors[index]"
+                        >
                             {{ $t(tab.label) }}
                         </ButtonTabGroup>
                     </Tab>
@@ -45,58 +48,55 @@
 
                 <TabPanels class="mt-2">
                     <TabPanel>
-                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
-                            <div class="w-full md:w-1/4">
-                                <h2 class="uppercase font-semibold">General</h2>
-                                <span class="py-2 text-sm text-gray-600"
-                                    >Manage general info</span
-                                >
-                            </div>
-                            <GeneralForm
-                                :form="form"
-                                :errors="errors"
-                                :is-editing="true"
-                            />
-                        </div>
+                        <GeneralForm
+                            :form="form"
+                            :errors="errors"
+                            :is-editing="true"
+                        />
+                    </TabPanel>
+
+                    <TabPanel>
+                        <DataForm :form="form" :errors="errors" :data="data" />
                     </TabPanel>
                     <TabPanel>
-                        <VariantList
+                        <ImagesForm :data="data.item" :errors="errors" />
+                    </TabPanel>
+                    <TabPanel>
+                        <VariantForm
                             :product-id="data.item.id"
                             :errors="errors"
                         />
                     </TabPanel>
+
                     <TabPanel>
                         <div class="border bg-white p-4 md:p-8 flex rounded-lg">
                             <div class="w-full md:w-1/4">
-                                <h2 class="uppercase font-semibold">Data</h2>
-                                <span class="py-2 text-sm text-gray-600"
-                                    >General product settings</span
-                                >
+                                <h2 class="uppercase font-semibold">SEO</h2>
+                                <span class="py-2 text-sm text-gray-600">
+                                    SEO settings
+                                </span>
                             </div>
-                            <DataForm
+                            <SeoForm
                                 :form="form"
                                 :errors="errors"
-                                :data="data"
+                                :isEditing="true"
                             />
                         </div>
-                    </TabPanel>
-                    <TabPanel>
-                        <ImagesForm :data="data.item" :errors="errors" />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
         </section>
 
         <!-- VarDump для локального середовища -->
-        <section v-if="$page.props.app.env !== 'local'">
+        <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="data" />
         </section>
     </Layout>
 </template>
 
 <script setup>
-import { ref, reactive, onBeforeMount, watch } from "vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { ref, onBeforeMount, watch } from "vue";
+import { router } from "@inertiajs/vue3";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { IconCancel, IconDeviceFloppy } from "@tabler/icons-vue";
 import Layout from "@/Shared/Themes/Layouts/CommerceLayout.vue";
@@ -107,7 +107,9 @@ import ButtonTabGroup from "@/Components/ButtonTabGroup.vue";
 import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.vue";
 import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";
 import VarDump from "@/Shared/VarDump.vue";
-import VariantList from "./Partials/Variant/VariantList.vue";
+import useTranslatableForm from "@/Composables/useTranslatableForm";
+import SeoForm from "@/Components/SEO/SeoForm.vue";
+import VariantForm from "./Partials/VariantForm.vue";
 
 // Пропси
 const props = defineProps({
@@ -119,85 +121,71 @@ const props = defineProps({
 const activeTab = ref(0);
 const tabs = ref([
     { key: "general", label: "General" },
-    { key: "variants", label: "Variants" },
     { key: "data", label: "Data" },
     { key: "images", label: "Images" },
+    { key: "variants", label: "Variants" },
+    { key: "seo", label: "SEO" },
 ]);
 
-// Ініціалізація форми
-const page = usePage();
-const translatedAttributes = ["title", "slug", "description", "content"];
+const translatedAttributes = [
+    "title",
+    "description",
+    "content",
+    "meta_title",
+    "meta_description",
+    "meta_keywords",
+];
+// Form init
+const { form, fillForm } = useTranslatableForm(translatedAttributes);
 
-const form = reactive({
-    _method: "put",
-    manufacturer_id: props.data.item.manufacturer_id || null,
-    order: props.data.item.order || 1,
-    country_id: props.data.item.country_id || null,
-    category_id: props.data.item.category_id || null,
-    public: !!props.data.item.public,
-    user_id: page.props.auth.user.id,
-});
-
-// Додавання перекладів
 onBeforeMount(() => {
-    const locales = page.props.lang.locales;
-
-    for (const [code] of Object.entries(locales)) {
-        form[code] = {};
-        translatedAttributes.forEach((attr) => {
-            form[code][attr] = "";
-        });
-    }
-
-    if (props.data.item.translations) {
-        for (const trans of props.data.item.translations) {
-            if (!form[trans.locale]) continue;
-            for (const attr of translatedAttributes) {
-                form[trans.locale][attr] = trans[attr] ?? "";
-            }
-        }
-    }
+    fillForm(props.data.item);
 });
 
-// Відправка форми
-const submit = () => {
+function submit() {
+    loading.value = true;
+    form._method = "PUT";
     router.post(route("admin.products.update", props.data.item.id), form, {
-        _method: "put",
         forceFormData: true,
         preserveState: true,
+        onFinish: () => (loading.value = false),
     });
-};
-
+}
+const tabErrors = ref([false, false, false, false, false]);
 // Логіка перемикання вкладок на основі помилок
 watch(
     () => props.errors,
     (errors) => {
         const keys = Object.keys(errors);
 
-        // Якщо є помилки у перекладах — перейти на вкладку General
-        if (
-            keys.some((key) =>
-                translatedAttributes.some((attr) => key.endsWith(attr))
-            )
-        ) {
-            activeTab.value = 0;
-        }
+        // Оновлення tabErrors
+        tabErrors.value[0] = keys.some((key) =>
+            translatedAttributes.some((attr) => key.endsWith(attr))
+        );
 
-        // Якщо є помилки в основних полях — Data
-        if (
-            keys.some((key) =>
-                [
-                    "order",
-                    "manufacturer_id",
-                    "country_id",
-                    "category_id",
-                ].includes(key)
-            )
-        ) {
-            activeTab.value = 1;
-        }
+        tabErrors.value[1] = keys.some((key) =>
+            [
+                "sku",
+                "price",
+                "quantity",
+                "order",
+                "public",
+                "manufacturer_id",
+                "country_id",
+                "category_id",
+            ].includes(key)
+        );
+        tabErrors.value[2] = false; // для майбутньої валідації
 
-        // Якщо в майбутньому буде валідація картинок — додати логіку для вкладки Images
+        tabErrors.value[3] = keys.some((key) => key.startsWith("variants"));
+
+        tabErrors.value[4] = keys.some((key) => ["slug"].includes(key));
+
+        // Автоматичне перемикання на першу вкладку з помилкою
+        const firstErrorTabIndex = tabErrors.value.findIndex(Boolean);
+        if (firstErrorTabIndex !== -1) {
+            activeTab.value = firstErrorTabIndex;
+        }
     },
     { immediate: true }
 );

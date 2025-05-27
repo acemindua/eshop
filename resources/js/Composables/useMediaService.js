@@ -2,13 +2,12 @@ import { ref } from "vue";
 import axios from "axios";
 
 /**
- * Composable for managing media files: upload, delete, reorder
- *
  * @param {Object} meta - { model_type, model_id, collection }
  * @returns {{
  *   uploadingMedia: Ref<boolean>,
  *   uploadErrors: Ref<Object>,
  *   uploadingProgress: Ref<number>,
+ *   getMedia: Function,
  *   uploadMedia: Function,
  *   deleteMedia: Function,
  *   sortMedia: Function

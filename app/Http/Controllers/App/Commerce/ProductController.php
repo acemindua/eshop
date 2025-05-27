@@ -141,7 +141,7 @@ class ProductController extends Controller
         $product->fill($request->validated());
         $product->save();
 
-        return redirect()->route('admin.products.index')->with([
+        return redirect()->back()->with([
             'alert' => [
                 'type' => 'success',
                 'message' => "Product successfully updated!",
@@ -156,6 +156,8 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         Gate::authorize('delete', $product);
+
+        $product->delete();
 
         return redirect()->route('admin.products.index')->with([
             'alert' => [

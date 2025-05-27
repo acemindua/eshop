@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function resolveDynamicRoute(string $slug, ?string $optional = null) //: Response
     {
         // Пошук товару
-        $product = Product::whereTranslation('slug', $slug)->first();
+        $product = Product::where('slug', $slug)->first();
         if ($product) {
             return $this->showProductPage($slug, $optional);
         }
@@ -73,7 +73,7 @@ class HomeController extends Controller
      */
     public function showProductPage(string $slug, ?string $variantSlug = null): Response
     {
-        $product = Product::whereTranslation('slug', $slug)
+        $product = Product::where('slug', $slug)
             ->with(['variants.attribute_value'])
             ->firstOrFail();
 

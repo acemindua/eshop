@@ -16,6 +16,8 @@ const classes = computed(() => {
     switch (props.action) {
         case "add":
             return "bg-green-50 text-green-600 hover:bg-green-100 hover:text-green-700";
+        case "save":
+            return "bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700";
         case "delete":
             return "bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700";
         default:

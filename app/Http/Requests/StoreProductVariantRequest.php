@@ -21,7 +21,7 @@ class StoreProductVariantRequest extends FormRequest
     {
         return [
             'product_id' => 'required|exists:products,id',          // Must reference existing product
-            'sku'        => 'nullable|string|max:255|unique:product_variants,sku',
+            'sku'        => 'nullable|string|max:255|unique:products,sku',
             'price'      => 'required|numeric|min:0|max:999999.99', // max matches decimal(8,2)
             'quantity'   => 'required|integer|min:0',
             'order'      => 'nullable|integer|min:1',

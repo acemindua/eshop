@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Spatie\MediaLibrary\HasMedia;
@@ -29,7 +28,14 @@ class Product extends Model implements TranslatableContract, HasMedia
      *
      * @var array<int, string>
      */
-    public $translatedAttributes = ['title', 'slug', 'description', 'content'];
+    public $translatedAttributes = [
+        'title',
+        'description',
+        'content',
+        'meta_title',
+        'meta_description',
+        'meta_keywords'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -37,7 +43,9 @@ class Product extends Model implements TranslatableContract, HasMedia
      * @var array<int, string>
      */
     protected $fillable = [
+        'slug',
         'category_id',
+        'sku',
         'price',
         'quantity',
         'manufacturer_id',
@@ -51,17 +59,13 @@ class Product extends Model implements TranslatableContract, HasMedia
      * Boot the model.
      * Automatically generates slugs from titles if not set.
      */
-    protected static function boot()
+    public static function boot()
     {
         parent::boot();
 
-        static::saving(function ($product) {
-            foreach (LaravelLocalization::getSupportedLocales() as $locale => $properties) {
-                $translated = $product->translateOrNew($locale);
-
-                if (empty($translated->slug) && !empty($translated->title)) {
-                    $translated->slug = Str::slug($translated->title);
-                }
+        static::saving(function ($model) {
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->title);
             }
         });
     }

@@ -10,7 +10,7 @@ import {
 
 const props = defineProps({
     modelValue: {
-        type: [String, Number],
+        type: [String, Number, null],
         required: true,
     },
     disabled: {

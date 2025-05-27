@@ -6,7 +6,7 @@ import useTranslatableForm from "@/Composables/useTranslatableForm";
 
 // Компоненти
 import DataValueTable from "./DataValueTable.vue";
-import ActionButton from "@/Shared/Themes/Components/Buttons/ActionButton.vue";
+import ActionButton from "@/Components/Themes/Admin/UI/Buttons/Actions/ActionButton.vue";
 import Modal from "@/Components/Modal.vue";
 import ModalValueForm from "./ModalValueForm.vue";
 import { IconCircleDashedPlus, IconTrashX } from "@tabler/icons-vue";

@@ -17,7 +17,7 @@ import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.
 import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";
 
 // Table Component
-import ProductTable from "./Partials/ProductTable.vue";
+import DataTable from "./Partials/DataTable.vue";
 
 const props = defineProps({
     data: Object,
@@ -26,6 +26,8 @@ const props = defineProps({
 
 const items = computed(() => props.data.items.data || []);
 const meta = computed(() => props.data.items.meta || []);
+
+const selectedItems = ref([]);
 
 const searchText = ref(props.filters.search);
 const loading = ref(false);
@@ -44,6 +46,10 @@ watch(
 const importRequest = () => {
     // TODO: Implement import logic
     return false;
+};
+
+const deleteValueItem = (item) => {
+    router.delete(route("admin.products.destroy", item.id));
 };
 </script>
 
@@ -76,7 +82,13 @@ const importRequest = () => {
             </div>
         </section>
 
-        <ProductTable :items="items" :meta="meta" />
+        <DataTable
+            :items="items"
+            :meta="meta"
+            :selected-items="selectedItems"
+            @update:selectedItems="selectedItems = $event"
+            @delete="deleteValueItem"
+        />
 
         <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="data" />

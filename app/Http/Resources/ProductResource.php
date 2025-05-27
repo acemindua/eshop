@@ -17,7 +17,9 @@ class ProductResource extends JsonResource
         return [
             'id'            => $this->id,
             'title'         => $this->title,
+            'sku'           => $this->sku,
             'description'   => $this->description,
+            'category'      => $this->category ? new CategoryResource($this->category) : null,
             'content'       => $this->content,
             'price'     => $this->price,
             'quantity'  => $this->quantity,
@@ -28,7 +30,7 @@ class ProductResource extends JsonResource
             'images'    => $this->sorted_images,
             'status'    => $this->public ? true : false,
             'variants'  => ProductVariantResource::collection($this->variants)
-            //'category'  => $this->category ? new CategoryResource($this->category) : null,
+
             //'country'   => $this->country ? new CountryResource($this->country) : null,
             //'manufacturer'  => $this->manufacturer ? new ManufacturerResource($this->manufacturer) : null,
         ];

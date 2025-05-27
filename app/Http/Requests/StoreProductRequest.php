@@ -29,8 +29,21 @@ class StoreProductRequest extends FormRequest
             '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('product_translations', 'title')->using(function ($q) {
                 $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
             })],
-            '%description%' => ['nullable', 'string'],
+            '%description%' => ['nullable', 'string', 'max:255'],
             '%content%' => ['nullable', 'string'],
+            '%meta_title%' => ['nullable', 'string', 'max:255'],
+            '%meta_description%' => ['nullable', 'string', 'max:255'],
+            '%meta_keywords%' => ['nullable', 'string', 'max:255'],
+            'sku'   => 'nullable|string|max:255|unique:products,sku',
+            'price'      => 'required|numeric|min:0|max:999999.99', // max matches decimal(8,2)
+            'quantity'   => 'required|integer|min:0',
+            'slug'  => [
+                'required',
+                'min:3',
+                'string',
+                'max:255',
+                'unique:products,slug',
+            ],
             'public' => ['required', 'boolean'],
             'order' => ['required', 'integer'],
             'manufacturer_id' => ['nullable', 'integer', Rule::exists('manufacturers', 'id')],

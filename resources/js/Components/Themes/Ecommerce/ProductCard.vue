@@ -14,36 +14,32 @@
                 }`"
                 class="flex items-center justify-center text-slate-300 overflow-hidden h-full"
             >
-                <img
-                    v-if="data.images && data.images.length"
-                    :src="data.images[0].preview"
-                    :alt="data.title"
-                    class="w-[100%] h-auto object-cover object-center"
-                />
-
-                <div v-else>
-                    <IconPhoto :stroke="1" :size="48" />
-                    <p class="py-1 uppercase text-xs">{{ $t("No image") }}</p>
-                </div>
+                <ImageViewSlider />
             </Link>
         </div>
-
-        <h4 class="grow px-3">{{ data.title }}</h4>
+        <Link
+            class="grow"
+            :href="`/${data.slug.product}${
+                data.slug.variant ? '/' + data.slug.variant : ''
+            }`"
+        >
+            <h4 class="px-3">{{ data.title }}</h4>
+        </Link>
         <!--    <small class="px-3 text-xs text-slate-400">/{{ data.slug }}</small> -->
         <div class="flex items-center justify-between px-3">
             <span class="text-xl">{{ data.price }} $</span>
         </div>
         <span
-            class="text-xs px-3"
-            :class="data.status ? 'text-green-500' : 'text-slate-400'"
+            v-if="data.quantity > 0 && data.status"
+            class="text-xs px-3 text-green-500"
         >
-            {{ data.status ? `${$t("in_stock")}` : `${$t("deactive")}` }}
+            {{ `${$t("In stock")}` }}
         </span>
     </div>
 </template>
 
 <script setup>
-import { IconPhoto } from "@tabler/icons-vue";
+import ImageViewSlider from "./UI/ImageViewSlider.vue";
 
 defineProps({
     data: {

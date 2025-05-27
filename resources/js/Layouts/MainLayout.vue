@@ -6,7 +6,6 @@
             </div>
         </header>
 
-        >
         <nav>
             <div class="w-full max-w-7xl mx-auto">
                 <Navigations :data="responseData" />

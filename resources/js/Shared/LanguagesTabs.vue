@@ -2,7 +2,7 @@
     <div class="flex flex-col w-full">
         <ul
             v-if="hasMultipleLanguages"
-            class="flex space-x-2 mb-4 border p-2 rounded-lg border-dashed"
+            class="flex space-x-2 mb-2 border p-2 rounded-lg border-dashed bg-white"
         >
             <li v-for="(locale, code) in locales" :key="code" class="relative">
                 <button

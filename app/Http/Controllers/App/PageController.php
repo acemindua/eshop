@@ -84,7 +84,7 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Page $page)
+    public function show(Page $page) //: Response
     {
         //
     }
@@ -111,7 +111,7 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePageRequest $request, Page $page)
+    public function update(UpdatePageRequest $request, Page $page): RedirectResponse
     {
         //
         Gate::authorize('update', $page);
@@ -130,7 +130,7 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Page $page)
+    public function destroy(Page $page): RedirectResponse
     {
         //
         Gate::authorize('delete', $page);

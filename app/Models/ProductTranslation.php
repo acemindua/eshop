@@ -26,8 +26,10 @@ class ProductTranslation extends Model
      */
     protected $fillable = [
         'title',
-        'slug',
         'description',
         'content',
+        'meta_title',
+        'meta_description',
+        'meta_keywords'
     ];
 }

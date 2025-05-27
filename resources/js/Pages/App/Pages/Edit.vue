@@ -31,12 +31,15 @@
                     class="flex items-center w-full bg-white border rounded-lg mt-4 p-2"
                 >
                     <Tab
-                        v-for="tab in tabs"
+                        v-for="(tab, index) in tabs"
                         :key="tab.key"
                         as="template"
                         v-slot="{ selected }"
                     >
-                        <ButtonTabGroup :selected="selected">
+                        <ButtonTabGroup
+                            :selected="selected"
+                            :has-error="tabErrors[index]"
+                        >
                             {{ $t(tab.label) }}
                         </ButtonTabGroup>
                     </Tab>
@@ -44,19 +47,11 @@
 
                 <TabPanels class="mt-2">
                     <TabPanel>
-                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
-                            <div class="w-full md:w-1/4">
-                                <h2 class="uppercase font-semibold">General</h2>
-                                <span class="py-2 text-sm text-gray-600">
-                                    Manage general info
-                                </span>
-                            </div>
-                            <GeneralForm
-                                :form="form"
-                                :errors="errors"
-                                :isEditing="true"
-                            />
-                        </div>
+                        <GeneralForm
+                            :form="form"
+                            :errors="errors"
+                            :isEditing="true"
+                        />
                     </TabPanel>
                     <TabPanel>
                         <div class="border bg-white p-4 md:p-8 flex rounded-lg">
@@ -145,28 +140,34 @@ const translatedAttributes = [
 ];
 
 // Form init
-const { locales, form, fillForm } = useTranslatableForm(translatedAttributes);
+const { form, fillForm } = useTranslatableForm(translatedAttributes);
 
 onBeforeMount(() => {
     fillForm(props.data.item);
 });
-// Error-driven tab navigation
+
+const tabErrors = ref([false, false, false]);
+// Логіка перемикання вкладок на основі помилок
 watch(
     () => props.errors,
     (errors) => {
         const keys = Object.keys(errors);
-        if (
-            keys.some((key) =>
-                translatedAttributes.some((attr) => key.endsWith(attr))
-            )
-        ) {
-            activeTab.value = 0;
-        }
-        if (keys.some((key) => ["order", "category_id"].includes(key))) {
-            activeTab.value = 1;
-        }
-        if (keys.some((key) => ["slug"].includes(key))) {
-            activeTab.value = 2;
+
+        // Оновлення tabErrors
+        tabErrors.value[0] = keys.some((key) =>
+            translatedAttributes.some((attr) => key.endsWith(attr))
+        );
+
+        tabErrors.value[1] = keys.some((key) =>
+            ["order", "public"].includes(key)
+        );
+
+        tabErrors.value[2] = keys.some((key) => ["slug"].includes(key));
+
+        // Автоматичне перемикання на першу вкладку з помилкою
+        const firstErrorTabIndex = tabErrors.value.findIndex(Boolean);
+        if (firstErrorTabIndex !== -1) {
+            activeTab.value = firstErrorTabIndex;
         }
     },
     { immediate: true }
