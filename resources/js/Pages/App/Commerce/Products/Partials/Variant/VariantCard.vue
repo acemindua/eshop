@@ -4,8 +4,8 @@
             <div class="flex flex-col space-y-4">
                 <div class="flex items-center justify-between">
                     <h1 class="text-lg font-semibold pb-2">
-                        #{{ data.id }} – {{ data.attribute.title }} ({{
-                            data.attribute_value.title
+                        #{{ data.id }} – {{ data.values.title }} ({{
+                            data.values.title
                         }})
                     </h1>
                     <!-- Status -->
@@ -126,6 +126,10 @@
             </div>
         </div>
     </div>
+
+    <pre>
+        {{ form }}
+    </pre>
 </template>
 
 <script setup>

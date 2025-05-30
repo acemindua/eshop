@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <MainLayout>
         <h1 class="font-semibold border-b">Profile</h1>
 
         <div class="flex w-full space-x-2">
@@ -58,12 +58,12 @@
             </div>
             <div class="w-4/6 p-4">asdasda</div>
         </div>
-    </Layout>
+    </MainLayout>
 </template>
 
 <script setup>
 import UserAvatar from "@/Components/UserAvatar.vue";
-import Layout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/MainLayout.vue";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({

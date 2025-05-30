@@ -1,6 +1,6 @@
 <!-- Commerce/Products/Partials/DataProductForm -->
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { router } from "@inertiajs/vue3";
 import CheckBoxSwitcher from "@/Components/CheckBoxSwitcher.vue";
 import ComboboxSelect from "@/Components/ComboboxSelect.vue";
@@ -17,6 +17,12 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["uploaded"]);
+
+// Two-way binding for boolean field "public"
+const booleanPublic = computed({
+    get: () => !!props.form.public,
+    set: (val) => (props.form.public = val),
+});
 
 const preview = ref("");
 const fileInput = ref(null);
@@ -140,7 +146,7 @@ const removePreview = () => {
                 :value="$t('Status')"
                 class="flex items-center leading-6 font-semibold"
             />
-            <CheckBoxSwitcher v-model="form.public" />
+            <CheckBoxSwitcher v-model="booleanPublic" />
             <InputError class="mt-2" :message="errors.public" />
         </div>
     </div>

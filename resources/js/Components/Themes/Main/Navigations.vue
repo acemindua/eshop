@@ -1,7 +1,7 @@
 <template>
-    <div class="border-t border-b py-2">
+    <!-- <div class="border-t border-b py-2">
         <ul class="text-sm font-semibold inline-flex items-center space-x-3">
-            <!-- Статичні сторінки -->
+    
             <li v-for="page in pages" :key="page.id">
                 <Link
                     :href="`/${page.slug}`"
@@ -12,7 +12,7 @@
                 </Link>
             </li>
         </ul>
-    </div>
+    </div> -->
 </template>
 
 <script setup>

@@ -35,7 +35,7 @@ const title = computed(() => {
 <template>
     <Head :title="title" />
 
-    <div class="bg-gray-100 dark:bg-slate-900 w-full min-h-screen flex">
+    <div class="bg-slate-100 dark:bg-slate-900 w-full min-h-screen flex">
         <div class="hidden md:flex">
             <!-- Sidebar -->
             <aside

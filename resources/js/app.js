@@ -45,7 +45,9 @@ createInertiaApp({
             .component("Head", Head)
             .mount(el);
     },
+
+    //progress: false,
     progress: {
-        color: "#4B5563",
+        color: "#ffcc00",
     },
 });

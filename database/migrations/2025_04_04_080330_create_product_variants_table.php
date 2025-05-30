@@ -27,7 +27,6 @@ return new class extends Migration
             $table->boolean('public')->default(false);
 
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');

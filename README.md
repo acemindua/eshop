@@ -19,12 +19,27 @@
 
 ## v2 Blog
 
+## v1.13 Review and Rating
+
+
+## v1.12 Desing Hopme page
+
+-   New SearchHeader
+-   npm install @jamescoyle/vue-icon
+-   npm install @mdi/js
+-   responsive Main/Header
+-   npm install @mdi/light-js @jamescoyle/vue-icon
 
 ## v1.11.04 Оптимізація SPA Layout в Inertia.js + Vue 3
+
 ## v1.11.03 Оптимізація SPA Layout в Inertia.js + Vue 3
+
 ## v1.11.02 Оптимізація SPA Layout в Inertia.js + Vue 3
+
 ## v1.11.01 Оптимізація SPA Layout в Inertia.js + Vue 3
+
 ## v1.11.00 SEO
+
 ## v1.10.00 Оптимізація SPA Layout в Inertia.js + Vue 3
 
 ## v1.09.00 Optimize translatable

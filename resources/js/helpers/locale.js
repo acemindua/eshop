@@ -1,32 +1,30 @@
+// resources/js/helpers/locale.js
+import { localeMap } from "@/helpers";
+import { computed } from "vue";
+import useLocales from "@/Stores/useLocales";
+
 /**
- * Maps input locale keys to actual locale codes used in URLs (e.g., 'uk' → 'ua')
- * @param {string[]} locales
- * @returns {string[]}
+ * Мапить ключ локалі до URL-коду
  */
-export const availableLocales = (locales = []) => {
-    const localeMap = {
-        uk: "ua",
-        // Add more mappings as needed
-    };
-    return locales.map((key) => localeMap[key] || key);
+export const mapLocale = (key) => localeMap[key] || key;
+
+/**
+ * Отримує всі доступні локалі
+ * @returns {ComputedRef<{ keys: string[], mapKeys: string[] }>}
+ */
+export const availableLocales = () => {
+    const { localeKeys } = useLocales();
+    return computed(() => ({
+        keys: localeKeys.value,
+        mapKeys: localeKeys.value.map(mapLocale),
+    }));
 };
 
 /**
- * Checks if a given code is a valid locale prefix
- * @param {string} code
- * @param {string[]} validLocales
- * @returns {boolean}
+ * Чи є код локаллю
  */
-export const isLocale = (code, validLocales = []) => {
-    return availableLocales(validLocales).includes(code);
-};
-
-/**
- * Extracts the locale from the current URL path, if valid
- * @param {string[]} validLocales
- * @returns {string|null}
- */
-export const getCurrentLocaleFromPath = (validLocales = []) => {
-    const segments = window.location.pathname.split("/").filter(Boolean);
-    return isLocale(segments[0], validLocales) ? segments[0] : null;
+export const isLocale = (code) => {
+    const locales = availableLocales().value;
+    //console.log(locales["mapKeys"].includes(code));
+    return locales["mapKeys"].includes(code);
 };

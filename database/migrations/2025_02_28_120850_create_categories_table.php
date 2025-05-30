@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->string('slug')->unique();
+
             $table->integer('category_id')->unsigned()->nullable();
+            $table->integer('user_id')->unsigned();
+
             $table->boolean('public')->default(false);
             $table->integer('order')->default(1);
-            $table->integer('user_id')->unsigned();
 
             $table->timestamps();
             $table->softDeletes();
@@ -24,7 +28,6 @@ return new class extends Migration
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
-
     }
 
     /**
@@ -32,6 +35,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('categories');
     }
 };

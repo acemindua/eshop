@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AttributeResource;
+use App\Http\Resources\AttributeValueResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PageResource;
 use App\Http\Resources\ProductResource;
@@ -25,12 +27,35 @@ class HomeController extends Controller
         $page = Page::find(1);
 
         $seo = $seoService->generate(new PageResource($page));
-        return Inertia::render('Main/Home', compact('seo'));
+        $about = Page::where('slug', 'about')->get();
+
+        return Inertia::render('Main/Home', [
+            'data' => [
+                'seo'   => $seo,
+                //'about' => $about ? new PageResource($about) : null
+            ]
+        ]);
     }
 
     /**
-     * Єдиний обробник маршрутів — визначає, що показувати за URL
+     * Search сторінка сайту
      */
+    public function search(Request $request): Response
+    {
+        $page = Page::find(1);
+        $seo = [
+            'title'         => __('Search result for your query') . ": " . $request->q,
+            'description'   =>  $page ? $page->description : ""
+        ];
+
+        return Inertia::render('Main/Search', [
+            'data' => [
+                'seo'   => $seo,
+            ],
+            'filters'   => request()->only(['q', 'status']),
+        ]);
+    }
+
     /**
      * Єдиний обробник маршрутів — визначає, що показувати за URL
      */
@@ -73,24 +98,39 @@ class HomeController extends Controller
      */
     public function showProductPage(string $slug, ?string $variantSlug = null): Response
     {
-        $product = Product::where('slug', $slug)
-            ->with(['variants.attribute_value'])
-            ->firstOrFail();
+        // Product
+        $product = Product::where('slug', $slug)->firstOrFail();
 
+        // Attempt to find the selected variant by its attribute value slug
         $variant = null;
 
         if ($variantSlug) {
             $variant = $product->variants
                 ->first(fn($v) => optional($v->attribute_value)->slug === $variantSlug);
-        }
 
+            // Append the variant attribute value to the product title if found
+            if ($variant) {
+                $product->title .= ' / ' . optional($variant->attribute_value)->title;
+                $product->sku =  $variant->sku;
+                $product->price = $variant->price;
+                $product->quantity = $variant->quantity;
+                $product->meta_title .= ' / ' . optional($variant->attribute_value)->title;
+            }
+        }
+        // Merge variant images with product images (variant first)
+        $images = array_merge($variant->sorted_images ?? [], $product->sorted_images ?? []);
+
+        // Render the product page via Inertia with all necessary data
         return Inertia::render('Main/Commerce/Show', [
             'data' => [
                 'item' => new ProductResource($product),
                 'variant' => $variant ? new ProductVariantResource($variant) : null,
+                'images' => $images,
+                //'attributes' => $attributes,
             ],
         ]);
     }
+
 
     /**
      * Показ сторінки категорії товарів
@@ -98,7 +138,7 @@ class HomeController extends Controller
     public function showCategoryPage(string $slug): Response
     {
         $categorySlug = str_replace('category__', '', $slug);
-        $category = Category::whereTranslation('slug', $categorySlug)->firstOrFail();
+        $category = Category::where('slug', $categorySlug)->firstOrFail();
 
         return Inertia::render('Main/Commerce/Category', [
             'data' => [

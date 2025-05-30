@@ -1,26 +1,19 @@
-<!-- Commerce/Products/Partials/GeneralProductForm -->
 <template>
     <LanguagesTabs v-model="selectedLocale" :errors="errors">
-        <div class="bg-gray-50 border rounded-lg p-4 md:p-8">
-            <TranslationContent
-                :code="selectedLocale"
-                v-model="form[selectedLocale]"
-                :errors="errors"
-                :is-editing="isEditing"
-            />
-        </div>
+        <TranslationContent
+            :code="selectedLocale"
+            v-model="form[selectedLocale]"
+            :errors="errors"
+            :is-editing="isEditing"
+        />
     </LanguagesTabs>
 </template>
 
 <script setup>
-// Core Vue & Inertia
 import { ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
-
-// Shared Components
 import LanguagesTabs from "@/Shared/LanguagesTabs.vue";
-
-import TranslationContent from "./TranslationContent.vue";
+import TranslationContent from "@/Components/TranslationContent.vue";
 
 const page = usePage();
 const selectedLocale = ref(page.props.lang.default);

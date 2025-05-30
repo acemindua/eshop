@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -14,16 +13,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProductVariant extends Model implements HasMedia
 {
-    //
-    use SoftDeletes;
-    use InteractsWithMedia;
-    use HasFactory;
+    use InteractsWithMedia, HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'product_id',
         'attribute_id',
@@ -35,11 +26,8 @@ class ProductVariant extends Model implements HasMedia
         'order'
     ];
 
-    /**
-     * Get sorted image media items with preview URLs.
-     *
-     * @return array|null
-     */
+    protected $appends = ['attribute_value_title'];
+
     public function getSortedImagesAttribute(): ?array
     {
         if ($this->getFirstMediaUrl('images', 'preview')) {
@@ -52,65 +40,40 @@ class ProductVariant extends Model implements HasMedia
                     'preview' => $media->getUrl('preview'),
                     'name' => $media->file_name,
                     'order_column' => $media->order_column,
-                ])
-                ->values()
-                ->all();
+                ])->values()->all();
         }
-
         return null;
     }
 
-    /**
-     *
-     */
     public function registerMediaConversions(Media $media = null): void
     {
-        $this
-            ->addMediaConversion('preview')
-            ->format('webp') // this was updated
+        $this->addMediaConversion('preview')
+            ->format('webp')
             ->fit(Fit::Contain, 256, 256)
             ->nonQueued();
     }
 
-
-    /**
-     * 
-     */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
-    }
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['attribute_value_title'];
-
-    /**
-     * Визначення зв'язку з `AttributeValue`.
-     */
-    public function attribute_value(): BelongsTo
-    {
-        return $this->belongsTo(AttributeValue::class, 'attribute_value_id', 'id');
-    }
-
-    /**
-     * Accessor для атрибута `title` з моделі `AttributeValue`.
-     */
-    public function getAttributeValueTitleAttribute(): ?string
-    {
-        // Перевіряємо, чи є зв'язок і повертаємо title, якщо є
-        return $this->attribute_value ? $this->attribute_value->title : null;
+        return $this->belongsTo(Product::class);
     }
 
     public function attribute(): BelongsTo
     {
-        return $this->belongsTo(Attribute::class, 'attribute_id');
+        return $this->belongsTo(Attribute::class);
     }
 
     public function attributeValue(): BelongsTo
+    {
+        return $this->belongsTo(AttributeValue::class, 'attribute_value_id');
+    }
+
+    public function getAttributeValueTitleAttribute(): ?string
+    {
+        return $this->attribute_value ? $this->attribute_value->title : null;
+    }
+
+    public function attribute_value(): BelongsTo
     {
         return $this->belongsTo(AttributeValue::class, 'attribute_value_id');
     }

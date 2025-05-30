@@ -3,52 +3,43 @@
 namespace App\Models;
 
 use App\Filters\QueryFilter;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\{Model, Builder, SoftDeletes, Factories\HasFactory};
 use Illuminate\Support\Str;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Astrotomic\Translatable\Translatable;
+use Astrotomic\Translatable\{Contracts\Translatable as TranslatableContract, Translatable};
 
 class Attribute extends Model implements TranslatableContract
 {
-    //
-    use Translatable;
-    use SoftDeletes;
-    use HasFactory;
+    use Translatable, SoftDeletes, HasFactory;
 
+    /**
+     * Fields that support translation
+     */
     public $translatedAttributes = ['title', 'slug', 'description'];
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Fields that can be mass-assigned
      */
     protected $fillable = ['order', 'public'];
 
-
     /**
-     * 
-     * Filters
+     * Apply custom query filters to the model
      */
-    public function scopeFilter(Builder $builder, QueryFilter $filter)
+    public function scopeFilter(Builder $builder, QueryFilter $filter): Builder
     {
         return $filter->apply($builder);
     }
 
     /**
-     * Boot the model.
-     * Automatically generates slugs from titles if not set.
+     * Automatically generate slugs for translations if missing
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
-        static::saving(function ($product) {
+        static::saving(function ($attribute) {
             foreach (LaravelLocalization::getSupportedLocales() as $locale => $properties) {
-                $translated = $product->translateOrNew($locale);
+                $translated = $attribute->translateOrNew($locale);
 
                 if (empty($translated->slug) && !empty($translated->title)) {
                     $translated->slug = Str::slug($translated->title);

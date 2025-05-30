@@ -17,9 +17,19 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     );
 });
 
+// Search page
+Breadcrumbs::for('search', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push(
+        __('Search'),
+        route('search')
+    );
+});
+
 // Категорія
 Breadcrumbs::for('category', function (BreadcrumbTrail $trail, string $slug) {
-    $category = Category::whereTranslation('slug', $slug)->firstOrFail();
+    $categorySlug = str_replace('category__', '', $slug);
+    $category = Category::where('slug', $categorySlug)->firstOrFail();
 
     if ($category->parent) {
         $trail->parent('category', $category->parent->slug);

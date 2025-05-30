@@ -8,7 +8,7 @@ const breadcrumbs = computed(() => usePage().props.breadcrumbs || []);
 </script>
 
 <template>
-    <nav aria-label="breadcrumb" class="text-xs">
+    <nav aria-label="breadcrumb" class="text-sm">
         <ol v-if="breadcrumbs.length" class="breadcrumb breadcrumb-arrows flex">
             <li
                 v-for="(page, index) in breadcrumbs"

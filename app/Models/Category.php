@@ -27,14 +27,21 @@ class Category extends Model implements TranslatableContract, HasMedia
     use InteractsWithMedia;
     use HasFactory;
 
-    public $translatedAttributes = ['title', 'slug', 'description', 'content'];
+    public $translatedAttributes = [
+        'title',
+        'description',
+        'content',
+        'meta_title',
+        'meta_description',
+        'meta_keywords'
+    ];
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = ['category_id', 'public', 'order', 'user_id'];
+    protected $fillable = ['category_id', 'slug', 'public', 'order', 'user_id'];
 
     /**
      * The accessors to append to the model's array form.
@@ -47,17 +54,13 @@ class Category extends Model implements TranslatableContract, HasMedia
      * Boot the model.
      * Automatically generates slugs from titles if not set.
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
-        static::saving(function ($product) {
-            foreach (LaravelLocalization::getSupportedLocales() as $locale => $properties) {
-                $translated = $product->translateOrNew($locale);
-
-                if (empty($translated->slug) && !empty($translated->title)) {
-                    $translated->slug = Str::slug($translated->title);
-                }
+        static::saving(function ($model) {
+            if (empty($model->slug)) {
+                $model->slug = Str::slug($model->title);
             }
         });
     }

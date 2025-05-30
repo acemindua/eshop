@@ -1,51 +1,98 @@
 <template>
-    <div
-        class="w-full h-full rounded-lg flex flex-col space-y-2 text-sm p-2"
-        :class="
-            data.status
-                ? 'bg-white text-gray-800 shadow'
-                : 'bg-gray-50 text-slate-400'
-        "
-    >
-        <div class="bg-gray-100 rounded-lg w-full h-60 mb-2 relative">
-            <Link
-                :href="`/${data.slug.product}${
-                    data.slug.variant ? '/' + data.slug.variant : ''
-                }`"
-                class="flex items-center justify-center text-slate-300 overflow-hidden h-full"
-            >
-                <ImageViewSlider />
-            </Link>
+    <div class="rounded w-full h-full p-4 bg-white border">
+        <div class="flex flex-col relative space-y-4 h-full">
+            <div class="media grow rounded-lg h-full relative overflow-hidden">
+                <div class="h-full min-h-64">
+                    <ImageSwiper
+                        :images="images"
+                        :alt="data.title"
+                        :href="`/${data.slug.product}${
+                            data.slug.variant ? '/' + data.slug.variant : ''
+                        }`"
+                    />
+                </div>
+            </div>
+            <div class="info">
+                <div class="info__header flex flex-col space-y-2">
+                    <div class="title">
+                        <Link
+                            :href="`/${data.slug.product}${
+                                data.slug.variant ? '/' + data.slug.variant : ''
+                            }`"
+                            :alt="data.title"
+                        >
+                            {{ data.title }}
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div
+                    class="price flex flex-col"
+                    :class="data.status ? 'text-2xl' : ' text-gray-400 text-xl'"
+                >
+                    <p
+                        class="price__curent font-montserrat font-semibold bg-slate-200"
+                    >
+                        {{ formattedPrice }} <span class="text-base">₴</span>
+                    </p>
+                    <p v-if="data.status">
+                        <span
+                            v-if="parseInt(data.quantity) > 0"
+                            class="text-xs text-green-600 bg-slate-200"
+                            >{{ $t("Є в наявності") }}</span
+                        >
+                    </p>
+                </div>
+                <div v-if="data.status" class="buy">
+                    <button
+                        type="button"
+                        :disabled="!data.status"
+                        class="rounded-lg p-2"
+                        :class="
+                            data.status
+                                ? 'text-green-600 '
+                                : 'text-gray-500 border-gray-400'
+                        "
+                    >
+                        <svg-icon
+                            type="mdi"
+                            :path="mdiCartOutline"
+                            class="w-7 h-7"
+                        ></svg-icon>
+                    </button>
+                </div>
+            </div>
         </div>
-        <Link
-            class="grow"
-            :href="`/${data.slug.product}${
-                data.slug.variant ? '/' + data.slug.variant : ''
-            }`"
-        >
-            <h4 class="px-3">{{ data.title }}</h4>
-        </Link>
-        <!--    <small class="px-3 text-xs text-slate-400">/{{ data.slug }}</small> -->
-        <div class="flex items-center justify-between px-3">
-            <span class="text-xl">{{ data.price }} $</span>
-        </div>
-        <span
-            v-if="data.quantity > 0 && data.status"
-            class="text-xs px-3 text-green-500"
-        >
-            {{ `${$t("In stock")}` }}
-        </span>
     </div>
 </template>
 
 <script setup>
-import ImageViewSlider from "./UI/ImageViewSlider.vue";
+import SvgIcon from "@jamescoyle/vue-icon";
+import { mdiCartOutline } from "@mdi/js";
+import ImageSwiper from "./UI/ImageSwiper.vue";
+import { computed } from "vue";
+import { formatPrice } from "@/helpers";
 
-defineProps({
+const props = defineProps({
     data: {
         type: Object,
         requared: true,
         default: {},
     },
 });
+
+//
+const images = computed(() => {
+    return props.data.images || [];
+});
+
+// Форматована ціна
+const formattedPrice = computed(() =>
+    formatPrice(props.data.price, {
+        roundTo: 10,
+        decimals: 0,
+        rate: 1,
+    })
+);
 </script>

@@ -6,16 +6,12 @@ use App\Filters\QueryFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany, HasManyThrough};
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
-use Astrotomic\Translatable\Translatable;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
+use Astrotomic\Translatable\{Contracts\Translatable as TranslatableContract, Translatable};
+use Spatie\MediaLibrary\{HasMedia, InteractsWithMedia};
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -24,9 +20,7 @@ class Product extends Model implements TranslatableContract, HasMedia
     use Translatable, SoftDeletes, InteractsWithMedia, HasFactory;
 
     /**
-     * The attributes that are translated.
-     *
-     * @var array<int, string>
+     * Translatable fields
      */
     public $translatedAttributes = [
         'title',
@@ -38,9 +32,7 @@ class Product extends Model implements TranslatableContract, HasMedia
     ];
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Mass assignable fields
      */
     protected $fillable = [
         'slug',
@@ -52,14 +44,13 @@ class Product extends Model implements TranslatableContract, HasMedia
         'country_id',
         'public',
         'order',
-        'user_id',
+        'user_id'
     ];
 
     /**
-     * Boot the model.
-     * Automatically generates slugs from titles if not set.
+     * Automatically generate slug from title if missing
      */
-    public static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -71,7 +62,7 @@ class Product extends Model implements TranslatableContract, HasMedia
     }
 
     /**
-     * Apply filters to query.
+     * Apply filters to query
      */
     public function scopeFilter(Builder $builder, QueryFilter $filter): Builder
     {
@@ -79,32 +70,28 @@ class Product extends Model implements TranslatableContract, HasMedia
     }
 
     /**
-     * Get sorted image media items with preview URLs.
-     *
-     * @return array|null
+     * Return sorted images with preview URLs
      */
     public function getSortedImagesAttribute(): ?array
     {
-        if ($this->getFirstMediaUrl('images', 'preview')) {
-            return $this->getMedia('images')
-                ->sortBy('order_column')
-                ->filter(fn($media) => File::exists($media->getPath()))
-                ->map(fn($media) => [
-                    'id' => $media->id,
-                    'url' => $media->getUrl(),
-                    'preview' => $media->getUrl('preview'),
-                    'name' => $media->file_name,
-                    'order_column' => $media->order_column,
-                ])
-                ->values()
-                ->all();
+        if (!$this->getFirstMediaUrl('images', 'preview')) {
+            return null;
         }
 
-        return null;
+        return $this->getMedia('images')
+            ->sortBy('order_column')
+            ->filter(fn($media) => File::exists($media->getPath()))
+            ->map(fn($media) => [
+                'id' => $media->id,
+                'url' => $media->getUrl(),
+                'preview' => $media->getUrl('preview'),
+                'name' => $media->file_name,
+                'order_column' => $media->order_column,
+            ])->values()->all();
     }
 
     /**
-     * Define morphMany relation to images collection.
+     * Define media relationship
      */
     public function images(): HasMany
     {
@@ -114,7 +101,7 @@ class Product extends Model implements TranslatableContract, HasMedia
     }
 
     /**
-     * Register media conversions (e.g., preview thumbnails).
+     * Media conversion for preview images
      */
     public function registerMediaConversions(Media $media = null): void
     {
@@ -124,64 +111,33 @@ class Product extends Model implements TranslatableContract, HasMedia
             ->nonQueued();
     }
 
-    /**
-     * Category relationship.
-     */
+    // Relationships
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * Manufacturer relationship.
-     */
     public function manufacturer(): BelongsTo
     {
         return $this->belongsTo(Manufacturer::class);
     }
 
-    /**
-     * Country relationship.
-     */
     public function country(): BelongsTo
     {
-        return $this->belongsTo(Country::class, 'country_id', 'id');
+        return $this->belongsTo(Country::class, 'country_id');
     }
 
-    /**
-     * Author (user) relationship.
-     */
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Product variants relationship.
-     */
     public function variants(): HasMany
     {
         return $this->hasMany(ProductVariant::class);
     }
 
-    /**
-     * Attributes relationship through product variants.
-     */
-    public function attributes(): HasManyThrough
-    {
-        return $this->hasManyThrough(
-            Attribute::class,
-            ProductVariant::class,
-            'product_id',
-            'id',
-            'id',
-            'attribute_id'
-        );
-    }
-
-    /**
-     * Attribute values relationship through product variants.
-     */
     public function attributeValues(): HasManyThrough
     {
         return $this->hasManyThrough(
@@ -192,5 +148,25 @@ class Product extends Model implements TranslatableContract, HasMedia
             'id',
             'attribute_value_id'
         );
+    }
+
+    /**
+     * Returns a list of unique attribute values
+     */
+    public function getAttributesListAttribute()
+    {
+        return $this->variants
+            ->pluck('attribute_value')
+            ->filter()
+            ->unique('id')
+            ->values();
+    }
+
+    /**
+     * (Optional) direct relation to a primary attribute
+     */
+    public function attribute(): BelongsTo
+    {
+        return $this->belongsTo(Attribute::class);
     }
 }

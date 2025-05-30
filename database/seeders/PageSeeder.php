@@ -21,7 +21,7 @@ class PageSeeder extends Seeder
         // 2. Далі встановлюємо перекладені поля через переклади
         foreach (config('translatable.locales') as $locale) {
             $page->translateOrNew($locale)->fill([
-                'title' => 'Головна сторінка',
+                'title' => 'Головна',
                 'description' => 'Опис головної сторінки для SEO',
                 'content' => '<p>Вітальний контент на головній сторінці</p>',
                 'meta_title' => 'Головна сторінка - My App',

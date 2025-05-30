@@ -5,11 +5,21 @@
         </Link>
     </div>
     <div v-else>
-        <button @click="open = !open" class="px-3">
-            <IconUserCircle stroke="{2}" :size="24" />
+        <button
+            @click="open = !open"
+            class="flex items-center rounded-lg p-1 hover:text-blue-600 duration-200"
+        >
+            <span
+                ><svg-icon
+                    type="mdi"
+                    :path="mdiAccountOutline"
+                    class="w-7 h-7"
+                ></svg-icon
+            ></span>
+            <span class="hidden md:block px-1 text-sm">{{ $t("Login") }}</span>
         </button>
     </div>
-    
+
     <Transition name="modal-fade">
         <Modal :show="open" @close="open = !open">
             <div class="flex w-full min-h-screen items-center justify-center">
@@ -283,12 +293,15 @@
 <script setup>
 import { useForm, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
+import SvgIcon from "@jamescoyle/vue-icon";
+import { mdiAccountOutline } from "@mdi/js";
+
 import {
     IconEye,
     IconEyeClosed,
     IconLock,
     IconPhone,
-    IconUserCircle,
+    IconUser,
     IconX,
 } from "@tabler/icons-vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";

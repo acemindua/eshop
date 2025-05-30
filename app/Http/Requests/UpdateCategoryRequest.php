@@ -29,11 +29,18 @@ class UpdateCategoryRequest extends FormRequest
             '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('category_translations', 'title')->using(function ($q) {
                 $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
             })],
-            '%slug%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('category_translations', 'slug')->using(function ($q) {
-                $q->where('locale',  'in_array', array_keys(LaravelLocalization::getSupportedLocales()));
-            })],
+            'slug' => [
+                'required',
+                'min:3',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'slug')->ignore($this->id),
+            ],
             '%description%' => ['nullable', 'string'],
             '%content%' => ['nullable', 'string'],
+            '%meta_title%' => ['nullable', 'string', 'max:255'],
+            '%meta_description%' => ['nullable', 'string', 'max:255'],
+            '%meta_keywords%' => ['nullable', 'string', 'max:255'],
             'public' => ['required', 'boolean'],
             'order' => ['required', 'integer'],
             'category_id' => ['nullable', 'integer', Rule::exists('categories', 'id')],

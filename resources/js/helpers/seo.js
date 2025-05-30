@@ -10,15 +10,13 @@ import { getCanonicalUrl, generateHreflangs } from "./url";
 export const generateHeadMeta = (
     item,
     appName = "Laravel",
-    localeKeys = []
 ) => {
-    const locales = localeKeys;
     const description =
         item.meta_description ??
         item.description ??
         item.content?.slice(0, 160) ??
         "";
-    const canonical = getCanonicalUrl(locales);
+    const canonical = getCanonicalUrl();
     const image = item.image ?? "/images/logo.jpg";
 
     return {
@@ -69,7 +67,7 @@ export const generateHeadMeta = (
                 rel: "canonical",
                 href: canonical,
             },
-            ...generateHreflangs(locales).map((link) => ({
+            ...generateHreflangs().map((link) => ({
                 rel: "alternate",
                 hreflang: link.hreflang,
                 href: link.href,

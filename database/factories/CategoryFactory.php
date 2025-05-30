@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
@@ -18,10 +17,13 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $title = $this->faker->unique()->word,
-            'description' => $this->faker->paragraph,
-            'content' => $this->faker->paragraph,
-            'slug' => Str::slug($title) . '-' . Str::uuid(),
+            'title' => $this->faker->unique()->word,
+            'description' => $this->faker->paragraph(),
+            'content' => $this->faker->paragraph(),
+            'meta_title' => $this->faker->sentence(3),
+            'meta_description' => $this->faker->paragraph(),
+            'meta_keywords' => implode(',
+            ', $this->faker->words(rand(3, 7))),
             'user_id' => 1,
         ];
     }

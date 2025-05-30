@@ -1,28 +1,23 @@
-import { isLocale, availableLocales } from "./locale";
+import { mapLocale, isLocale, availableLocales } from "./locale";
 
 /**
  * Removes the locale prefix from a given path
  * @param {string} path
- * @param {string[]} validLocales
  * @returns {string}
  */
-export const stripLocaleFromPath = (path, validLocales = []) => {
+export const stripLocaleFromPath = (path) => {
     const segments = path.split("/").filter(Boolean);
-    if (isLocale(segments[0], validLocales)) segments.shift();
+    if (isLocale(segments[0])) segments.shift();
     return "/" + segments.join("/");
 };
 
 /**
  * Returns the canonical URL without a locale prefix
- * @param {string[]} validLocales
  * @returns {string}
  */
-export const getCanonicalUrl = (validLocales = []) => {
+export const getCanonicalUrl = () => {
     const origin = window.location.origin;
-    const cleanPath = stripLocaleFromPath(
-        window.location.pathname,
-        validLocales
-    );
+    const cleanPath = stripLocaleFromPath(window.location.pathname);
     return origin + cleanPath;
 };
 
@@ -30,17 +25,14 @@ export const getCanonicalUrl = (validLocales = []) => {
  * Builds a localized version of the current URL
  * @param {string} locale
  * @param {string} currentPath
- * @param {string[]} validLocales
  * @returns {string}
  */
-export const buildUrlForLocale = (locale, currentPath, validLocales = []) => {
-    const cleanPath = stripLocaleFromPath(currentPath, validLocales);
+export const buildUrlForLocale = (locale, currentPath) => {
+    const cleanPath = stripLocaleFromPath(currentPath);
     const segments = cleanPath.split("/").filter(Boolean);
-    segments.unshift(locale);
-
+    segments.unshift(mapLocale(locale));
     const url = new URL(window.location.origin);
     url.pathname = "/" + segments.join("/");
-
     return url.toString();
 };
 
@@ -49,12 +41,11 @@ export const buildUrlForLocale = (locale, currentPath, validLocales = []) => {
  * @param {string[]} localeKeys
  * @returns {{ hreflang: string, href: string }[]}
  */
-export const generateHreflangs = (localeKeys = []) => {
-    const locales = availableLocales(localeKeys);
+export const generateHreflangs = () => {
+    const locales = availableLocales().value;
     const currentPath = window.location.pathname;
-
-    return locales.map((locale) => ({
+    return locales["keys"].map((locale) => ({
         hreflang: locale,
-        href: buildUrlForLocale(locale, currentPath, locales),
+        href: buildUrlForLocale(locale, currentPath),
     }));
 };

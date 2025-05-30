@@ -52,6 +52,7 @@ class HandleInertiaRequests extends Middleware
                 'phpVersion'        => PHP_VERSION
             ],
             'lang' => [
+                'locale'        => app()->getLocale(),
                 'default'       => app()->getLocale(),
                 'keys'          => config('translatable.locales'),
                 'locales'       => (new \App\Services\LanguageServices())->getActiveLanguages(),

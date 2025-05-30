@@ -44,13 +44,14 @@ class ProductController extends Controller
                 foreach ($product->variants as $variant) {
                     $items->push([
                         'id' => $variant->id,
-                        'title' => $product->title . (optional($variant->attribute_value)->title ? ' (' . $variant->attribute_value->title . ')' : ''),
+                        'title' => $product->title . (optional($variant->attribute_value)->title ? ' / ' . $variant->attribute_value->title  : ''),
                         'price' => $variant->price,
                         'quantity' => $variant->quantity,
                         'slug' => [
                             'product' => $product->slug,
                             'variant' => optional($variant->attribute_value)->slug,
                         ],
+                        'category' => $product->category,
                         'images' => array_merge($variant->sorted_images ?? [], $product->sorted_images ?? []),
                         'status' => (bool) $variant->public,
                     ]);

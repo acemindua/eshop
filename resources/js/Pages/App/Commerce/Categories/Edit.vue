@@ -26,17 +26,21 @@
 
         <!-- Tabs -->
         <section>
+            <!-- Вкладки -->
             <TabGroup :selectedIndex="activeTab" @change="changeTab">
                 <TabList
                     class="flex items-center w-full bg-white border rounded-lg mt-4 p-2"
                 >
                     <Tab
-                        v-for="tab in tabs"
+                        v-for="(tab, index) in tabs"
                         :key="tab.key"
                         as="template"
                         v-slot="{ selected }"
                     >
-                        <ButtonTabGroup :selected="selected">
+                        <ButtonTabGroup
+                            :selected="selected"
+                            :has-error="tabErrors[index]"
+                        >
                             {{ $t(tab.label) }}
                         </ButtonTabGroup>
                     </Tab>
@@ -44,33 +48,30 @@
 
                 <TabPanels class="mt-2">
                     <TabPanel>
-                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
-                            <div class="w-full md:w-1/4">
-                                <h2 class="uppercase font-semibold">General</h2>
-                                <span class="py-2 text-sm text-gray-600">
-                                    Manage general info
-                                </span>
-                            </div>
-                            <GeneralForm
-                                :form="form"
-                                :errors="errors"
-                                :is-editing="true"
-                            />
-                        </div>
+                        <GeneralForm
+                            :form="form"
+                            :errors="errors"
+                            :is-editing="true"
+                            @uploaded="handleUpload"
+                        />
                     </TabPanel>
+
+                    <TabPanel>
+                        <DataForm :form="form" :errors="errors" :data="data" />
+                    </TabPanel>
+
                     <TabPanel>
                         <div class="border bg-white p-4 md:p-8 flex rounded-lg">
                             <div class="w-full md:w-1/4">
-                                <h2 class="uppercase font-semibold">Data</h2>
+                                <h2 class="uppercase font-semibold">SEO</h2>
                                 <span class="py-2 text-sm text-gray-600">
-                                    General settings
+                                    SEO settings
                                 </span>
                             </div>
-                            <DataForm
+                            <SeoForm
                                 :form="form"
                                 :errors="errors"
-                                :data="data"
-                                @uploaded="handleUpload"
+                                :isEditing="true"
                             />
                         </div>
                     </TabPanel>
@@ -87,8 +88,9 @@
 
 <script setup>
 // Vue & Inertia Core
-import { ref, reactive, onBeforeMount, watch } from "vue";
-import { usePage, router } from "@inertiajs/vue3";
+import { ref, onBeforeMount, watch } from "vue";
+import { router } from "@inertiajs/vue3";
+import useTranslatableForm from "@/Composables/useTranslatableForm";
 
 // UI Components
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
@@ -102,6 +104,7 @@ import VarDump from "@/Shared/VarDump.vue";
 // Partials
 import GeneralForm from "./Partials/GeneralForm.vue";
 import DataForm from "./Partials/DataForm.vue";
+import SeoForm from "@/Components/SEO/SeoForm.vue";
 
 // Props
 const props = defineProps({
@@ -114,37 +117,21 @@ const activeTab = ref(0);
 const tabs = ref([
     { key: "general", label: "General" },
     { key: "data", label: "Data" },
+    { key: "seo", label: "SEO" },
 ]);
 
+const translatedAttributes = [
+    "title",
+    "description",
+    "content",
+    "meta_title",
+    "meta_description",
+    "meta_keywords",
+];
 // Form init
-const page = usePage();
-const translatedAttributes = ["title", "slug", "description", "content"];
-const form = reactive({
-    _method: "put",
-    order: props.data.item.order || 1,
-    category_id: props.data.item.category_id || null,
-    public: !!props.data.item.public,
-    user_id: page.props.auth.user.id,
-});
-
-// Add i18n fields
+const { form, fillForm } = useTranslatableForm(translatedAttributes);
 onBeforeMount(() => {
-    const locales = page.props.lang.locales;
-    for (const code in locales) {
-        form[code] = {};
-        translatedAttributes.forEach((attr) => {
-            form[code][attr] = "";
-        });
-    }
-
-    if (props.data.item.translations) {
-        for (const trans of props.data.item.translations) {
-            if (!form[trans.locale]) continue;
-            for (const attr of translatedAttributes) {
-                form[trans.locale][attr] = trans[attr] ?? "";
-            }
-        }
-    }
+    fillForm(props.data.item);
 });
 
 // Upload handler
@@ -156,33 +143,40 @@ function handleUpload(file) {
 const loading = ref(false);
 function submit() {
     loading.value = true;
+    form._method = "PUT";
     router.post(route("admin.categories.update", props.data.item.id), form, {
         forceFormData: true,
         preserveState: true,
         onFinish: () => (loading.value = false),
     });
 }
-
-// Error-driven tab navigation
+const tabErrors = ref([false, false]);
+// Логіка перемикання вкладок на основі помилок
 watch(
     () => props.errors,
     (errors) => {
         const keys = Object.keys(errors);
-        if (
-            keys.some((key) =>
-                translatedAttributes.some((attr) => key.endsWith(attr))
-            )
-        ) {
-            activeTab.value = 0;
-        }
-        if (keys.some((key) => ["order", "category_id"].includes(key))) {
-            activeTab.value = 1;
+
+        // Оновлення tabErrors
+        tabErrors.value[0] = keys.some((key) =>
+            translatedAttributes.some((attr) => key.endsWith(attr))
+        );
+
+        tabErrors.value[1] = keys.some((key) =>
+            ["order", "public"].includes(key)
+        );
+
+        tabErrors.value[2] = keys.some((key) => ["slug"].includes(key));
+
+        // Автоматичне перемикання на першу вкладку з помилкою
+        const firstErrorTabIndex = tabErrors.value.findIndex(Boolean);
+        if (firstErrorTabIndex !== -1) {
+            activeTab.value = firstErrorTabIndex;
         }
     },
     { immediate: true }
 );
 
-// Tab switch
 function changeTab(index) {
     activeTab.value = index;
 }

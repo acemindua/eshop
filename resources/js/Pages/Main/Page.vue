@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <MainLayout>
         <section class="bg-white p-8 rounded-lg">
             <h1 class="text-xl font-semibold">{{ item.title }}</h1>
             <div class="py-4">
@@ -10,7 +10,7 @@
         <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="data" />
         </section>
-    </div>
+    </MainLayout>
 </template>
 <script setup>
 import { computed } from "vue";
@@ -19,8 +19,6 @@ import { usePage } from "@inertiajs/vue3";
 import { generateHeadMeta } from "@/helpers";
 import MainLayout from "@/Layouts/MainLayout.vue";
 import VarDump from "@/Shared/VarDump.vue";
-
-defineOptions({ layout: MainLayout });
 
 const props = defineProps({
     data: {
@@ -31,11 +29,7 @@ const props = defineProps({
 const item = computed(() => props.data.item.data || {});
 //
 const headMeta = computed(() =>
-    generateHeadMeta(
-        item.value,
-        usePage().props.app.name,
-        usePage().props.lang.keys
-    )
+    generateHeadMeta(item.value, usePage().props.app.name)
 );
 //
 useHead(headMeta);

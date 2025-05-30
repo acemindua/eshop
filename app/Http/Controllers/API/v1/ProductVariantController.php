@@ -91,10 +91,11 @@ class ProductVariantController extends Controller
     public function destroy(ProductVariant $productVariant)
     {
         try {
+            $productVariant->clearMediaCollection('images');
             $productVariant->delete();
 
             return response()->json([
-                'message' => 'Product variant deleted successfully.'
+                'message' => 'Product variant variant deleted successfully.'
             ]);
         } catch (\Exception $e) {
             return response()->json([

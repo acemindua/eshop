@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex items-center gap-8 text-sm text-gray-600">
+    <div class="flex items-center gap-8 text-sm">
         <div v-for="category in categories" :key="category.id">
             <Link :href="`/category__${category.slug}/`">
                 <span>{{ category.title }}</span>

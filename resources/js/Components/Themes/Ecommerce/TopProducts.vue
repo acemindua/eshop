@@ -4,15 +4,17 @@
             {{ $t("The best products") }}
         </h3>
 
-        <div class="grid grid-cols-4 gap-4">
+        <div
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 relative"
+        >
             <ProductCard v-for="item in items" :key="item.id" :data="item" />
         </div>
     </div>
 </template>
 
 <script setup>
-import useApiResourceService from "@/Composables/useApiResourceService";
 import { ref, onBeforeMount } from "vue";
+import useApiResourceService from "@/Composables/useApiResourceService";
 import ProductCard from "./ProductCard.vue";
 
 const items = ref([]);

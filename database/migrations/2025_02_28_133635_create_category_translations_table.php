@@ -13,16 +13,20 @@ return new class extends Migration
     {
         Schema::create('category_translations', function (Blueprint $table) {
             $table->increments('id');
+
             $table->integer('category_id')->unsigned();
             $table->string('locale')->index();
 
             $table->string('title');
-            $table->string('slug');
             $table->text('description')->nullable();
             $table->text('content')->nullable();
 
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
+            $table->string('meta_keywords')->nullable();
+
             $table->timestamps();
-            $table->unique(['slug', 'locale']);
+
             $table->unique(['category_id', 'locale']);
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });

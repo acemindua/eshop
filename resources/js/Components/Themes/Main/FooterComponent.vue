@@ -31,17 +31,13 @@ const isActivePage = (slug) => {
             v-if="categories && categories.length > 0"
             class="flex gap-4 items-start"
         >
-            <h4 class="text-gray-600 text-sm font-semibold">
-                {{ $t("Category") }}:
-            </h4>
+            <h4 class="text-sm font-semibold">{{ $t("Category") }}:</h4>
             <CategoryTree :categories="categories" />
         </div>
         <div v-if="pages && pages.length > 0" class="flex gap-4 items-start">
-            <h4 class="text-gray-600 text-sm font-semibold">
-                {{ $t("Pages") }}:
-            </h4>
+            <h4 class="text-sm font-semibold">{{ $t("Pages") }}:</h4>
 
-            <ul class="text-sm text-gray-600">
+            <ul class="text-sm">
                 <li v-for="page in pages" :key="page.id">
                     <Link
                         :href="`/${page.slug}`"
@@ -53,14 +49,35 @@ const isActivePage = (slug) => {
         </div>
 
         <Link href="/" class="inline-flex items-center space-x-2">
-            <ApplicationLogo
-                class="block h-9 w-auto fill-current text-gray-600"
-            />
+            <ApplicationLogo class="block h-9 w-auto fill-current" />
         </Link>
     </div>
 
-    <div class="text-xs text-gray-600 py-4 border-t">
-        ©{{ $page.props.app.year }} {{ $page.props.app.name }}.
-        {{ $t("All rights reserved.") }}
+    <div
+        class="flex items-center justify-between pb-6 pt-3 text-xs  border-t"
+    >
+        <div class="">
+            ©{{ $page.props.app.year }} {{ $page.props.app.name }}.
+            {{ $t("All rights reserved.") }}
+        </div>
+
+        <div>
+            <a
+                href="http://apisoft.com.ua"
+                target="_blank"
+                class="inline-flex space-x-2 items-center"
+            >
+                <p class="flex flex-col text-end">
+                    <span class="text-xs ">Handmade by:</span>
+                    <span class=" font-semibold">apiSoft</span>
+                </p>
+
+                <img
+                    src="https://apisoft.com.ua/storage/apisoft.svg"
+                    alt="apiSoft"
+                    class="w-10 h-10"
+                />
+            </a>
+        </div>
     </div>
 </template>
