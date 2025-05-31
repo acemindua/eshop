@@ -35,9 +35,41 @@
         </template>
         <span>{{ $t("Pages") }}</span>
     </NavigationLink>
+    <div class="py-2 px-3">
+        <span class="text-xs uppercase font-semibold text-gray-400">{{
+            $t("Blog")
+        }}</span>
+        <hr />
+    </div>
+    <NavigationLink
+        v-if="can('post-view') || is('super-user')"
+        :href="route('admin.posts.index')"
+        :active="$page.url.startsWith('/posts')"
+    >
+        <template #icon>
+            <IconArticle :stroke="1" width="20" />
+        </template>
+        <span>{{ $t("Posts") }}</span>
+    </NavigationLink>
+    <NavigationLink
+        v-if="can('post-category-view') || is('super-user')"
+        :href="route('admin.post-categories.index')"
+        :active="$page.url.startsWith('/post-categories')"
+    >
+        <template #icon>
+            <IconCircles :stroke="1" width="20" />
+        </template>
+        <span>{{ $t("Post categories") }}</span>
+    </NavigationLink>
 </template>
 
 <script setup>
-import { IconDashboard, IconUsers, IconToiletPaper } from "@tabler/icons-vue";
+import {
+    IconDashboard,
+    IconUsers,
+    IconToiletPaper,
+    IconArticle,
+    IconCircles,
+} from "@tabler/icons-vue";
 import NavigationLink from "../Components/NavigationLink.vue";
 </script>

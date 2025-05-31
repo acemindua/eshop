@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\App\Blog\PostCategoryController;
+use App\Http\Controllers\App\Blog\PostController;
 use App\Http\Controllers\App\Commerce\CategoryController;
 use App\Http\Controllers\App\Commerce\ManufacturerController;
 use App\Http\Controllers\App\Commerce\OrderController;
@@ -22,6 +24,8 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::resources([
     'pages'         => PageController::class,
     'users'         => UserController::class,
+    'posts'         => PostController::class,
+    'post-categories'   => PostCategoryController::class,
 ]);
 
 Route::prefix('commerce')->group(function () {

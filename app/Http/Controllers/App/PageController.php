@@ -54,6 +54,8 @@ class PageController extends Controller
      */
     public function create(): Response
     {
+        Gate::authorize('create', Page::class);
+        
         return Inertia::render(
             'App/Pages/Create',
             [

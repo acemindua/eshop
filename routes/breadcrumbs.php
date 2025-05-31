@@ -86,7 +86,7 @@ Breadcrumbs::for('dynamic.route', function (BreadcrumbTrail $trail, string $slug
 Breadcrumbs::for(
     'admin.dashboard',
     fn(BreadcrumbTrail $trail) =>
-    $trail->push(__('Dashboard'), route('admin.dashboard'))
+    $trail->push('Dashboard', route('admin.dashboard'))
 );
 
 Breadcrumbs::for(
@@ -117,6 +117,8 @@ Breadcrumbs::macro('resource', function (string $name, string $title) {
 
 // Admin ресурси
 $resources = [
+    'posts' => __('Posts'),
+    'post-categories' => __('Post categories'),
     'pages' => __('Pages'),
     'users' => __('Users'),
     'orders' => __('Orders'),

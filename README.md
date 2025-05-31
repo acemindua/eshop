@@ -19,6 +19,22 @@
 
 ## v2 Blog
 
+-   php artisan make:model PostCategory -m
+-   php artisan make:model PostCategoryTranslation -m
+-   php artisan make:controller \App\Http\Controllers\App\Blog\PostCategoryController --model=PostCategory --resource --requests
+
+-   php artisan make:model Post -m
+-   php artisan make:model PostTranslation -m
+-   php artisan make:controller \App\Http\Controllers\App\Blog\PostController --model=Post --resource --requests
+
+-   php artisan make:resource PostResource
+-   php artisan make:resource PostCategoryResource
+
+-   php artisan make:factory PostCategoryFactory --model=PostCategory
+-   php artisan make:factory PostFactory --model=Post
+
+-   php artisan make:seeder CategoryAndPostSeeder
+
 ## v1.14 Corporate Themes
 
 -   Logo

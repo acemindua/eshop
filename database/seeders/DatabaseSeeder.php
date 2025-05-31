@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             SettingsSeeder::class,
             PageSeeder::class,
+            CategoryAndPostSeeder::class
         ]);
     }
 }
