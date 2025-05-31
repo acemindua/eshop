@@ -6,6 +6,7 @@ use App\Http\Controllers\API\ChatRooms\TelegramController;
 use App\Http\Controllers\API\V1\MediaController;
 use App\Http\Controllers\API\V1\MessageController;
 use App\Http\Controllers\API\ProductMediaController;
+use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\UploadImageController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\V1\DataController;
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
+
+//
+Route::apiResource('reviews', ReviewController::class);
 
 Route::prefix('v1')->group(function () {
     Route::prefix('chat')->group(function () {

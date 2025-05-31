@@ -21,6 +21,13 @@
 
 ## v1.13 Review and Rating
 
+-   composer require codebyray/laravel-review-rateable
+
+-   php artisan vendor:publish --provider="Codebyray\ReviewRateable\ReviewRateableServiceProvider" --tag=config
+-   php artisan vendor:publish --provider="Codebyray\ReviewRateable\ReviewRateableServiceProvider" --tag=migrations
+-   php artisan migrate
+
+-   php artisan make:controller API/ReviewController --resource --api
 
 ## v1.12 Desing Hopme page
 

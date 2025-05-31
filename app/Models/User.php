@@ -27,7 +27,6 @@ class User extends Authenticatable implements HasMedia
     use SoftDeletes;
     use InteractsWithMedia;
     use SpatiePermissionsToVue;
-
     /**
      * The attributes that are mass assignable.
      *

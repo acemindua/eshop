@@ -11,13 +11,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Astrotomic\Translatable\{Contracts\Translatable as TranslatableContract, Translatable};
+use Codebyray\ReviewRateable\Traits\ReviewRateable;
 use Spatie\MediaLibrary\{HasMedia, InteractsWithMedia};
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Product extends Model implements TranslatableContract, HasMedia
 {
-    use Translatable, SoftDeletes, InteractsWithMedia, HasFactory;
+    use ReviewRateable, Translatable, SoftDeletes, InteractsWithMedia, HasFactory;
 
     /**
      * Translatable fields

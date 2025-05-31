@@ -121,7 +121,7 @@ class HomeController extends Controller
         $images = array_merge($variant->sorted_images ?? [], $product->sorted_images ?? []);
 
         // Render the product page via Inertia with all necessary data
-        return Inertia::render('Main/Commerce/Show', [
+        return Inertia::render('Main/Commerce/ProductDetails', [
             'data' => [
                 'item' => new ProductResource($product),
                 'variant' => $variant ? new ProductVariantResource($variant) : null,
