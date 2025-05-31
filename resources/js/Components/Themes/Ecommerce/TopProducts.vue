@@ -1,17 +1,12 @@
 <template>
     <div>
-        <h3 class="uppercase font-semibold">
-            {{ $t("The best products") }}
-        </h3>
-
         <div
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 relative"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[1px] border w-full bg-gray-200"
         >
             <ProductCard v-for="item in items" :key="item.id" :data="item" />
         </div>
     </div>
 </template>
-
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import useApiResourceService from "@/Composables/useApiResourceService";

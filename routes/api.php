@@ -18,8 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/telegram/webhook', [TelegramController::class, 'webhook']);
 
-//
-Route::apiResource('reviews', ReviewController::class);
+// Reviews
+Route::controller(ReviewController::class)->group(
+    function () {
+        Route::get('/reviews', 'index');
+        Route::post('/reviews', 'store');
+        Route::get('/reviews/average-rating', 'getAverageRating');
+    }
+);
 
 Route::prefix('v1')->group(function () {
     Route::prefix('chat')->group(function () {

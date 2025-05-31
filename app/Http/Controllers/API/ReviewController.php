@@ -16,9 +16,51 @@ class ReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
         //
+        //return response()->json($request->all(), 201);
+        $reviewableType = $request->model;
+        $reviewableId = $request->model_id;
+        try {
+            $reviewable = $this->findReviewableModel($reviewableType, $reviewableId);
+            $reviews = $reviewable->reviews()->latest()->paginate(10);
+            return response()->json([
+                'reviews' => $reviews,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\LogicException $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        } catch (\Exception $e) {
+            // Логування помилки для діагностики
+            Log::error("Error fetching reviews for {$reviewableType}/{$reviewableId}: " . $e->getMessage());
+            return response()->json(['message' => 'Error fetching reviews: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Отримати середній рейтинг та кількість відгуків для сутності.
+     */
+    public function getAverageRating(Request $request): JsonResponse
+    {
+        try {
+            $reviewableType = $request->model;
+            $reviewableId = $request->model_id;
+
+            $reviewable = $this->findReviewableModel($reviewableType, $reviewableId);
+            return response()->json([
+                'average_rating' => $reviewable->overallAverageRating(),
+                'reviews_count' => $reviewable->reviews()->approved()->count(),
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\LogicException $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        } catch (\Exception $e) {
+            Log::error("Error fetching average rating for {$reviewableType}/{$reviewableId}: " . $e->getMessage());
+            return response()->json(['message' => 'Error fetching average rating: ' . $e->getMessage()], 500);
+        }
     }
 
     /**

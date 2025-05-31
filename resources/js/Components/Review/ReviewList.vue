@@ -89,11 +89,11 @@ import StarRating from "./StarRating.vue";
 import { useReviewApi } from "@/Composables/useReviewApi"; // Імпорт composable
 
 const props = defineProps({
-    reviewableType: {
+    modelType: {
         type: String,
         required: true,
     },
-    reviewableId: {
+    modelId: {
         type: Number,
         required: true,
     },
@@ -115,15 +115,18 @@ const hasMoreReviews = ref(false);
 // Функція для отримання відгуків
 const fetchReviews = async () => {
     const data = await api.fetchReviews(
-        props.reviewableType,
-        props.reviewableId,
+        props.modelType,
+        props.modelId,
         currentPage.value
     );
     if (data) {
         if (currentPage.value === 1) {
-            reviews.value = data.data;
+            console.log("currentPage", currentPage.value === 1);
+            console.log("currentPage", currentPage.value);
+            console.log("reviews", data.reviews.data);
+            reviews.value = data.reviews.data;
         } else {
-            reviews.value = [...reviews.value, ...data.data];
+            reviews.value = [...reviews.value, ...data];
         }
         currentPage.value = data.current_page;
         lastPage.value = data.last_page;
@@ -150,8 +153,8 @@ const editReview = (review) => {
 const confirmDelete = async (reviewId) => {
     if (confirm("Ви впевнені, що хочете видалити цей відгук?")) {
         const success = await api.deleteReview(
-            props.reviewableType,
-            props.reviewableId,
+            props.modelType,
+            props.modelId,
             reviewId
         );
         if (success) {

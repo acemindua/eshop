@@ -58,7 +58,11 @@ class ReviewController extends Controller
             $reviewable = $this->findReviewableModel($reviewableType, $reviewableId);
             // Виправлено: Змінено 'user' на 'reviewer' для коректного завантаження користувача
             $reviews = $reviewable->reviews()->with('reviewer')->approved()->latest()->paginate(10);
-            return response()->json($reviews);
+            return response()->json([
+                'reviews' =>  $reviews,
+                'average_rating' => $reviewable->overallAverageRating(),
+                'reviews_count' => $reviewable->reviews()->approved()->count(),
+            ]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\LogicException $e) {

@@ -19,6 +19,12 @@
 
 ## v2 Blog
 
+## v1.14 Corporate Themes
+
+-   Logo
+
+## v1.13.01 Review and Rating
+
 ## v1.13 Review and Rating
 
 -   composer require codebyray/laravel-review-rateable

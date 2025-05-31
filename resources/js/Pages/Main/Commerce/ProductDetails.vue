@@ -7,10 +7,6 @@
                 @review-added="handleReviewAdded"
             />
         </section>
-
-        <pre>
-            {{ item }}
-        </pre>
     </MainLayout>
 </template>
 

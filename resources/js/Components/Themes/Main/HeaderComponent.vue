@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import AppLogo from "@/Components/Themes/AppLogo.vue";
 import SearchHeader from "./UI/SearchHeader.vue";
 import LoginRegisterFormModal from "./Auth/LoginRegisterFormModal.vue";
 import ShoppingCartButton from "../Ecommerce/UI/ShoppingCartButton.vue";
@@ -18,10 +18,8 @@ const search = ref("");
 <template>
     <div class="grid grid-cols-4 gap-2">
         <Link href="/" class="inline-flex items-center space-x-2">
-            <ApplicationLogo
-                class="block h-9 w-auto fill-current text-red-600"
-            />
-            <span class="font-semibold hidden md:block">{{
+            <AppLogo class="block h-11 w-auto fill-current" />
+            <span class="font-semibold text-xl uppercase hidden md:block">{{
                 $page.props.app.name
             }}</span>
         </Link>

@@ -42,7 +42,7 @@ export function useReviewApi() {
 
         try {
             const response = await axios.post(`/api/reviews`, formData);
-            console.log(response);
+
             successMessage.value = response.data.message;
             return true; // Успішно
         } catch (error) {
@@ -75,9 +75,14 @@ export function useReviewApi() {
         loading.value = true;
         errorMessage.value = "";
         try {
-            const response = await axios.get(
-                `/api/${reviewableType}/${reviewableId}/reviews?page=${page}`
-            );
+            const response = await axios.get(`/api/reviews/`, {
+                params: {
+                    model: reviewableType,
+                    model_id: reviewableId,
+                    page: page,
+                },
+            });
+
             return response.data;
         } catch (error) {
             errorMessage.value = "Помилка завантаження відгуків.";
@@ -98,9 +103,13 @@ export function useReviewApi() {
         loading.value = true;
         errorMessage.value = "";
         try {
-            const response = await axios.get(
-                `/api/${reviewableType}/${reviewableId}/average-rating`
-            );
+            const response = await axios.get(`/api/reviews/average-rating`, {
+                params: {
+                    model: reviewableType,
+                    model_id: reviewableId,
+                },
+            });
+
             return response.data;
         } catch (error) {
             errorMessage.value = "Помилка завантаження середнього рейтингу.";

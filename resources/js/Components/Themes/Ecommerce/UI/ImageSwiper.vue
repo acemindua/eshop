@@ -1,25 +1,35 @@
 <template>
-    <div v-if="hasImages">
+    <div class="h-full w-full">
         <div
-            class="slider group"
+            v-if="hasImages"
+            class="slider group h-full w-full relative overflow-hidden rounded-lg"
             @touchstart="handleTouchStart"
             @touchend="handleTouchEnd"
             @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave"
         >
-            <div class="slider-wrapper">
-                <Link :href="href" :alt="alt">
+            <div class="slider-wrapper h-full w-full relative">
+                <Link :href="href" :alt="alt" class="block h-full w-full">
                     <transition :name="transitionName" mode="out-in">
-                        <img
+                        <div
                             v-if="currentImage"
-                            :src="currentImage.preview"
                             :key="currentImage.id || currentIndex"
-                            loading="lazy"
-                            class="slide"
-                            :alt="`${alt}_${currentIndex + 1}`"
-                        />
+                            class="image-zoom-container"
+                            :class="{ 'is-zoomed': isZoomed }"
+                        >
+                            <img
+                                :src="currentImage.preview"
+                                loading="lazy"
+                                class="slide"
+                                :alt="`${alt} - Image ${currentIndex + 1}`"
+                            />
+                        </div>
                         <div v-else class="slide placeholder-image">
-                            Немає зображень
+                            <IconPhoto
+                                :stroke="1"
+                                :size="48"
+                                class="text-gray-400"
+                            />
                         </div>
                     </transition>
                 </Link>
@@ -28,7 +38,8 @@
             <button
                 v-if="hasMultipleImages"
                 class="nav-btn left-2"
-                @click.stop="prevSlide"
+                @click.stop.prevent="prevSlide"
+                aria-label="Previous image"
             >
                 ‹
             </button>
@@ -36,116 +47,175 @@
             <button
                 v-if="hasMultipleImages"
                 class="nav-btn right-2"
-                @click.stop="nextSlide"
+                @click.stop.prevent="nextSlide"
+                aria-label="Next image"
             >
                 ›
             </button>
-        </div>
-    </div>
 
-    <Link
-        v-else
-        :href="href"
-        :alt="alt"
-        class="bg-gray-50 text-gray-300 rounded-lg h-full w-full flex items-center justify-center"
-    >
-        <IconPhoto :stroke="1" :size="48" />
-    </Link>
+            <div v-if="hasMultipleImages" class="slider-dots">
+                <span
+                    v-for="(image, index) in images"
+                    :key="image.id || index"
+                    class="dot"
+                    :class="{ active: index === currentIndex }"
+                    @click.stop.prevent="goToSlide(index)"
+                    :aria-label="`Go to image ${index + 1}`"
+                ></span>
+            </div>
+        </div>
+
+        <Link
+            v-else
+            :href="href"
+            :alt="alt"
+            class="bg-gray-100 text-gray-400 rounded-lg flex flax-col items-center justify-center min-h-64 h-full w-full"
+        >
+            <div class="flex flex-col items-center justify-center space-y-4">
+                <IconPhoto :stroke="1" :size="48" />
+                <span class="ml-2 text-sm">{{ $t("Немає зображень") }}</span>
+            </div>
+        </Link>
+    </div>
 </template>
 
 <script setup>
 import { IconPhoto } from "@tabler/icons-vue";
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeUnmount } from "vue";
 import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     images: {
         type: Array,
         required: true,
+        default: () => [],
     },
-    href: { type: String, default: "#" },
-    alt: { type: String, default: "Image" },
+    href: {
+        type: String,
+        default: "#",
+        validator: (value) => value.startsWith("/") || value.startsWith("http"),
+    },
+    alt: {
+        type: String,
+        default: "Product image",
+    },
+    autoSlide: {
+        type: Boolean,
+        default: false,
+    },
+    autoSlideInterval: {
+        type: Number,
+        default: 3000,
+    },
 });
 
 const currentIndex = ref(0);
 const touchStartX = ref(0);
 const touchEndX = ref(0);
 const transitionName = ref("slide-next");
+let autoSlideTimer = null;
 
-// --- Computed Properties for better readability and logic ---
-const hasImages = computed(() => props.images && props.images.length > 0);
-const hasMultipleImages = computed(
-    () => props.images && props.images.length > 1
-);
+// New: State for zoom
+const isZoomed = ref(false);
+
+// --- Computed Properties ---
+const hasImages = computed(() => props.images.length > 0);
+const hasMultipleImages = computed(() => props.images.length > 1);
 
 const currentImage = computed(() => {
-    if (hasImages.value) {
-        return props.images[currentIndex.value];
-    }
-    return null;
+    return hasImages.value ? props.images[currentIndex.value] : null;
 });
 
 // --- Navigation & Interaction Functions ---
-function triggerSlide(direction) {
-    if (!hasImages.value) return;
+
+const triggerSlide = (direction) => {
+    if (!hasMultipleImages.value) return;
+
+    const totalImages = props.images.length;
 
     if (direction === "next") {
         transitionName.value = "slide-next";
-        currentIndex.value = (currentIndex.value + 1) % props.images.length;
+        currentIndex.value = (currentIndex.value + 1) % totalImages;
     } else if (direction === "prev") {
-        transitionName.value = "slide-prev";
+        transitionName.value =
+            currentIndex.value === 0 && totalImages > 1
+                ? "slide-next"
+                : "slide-prev";
         currentIndex.value =
-            (currentIndex.value - 1 + props.images.length) %
-            props.images.length;
-    } else if (direction === "reset") {
-        // For reset to first image
-        transitionName.value = "slide-prev"; // Animation direction for reset
-        currentIndex.value = 0;
+            (currentIndex.value - 1 + totalImages) % totalImages;
     }
-}
+};
 
-// Public methods for navigation
-function nextSlide() {
-    triggerSlide("next");
-}
+const nextSlide = () => triggerSlide("next");
+const prevSlide = () => triggerSlide("prev");
 
-function prevSlide() {
-    triggerSlide("prev");
-}
+const goToSlide = (index) => {
+    if (index === currentIndex.value || !hasMultipleImages.value) return;
 
-// Mouse events
-function handleMouseEnter() {
-    if (!hasImages.value) return;
-
-    // Якщо ми не на останньому зображенні, переходимо до наступного
-    // Ми використовуємо `currentIndex.value < props.images.length - 1` для наведення,
-    // щоб уникнути циклічності при першому наведенні, якщо зображень багато
-    if (currentIndex.value < props.images.length - 1) {
-        triggerSlide("next");
+    if (index > currentIndex.value) {
+        transitionName.value = "slide-next";
+    } else {
+        transitionName.value = "slide-prev";
     }
-}
+    currentIndex.value = index;
+    resetAutoSlideTimer();
+};
 
-function handleMouseLeave() {
-    if (!hasImages.value) return;
+// --- Auto-sliding Logic ---
+const startAutoSlide = () => {
+    if (!props.autoSlide || !hasMultipleImages.value || autoSlideTimer) return;
 
-    if (currentIndex.value !== 0) {
-        triggerSlide("reset"); // Use 'reset' for a specific reset animation
+    autoSlideTimer = setInterval(() => {
+        nextSlide();
+    }, props.autoSlideInterval);
+};
+
+const stopAutoSlide = () => {
+    if (autoSlideTimer) {
+        clearInterval(autoSlideTimer);
+        autoSlideTimer = null;
     }
-}
+};
 
-// Touch events
-function handleTouchStart(event) {
-    if (!hasImages.value) return;
-    touchStartX.value = event.changedTouches[0].screenX;
-}
+const resetAutoSlideTimer = () => {
+    stopAutoSlide();
+    startAutoSlide();
+};
 
-function handleTouchEnd(event) {
-    if (!hasImages.value) return;
-    touchEndX.value = event.changedTouches[0].screenX;
+// --- Mouse Events for Hover Zoom and Auto-Slide Control ---
+const handleMouseEnter = () => {
+    // If auto-slide is enabled, stop it on hover
+    if (props.autoSlide) {
+        stopAutoSlide();
+    }
+    // Activate zoom
+    isZoomed.value = true;
+};
+
+const handleMouseLeave = () => {
+    // If auto-slide is enabled, resume it on mouse leave
+    if (props.autoSlide) {
+        startAutoSlide();
+    }
+    // Deactivate zoom
+    isZoomed.value = false;
+};
+
+// --- Touch Events (unrelated to zoom, but for completeness) ---
+const handleTouchStart = (event) => {
+    if (!hasMultipleImages.value) return;
+    stopAutoSlide(); // Stop auto-slide on touch interaction
+    touchStartX.value = event.touches[0].clientX;
+};
+
+const handleTouchEnd = (event) => {
+    if (!hasMultipleImages.value) return;
+    touchEndX.value = event.changedTouches[0].clientX;
     handleSwipe();
-}
+    startAutoSlide(); // Resume auto-slide after interaction
+};
 
-function handleSwipe() {
+const handleSwipe = () => {
     const distance = touchEndX.value - touchStartX.value;
     const SWIPE_THRESHOLD = 50;
 
@@ -156,28 +226,56 @@ function handleSwipe() {
             prevSlide();
         }
     }
-}
+};
+
+// --- Lifecycle Hook ---
+onBeforeUnmount(() => {
+    stopAutoSlide(); // Clear any active timers
+});
+
+// Optionally start auto-slide on mount if enabled
+// onMounted(() => {
+//     startAutoSlide();
+// });
 </script>
 
 <style scoped>
 .slider {
     position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    overflow: hidden;
+    /* height and width inherited from parent */
 }
+
 .slider-wrapper {
     width: 100%;
     height: 100%;
     position: relative;
+    overflow: hidden;
 }
-.slide {
-    position: absolute;
+
+/* New: Styles for the zoom container */
+.image-zoom-container {
+    width: 100%;
+    height: 100%;
+    position: absolute; /* Ensures it's positioned within its parent */
     top: 0;
     left: 0;
+    transition: transform 0.3s ease-in-out; /* Smooth zoom transition */
+    transform-origin: center center; /* Zoom from the center */
+    display: flex; /* Helps ensure the image inside fills */
+    justify-content: center;
+    align-items: center;
+}
+
+.image-zoom-container.is-zoomed {
+    transform: scale(1.15); /* Adjust zoom level as needed (e.g., 1.1 to 1.3) */
+}
+
+.slide {
+    display: block; /* Ensure no extra space below img */
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
 .placeholder-image {
@@ -185,81 +283,97 @@ function handleSwipe() {
     color: #888;
     font-size: 1.2em;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-/* --- Vue Slide Animations --- */
+/* --- Vue Slide Animations (Unchanged) --- */
 .slide-next-enter-active,
 .slide-next-leave-active,
 .slide-prev-enter-active,
 .slide-prev-leave-active {
-    transition: transform 0.2s ease-in-out; /* Adjusted animation time for smoother feel */
+    transition: transform 0.3s ease-in-out;
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
-/* slide-next: New image slides in from right, old image slides out to left */
 .slide-next-enter-from {
     transform: translateX(100%);
-}
-.slide-next-enter-to {
-    transform: translateX(0);
-}
-.slide-next-leave-from {
-    transform: translateX(0);
 }
 .slide-next-leave-to {
     transform: translateX(-100%);
 }
 
-/* slide-prev: New image slides in from left, old image slides out to right */
 .slide-prev-enter-from {
     transform: translateX(-100%);
-}
-.slide-prev-enter-to {
-    transform: translateX(0);
-}
-.slide-prev-leave-from {
-    transform: translateX(0);
 }
 .slide-prev-leave-to {
     transform: translateX(100%);
 }
 
+/* Navigation Buttons (Unchanged, but ensure z-index is high enough for new elements) */
 .nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 2;
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ccc;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
     border-radius: 50%;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     cursor: pointer;
     transition: background-color 0.3s ease, opacity 0.3s ease;
     opacity: 0;
-    color: gray;
-    width: 40px;
-    height: 40px;
+    color: #333;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
+
 .slider:hover .nav-btn {
-    opacity: 0.9;
+    opacity: 1;
 }
 .nav-btn:hover {
-    opacity: 1;
     background-color: rgb(255, 255, 255);
+    color: #000;
 }
 .left-2 {
     left: 0.5rem;
 }
 .right-2 {
     right: 0.5rem;
+}
+
+/* Navigation Dots (Unchanged) */
+.slider-dots {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dot.active {
+    background-color: #368d02;
+    transform: scale(1.2);
 }
 </style>
