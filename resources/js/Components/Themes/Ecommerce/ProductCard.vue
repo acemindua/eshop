@@ -8,7 +8,6 @@
                     :href="productLink"
                 />
             </div>
-
             <div class="h-10 mt-2 flex w-full items-start justify-start">
                 <div class="text-sm line-clamp-2">
                     <Link :href="productLink" :alt="product.title">
@@ -51,6 +50,7 @@
                             <span class="text-base">₴</span>
                         </p>
                     </div>
+
                     <div v-if="isAvailable">
                         <button
                             type="button"
@@ -60,14 +60,13 @@
                         >
                             <svg-icon
                                 type="mdi"
-                                :path="mdiCartOutline"
+                                :path="isInCart ? mdiCartCheck : mdiCartOutline"
                                 class="w-8 h-8"
                             />
                         </button>
                     </div>
                 </div>
             </div>
-
             <div class="h-4 flex w-full items-center justify-start">
                 <div v-if="isAvailable">
                     <span class="text-xs text-green-600">{{
@@ -80,10 +79,10 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted, inject } from "vue";
 import { useReviewApi } from "@/Composables/useReviewApi";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiCartOutline } from "@mdi/js";
+import { mdiCartOutline, mdiCartCheck } from "@mdi/js";
 
 // UI Components
 import ImageSwiper from "./UI/ImageSwiper.vue";
@@ -100,6 +99,18 @@ const props = defineProps({
         required: true,
         default: () => ({}),
     },
+});
+
+// Inject the cartStore using the same key you used in app.js
+const cartStore = inject("cartStore");
+
+// Перевіряємо, чи товар вже є в кошику
+const isInCart = computed(() => {
+    // `product.value.id` - це унікальний ідентифікатор товару
+    // який відповідає `id`, використаному в Darryldecode\Cart::add()
+    return cartStore.state.items.some(
+        (item) => item.product_id === product.value.id
+    );
 });
 
 const product = computed(() => props.data);
@@ -153,14 +164,13 @@ const isAvailable = computed(
 );
 
 // Emits for communication with parent
-const emit = defineEmits(["addToCart"]);
+const emit = defineEmits(["add-to-cart"]);
 
 const addToCart = () => {
     if (isAvailable.value) {
-        emit("addToCart", product.value.id);
-        console.log(
-            `Adding ${product.value.title} (ID: ${product.value.id}) to cart!`
-        );
+        emit("add-to-cart", product.value.id);
+        cartStore.fetchCart();
+        //console.log( `Adding ${product.value.title} (ID: ${product.value.id}) to cart!` );
     } else {
         console.warn(
             `Cannot add ${product.value.title} to cart: Not available.`

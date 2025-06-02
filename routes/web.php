@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LanguageController;
@@ -15,6 +16,12 @@ Route::middleware(['web'])->group(
     function () {
         //
         Route::get('/language/{locale}', [LanguageController::class, 'change'])->name('lang.swicher');
+
+        //cart
+        Route::controller(CartController::class)->group(function () {
+            Route::get('/cart', 'index')->name('cart.index');
+            Route::post('/cart', 'store')->name('cart.store');
+        });
 
         // Route to redirect to Google's OAuth page
         Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');

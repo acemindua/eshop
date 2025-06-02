@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AttributeResource;
-use App\Http\Resources\AttributeValueResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PageResource;
 use App\Http\Resources\ProductResource;
@@ -13,17 +11,25 @@ use App\Models\Category;
 use App\Models\Page;
 use App\Models\Product;
 use App\Services\SeoService;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
+
+
+
+
+
     /**
      * Головна сторінка сайту
      */
     public function index(SeoService $seoService): Response
     {
+        $cartItems = Cart::getContent();
+
         $page = Page::find(1);
 
         $seo = $seoService->generate(new PageResource($page));

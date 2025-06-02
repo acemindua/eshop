@@ -64,7 +64,7 @@ const handleBlur = () => {
 </script>
 
 <template>
-    <div class="relative w-full hidden">
+    <div class="relative w-full">
         <label for="search" class="sr-only">Search</label>
 
         <!-- Search input and button -->

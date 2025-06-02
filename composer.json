@@ -12,6 +12,7 @@
         "php": "^8.2",
         "astrotomic/laravel-translatable": "^11.15",
         "codebyray/laravel-review-rateable": "^2.0",
+        "darryldecode/cart": "^4.2",
         "diglactic/laravel-breadcrumbs": "^10.0",
         "inertiajs/inertia-laravel": "^2.0",
         "irazasyed/telegram-bot-sdk": "^3.15",

@@ -31,11 +31,10 @@ class SettingsServiceProvider extends ServiceProvider
         if (Schema::hasTable('categories') && Schema::hasTable('pages')) {
             Inertia::share([
                 'responseData' => fn() => [
-                    'categories' => SharedDataService::getCategories(),
-                    'pages' => SharedDataService::getPages(),
+                    'categories'    => SharedDataService::getCategories(),
+                    'pages'         => SharedDataService::getPages(),
                 ],
             ]);
         }
-        
     }
 }

@@ -23,7 +23,7 @@ const search = ref("");
                 $page.props.app.name
             }}</span>
         </Link>
-        <div class="col-span-2">
+        <div class="col-span-2 hidden md:block">
             <SearchHeader />
         </div>
 

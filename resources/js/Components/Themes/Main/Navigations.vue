@@ -25,8 +25,8 @@ const props = defineProps({
     },
 });
 
-const categories = ref(props.data.categories.data || {});
-const pages = ref(props.data.pages.data || {});
+const categories = ref({});
+const pages = ref({});
 
 // Дані сторінки
 const currentPage = usePage();

@@ -7,13 +7,13 @@
                 </div>
             </div> -->
             <div class="w-full max-w-7xl mx-auto px-4 py-2">
-                <HeaderComponent :data="responseData" />
+                <HeaderComponent :data="data" />
             </div>
         </header>
 
         <nav>
             <div class="w-full max-w-7xl mx-auto px-4">
-                <Navigations :data="responseData" />
+                <Navigations :data="data" />
             </div>
             <div
                 v-if="!route().current('home')"
@@ -29,10 +29,13 @@
         </main>
         <footer class="border-t bg-gray-100 text-slate-800">
             <div class="w-full max-w-7xl mx-auto px-4">
-                <FooterComponent :data="responseData" />
+                <FooterComponent :data="data" />
             </div>
         </footer>
     </div>
+    <section v-if="$page.props.app.env === 'local'" class="bg-gray-700">
+        <VarDump :data="data" />
+    </section>
 </template>
 
 <script setup>
@@ -44,8 +47,9 @@ import FooterComponent from "@/Components/Themes/Main/FooterComponent.vue";
 import HeaderComponent from "@/Components/Themes/Main/HeaderComponent.vue";
 import Navigations from "@/Components/Themes/Main/Navigations.vue";
 import LocaleSwicher from "@/Components/Themes/Main/LocaleSwicher.vue";
+import VarDump from "@/Shared/VarDump.vue";
 
 // Отримання глобальних даних з props
 const { props } = usePage();
-const responseData = computed(() => props.responseData || {});
+const data = computed(() => props.responseData || {});
 </script>

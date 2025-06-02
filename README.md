@@ -11,13 +11,17 @@
 -   php artisan storage:link
 -   composer install --optimize-autoloader --no-dev
 
-## v3 Laravel Octane (для максимуму)
+## Laravel Octane (для максимуму)
 
 -   composer require laravel/octane
 -   php artisan octane:install
 -   php artisan octane:start
 
 ## v3 Shoping Cart
+
+-   composer require darryldecode/cart
+-   php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"
+-   php artisan make:controller \App\Http\Controllers\App\Commerce\CartController --resource
 
 ## v2 Blog
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ProductMediaController;
 use App\Http\Controllers\API\ReviewController;
 use App\Http\Controllers\API\UploadImageController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\V1\CartController;
 use App\Http\Controllers\API\V1\DataController;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\ProductVariantController;
