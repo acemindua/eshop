@@ -49,7 +49,7 @@ const importRequest = () => {
 };
 
 const deleteValueItem = (item) => {
-    router.delete(route("admin.post-categories.destroy", item.id));
+    router.delete(route("admin.posts.destroy", item.id));
 };
 </script>
 

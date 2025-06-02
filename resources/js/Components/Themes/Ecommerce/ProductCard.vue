@@ -1,74 +1,79 @@
 <template>
-    <div class="bg-white p-4 flex flex-col">
-        <div class="bg-gray-100 rounded-lg h-56 md:h-64 overflow-hidden">
-            <ImageSwiper
-                :images="images"
-                :alt="product.title"
-                :href="productLink"
-            />
-        </div>
-
-        <div class="h-10 mt-2 flex w-full items-start justify-start">
-            <div class="text-sm line-clamp-2">
-                <Link :href="productLink" :alt="product.title">
-                    <span
-                        class="text-pretty"
-                        :class="{ 'text-gray-400': !isAvailable }"
-                    >
-                        {{ product.title }}
-                    </span>
-                </Link>
-            </div>
-        </div>
-
-        <div class="h-8 flex w-full items-center justify-start text-xs">
-            <div v-if="hasReviews" class="flex items-center space-x-2">
-                <StarRating
-                    :initial-rating="averageRating"
-                    :read-only="true"
-                    :show-average="true"
-                    class="text-lg"
+    <div class="">
+        <div class="bg-white p-4 flex flex-col shadow-sm rounded-lg">
+            <div class="bg-gray-50 rounded-lg h-56 md:h-64 overflow-hidden">
+                <ImageSwiper
+                    :images="images"
+                    :alt="product.title"
+                    :href="productLink"
                 />
-                <p class="flex items-center space-x-1">
-                    <IconMessage :stroke="1" class="w-4 h-4" />
-                    <span class="ml-2"> {{ reviewsCount }}</span>
-                </p>
             </div>
-            <div v-else class="flex items-center space-x-1 py-1">
-                <IconMessage :stroke="1" class="w-4 h-4" />
-                <span>Залишити відгук</span>
-            </div>
-        </div>
 
-        <div class="text-2xl h-12 flex w-full items-center justify-start">
-            <div class="flex items-center justify-between font-semibold w-full">
-                <div :class="{ 'text-gray-400': !isAvailable }">
-                    <p class="font-montserrat">
-                        {{ formattedPrice }} <span class="text-base">₴</span>
+            <div class="h-10 mt-2 flex w-full items-start justify-start">
+                <div class="text-sm line-clamp-2">
+                    <Link :href="productLink" :alt="product.title">
+                        <span
+                            class="text-pretty"
+                            :class="{ 'text-gray-400': !isAvailable }"
+                        >
+                            {{ product.title }}
+                        </span>
+                    </Link>
+                </div>
+            </div>
+
+            <div class="h-8 flex w-full items-center justify-start text-xs">
+                <div v-if="hasReviews" class="flex items-center space-x-2">
+                    <StarRating
+                        :initial-rating="averageRating"
+                        :read-only="true"
+                        :show-average="true"
+                        class="text-lg"
+                    />
+                    <p class="flex items-center space-x-1">
+                        <IconMessage :stroke="1" class="w-4 h-4" />
+                        <span class="ml-2"> {{ reviewsCount }}</span>
                     </p>
                 </div>
-                <div v-if="isAvailable">
-                    <button
-                        type="button"
-                        class="rounded-lg p-2 text-green-600 hover:bg-green-50 transition-colors"
-                        @click="addToCart"
-                        aria-label="Add to cart"
-                    >
-                        <svg-icon
-                            type="mdi"
-                            :path="mdiCartOutline"
-                            class="w-8 h-8"
-                        />
-                    </button>
+                <div v-else class="flex items-center space-x-1 py-1">
+                    <IconMessage :stroke="1" class="w-4 h-4" />
+                    <span class="text-gray-500">Залишити відгук</span>
                 </div>
             </div>
-        </div>
 
-        <div class="h-4 flex w-full items-center justify-start">
-            <div v-if="isAvailable">
-                <span class="text-xs text-green-600">{{
-                    $t("Є в наявності")
-                }}</span>
+            <div class="text-2xl h-12 flex w-full items-center justify-start">
+                <div
+                    class="flex items-center justify-between font-semibold w-full"
+                >
+                    <div :class="{ 'text-gray-400': !isAvailable }">
+                        <p class="font-montserrat">
+                            {{ formattedPrice }}
+                            <span class="text-base">₴</span>
+                        </p>
+                    </div>
+                    <div v-if="isAvailable">
+                        <button
+                            type="button"
+                            class="rounded-lg p-2 text-green-600 hover:bg-green-50 transition-colors"
+                            @click="addToCart"
+                            aria-label="Add to cart"
+                        >
+                            <svg-icon
+                                type="mdi"
+                                :path="mdiCartOutline"
+                                class="w-8 h-8"
+                            />
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-4 flex w-full items-center justify-start">
+                <div v-if="isAvailable">
+                    <span class="text-xs text-green-600">{{
+                        $t("Є в наявності")
+                    }}</span>
+                </div>
             </div>
         </div>
     </div>

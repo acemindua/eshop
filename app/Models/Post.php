@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Astrotomic\Translatable\{Contracts\Translatable as TranslatableContract, Translatable};
 use Codebyray\ReviewRateable\Traits\ReviewRateable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model implements TranslatableContract
 {
@@ -34,4 +35,19 @@ class Post extends Model implements TranslatableContract
         'order',
         'user_id'
     ];
+
+    // Relationships
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(PostCategory::class, 'post_category_id', 'id');
+    }
+
+    /**
+     * 
+     */
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, handleError } from "vue";
 import { useReviewApi } from "@/Composables/useReviewApi"; // Імпорт composable
 import ReviewForm from "./ReviewForm.vue";
 import StarRating from "./StarRating.vue";
@@ -30,6 +30,10 @@ const fetchAverageRating = async () => {
 onMounted(async () => {
     await fetchAverageRating();
 });
+
+const handleAddedReviews = async () => {
+    console.log("handleAddedReviews");
+};
 </script>
 
 <template>
@@ -51,7 +55,11 @@ onMounted(async () => {
 
         <hr class="my-8 border-t-2 border-gray-200" />
 
-        <ReviewForm :model-type="modelType" :model-id="modelId" />
+        <ReviewForm
+            :model-type="modelType"
+            :model-id="modelId"
+            @review-added="handleAddedReviews"
+        />
 
         <hr class="my-8 border-t-2 border-gray-200" />
 

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[1px] border w-full bg-gray-200"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 w-full"
         >
             <ProductCard v-for="item in items" :key="item.id" :data="item" />
         </div>

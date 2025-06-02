@@ -1,16 +1,19 @@
 <script setup>
 import { IconEdit, IconSettings, IconTrash } from "@tabler/icons-vue";
 import { ref, watch } from "vue";
+import Swal from "sweetalert2";
 import Checkbox from "@/Components/Checkbox.vue";
 import BadgeStatus from "@/Components/BadgeStatus.vue";
 import ImagePreview from "@/Components/ImagePreview.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 const props = defineProps({
     items: Array,
     selectedItems: Array,
+    meta: Object,
 });
 
-const emit = defineEmits(["update:selectedItems", "edit", "delete"]);
+const emit = defineEmits(["update:selectedItems", "delete"]);
 
 const toggleAll = ref(false);
 
@@ -31,6 +34,25 @@ const toggleItem = (id) => {
         : [...props.selectedItems, id];
     emit("update:selectedItems", updated);
 };
+
+/**
+ * Confirm before delete
+ */
+const confirmDelete = async (item) => {
+    const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "This item will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+        emit("delete", item);
+    }
+};
 </script>
 
 <template>
@@ -43,6 +65,7 @@ const toggleItem = (id) => {
                     </th>
                     <th class="p-3 w-[80px]">Img</th>
                     <th class="p-3 text-start">Title</th>
+                    <th class="p-3 text-start">{{ $t("Category") }}</th>
                     <th class="p-3 w-48">Status</th>
                     <th class="p-3 w-48">
                         <IconSettings :stroke="2" size="18" class="mx-auto" />
@@ -69,6 +92,11 @@ const toggleItem = (id) => {
                     <td class="p-2">
                         {{ item.title }}
                     </td>
+                    <td class="p-2 text-sm">
+                        <span v-if="item.category">{{
+                            item.category.title
+                        }}</span>
+                    </td>
                     <td class="p-2">
                         <div class="flex justify-center">
                             <BadgeStatus :active="item.public" />
@@ -78,24 +106,37 @@ const toggleItem = (id) => {
                         <div
                             class="inline-flex items-center w-full justify-center space-x-2"
                         >
-                            <IconEdit
-                                :stroke="1"
-                                size="18"
-                                class="text-indigo-500 cursor-pointer"
-                                @click="emit('edit', item)"
-                            />
+                            <Link :href="route('admin.posts.edit', item.id)">
+                                <IconEdit
+                                    :stroke="1"
+                                    size="18"
+                                    class="text-indigo-500 cursor-pointer"
+                                    @click="emit('edit', item)"
+                            /></Link>
                             <IconTrash
                                 :stroke="1"
                                 size="18"
                                 class="text-red-500 cursor-pointer"
                                 preserve-scroll
                                 preserve-state
-                                @click.prevent="emit('delete', item)"
+                                @click.prevent="confirmDelete(item)"
                             />
                         </div>
                     </td>
                 </tr>
             </tbody>
+            <tfoot v-if="meta.links && meta.links.length > 3">
+                <tr>
+                    <td colspan="100%" class="border-t px-4">
+                        <Pagination
+                            :links="meta.links"
+                            :total="meta.total"
+                            :from="meta.from"
+                            :to="meta.to"
+                        />
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </section>
 </template>

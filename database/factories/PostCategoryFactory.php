@@ -31,7 +31,7 @@ class PostCategoryFactory extends Factory
             $post->translations()->createMany([
                 [
                     'locale' => 'en',
-                    'title' => 'EN ' . fake()->sentence,
+                    'title' => 'EN ' . fake()->word,
                     'slug' => fake()->slug,
                     'description' => fake()->text(100),
                     'content' => fake()->paragraph,
@@ -41,7 +41,7 @@ class PostCategoryFactory extends Factory
                 ],
                 [
                     'locale' => 'uk',
-                    'title' => 'UA ' . fake('uk_UA')->sentence,
+                    'title' => 'UA ' . fake('uk_UA')->word,
                     'slug' => fake('uk_UA')->slug,
                     'description' => fake('uk_UA')->text(100),
                     'content' => fake('uk_UA')->paragraph,

@@ -17,6 +17,8 @@
 -   php artisan octane:install
 -   php artisan octane:start
 
+## v3 Shoping Cart
+
 ## v2 Blog
 
 -   php artisan make:model PostCategory -m
@@ -34,6 +36,9 @@
 -   php artisan make:factory PostFactory --model=Post
 
 -   php artisan make:seeder CategoryAndPostSeeder
+
+-   php artisan make:policy PostPolicy --model=Post
+-   php artisan make:policy PostCategoryPolicy --model=PostCategory
 
 ## v1.14 Corporate Themes
 

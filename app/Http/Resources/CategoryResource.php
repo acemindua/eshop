@@ -22,7 +22,6 @@ class CategoryResource extends JsonResource
             'status'    => $this->public ? true : false,
             'parent'    => $this->parent ? new CategoryResource($this->parent) : null,
             'childs'    => CategoryResource::collection($this->whenLoaded('childs')),
-            //'count'     => $this->whenLoaded('products') ? $this->products(true)->count() : 0,
         ];
     }
 }
