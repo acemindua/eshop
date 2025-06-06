@@ -48,14 +48,13 @@ class Product extends Model implements TranslatableContract, HasMedia
         'user_id'
     ];
 
-    /**
-     * Automatically generate slug from title if missing
-     */
     protected static function boot(): void
     {
         parent::boot();
 
         static::saving(function ($model) {
+            // Only generate slug if it's explicitly empty
+            // This means if a slug is provided (and passes validation), it will be used.
             if (empty($model->slug)) {
                 $model->slug = Str::slug($model->title);
             }
@@ -108,7 +107,7 @@ class Product extends Model implements TranslatableContract, HasMedia
     {
         $this->addMediaConversion('preview')
             ->format('webp')
-            ->fit(Fit::Contain, 1200, 1200)
+            ->fit(Fit::Contain, 600, 600)
             ->nonQueued();
     }
 

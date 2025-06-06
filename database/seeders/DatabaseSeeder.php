@@ -16,13 +16,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CreateRolesAndPermissionsSeeder::class,
             CreateSuperUserSeeder::class,
-            UserSeeder::class,
-            ProductsAndCategoriesTableSeeder::class,
-            ManufacturerSeeder::class,
+            //UserSeeder::class,
+            //ProductsAndCategoriesTableSeeder::class,
+            //ManufacturerSeeder::class,
             CountrySeeder::class,
             SettingsSeeder::class,
             PageSeeder::class,
-            CategoryAndPostSeeder::class
+            //CategoryAndPostSeeder::class
         ]);
     }
 }

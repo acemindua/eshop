@@ -44,30 +44,10 @@
 
                 <TabPanels class="mt-2">
                     <TabPanel>
-                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
-                            <div class="w-full md:w-1/4">
-                                <h2 class="uppercase font-semibold">General</h2>
-                                <span class="py-2 text-sm text-gray-600"
-                                    >Manage general info</span
-                                >
-                            </div>
-                            <GeneralForm :form="form" :errors="errors" />
-                        </div>
+                        <GeneralForm :form="form" :errors="errors" />
                     </TabPanel>
                     <TabPanel>
-                        <div class="border bg-white p-4 md:p-8 flex rounded-lg">
-                            <div class="w-full md:w-1/4">
-                                <h2 class="uppercase font-semibold">Data</h2>
-                                <span class="py-2 text-sm text-gray-600"
-                                    >General settings</span
-                                >
-                            </div>
-                            <DataForm
-                                :form="form"
-                                :errors="errors"
-                                :data="data"
-                            />
-                        </div>
+                        <DataForm :form="form" :errors="errors" :data="data" />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

@@ -37,12 +37,16 @@ class StoreProductRequest extends FormRequest
             'sku'   => 'nullable|string|max:255|unique:products,sku',
             'price'      => 'required|numeric|min:0|max:999999.99', // max matches decimal(8,2)
             'quantity'   => 'required|integer|min:0',
-            'slug'  => [
-                'required',
+            'slug'          => [
+                'nullable', // <--- CHANGE THIS FROM 'required' TO 'nullable'
                 'min:3',
                 'string',
                 'max:255',
+                // For 'unique', consider if you're creating or updating:
+                // If creating (your current context):
                 'unique:products,slug',
+                // If updating an existing product (e.g., PUT/PATCH request), you'd need to ignore the current product's slug:
+                // Rule::unique('products', 'slug')->ignore($this->route('product')), // Assuming route model binding
             ],
             'public' => ['required', 'boolean'],
             'order' => ['required', 'integer'],

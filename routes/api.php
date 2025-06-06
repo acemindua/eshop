@@ -13,6 +13,7 @@ use App\Http\Controllers\API\V1\CartController;
 use App\Http\Controllers\API\V1\DataController;
 use App\Http\Controllers\API\V1\ProductController;
 use App\Http\Controllers\API\V1\ProductVariantController;
+use App\Http\Controllers\API\V1\SearchHistoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,9 @@ Route::prefix('v1')->group(function () {
 
     // DataController
     Route::get('/data', [DataController::class, 'index'])->name('api.data');
+    // Add history query
+    Route::post('/search-history', [SearchHistoryController::class, 'store']);
+    Route::get('/search-history/top', [SearchHistoryController::class, 'top']);
 });
 
 

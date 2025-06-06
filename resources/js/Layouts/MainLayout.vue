@@ -1,55 +1,68 @@
-<template>
-    <div class="w-full h-full min-h-screen flex flex-col bg-gray-100">
-        <header class="border-b bg-white sticky top-0 z-50">
-            <!-- <div class="flex py-2 border-b bg-gray-100 px-4">
-                <div class="w-full max-w-7xl mx-auto">
-                    <LocaleSwicher />
-                </div>
-            </div> -->
-            <div class="w-full max-w-7xl mx-auto px-4 py-2">
-                <HeaderComponent :data="data" />
-            </div>
-        </header>
+<script setup>
+import { computed, ref, inject, onMounted } from "vue";
+import { usePage } from "@inertiajs/vue3";
+import FooterComponent from "@/Components/Themes/Main/FooterComponent.vue";
+import HeaderComponent from "@/Components/Themes/Main/HeaderComponent.vue";
+import CategoryMenu from "@/Components/Themes/Ecommerce/Layout/CategoryMenu.vue";
+import AsideCart from "@/Components/Themes/Ecommerce/AsideCart.vue";
+import EmptyCartModal from "@/Components/Themes/Ecommerce/EmptyCartModal.vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
-        <nav>
-            <div class="w-full max-w-7xl mx-auto px-4">
-                <Navigations :data="data" />
-            </div>
+// Підключення cartStore
+const cartStore = inject("cartStore");
+
+const { props } = usePage();
+const categories = computed(() => props.responseData.categories.data || []);
+
+const categoriesMenuVisible = ref(false);
+const cartContentVisible = computed(() => cartStore.state.isCartOpen);
+
+// Завантажити дані при монтуванні
+onMounted(() => {
+    cartStore?.fetchCart?.();
+});
+</script>
+
+<template>
+    <div class="bg-gray-100 flex flex-col w-full min-h-screen">
+        <div class="sticky top-0 z-10">
+            <HeaderComponent
+                :catalogOpen="categoriesMenuVisible"
+                :cart="cartStore.state"
+                @toggleCatalog="categoriesMenuVisible = !categoriesMenuVisible"
+                @toggleCart="cartStore.toggleCart()"
+            />
+            <CategoryMenu
+                :categories="categories"
+                :visible="categoriesMenuVisible"
+                @close="categoriesMenuVisible = false"
+            />
+        </div>
+
+        <div v-if="!cartStore.state.isLoading">
+            <AsideCart
+                v-if="cartStore.state.itemCount > 0"
+                :cart="cartStore"
+                :visible="cartContentVisible"
+                @close="cartStore.toggleCart()"
+                @remove="cartStore.removeCartItem(item)"
+            />
+            <EmptyCartModal
+                v-else-if="cartContentVisible"
+                :visible="true"
+                @close="cartStore.toggleCart()"
+            />
+        </div>
+
+        <div>
             <div
                 v-if="!route().current('home')"
-                class="w-full max-w-7xl mx-auto px-4 py-4"
+                class="w-full max-w-7xl mx-auto py-4"
             >
                 <Breadcrumbs />
             </div>
-        </nav>
-        <main class="grow">
-            <div class="grow w-full max-w-7xl mx-auto md:px-4">
-                <slot />
-            </div>
-        </main>
-        <footer class="border-t bg-gray-100 text-slate-800">
-            <div class="w-full max-w-7xl mx-auto px-4">
-                <FooterComponent :data="data" />
-            </div>
-        </footer>
+            <slot />
+        </div>
+        <FooterComponent />
     </div>
-    <section v-if="$page.props.app.env === 'local'" class="bg-gray-700">
-        <VarDump :data="data" />
-    </section>
 </template>
-
-<script setup>
-import { computed } from "vue";
-import { usePage } from "@inertiajs/vue3";
-
-import Breadcrumbs from "@/Components/Breadcrumbs.vue";
-import FooterComponent from "@/Components/Themes/Main/FooterComponent.vue";
-import HeaderComponent from "@/Components/Themes/Main/HeaderComponent.vue";
-import Navigations from "@/Components/Themes/Main/Navigations.vue";
-import LocaleSwicher from "@/Components/Themes/Main/LocaleSwicher.vue";
-import VarDump from "@/Shared/VarDump.vue";
-
-// Отримання глобальних даних з props
-const { props } = usePage();
-const data = computed(() => props.responseData || {});
-</script>

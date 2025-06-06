@@ -4,22 +4,27 @@ import cartService from "@/services/cart";
 
 const state = reactive({
     items: [],
+    itemsIds: [],
     total: 0,
     itemCount: 0,
     isLoading: false,
     error: null,
+    isCartOpen: false,
 });
 
 const actions = {
     async fetchCart() {
         state.isLoading = true;
         state.error = null;
-        console.log("actions - fetchCart", state.itemCount);
         try {
             const response = await cartService.getCart();
             state.items = response.data.items;
             state.total = response.data.total;
             state.itemCount = response.data.itemCount;
+            // Update itemsIds with all product IDs in the cart
+            state.itemsIds = response.data.items.map(
+                (item) => item.id?.toString() || ""
+            );
         } catch (error) {
             console.error("Error fetching cart:", error);
             state.error = "Failed to load cart. Please try again.";
@@ -32,18 +37,15 @@ const actions = {
         state.error = null;
         try {
             // Send product_id and quantity to the backend
-            await cartService.addToCart({
-                id: product.id,
-                quantity: product.quantity || 1,
-            });
-            const q = actions.fetchCart(); // Re-fetch cart after adding
-            console.log("actions.fetchCart", q);
-            await q;
+            //console.log("addToCart", product);
+            await cartService.addToCart(product);
+            await actions.fetchCart();
         } catch (error) {
             console.error("Error adding to cart:", error);
             state.error = "Failed to add item to cart.";
         } finally {
             state.isLoading = false;
+            state.isCartOpen = true;
         }
     },
     async updateCartItem({ rowId, quantity }) {
@@ -60,12 +62,12 @@ const actions = {
             state.isLoading = false;
         }
     },
-    async removeCartItem(rowId) {
+    async removeCartItem(item) {
         state.isLoading = true;
         state.error = null;
         try {
             // Send darryldecode/cart's row_id to the backend
-            await cartService.removeCartItem(rowId);
+            await cartService.removeCartItem(item);
             await actions.fetchCart();
         } catch (error) {
             console.error("Error removing cart item:", error);
@@ -89,6 +91,9 @@ const actions = {
         } finally {
             state.isLoading = false;
         }
+    },
+    toggleCart() {
+        state.isCartOpen = !state.isCartOpen;
     },
 };
 

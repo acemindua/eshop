@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Main;
 
+use App\Filters\ProductFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\PageResource;
@@ -10,9 +11,11 @@ use App\Http\Resources\ProductVariantResource;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\Product;
+use App\Models\SearchHistory;
 use App\Services\SeoService;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -46,19 +49,38 @@ class HomeController extends Controller
     /**
      * Search сторінка сайту
      */
-    public function search(Request $request): Response
+    public function search(Request $request, ProductFilter $filter): Response
     {
-        $page = Page::find(1);
+        $query = trim($request->get('q'));
+
+
+
+        // Пошук по товарах
+        $products = Product::filter($filter)
+            ->limit(20)
+            ->get();
+
+        if ($products->count() > 0) {
+            SearchHistory::create([
+                'user_id' => Auth() ? auth()->id() : "",
+                'query' => $query,
+                'ip_address' => $request->ip(),
+            ]);
+        }
+
+        // SEO
         $seo = [
-            'title'         => __('Search result for your query') . ": " . $request->q,
-            'description'   =>  $page ? $page->description : ""
+            'title'         => __('Результати пошуку для запиту') . ": " . $query,
+            'description'   => __('Знайдено') . " " . $products->count() . " " . __('товарів'),
+            'status'        => true
         ];
 
         return Inertia::render('Main/Search', [
             'data' => [
-                'seo'   => $seo,
+                'seo'     => $seo,
+                'results' => ProductResource::collection($products),
             ],
-            'filters'   => request()->only(['q', 'status']),
+            'filters' => $request->only(['q']),
         ]);
     }
 
@@ -133,22 +155,6 @@ class HomeController extends Controller
                 'variant' => $variant ? new ProductVariantResource($variant) : null,
                 'images' => $images,
                 //'attributes' => $attributes,
-            ],
-        ]);
-    }
-
-
-    /**
-     * Показ сторінки категорії товарів
-     */
-    public function showCategoryPage(string $slug): Response
-    {
-        $categorySlug = str_replace('category__', '', $slug);
-        $category = Category::where('slug', $categorySlug)->firstOrFail();
-
-        return Inertia::render('Main/Commerce/Category', [
-            'data' => [
-                'item' => new CategoryResource($category),
             ],
         ]);
     }

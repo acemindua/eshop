@@ -102,14 +102,12 @@ import { IconCancel, IconDeviceFloppy } from "@tabler/icons-vue";
 import DashboardLayout from "@/Shared/Themes/Layouts/DashboardLayout.vue";
 import GeneralForm from "./Partials/GeneralForm.vue";
 import DataForm from "./Partials/DataForm.vue";
-import ImagesForm from "./Partials/ImagesForm.vue";
+
 import ButtonTabGroup from "@/Components/ButtonTabGroup.vue";
 import PrimaryButton from "@/Shared/Themes/App/Components/Buttons/PrimaryButton.vue";
 import SecondaryButton from "@/Shared/Themes/App/Components/Buttons/SecondaryButton.vue";
 import VarDump from "@/Shared/VarDump.vue";
 import useTranslatableForm from "@/Composables/useTranslatableForm";
-import SeoForm from "@/Components/SEO/SeoForm.vue";
-import VariantForm from "./Partials/VariantForm.vue";
 
 // Пропси
 const props = defineProps({

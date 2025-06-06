@@ -17,7 +17,7 @@ class CategoryAndPostSeeder extends Seeder
     {
         //
 
-        PostCategory::factory()->count(10)->create();
+        PostCategory::factory()->count(3)->create();
 
         // Предположим, категории уже существуют
         $categories = PostCategory::all();
@@ -29,7 +29,7 @@ class CategoryAndPostSeeder extends Seeder
         });
 
         $this->createPermissionsForModel('post');
-        $this->createPermissionsForModel('post-category');
+        $this->createPermissionsForModel('post_category');
     }
 
     /**

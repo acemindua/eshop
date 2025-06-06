@@ -63,8 +63,10 @@ class CartController extends Controller
     {
         //
         $request->validate([
-            'id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
+            'id'        => 'required|exists:products,id',
+            'title'     => 'string|min:3',
+            'price'     => 'required|integer|min:1',
+            'quantity'  => 'required|integer|min:1',
         ]);
 
         $product = Product::find($request->id);
@@ -72,11 +74,11 @@ class CartController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Product not found.'], 404);
         }
-
+        //
         Cart::add([
             'id' => $product->id,
-            'name' => $product->title,
-            'price' => $product->price,
+            'name' => $request->title,
+            'price' => $request->price,
             'quantity' => $request->quantity,
             'attributes' => [
                 'image' => $product->image,
@@ -110,6 +112,20 @@ class CartController extends Controller
     public function update(Request $request, string $id)
     {
         //
+
+    }
+
+    /**
+     * 
+     */
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function remove(Request $request)
+    {
+        //
+        return response()->json($request->all());
     }
 
     /**

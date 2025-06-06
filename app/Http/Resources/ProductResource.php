@@ -31,6 +31,7 @@ class ProductResource extends JsonResource
             'meta_title'            => $this->meta_title,
             'meta_description'      => $this->meta_description,
             'meta_keywords'         => $this->meta_keywords,
+            'category'              => $this->category ? $this->category->title : null,
             'attributes'            => $this->attributeValues->groupBy(fn($val) => optional($val->attribute)->title)->map(function ($values, $attributeTitle) {
                 return [
                     'title' => $attributeTitle,
@@ -39,30 +40,5 @@ class ProductResource extends JsonResource
                 ];
             })->toArray(),
         ];
-        /* return [
-            'id'            => $this->id,
-            'title'         => $this->title,
-            'sku'           => $this->sku,
-            'description'   => $this->description,
-            'category'      => $this->category ? new CategoryResource($this->category) : null,
-            'content'       => $this->content,
-            'price'     => $this->price,
-            'quantity'  => $this->quantity,
-            'slug'      => [
-                'product' => $this->slug,
-                'variant' => null, // <-- завжди є ключ variant
-            ],
-            'images'    => $this->sorted_images,
-            
-            'variants'  => ProductVariantResource::collection($this->variants),
-            'attributes' => $this->variants
-                ->pluck('attribute_value')
-                ->filter()
-                ->unique('id')
-                ->groupBy(fn($val) => optional($val->attribute)->title)
-
-            //'country'   => $this->country ? new CountryResource($this->country) : null,
-            //'manufacturer'  => $this->manufacturer ? new ManufacturerResource($this->manufacturer) : null,
-        ]; */
     }
 }

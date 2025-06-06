@@ -7,6 +7,10 @@
                 @review-added="handleReviewAdded"
             />
         </section>
+
+        <section v-if="$page.props.app.env === 'local'">
+            <VarDump :data="data" />
+        </section>
     </MainLayout>
 </template>
 
@@ -14,6 +18,7 @@
 import { computed } from "vue";
 import ReviewRatingDisplay from "@/Components/Review/ReviewRatingDisplay.vue";
 import MainLayout from "@/Layouts/MainLayout.vue";
+import VarDump from "@/Shared/VarDump.vue";
 
 const props = defineProps({
     data: Object,

@@ -7,23 +7,25 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex items-center gap-8 text-sm">
-        <div v-for="category in categories" :key="category.id">
+    <ul class="text-sm py-2">
+        <li v-for="category in categories" :key="category.id" class="py-1">
             <Link :href="`/category__${category.slug}/`">
-                <span>{{ category.title }}</span>
+                <span :class="{ 'font-semibold': !category.parent }">{{
+                    category.title
+                }}</span>
             </Link>
             <CategoryTree
                 v-if="category.childs && category.childs.length"
                 :categories="category.childs"
                 class="subcategory-list"
             />
-        </div>
-    </div>
+        </li>
+    </ul>
 </template>
 
 <style scoped>
 .subcategory-list {
     list-style: none;
-    padding-top: 4px;
+    padding: 4px 10px;
 }
 </style>

@@ -35,9 +35,9 @@ export default {
         // Expects { row_id, quantity }
         return cartService.post("/cart/update", item);
     },
-    removeCartItem(rowId) {
+    removeCartItem(item) {
         // Expects { row_id }
-        return cartService.post("/cart/remove", { row_id: rowId });
+        return cartService.post("/cart/remove", { item: item });
     },
     clearCart() {
         return cartService.post("/cart/clear");

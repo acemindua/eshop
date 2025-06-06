@@ -11,4 +11,14 @@ class ProductFilter extends QueryFilter
                 ->orWhereTranslationLike('title', '%' . $search . '%');
         });
     }
+
+    // Search to Main
+    public function q($search = '')
+    {
+        return $this->builder->where(function ($query) use ($search) {
+            $query->where('sku', 'like', '%' . $search . '%')
+                ->orWhereTranslationLike('title', '%' . $search . '%')
+                ->orWhereTranslationLike('description', '%' . $search . '%');
+        });
+    }
 }

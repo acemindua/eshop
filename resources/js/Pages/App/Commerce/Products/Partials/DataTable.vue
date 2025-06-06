@@ -101,9 +101,7 @@ const confirmDelete = async (item) => {
                         <p class="text-xs text-gray-500">{{ item.sku }}</p>
                     </td>
                     <td class="p-2 text-sm">
-                        <span v-if="item.category">{{
-                            item.category.title
-                        }}</span>
+                        <span v-if="item.category">{{ item.category }}</span>
                     </td>
                     <td class="p-2 text-end">{{ item.price }}</td>
                     <td class="p-2 text-end">

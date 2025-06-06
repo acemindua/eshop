@@ -7,10 +7,7 @@ import { getCanonicalUrl, generateHreflangs } from "./url";
  * @param {string[]} localeKeys - Supported locale keys
  * @returns {Object}
  */
-export const generateHeadMeta = (
-    item,
-    appName = "Laravel",
-) => {
+export const generateHeadMeta = (item, appName = "Laravel") => {
     const description =
         item.meta_description ??
         item.description ??
@@ -25,7 +22,10 @@ export const generateHeadMeta = (
         meta: [
             {
                 name: "robots",
-                content: item.status ? "index, follow" : "noindex, nofollow",
+                content:
+                    item.status || item.public
+                        ? "index, follow"
+                        : "noindex, nofollow",
             },
             {
                 name: "keywords",

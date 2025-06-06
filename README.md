@@ -17,10 +17,36 @@
 -   php artisan octane:install
 -   php artisan octane:start
 
+## v0.6.1
+
+-   php artisan make:controller Main/CommerceController
+
+## v6
+
+-   php artisan make:model SearchHistory -m
+-   php artisan make:controller API/V1/SearchHistoryController --api
+
+Додатково:
+👉 Можна очищати старі записи (наприклад, > 90 днів) кроном.
+👉 Можна додати частотність та топ-запити.
+👉 Можна кешувати останні запити користувача (last 5).
+
+## v5
+
+-   npm install @heroicons/vue
+
+## v4 Translation Web Portal
+
+-   composer require barryvdh/laravel-translation-manager
+-   php artisan vendor:publish --provider="Barryvdh\TranslationManager\ManagerServiceProvider" --tag=migrations
+-   php artisan migrate
+-   php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"
+-   php artisan vendor:publish --provider="Barryvdh\TranslationManager\ManagerServiceProvider" --tag=views
+
 ## v3 Shoping Cart
 
 -   composer require darryldecode/cart
--   php artisan vendor:publish --provider="Darryldecode\Cart\CartServiceProvider" --tag="config"
+
 -   php artisan make:controller \App\Http\Controllers\App\Commerce\CartController --resource
 
 ## v2 Blog

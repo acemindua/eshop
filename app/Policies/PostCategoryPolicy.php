@@ -13,7 +13,7 @@ class PostCategoryPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('post-category-view');
+        return $user->hasPermissionTo('post_category-view');
     }
 
     /**
@@ -21,7 +21,7 @@ class PostCategoryPolicy
      */
     public function view(User $user, PostCategory $postCategory): bool
     {
-        return $user->hasPermissionTo('post-category-view');
+        return $user->hasPermissionTo('post_category-view');
     }
 
     /**
@@ -29,7 +29,7 @@ class PostCategoryPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('post-category-create');
+        return $user->hasPermissionTo('post_category-create');
     }
 
     /**
@@ -37,7 +37,7 @@ class PostCategoryPolicy
      */
     public function update(User $user, PostCategory $postCategory): bool
     {
-        return $user->hasPermissionTo('post-category-update');
+        return $user->hasPermissionTo('post_category-update');
     }
 
     /**
@@ -45,7 +45,7 @@ class PostCategoryPolicy
      */
     public function delete(User $user, PostCategory $postCategory): bool
     {
-        return $user->hasPermissionTo('post-category-delete');
+        return $user->hasPermissionTo('post_category-delete');
     }
 
     /**
@@ -53,7 +53,7 @@ class PostCategoryPolicy
      */
     public function restore(User $user, PostCategory $postCategory): bool
     {
-        return $user->hasPermissionTo('post-category-update');
+        return $user->hasPermissionTo('post_category-update');
     }
 
     /**
@@ -61,6 +61,6 @@ class PostCategoryPolicy
      */
     public function forceDelete(User $user, PostCategory $postCategory): bool
     {
-        return $user->hasPermissionTo('post-category-delete');
+        return $user->hasPermissionTo('post_category-delete');
     }
 }
