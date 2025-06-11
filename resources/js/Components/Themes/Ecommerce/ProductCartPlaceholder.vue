@@ -1,7 +1,9 @@
 <template>
-    <div class="bg-white p-4 flex flex-col shadow-sm rounded-lg animate-pulse">
+    <div class="bg-white p-4 flex flex-col shadows animate-pulse">
         <!-- Image Placeholder -->
-        <div class="bg-gray-200 rounded-lg h-56 md:h-64 w-full"></div>
+        <div
+            class="bg-gray-200 rounded-lg h-36 xs:48 sm:h-56 md:h-64 w-full"
+        ></div>
 
         <!-- Title Placeholder -->
         <div class="mt-2 h-5 bg-gray-200 rounded w-3/4"></div>

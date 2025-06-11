@@ -1,33 +1,34 @@
 <!--  // HeaderComponent.vue -->
 <template>
-    <div
-        class="bg-white shadow-sm px-4 relative h-20 z-50 flex w-full items-center"
-    >
-        <div class="w-full max-w-7xl mx-auto flex items-center">
-            <div class="grid grid-cols-6 gap-4 w-full">
-                <Link
-                    href="/"
-                    class="flex items-center space-x-4 mr-8 w-full max-w-xl"
-                >
-                    <ApplicationLogo
-                        class="block h-8 md:h-11 w-auto fill-current text-[#368D02]"
-                    />
-                    <p class="hidden md:block">
-                        <span>{{ $page.props.app.name }}</span>
-                    </p>
-                </Link>
-                <div class="flex items-center">
+    <div class="h-20 z-50 bg-white shadow relative">
+        <div class="w-full container mx-auto flex h-full">
+            <div
+                class="flex items-center justify-between h-full px-4 gap-4 w-full"
+            >
+                <div class="flex items-center justify-center shrink-0">
+                    <Link
+                        href="/"
+                        class="flex items-center space-x-4 md:mr-8 w-full max-w-xl"
+                    >
+                        <ApplicationLogo
+                            class="block h-11 w-auto fill-current text-[#368D02]"
+                        />
+                        <p class="hidden md:block font-semibold">
+                            <span>{{ $page.props.app.name }}</span>
+                        </p>
+                    </Link>
+                </div>
+                <div class="hidden md:block">
                     <CategoryButtonMenu
                         id="category-button-menu"
                         :open="catalogOpen"
                         @click="$emit('toggleCatalog')"
                     />
                 </div>
-
-                <div class="col-span-2 flex items-center">
+                <div class="w-full md:max-w-lg">
                     <SearchFilter @focusin="handleSearchFocus" />
                 </div>
-                <div class="col-span-2 flex items-center justify-end">
+                <div class="hidden w-full md:flex items-center justify-end">
                     <ShoppingCartButton
                         :cart="cart"
                         @click="$emit('toggleCart')"

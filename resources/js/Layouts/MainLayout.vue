@@ -8,6 +8,9 @@ import AsideCart from "@/Components/Themes/Ecommerce/AsideCart.vue";
 import EmptyCartModal from "@/Components/Themes/Ecommerce/EmptyCartModal.vue";
 import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 
+import Services from "@/Components/Themes/Ecommerce/Layout/Services.vue";
+import FooterNavigaqtions from "@/Components/Themes/Ecommerce/FooterNavigaqtions.vue";
+
 // Підключення cartStore
 const cartStore = inject("cartStore");
 
@@ -24,45 +27,60 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="bg-gray-100 flex flex-col w-full min-h-screen">
-        <div class="sticky top-0 z-10">
-            <HeaderComponent
-                :catalogOpen="categoriesMenuVisible"
-                :cart="cartStore.state"
-                @toggleCatalog="categoriesMenuVisible = !categoriesMenuVisible"
-                @toggleCart="cartStore.toggleCart()"
-            />
-            <CategoryMenu
-                :categories="categories"
-                :visible="categoriesMenuVisible"
-                @close="categoriesMenuVisible = false"
-            />
-        </div>
-
-        <div v-if="!cartStore.state.isLoading">
-            <AsideCart
-                v-if="cartStore.state.itemCount > 0"
-                :cart="cartStore"
-                :visible="cartContentVisible"
-                @close="cartStore.toggleCart()"
-                @remove="cartStore.removeCartItem(item)"
-            />
-            <EmptyCartModal
-                v-else-if="cartContentVisible"
-                :visible="true"
-                @close="cartStore.toggleCart()"
-            />
-        </div>
-
-        <div>
-            <div
-                v-if="!route().current('home')"
-                class="w-full max-w-7xl mx-auto py-4"
-            >
-                <Breadcrumbs />
+    <div class="bg-slate-100 text-gray-900 w-full min-h-screen">
+        <div class="flex flex-col w-full h-full min-h-svh">
+            <header class="sticky top-0 z-10">
+                <HeaderComponent
+                    :catalogOpen="categoriesMenuVisible"
+                    :cart="cartStore.state"
+                    @toggleCatalog="
+                        categoriesMenuVisible = !categoriesMenuVisible
+                    "
+                    @toggleCart="cartStore.toggleCart()"
+                />
+                <CategoryMenu
+                    :categories="categories"
+                    :visible="categoriesMenuVisible"
+                    @close="categoriesMenuVisible = false"
+                />
+            </header>
+            <div class="flex flex-col grow md:p-2">
+                <div
+                    v-if="!route().current('home')"
+                    class="w-full container mx-auto py-2"
+                >
+                    <Breadcrumbs />
+                </div>
+                <main class="mt-2 md:px-4">
+                    <slot />
+                </main>
             </div>
-            <slot />
+
+            <footer>
+                <FooterComponent />
+            </footer>
+
+            <div>
+                <AsideCart
+                    v-if="cartStore.state.itemCount > 0"
+                    :cart="cartStore"
+                    :visible="cartContentVisible"
+                    @close="cartStore.toggleCart()"
+                    @remove="(id) => cartStore.removeCartItem(id)"
+                />
+                <EmptyCartModal
+                    v-else-if="cartContentVisible"
+                    :visible="true"
+                    @close="cartStore.toggleCart()"
+                />
+            </div>
+
+            <div class="md:hidden sticky bottom-0 z-10 border-t bg-white">
+                <FooterNavigaqtions
+                    :cart="cartStore.state"
+                    @toggleCart="cartStore.toggleCart()"
+                />
+            </div>
         </div>
-        <FooterComponent />
     </div>
 </template>

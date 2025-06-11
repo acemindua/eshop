@@ -1,3 +1,67 @@
+<script setup>
+import { ref, computed } from "vue";
+import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+} from "@headlessui/vue";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
+
+import ImageView from "@/Components/Themes/Admin/UI/ImageView.vue";
+import ConfirmDialog from "@/Components/UI/ConfirmDialog.vue";
+
+// Utility functions
+import { formatPrice } from "@/helpers";
+
+const props = defineProps({
+    cart: Object,
+    visible: Boolean,
+});
+
+const emit = defineEmits(["close", "remove"]);
+
+const onClose = () => emit("close");
+const initialFocusRef = ref(null);
+const products = computed(() => props.cart.state?.items || []);
+
+const showConfirmModal = ref(false);
+const itemToRemove = ref(null);
+
+const confirmDelete = (item) => {
+    itemToRemove.value = item;
+    showConfirmModal.value = true;
+};
+
+const handleConfirmRemove = () => {
+    if (itemToRemove.value) {
+        console.log(itemToRemove.value.id);
+        emit("remove", itemToRemove.value.id);
+
+        itemToRemove.value = null;
+    }
+};
+
+const handleCancelRemove = () => {
+    itemToRemove.value = null;
+};
+
+const handleCloseConfirmModal = () => {
+    showConfirmModal.value = false;
+    itemToRemove.value = null;
+};
+
+// Price Logic
+const formattedPrice = (price) => {
+    return formatPrice(price, {
+        roundTo: 10,
+        decimals: 0,
+        rate: 1,
+    });
+};
+</script>
+
 <template>
     <TransitionRoot as="template" :show="visible">
         <Dialog class="relative z-10" @close="onClose">
@@ -28,10 +92,12 @@
                             leave-to="translate-x-full"
                         >
                             <DialogPanel
-                                class="pointer-events-auto w-screen max-w-md md:max-w-2xl"
+                                tabindex="0"
+                                :initialFocus="initialFocusRef"
+                                class="pointer-events-auto w-screen h-screen sm:w-full sm:h-full"
                             >
                                 <div
-                                    class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
+                                    class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl w-full"
                                 >
                                     <div
                                         class="flex-1 overflow-y-auto px-4 py-6 sm:px-6"
@@ -68,6 +134,9 @@
                                         </div>
 
                                         <div class="mt-8">
+                                            <div
+                                                class="overflow-hidden p-4 text-xs text-gray-500"
+                                            ></div>
                                             <div class="flow-root">
                                                 <ul
                                                     role="list"
@@ -83,11 +152,10 @@
                                                         >
                                                             <ImageView
                                                                 class="mx-auto"
-                                                                :product-data="
-                                                                    product.data
-                                                                "
-                                                                :variant-data="
-                                                                    product.variant
+                                                                :image="
+                                                                    product
+                                                                        .attributes
+                                                                        .image
                                                                 "
                                                                 :config="{
                                                                     width: 96,
@@ -117,7 +185,9 @@
                                                                         class="ml-4"
                                                                     >
                                                                         {{
-                                                                            product.price
+                                                                            formattedPrice(
+                                                                                product.price
+                                                                            )
                                                                         }}
                                                                         <span
                                                                             class="text-base"
@@ -125,13 +195,6 @@
                                                                         >
                                                                     </p>
                                                                 </div>
-                                                                <p
-                                                                    class="mt-1 text-sm text-gray-500"
-                                                                >
-                                                                    {{
-                                                                        product.color
-                                                                    }}
-                                                                </p>
                                                             </div>
                                                             <div
                                                                 class="flex flex-1 items-end justify-between text-sm"
@@ -184,18 +247,22 @@
                                         >
                                             <p>Сума</p>
                                             <p>
-                                                {{ cart.state.total }}
+                                                {{
+                                                    formattedPrice(
+                                                        cart.state.total
+                                                    )
+                                                }}
                                                 <span class="text-base">₴</span>
                                             </p>
                                         </div>
                                         <p class="mt-0.5 text-sm text-gray-500">
-                                            Для зміни кільості та інших
+                                            Для зміни кількості та інших
                                             параметрів перейдіть в "Оформлення
                                             замовлення".
                                         </p>
                                         <div class="mt-6">
                                             <a
-                                                href="#"
+                                                href="/check-out/cart"
                                                 class="flex items-center justify-center rounded-md border border-transparent bg-green-600 px-6 py-3 text-base font-medium text-white shadow-xs hover:bg-green-700"
                                                 >{{
                                                     $t("Оформити замовлення")
@@ -228,45 +295,15 @@
             </div>
         </Dialog>
     </TransitionRoot>
+
+    <ConfirmDialog
+        :show="showConfirmModal"
+        title="Видалити товар?"
+        :message="`Ви впевнені, що хочете видалити &quot;${itemToRemove?.name}&quot; з кошика?`"
+        confirmText="Так, видалити!"
+        cancelText="Скасувати"
+        @confirm="handleConfirmRemove"
+        @cancel="handleCancelRemove"
+        @close="handleCloseConfirmModal"
+    />
 </template>
-
-<script setup>
-import { computed } from "vue";
-import Swal from "sweetalert2";
-import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-} from "@headlessui/vue";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
-
-import ImageView from "@/Components/Themes/Admin/UI/ImageView.vue";
-
-const props = defineProps({
-    cart: Object,
-    visible: Boolean,
-});
-
-const emit = defineEmits(["close", "remove"]);
-const onClose = () => emit("close");
-
-const products = computed(() => props.cart.state?.items || []);
-
-const confirmDelete = async (item) => {
-    const result = await Swal.fire({
-        title: "Ви впевнені?",
-        text: 'Цей Товар буде видалено з "Кошика"!',
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "green",
-        confirmButtonText: "Так, видалити!",
-        cancelButtonText: "Ні, скасувати",
-    });
-
-    if (result.isConfirmed) {
-        emit("remove", item);
-    }
-};
-</script>

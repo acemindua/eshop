@@ -1,11 +1,11 @@
-// CategoryMenu.vue
+<!-- // CategoryMenu.vue -->
 <template>
     <div v-show="visible">
         <div class="fixed inset-0 bg-gray-800/10" @click="onClose" />
         <div
-            class="bg-white p-4 w-full absolute left-0 top-20 z-50 border-t duration-150 shadow-sm"
+            class="bg-white p-4 w-full absolute left-0 top-20 border-t duration-150 shadow-sm"
         >
-            <div class="rounded-lg max-w-7xl mx-auto">
+            <div class="rounded-lg container mx-auto flex">
                 <CategoryTree :categories="categories" />
             </div>
         </div>

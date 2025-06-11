@@ -14,6 +14,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::controller(CommerceController::class)->group(function () {
+    Route::get('/check-out/cart', 'showCart')->name('cart');
     // Окремий маршрут для категорій (із префіксом)
     Route::get('/category__{slug}', 'showCategoryPage')->name('category');
 });

@@ -1,11 +1,11 @@
 <template>
     <MainLayout>
-        <h1 class="text-3xl font-extrabold text-gray-900 mb-6 sr-only">
+        <h1 class="text-3xl font-extrabold sr-only">
             {{ title }}
         </h1>
         <!-- section -->
         <section>
-            <div class="w-full max-w-7xl mx-auto py-4">
+            <div class="container mx-auto px-4">
                 <ProductsGrid :category-id="null" />
             </div>
         </section>

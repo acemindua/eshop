@@ -35,10 +35,10 @@
             <button
                 type="button"
                 @click="goToResults"
-                class="p-2 pl-3 text-white duration-300 flex items-center text-sm space-x-2"
+                class="p-2 lg:pl-3 text-white duration-300 flex items-center text-sm lg:space-x-2"
                 :class="isActive ? 'bg-green-600 ' : 'bg-green-600 '"
             >
-                <span>{{ $t("Знайти") }}</span>
+                <span class="hidden lg:block">{{ $t("Знайти") }}</span>
                 <IconSearch :stroke="2" />
             </button>
         </div>

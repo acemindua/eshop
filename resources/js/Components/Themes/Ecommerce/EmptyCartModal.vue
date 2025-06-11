@@ -1,6 +1,13 @@
 <template>
     <TransitionRoot as="template" :show="visible">
-        <Dialog as="div" class="relative z-50" @close="$emit('close')">
+        <Dialog
+            as="div"
+            class="relative z-50"
+            @close="$emit('close')"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+        >
+            <!-- Overlay -->
             <TransitionChild
                 as="template"
                 enter="ease-out duration-300"
@@ -10,54 +17,58 @@
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div
-                    class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-                />
+                <div class="fixed inset-0 bg-black/50" />
             </TransitionChild>
 
-            <div class="fixed inset-0 z-50 w-screen overflow-y-auto">
-                <div
-                    class="flex min-h-full items-center justify-center p-4 text-center sm:p-0"
+            <!-- Modal Panel -->
+            <div
+                class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0"
+            >
+                <TransitionChild
+                    as="template"
+                    enter="ease-out duration-300"
+                    enter-from="opacity-0 scale-95"
+                    enter-to="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leave-from="opacity-100 scale-100"
+                    leave-to="opacity-0 scale-95"
                 >
-                    <TransitionChild
-                        as="template"
-                        enter="ease-out duration-300"
-                        enter-from="opacity-0 scale-95"
-                        enter-to="opacity-100 scale-100"
-                        leave="ease-in duration-200"
-                        leave-from="opacity-100 scale-100"
-                        leave-to="opacity-0 scale-95"
+                    <DialogPanel
+                        class="relative w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left shadow-xl transition-all"
                     >
-                        <DialogPanel
-                            class="relative transform overflow-hidden rounded-lg bg-white p-6 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-md text-center"
+                        <DialogTitle
+                            id="modal-title"
+                            class="text-xl font-semibold text-gray-900 mb-4"
                         >
-                            <DialogTitle
-                                as="h3"
-                                class="text-xl font-semibold mb-4 leading-6 text-gray-900"
+                            {{ $t("Ваша корзина порожня") }}
+                            <button
+                                type="button"
+                                class="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
+                                @click="$emit('close')"
                             >
-                                {{ $t("Ваша корзина порожня") }}
-                            </DialogTitle>
-                            <div class="mt-2">
-                                <p class="text-gray-600 mb-6">
-                                    {{
-                                        $t(
-                                            "Додайте товари, щоб розпочати покупки."
-                                        )
-                                    }}
-                                </p>
-                            </div>
-                            <div class="mt-5 sm:mt-6">
-                                <button
-                                    type="button"
-                                    class="inline-flex w-full justify-center rounded-lg bg-green-600 px-4 py-2 text-white font-semibold shadow-sm hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                                    @click="$emit('close')"
-                                >
-                                    {{ $t("Продовжити покупки") }}
-                                </button>
-                            </div>
-                        </DialogPanel>
-                    </TransitionChild>
-                </div>
+                                <XMarkIcon class="size-6" aria-hidden="true" />
+                                <span class="sr-only">Close</span>
+                            </button>
+                        </DialogTitle>
+
+                        <div
+                            id="modal-description"
+                            class="text-gray-600 mb-6 text-sm"
+                        >
+                            {{ $t("Додайте товари, щоб розпочати покупки.") }}
+                        </div>
+
+                        <div class="mx-auto max-w-sm py-4">
+                            <button
+                                type="button"
+                                class="w-full rounded-lg bg-green-600 px-4 py-2 text-white font-semibold shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+                                @click="$emit('close')"
+                            >
+                                {{ $t("Продовжити покупки") }}
+                            </button>
+                        </div>
+                    </DialogPanel>
+                </TransitionChild>
             </div>
         </Dialog>
     </TransitionRoot>
@@ -71,6 +82,7 @@ import {
     TransitionChild,
     TransitionRoot,
 } from "@headlessui/vue";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 import { defineProps, defineEmits } from "vue";
 
 defineProps({
@@ -84,5 +96,5 @@ defineEmits(["close"]);
 </script>
 
 <style scoped>
-/* No additional custom CSS needed, Tailwind classes handle the animations. */
+/* Tailwind повністю керує стилями */
 </style>

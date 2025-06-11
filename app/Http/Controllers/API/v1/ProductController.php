@@ -72,6 +72,7 @@ class ProductController extends Controller
                 foreach ($product->variants as $variant) {
                     $formattedItems->push([
                         'id' => $product->id,
+                        'variant_id' => $variant->id,
                         'title' => $product->title . (optional($variant->attribute_value)->title ? ' / ' . $variant->attribute_value->title : ''),
                         'price' => $variant->price,
                         'quantity' => $variant->quantity,
@@ -79,7 +80,7 @@ class ProductController extends Controller
                             'product' => $product->slug,
                             'variant' => optional($variant->attribute_value)->slug,
                         ],
-                        'category' => $product->category, // Assuming category is loaded via `with('category')`
+                        'category' => $product->category ? $product->category->title : "", // Assuming category is loaded via `with('category')`
                         'images' => array_merge($variant->sorted_images ?? [], $product->sorted_images ?? []),
                         'status' => (bool) $variant->public,
                         'reviews' => [

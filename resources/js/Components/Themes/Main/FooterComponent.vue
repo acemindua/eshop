@@ -1,7 +1,9 @@
 <!-- // FooterComponent.vue -->
 <template>
-    <div class="w-full max-w-7xl mx-auto p-4 text-sm text-gray-600">
-        <div class="flex items-center justify-between py-2 text-xs border-t">
+    <div
+        class="w-full max-w-7xl mx-auto p-4 text-sm text-gray-600"
+    >
+        <div class="md:flex items-center justify-between py-2 text-xs border-t">
             <div>
                 ©{{ $page.props.app.year }} {{ $page.props.app.name }}.
                 {{ $t("All rights reserved.") }}

@@ -69,7 +69,7 @@
             v-else
             :href="href"
             :alt="alt"
-            class="bg-gray-100 text-gray-400 rounded-lg flex flax-col items-center justify-center min-h-64 h-full w-full"
+            class="bg-gray-100 text-gray-400 rounded-lg flex flax-col items-center justify-center h-36 xs:48 sm:h-56 md:h-64 w-full"
         >
             <div class="flex flex-col items-center justify-center space-y-4">
                 <IconPhoto :stroke="1" :size="48" />

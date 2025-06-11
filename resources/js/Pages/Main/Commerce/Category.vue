@@ -5,7 +5,7 @@
         </h1>
         <div class="w-full max-w-7xl mx-auto">
             <section>
-                <div class="w-full max-w-7xl mx-auto py-4">
+                <div class="w-full max-w-7xl mx-auto">
                     <ProductsGrid :category-id="category.id" />
                 </div>
             </section>

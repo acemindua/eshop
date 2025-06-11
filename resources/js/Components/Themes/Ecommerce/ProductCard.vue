@@ -25,10 +25,12 @@ const props = defineProps({
     },
 });
 
+const idToCart = computed(() => {
+    const variant_id = props.product.variant_id || "default";
+    return props.product.id + "-" + variant_id;
+});
 // А тут ви вже правильно використовуєте .toString(), якщо product.id може бути числом
-const isInCart = computed(() =>
-    props.ids.includes(props.product.id.toString())
-);
+const isInCart = computed(() => props.ids.includes(idToCart.value.toString()));
 //
 const hasReviews = computed(
     () =>
@@ -63,19 +65,13 @@ const formattedPrice = computed(() =>
 
 //
 const addToCart = async () => {
-    emit("add-to-cart", {
-        id: props.product.id,
-        title: props.product.title,
-        price: formattedPrice.value,
-        quantity: 1,
-        slug: props.product.slug,
-    });
+    emit("add-to-cart", props.product);
 };
 </script>
 
 <template>
-    <div class="bg-white p-4 flex flex-col shadow-sm rounded-lg">
-        <div class="bg-gray-50 rounded-lg h-56 md:h-64 overflow-hidden">
+    <div class="bg-white p-4 flex flex-col shadow">
+        <div class="bg-gray-50 h-36 xs:48 sm:h-56 md:h-64 overflow-hidden">
             <ImageSwiper
                 :images="images"
                 :alt="product.title"
@@ -151,11 +147,12 @@ const addToCart = async () => {
                 }}</span>
             </div>
         </div>
-
-        <!--  <div class="text-xs text-gray-500">
+        <!--
+        <div class="text-xs text-gray-500">
             <pre>
                 {{ product }}
             </pre>
-        </div> -->
+        </div>
+        <!---->
     </div>
 </template>

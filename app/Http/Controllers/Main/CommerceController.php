@@ -21,4 +21,13 @@ class CommerceController extends Controller
 
         return Inertia::render('Main/Commerce/Category', compact(['category']));
     }
+
+    /**
+     *
+     */
+    public function showCart(): Response
+    {
+        //
+        return Inertia::render('Main/Commerce/Cart');
+    }
 }

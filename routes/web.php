@@ -17,13 +17,16 @@ Route::middleware(['web'])->group(
         //
         Route::get('/language/{locale}', [LanguageController::class, 'change'])->name('lang.swicher');
 
-        //cart
-        Route::prefix('cart')->name('cart.')->controller(CartController::class)->group(function () {
+        Route::prefix('cart')->controller(CartController::class)->group(function () {
             Route::get('/', 'index')->name('cart.index');
             Route::post('/', 'store')->name('cart.store');
-            Route::post('/remove', 'remove')->name('cart.remove');
+            // Оновлення кількості для конкретного елемента кошика
+            Route::put('/{cartItemId}', 'update')->name('cart.update');
+            // Видалення конкретного елемента з кошика
+            Route::delete('/{cartItemId}', 'remove')->name('cart.remove');
+            // Очищення всього кошика
+            Route::post('/clear', 'clear')->name('cart.clear'); // Або Route::delete('/clear', 'clear')
         });
-
         // Route to redirect to Google's OAuth page
         Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
         // Route to handle the callback from Google

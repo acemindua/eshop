@@ -1,25 +1,29 @@
 <template>
-    <div class="relative">
-        <button
-            class="flex items-center bg-gray-100 py-2 border-2 border-gray-100 rounded-lg relative px-3"
-            aria-label="Відкрити корзину"
-            @click="$emit('toggleCart')"
-        >
-            <svg-icon type="mdi" :path="mdiCartOutline" class="w-6 h-6" />
-            <p class="font-semibold hidden md:block px-4 text-sm">
-                <span v-if="total && parseInt(total) > 0">
-                    {{ total }} <span>₴</span>
-                </span>
-                <span v-else>{{ $t("Корзина") }}</span>
-            </p>
-            <span
-                v-if="cartItemCount && cartItemCount > 0"
-                class="absolute -top-1 -right-1 rounded-full bg-orange-500 text-xs border-2 border-white text-white w-5 h-5 inline-flex justify-center items-center"
-            >
-                {{ cartItemCount }}
+    <button
+        class="md:border-2 border-gray-100 rounded-lg md:flex items-center justify-center md:space-x-2 md:py-2 relative md:px-3 md:bg-gray-100"
+        aria-label="Відкрити корзину"
+        @click="$emit('toggleCart')"
+    >
+        <svg-icon type="mdi" :path="mdiCartOutline" class="size-6 mx-auto" />
+
+        <p class="font-semibold hidden md:block px-4 text-sm">
+            <span v-if="total && parseInt(total) > 0">
+                {{ total }} <span>₴</span>
             </span>
-        </button>
-    </div>
+            <span v-else>{{ $t("Корзина") }}</span>
+        </p>
+
+        <p class="text-xs text-gray-500 md:hidden pt-1">
+            {{ $t("Корзина") }}
+        </p>
+
+        <p
+            v-if="cartItemCount && cartItemCount > 0"
+            class="absolute md:-top-1 md:-right-1 -top-1 right-1 rounded-full bg-orange-500 text-xs border-2 border-white text-white w-3 md:w-5 h-3 md:h-5 inline-flex justify-center items-center"
+        >
+            <span class="hidden md:block">{{ cartItemCount }}</span>
+        </p>
+    </button>
 </template>
 
 <script setup>
