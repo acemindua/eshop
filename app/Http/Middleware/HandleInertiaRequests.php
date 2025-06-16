@@ -56,6 +56,7 @@ class HandleInertiaRequests extends Middleware
                 'default'       => app()->getLocale(),
                 'keys'          => config('translatable.locales'),
                 'locales'       => (new \App\Services\LanguageServices())->getActiveLanguages(),
+                'mapping'       => config('laravellocalization.localesMapping', [])
             ],
             'permissions' => json_decode(Auth::user()?->jsPermissions() ?? '{}', true),
             'flash' => [

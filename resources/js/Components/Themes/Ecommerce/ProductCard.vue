@@ -111,7 +111,9 @@ const addToCart = async () => {
             </div>
         </div>
 
-        <div class="text-2xl h-12 flex w-full items-center justify-start">
+        <div
+            class="text-xl md:text-2xl h-12 flex w-full items-center justify-start"
+        >
             <div class="flex items-center justify-between font-semibold w-full">
                 <div :class="{ 'text-gray-400': !isAvailable }">
                     <p class="font-montserrat">

@@ -94,34 +94,30 @@ const storeCart = (product) => {
 </script>
 
 <template>
-    <div>
-        <ul
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[1px] p-[1px]"
-        >
-            <li v-if="isLoading" v-for="n in 8" :key="n">
-                <ProductCartPlaceholder />
-            </li>
-            <li v-else v-for="product in items" :key="product.id">
-                <ProductCard
-                    :product="product"
-                    :ids="itemsIds"
-                    :reviews-data="product.reviews"
-                    @add-to-cart="storeCart"
-                />
-            </li>
-        </ul>
-    </div>
+    <ul
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[1px] p-[1px]"
+    >
+        <li v-if="isLoading" v-for="n in 8" :key="n">
+            <ProductCartPlaceholder />
+        </li>
+        <li v-else v-for="product in items" :key="product.id">
+            <ProductCard
+                :product="product"
+                :ids="itemsIds"
+                :reviews-data="product.reviews"
+                @add-to-cart="storeCart"
+            />
+        </li>
+    </ul>
 
-    <div>
-        <PaginationControls
-            :pagination-meta="pagination.meta"
-            :pagination-links="pagination.links"
-            :loading="isLoading"
-            @go-to-page="handleGoToPage"
-        />
-    </div>
+    <PaginationControls
+        :pagination-meta="pagination.meta"
+        :pagination-links="pagination.links"
+        :loading="isLoading"
+        @go-to-page="handleGoToPage"
+    />
 
-    <section v-if="$page.props.app.env === 'local'">
+    <section v-if="$page.props.app.env !== 'local'">
         <VarDump :data="cartStore.state.itemsIds" />
     </section>
 </template>

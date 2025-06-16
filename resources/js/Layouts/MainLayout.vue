@@ -1,86 +1,131 @@
 <script setup>
-import { computed, ref, inject, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
-import FooterComponent from "@/Components/Themes/Main/FooterComponent.vue";
-import HeaderComponent from "@/Components/Themes/Main/HeaderComponent.vue";
-import CategoryMenu from "@/Components/Themes/Ecommerce/Layout/CategoryMenu.vue";
-import AsideCart from "@/Components/Themes/Ecommerce/AsideCart.vue";
-import EmptyCartModal from "@/Components/Themes/Ecommerce/EmptyCartModal.vue";
+import { computed, ref, inject, onMounted } from "vue";
+
+// Components
 import Breadcrumbs from "@/Components/Breadcrumbs.vue";
+import EmptyCart from "@/Components/Themes/Ecommerce/EmptyCart.vue";
+import FooterComponent from "@/Components/Themes/Main/FooterComponent.vue";
+import FooterNavigations from "@/Components/Themes/Main/FooterNavigations.vue";
+import HeaderComponent from "@/Components/Themes/Main/HeaderComponent.vue";
+import Container from "@/Components/Themes/Main/Layout/Container.vue";
+import TopNav from "@/Components/Themes/Main/TopNav.vue";
+import MobileNavigations from "../Components/Themes/Main/MobileNavigations.vue";
 
-import Services from "@/Components/Themes/Ecommerce/Layout/Services.vue";
-import FooterNavigaqtions from "@/Components/Themes/Ecommerce/FooterNavigaqtions.vue";
-
-// Підключення cartStore
+const page = usePage();
 const cartStore = inject("cartStore");
 
-const { props } = usePage();
-const categories = computed(() => props.responseData.categories.data || []);
+const isHome = computed(() => page.component.startsWith("Main/Home"));
+const locales = computed(() => page.props.lang || {});
+const catalogVisible = ref(false);
+const cartEmptyVisible = ref(false);
+const mobileMenuVisible = ref(false);
 
-const categoriesMenuVisible = ref(false);
-const cartContentVisible = computed(() => cartStore.state.isCartOpen);
+const cartState = computed(() => cartStore?.state || {});
 
-// Завантажити дані при монтуванні
 onMounted(() => {
     cartStore?.fetchCart?.();
 });
+
+const toggleCatalog = () => {
+    catalogVisible.value = !catalogVisible.value;
+};
+
+const toggleCart = () => {
+    cartEmptyVisible.value = !cartEmptyVisible.value;
+};
+
+const toggleMenu = () => {
+    mobileMenuVisible.value = !mobileMenuVisible.value;
+};
 </script>
 
 <template>
-    <div class="bg-slate-100 text-gray-900 w-full min-h-screen">
-        <div class="flex flex-col w-full h-full min-h-svh">
-            <header class="sticky top-0 z-10">
+    <div
+        class="flex flex-col min-h-screen w-full text-sm bg-gray-100 text-gray-950"
+    >
+        <!-- Top Nav (Desktop) -->
+        <div class="hidden md:block border-b relative z-40 bg-white">
+            <Container class="py-2">
+                <TopNav :locales="locales" class="text-sm text-gray-700" />
+            </Container>
+        </div>
+
+        <!-- Overlay for catalog -->
+        <div
+            v-show="catalogVisible"
+            class="fixed inset-0 bg-gray-800 bg-opacity-10 transition-opacity duration-300"
+            @click="toggleCatalog"
+            aria-hidden="true"
+        />
+
+        <!-- Header -->
+        <header class="sticky top-0 z-40 bg-white shadow-sm">
+            <Container>
                 <HeaderComponent
-                    :catalogOpen="categoriesMenuVisible"
-                    :cart="cartStore.state"
-                    @toggleCatalog="
-                        categoriesMenuVisible = !categoriesMenuVisible
-                    "
-                    @toggleCart="cartStore.toggleCart()"
+                    :cart="cartState"
+                    :catalogOpen="catalogVisible"
+                    @toggleCatalog="toggleCatalog"
+                    @toggleCart="toggleCart"
                 />
-                <CategoryMenu
-                    :categories="categories"
-                    :visible="categoriesMenuVisible"
-                    @close="categoriesMenuVisible = false"
-                />
-            </header>
-            <div class="flex flex-col grow md:p-2">
+            </Container>
+
+            <!-- Catalog dropdown -->
+            <Transition name="slide-down">
                 <div
-                    v-if="!route().current('home')"
-                    class="w-full container mx-auto py-2"
+                    v-show="catalogVisible"
+                    class="absolute left-0 top-full w-full z-30 bg-white shadow-md overflow-hidden"
                 >
-                    <Breadcrumbs />
+                    <Container class="py-12">
+                        <h2 class="text-lg font-semibold">Каталог меню</h2>
+                        <ul class="mt-4 space-y-2">
+                            <li><a href="#">Категорія 1</a></li>
+                            <li><a href="#">Категорія 2</a></li>
+                            <li><a href="#">Категорія 3</a></li>
+                        </ul>
+                    </Container>
                 </div>
-                <main class="mt-2 md:px-4">
-                    <slot />
-                </main>
-            </div>
+            </Transition>
+        </header>
 
-            <footer>
+        <!-- Mobile Menu -->
+        <MobileNavigations
+            :locales="locales"
+            :show="mobileMenuVisible"
+            @close="toggleMenu"
+        />
+
+        <!-- Breadcrumbs -->
+        <div v-if="!isHome" class="py-4">
+            <Container><Breadcrumbs /></Container>
+        </div>
+
+        <!-- Main content -->
+        <main class="flex-grow">
+            <Container>
+                <slot />
+            </Container>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-gray-600 bg-white border-t">
+            <Container class="py-6">
                 <FooterComponent />
-            </footer>
+            </Container>
+        </footer>
 
-            <div>
-                <AsideCart
-                    v-if="cartStore.state.itemCount > 0"
-                    :cart="cartStore"
-                    :visible="cartContentVisible"
-                    @close="cartStore.toggleCart()"
-                    @remove="(id) => cartStore.removeCartItem(id)"
-                />
-                <EmptyCartModal
-                    v-else-if="cartContentVisible"
-                    :visible="true"
-                    @close="cartStore.toggleCart()"
-                />
-            </div>
+        <!-- Empty cart modal -->
+        <EmptyCart :show="cartEmptyVisible" @close="toggleCart" />
 
-            <div class="md:hidden sticky bottom-0 z-10 border-t bg-white">
-                <FooterNavigaqtions
-                    :cart="cartStore.state"
-                    @toggleCart="cartStore.toggleCart()"
-                />
-            </div>
+        <!-- Footer navigation (Mobile) -->
+        <div class="md:hidden sticky bottom-0 bg-white border-t">
+            <FooterNavigations
+                :cart="cartState"
+                :catalogOpen="catalogVisible"
+                @toggleCatalog="toggleCatalog"
+                @toggleCart="toggleCart"
+                @toggleMenu="toggleMenu"
+            />
         </div>
     </div>
 </template>

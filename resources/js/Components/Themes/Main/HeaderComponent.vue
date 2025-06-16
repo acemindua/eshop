@@ -1,58 +1,82 @@
-<!--  // HeaderComponent.vue -->
+<script setup>
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import ShoppingCartButton from "../Ecommerce/UI/ShoppingCartButton.vue";
+import CatalogButton from "../Ecommerce/UI/CatalogButton.vue";
+import InputSearch from "./UI/InputSearch.vue";
+import ResultSearch from "./UI/ResultSearch.vue";
+import { ref } from "vue";
+//
+const props = defineProps({
+    catalogOpen: Boolean,
+    cart: {
+        type: Object,
+    },
+});
+
+const resultSearhVisible = ref(false);
+//
+const emit = defineEmits(["toggleCatalog", "toggleCart"]);
+//
+const handleSearchFocus = () => {
+    if (props.catalogOpen) emit("toggleCatalog");
+    resultSearhVisible.value = true;
+};
+
+</script>
+
 <template>
-    <div class="h-20 z-50 bg-white shadow relative">
-        <div class="w-full container mx-auto flex h-full">
-            <div
-                class="flex items-center justify-between h-full px-4 gap-4 w-full"
-            >
-                <div class="flex items-center justify-center shrink-0">
-                    <Link
-                        href="/"
-                        class="flex items-center space-x-4 md:mr-8 w-full max-w-xl"
-                    >
-                        <ApplicationLogo
-                            class="block h-11 w-auto fill-current text-[#368D02]"
-                        />
-                        <p class="hidden md:block font-semibold">
-                            <span>{{ $page.props.app.name }}</span>
+    <div class="flex items-center justify-between gap-4 w-full h-20">
+        <div class="md:flex flex-1 items-center gap-4 md:gap-6">
+            <div class="hidden md:flex items-center gap-4 md:gap-6">
+                <Link href="/" class="flex items-center space-x-4 shrink-0">
+                    <ApplicationLogo
+                        class="block h-9 md:h-11 w-auto fill-current text-green-500"
+                    />
+                    <div class="hidden md:flex flex-col">
+                        <p class="font-semibold">
+                            {{ $page.props.app.name }}
                         </p>
-                    </Link>
-                </div>
-                <div class="hidden md:block">
-                    <CategoryButtonMenu
-                        id="category-button-menu"
+                        <p class="text-xs font-thin text-gray-500">
+                            slogan & cool text
+                        </p>
+                    </div>
+                </Link>
+                <div class="w-full md:max-w-lg">
+                    <CatalogButton
+                        id="catalog-button"
                         :open="catalogOpen"
                         @click="$emit('toggleCatalog')"
-                    />
-                </div>
-                <div class="w-full md:max-w-lg">
-                    <SearchFilter @focusin="handleSearchFocus" />
-                </div>
-                <div class="hidden w-full md:flex items-center justify-end">
-                    <ShoppingCartButton
-                        :cart="cart"
-                        @click="$emit('toggleCart')"
+                        :aria-label="$t('Відкрити каталог')"
                     />
                 </div>
             </div>
+
+            <div class="w-full md:max-w-lg px-2">
+                <div
+                    v-show="resultSearhVisible"
+                    class="fixed inset-0 bg-gray-800 opacity-10 transition-opacity"
+                    @click="resultSearhVisible = false"
+                />
+
+                <InputSearch @focusin="handleSearchFocus" />
+
+                <ResultSearch
+                    :open="resultSearhVisible"
+                    @close="resultSearhVisible = false"
+                />
+            </div>
         </div>
+
+        <ul class="hidden md:block">
+            <li>
+                <ShoppingCartButton
+                    :total="cart.total"
+                    :count="cart.itemCount"
+                    :loading="cart.isLoading"
+                    :aria-label="$t('Відкрити корзину')"
+                    @empty="$emit('toggleCart')"
+                />
+            </li>
+        </ul>
     </div>
 </template>
-
-<script setup>
-import { Link } from "@inertiajs/vue3";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import CategoryButtonMenu from "@/Components/Themes/Ecommerce/UI/CategoryButtonMenu.vue";
-import SearchFilter from "./UI/SearchFilter.vue";
-import ShoppingCartButton from "../Ecommerce/UI/ShoppingCartButton.vue";
-
-const props = defineProps({
-    catalogOpen: Boolean,
-    cart: Object,
-});
-
-const emit = defineEmits(["toggleCatalog", "toggleCart"]);
-const handleSearchFocus = () => {
-    if (props.catalogOpen) emit("toggleCatalog");
-};
-</script>

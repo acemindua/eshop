@@ -5,13 +5,13 @@
         </h1>
         <!-- section -->
         <section>
-            <div class="container mx-auto px-4">
+            <div class="container mx-auto">
                 <ProductsGrid :category-id="null" />
             </div>
         </section>
         <!-- About -->
         <section></section>
-        <section v-if="$page.props.app.env === 'local'">
+        <section v-if="$page.props.app.env !== 'local'">
             <VarDump :data="data" />
         </section>
     </MainLayout>

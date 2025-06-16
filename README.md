@@ -17,6 +17,8 @@
 -   php artisan octane:install
 -   php artisan octane:start
 
+## v0.6.3
+
 ## v0.6.2
 
 -   php artisan make:controller Main/CommerceController

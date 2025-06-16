@@ -38,7 +38,7 @@
                     >
                         <DialogTitle
                             id="modal-title"
-                            class="text-xl font-semibold text-gray-900 mb-4"
+                           
                         >
                             {{ $t("Ваша корзина порожня") }}
                             <button

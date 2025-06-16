@@ -247,6 +247,15 @@
     "Update Password": "Update Password",
     "Update your account's profile information and email address.": "Update your account's profile information and email address.",
     "Upgrade Required": "Upgrade Required",
+    "upload": {
+        "click": "Click to upload",
+        "note": "The first image will be used as the primary image for your product.",
+        "orDrag": "or drag and drop",
+        "subtitle": "Upload new image",
+        "title": "Upload",
+        "upload": "Upload",
+        "uploading": "Uploading"
+    },
     "URI Too Long": "URI Too Long",
     "Use Proxy": "Use Proxy",
     "User": "User",
@@ -259,14 +268,5 @@
     "Yes": "Yes",
     "You are receiving this email because we received a password reset request for your account.": "You are receiving this email because we received a password reset request for your account.",
     "You're logged in!": "You're logged in!",
-    "Your email address is unverified.": "Your email address is unverified.",
-    "upload": {
-        "title": "Upload",
-        "subtitle": "Upload new image",
-        "note": "The first image will be used as the primary image for your product.",
-        "click": "Click to upload",
-        "orDrag": "or drag and drop",
-        "upload": "Upload",
-        "uploading": "Uploading"
-    }
+    "Your email address is unverified.": "Your email address is unverified."
 }

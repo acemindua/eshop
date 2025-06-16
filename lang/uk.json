@@ -248,6 +248,15 @@
     "Update Password": "Оновити пароль",
     "Update your account's profile information and email address.": "Оновіть дані профілю свого облікового запису та електронну адресу.",
     "Upgrade Required": "Потрібне оновлення",
+    "upload": {
+        "click": "Click to upload",
+        "note": "The first image will be used as the primary image for your product.",
+        "orDrag": "or drag and drop",
+        "subtitle": "Upload new image",
+        "title": "Upload",
+        "upload": "Upload",
+        "uploading": "Uploading"
+    },
     "URI Too Long": "URI занадто довгий",
     "Use Proxy": "Використовуйте проксі",
     "User": "Користувач",
@@ -260,14 +269,5 @@
     "Yes": "Так",
     "You are receiving this email because we received a password reset request for your account.": "Ви отримали цей електронний лист, оскільки ми отримали запит на скидання паролю для вашого облікового запису.",
     "You're logged in!": "Ви увійшли!",
-    "Your email address is unverified.": "Ваша електронна адреса неверифікована.",
-    "upload": {
-        "title": "Upload",
-        "subtitle": "Upload new image",
-        "note": "The first image will be used as the primary image for your product.",
-        "click": "Click to upload",
-        "orDrag": "or drag and drop",
-        "upload": "Upload",
-        "uploading": "Uploading"
-    }
+    "Your email address is unverified.": "Ваша електронна адреса неверифікована."
 }
