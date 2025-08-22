@@ -1,5 +1,6 @@
 <template>
     <MainLayout>
+        <!--
         <section
             class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-xl my-8"
         >
@@ -149,7 +150,7 @@
 
         <section v-if="$page.props.app.env === 'local'">
             <VarDump :data="displayItem" />
-        </section>
+        </section>-->
     </MainLayout>
 </template>
 

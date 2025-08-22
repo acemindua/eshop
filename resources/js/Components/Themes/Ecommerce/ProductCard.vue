@@ -149,12 +149,5 @@ const addToCart = async () => {
                 }}</span>
             </div>
         </div>
-        <!--
-        <div class="text-xs text-gray-500">
-            <pre>
-                {{ product }}
-            </pre>
-        </div>
-        <!---->
     </div>
 </template>

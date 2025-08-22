@@ -217,6 +217,7 @@ const resetConfirmDialog = () => {
  * @param {number} newQuantity - The new quantity for the product.
  */
 const handleUpdateQuantity = (productId, newQuantity) => {
+    console.log(productId, newQuantity);
     // Assuming your cartStore has an updateItemQuantity method
     cartStore.updateCartItemQuantity(productId, newQuantity);
 };

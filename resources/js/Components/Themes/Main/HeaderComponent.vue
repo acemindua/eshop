@@ -5,6 +5,7 @@ import CatalogButton from "../Ecommerce/UI/CatalogButton.vue";
 import InputSearch from "./UI/InputSearch.vue";
 import ResultSearch from "./UI/ResultSearch.vue";
 import { ref } from "vue";
+import LoginRegisterFormModal from "./Auth/LoginRegisterFormModal.vue";
 //
 const props = defineProps({
     catalogOpen: Boolean,
@@ -21,7 +22,6 @@ const handleSearchFocus = () => {
     if (props.catalogOpen) emit("toggleCatalog");
     resultSearhVisible.value = true;
 };
-
 </script>
 
 <template>
@@ -67,7 +67,10 @@ const handleSearchFocus = () => {
             </div>
         </div>
 
-        <ul class="hidden md:block">
+        <ul class="hidden md:flex items-center space-x-2">
+            <li>
+                <LoginRegisterFormModal />
+            </li>
             <li>
                 <ShoppingCartButton
                     :total="cart.total"

@@ -17,7 +17,7 @@
 
 <script setup>
 import { IconPhoto } from "@tabler/icons-vue";
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
     config: {
@@ -32,7 +32,7 @@ const props = defineProps({
      * @property {string} preview - The URL of the preview image (preferable for smaller sizes).
      */
     image: {
-        type: Object,
+        type: String,
         default: null, // Default to null for no image
     },
     // Optional: if product data is needed for alt text or other purposes
@@ -58,22 +58,7 @@ const imageAltText = computed(() => {
 
 // --- Reactive State ---
 
-const displayImageUrl = ref(null);
-
-// --- Watcher to update displayImageUrl when props.image changes ---
-watch(
-    () => props.image,
-    (newImage) => {
-        if (newImage && newImage.preview) {
-            displayImageUrl.value = newImage.preview;
-        } else if (newImage && newImage.url) {
-            displayImageUrl.value = newImage.url;
-        } else {
-            displayImageUrl.value = null; // No image available
-        }
-    },
-    { immediate: true }
-); // Run immediately on component mount
+const displayImageUrl = ref(props.image || null);
 </script>
 
 <style scoped>

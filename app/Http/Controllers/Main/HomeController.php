@@ -21,11 +21,6 @@ use Inertia\Response;
 
 class HomeController extends Controller
 {
-
-
-
-
-
     /**
      * Головна сторінка сайту
      */
