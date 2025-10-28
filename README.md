@@ -1,3 +1,31 @@
+## Laravel Media Library (v0.3)
+
+[**Spatie Media Library**](https://spatie.be/docs/laravel-medialibrary/v11/introduction) 
+
+1. **Base installation**
+
+    ```bash
+    composer require "spatie/laravel-medialibrary"
+    ```
+
+    You need to publish the migration to create the media table:
+
+     ```bash
+    php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
+    ```
+
+    After that, you need to run migrations.
+
+    ```bash
+    php artisan migrate
+    ```
+
+    Publishing the config file is optional:
+
+    ```bash
+    php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-config"
+    ```
+
 ## 🌍 Localization & translatable (v0.2)
 
 1.  [**Astrotomic:**](https://docs.astrotomic.info/laravel-translatable/installation)
