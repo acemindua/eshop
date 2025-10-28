@@ -1,6 +1,57 @@
-## Laravel Media Library (v0.3)
+## Laravel Permission (v0.4)
 
-[**Spatie Media Library**](https://spatie.be/docs/laravel-medialibrary/v11/introduction) 
+[**Doc**](https://spatie.be/docs/laravel-permission/v6/installation-laravel)
+
+1. **Base installation**
+
+    ```bash
+    composer require spatie/laravel-permission
+    ```
+
+    You should publish the migration and the config/permission.php config file with:
+
+    ```bash
+    php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+    ```
+
+    Clear your config cache.
+
+    ```bash
+    php artisan optimize:clear
+    ```
+
+    Run the migrations:
+
+    ```bash
+    php artisan migrate
+    ```
+
+    Add the necessary trait to your User model:
+
+    ```bash
+    // The User model requires this trait
+    use HasRoles;
+    ```
+
+    Defining a Super-Admin
+    In Laravel 11 this would go in the boot() method of AppServiceProvider: In Laravel 10 and below it would go in the boot() method of AuthServiceProvider.php:
+
+    ```bash
+    use Illuminate\Support\Facades\Gate;
+    // ...
+    public function boot()
+    {
+        // Implicitly grant "Super Admin" role all permissions
+        // This works in the app by using gate-related functions like auth()->user->can() and @can()
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('super-user') ? true : null;
+        });
+    }
+    ```
+
+## 🖼️ Laravel Media Library (v0.3)
+
+[**Spatie Media Library**](https://spatie.be/docs/laravel-medialibrary/v11/introduction)
 
 1. **Base installation**
 
@@ -10,7 +61,7 @@
 
     You need to publish the migration to create the media table:
 
-     ```bash
+    ```bash
     php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
     ```
 
@@ -24,6 +75,12 @@
 
     ```bash
     php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-config"
+    ```
+
+    Create storage:link
+
+    ```bash
+    php artisan storage:link
     ```
 
 ## 🌍 Localization & translatable (v0.2)
