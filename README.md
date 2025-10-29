@@ -219,6 +219,17 @@ These steps cover initial dependency installation and asset compilation, essenti
     php artisan make:seeder RolesAndPermissionsSeeder
     ```
 
+    If using Laravel 11, ensure the middleware aliases are registered in `bootstrap/app.php` within the `withMiddleware` closure. (For Laravel 10 and below, they would typically be registered in `app/Http/Kernel.php`.)
+
+    ```bash
+    $middleware->alias([
+        //
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+    ])
+    ```
+
     ```bash
     public function run(): void
     {
@@ -259,7 +270,7 @@ These steps cover initial dependency installation and asset compilation, essenti
                     'user-update'
                 ]
             );
-        $role = Role::create(['name' => 'user']);
+        $role = Role::create(['name' => 'auth']);
     }
     ```
 
@@ -267,4 +278,71 @@ These steps cover initial dependency installation and asset compilation, essenti
 
     ```bash
     php artisan migrate:fresh --seed
+    ```
+
+### 6. First Controller
+
+    ```bash
+    php artisan make:controller Admin\DashboardController
+    ```
+
+    ```bash
+    php artisan make:controller Public\HomeController
+    ```
+
+1.  **_Laravel Vue i18n_**
+
+    Installation
+
+    ```bash
+    npm i laravel-vue-i18n
+    ```
+
+    PHP Translations Available on Vue
+
+    ```bash
+    import { i18nVue } from 'laravel-vue-i18n'
+
+    .use(i18nVue, {
+        resolve: async lang => {
+            const langs = import.meta.glob('../../lang/*.json');
+            return await langs[`../../lang/${lang}.json`]();
+        }
+    })
+    ```
+
+    In order to load php translations, you can use this Vite plugin.
+
+    ```bash
+    // vite.config.js
+    import i18n from 'laravel-vue-i18n/vite';
+
+    export default defineConfig({
+        plugins: [
+            laravel([
+                'resources/css/app.css'
+                'resources/js/app.js',
+            ]),
+            vue(),
+
+            // Laravel >= 9
+            i18n(),
+
+            // Laravel < 9, since the lang folder is inside the resources folder
+            // you will need to pass as parameter:
+            // i18n('resources/lang'),
+        ],
+    });
+    ```
+
+    Add Locales
+
+    ```bash
+    php artisan lang:add ru uk pl
+    ```
+
+2.  📝 Код LocalizationSyncServiceProvider.php
+
+    ```bash
+    php artisan make:provider LocalizationSyncServiceProvider
     ```

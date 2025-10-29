@@ -54,6 +54,6 @@ class RolesAndPermissionsSeeder extends Seeder
                     'user-update'
                 ]
             );
-        $role = Role::create(['name' => 'user']);
+        $role = Role::create(['name' => 'auth']);
     }
 }
