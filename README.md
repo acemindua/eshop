@@ -1,401 +1,206 @@
 # 🚀 Project Setup and Package Installation Guide
 
-This guide details the steps to set up the project and install key Laravel packages for permissions, media management, and localization.
+Цей посібник містить детальні кроки для налаштування проекту та встановлення ключових Laravel-пакетів для **управління дозволами (Permissions), медіа-бібліотекою (Media Library)** та **локалізації (Localization)**.
 
 ---
 
-## ⚙️ 1. Getting Started (Initial Setup)
+## 🛠️ 1. Початкове Налаштування та Залежності
 
-These steps cover initial dependency installation and asset compilation, essential for running the application.
+Ці кроки є основними для підготовки середовища та компіляції фронтенд-активів.
 
-1.  **Install PHP Dependencies:**
+### 1.1. Встановлення PHP та JS Залежностей
 
+1.  **Встановити PHP (Composer) залежності:**
     ```bash
     composer install
     ```
-
-2.  **Install JavaScript/CSS Dependencies (NPM):**
-
-    Update the Plugin
-
+2.  **Оновити Vite Vue-плагін** (якщо необхідно):
     ```bash
     npm install @vitejs/plugin-vue@latest
     ```
-
+3.  **Встановити JavaScript/CSS (NPM) залежності:**
     ```bash
     npm install
-    # Use the --force flag only if you encounter dependency resolution errors:
+    # Використовуйте --force лише при помилках залежностей:
     # npm install --force
     ```
 
-3.  **Final Asset Compilation (Production Build):**
-    This compiles and minifies your assets for production or final testing.
+### 1.2. Компіляція Активів
 
+1.  **Фінальна збірка (Production Build):**
     ```bash
     npm run build
     ```
-
-4.  **Development Mode (Optional):**
-    Run this command in a separate terminal if you plan to make **frontend changes**. It automatically recompiles assets on file changes.
+2.  **Режим розробки (Development, Опціонально):**
+    Запускайте в окремому терміналі, якщо вносите **фронтенд-зміни**.
     ```bash
     npm run dev
     ```
 
 ---
 
-## 🔐 2. Laravel Permission (Spatie)
+## 🔐 2. Налаштування Дозволів (Spatie Laravel Permission)
 
--   **Version:** v6+ (Based on current documentation link)
--   **Documentation:** [Spatie Laravel Permission Docs](https://spatie.be/docs/laravel-permission/v6/installation-laravel)
+### 2.1. Встановлення та Міграція
 
-1.  **Install the Package:**
-
+1.  **Встановити пакет:**
     ```bash
     composer require spatie/laravel-permission
     ```
-
-2.  **Publish Migration and Configuration:**
-    This command creates the necessary database tables and the `config/permission.php` file.
-
+2.  **Опублікувати Міграцію та Конфігурацію:**
     ```bash
     php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
     ```
-
-3.  **Clear Configuration Cache:**
-    Crucial step to ensure the new config file is loaded correctly.
-
+3.  **Очистити кеш конфігурації:**
     ```bash
     php artisan optimize:clear
     ```
-
-4.  **Run Database Migrations:**
-    Creates the `roles` and `permissions` tables.
-
+4.  **Запустити міграції:**
     ```bash
     php artisan migrate
     ```
 
-5.  **Add Trait to User Model:**
-    Ensure your `App\Models\User` model uses the `HasRoles` trait.
+### 2.2. Налаштування Моделі та Gate
 
-    ```php
-    // In App\Models\User.php
-    use Spatie\Permission\Traits\HasRoles;
-    // ...
-    class User extends Authenticatable
-    {
-        use HasApiTokens, HasFactory, Notifiable, HasRoles; // <-- Add HasRoles
-        // ...
-    }
-    ```
-
-6.  **Define a Super-Admin Gate (Optional but Recommended):**
-    Place this in the `boot()` method of your **`AppServiceProvider.php`** (Laravel 11) or **`AuthServiceProvider.php`** (Laravel 10 and below) to grant a specific role (`super-user`) all permissions implicitly.
-
+1.  **Додати Trait до `User` моделі:**
+    Додайте `use Spatie\Permission\Traits\HasRoles;` та `HasRoles` до масиву traits у `App\Models\User.php`.
+2.  **Визначити Super-Admin Gate (Рекомендовано):**
+    Додайте цей код у метод `boot()` вашого **`AppServiceProvider.php`** (або `AuthServiceProvider.php`):
     ```php
     use Illuminate\Support\Facades\Gate;
     // ...
-    public function boot()
+    public function boot(): void
     {
-        // Implicitly grant "super-user" role all permissions
-        // This makes permission checks (like auth()->user->can() or @can) always return true for this role.
+        // Надати ролі "super-user" усі дозволи
         Gate::before(function ($user, $ability) {
             return $user->hasRole('super-user') ? true : null;
         });
     }
+    ```
+3.  **Реєстрація Middleware (Laravel 11+):**
+    Додайте alias-и у `bootstrap/app.php` у `withMiddleware` closure:
+    ```php
+    // У bootstrap/app.php ->withMiddleware(...)
+    $middleware->alias([
+        // ...
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+    ]);
     ```
 
 ---
 
 ## 🖼️ 3. Laravel Media Library (Spatie)
 
--   **Version:** v11+ (Based on current documentation link)
--   **Documentation:** [Spatie Media Library Docs](https://spatie.be/docs/laravel-medialibrary/v11/introduction)
-
-1.  **Install the Package:**
-
+1.  **Встановити пакет:**
     ```bash
     composer require "spatie/laravel-medialibrary"
     ```
-
-2.  **Publish Migration:**
-    This command generates the migration file to create the `media` table.
-
+2.  **Опублікувати Міграцію:**
     ```bash
     php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-migrations"
     ```
-
-3.  **Run Database Migrations:**
-    Creates the `media` table.
-
+3.  **Запустити міграції:**
     ```bash
     php artisan migrate
     ```
-
-4.  **Publish Configuration (Optional):**
-    If you need to customize settings like disk names or model defaults.
-
-    ```bash
-    php artisan vendor:publish --provider="Spatie\MediaLibrary\MediaLibraryServiceProvider" --tag="medialibrary-config"
-    ```
-
-5.  **Create Storage Symlink:**
-    Essential for making uploaded files in the `storage/app/public` directory accessible via a web URL (`public/storage`).
+4.  **Створити Storage Symlink:**
     ```bash
     php artisan storage:link
     ```
 
 ---
 
-## 🌍 4. Localization and Translatable
+## 🌍 4. Налаштування Локалізації (Localization)
 
-### 4.1. Astrotomic/laravel-translatable (Model Translations)
+### 4.1. Astrotomic/laravel-translatable (Переклад Моделей)
 
--   **Documentation:** [Astrotomic Laravel-Translatable Docs](https://docs.astrotomic.info/laravel-translatable/installation)
-
-1.  **Install the Package:**
-    Used for making Eloquent models translatable across different locales.
-
+1.  **Встановити пакет:**
     ```bash
     composer require astrotomic/laravel-translatable
     ```
-
-2.  **Publish Configuration:**
-    Copies the configuration file to `config/translatable.php`.
+2.  **Опублікувати Конфігурацію:**
     ```bash
     php artisan vendor:publish --tag=translatable
     ```
 
-### 4.2. Mcamara/laravel-localization (Route Management)
+### 4.2. Mcamara/laravel-localization (Локалізація Маршрутів)
 
--   **Documentation:** [Mcamara Laravel-Localization GitHub](https://github.com/mcamara/laravel-localization)
-
-1.  **Install the Package:**
-    Handles localization of routes and URL segments.
-
+1.  **Встановити пакет:**
     ```bash
     composer require mcamara/laravel-localization
     ```
-
-2.  **Publish Configuration:**
-    Copies the configuration file to `config/laravellocalization.php`.
-
+2.  **Опублікувати Конфігурацію:**
     ```bash
     php artisan vendor:publish --provider="Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider"
     ```
+3.  **Реєстрація Middleware (Laravel 11+):**
+    Додайте необхідні `LaravelLocalization` middleware alias-и до `bootstrap/app.php` у `withMiddleware` closure.
 
-3.  **Register Middleware (Laravel 11+):**
-    If using Laravel 11, ensure the middleware aliases are registered in `bootstrap/app.php` within the `withMiddleware` closure. (For Laravel 10 and below, they would typically be registered in `app/Http/Kernel.php`.)
+### 4.3. Laravel-Lang/Common (Мовні Файли)
 
-    ```php
-    // In bootstrap/app.php
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'localize'                => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
-            'localizationRedirect'    => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
-            'localeSessionRedirect'   => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
-            'localeCookieRedirect'    => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
-            'localeViewPath'          => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
-        ]);
-    })
-    ```
-
-### 4.3. Laravel-Lang/Common (Language Files)
-
--   **Documentation:** [Laravel-Lang Usage Docs](https://laravel-lang.com/usage-add-locales.html)
-
-1.  **Install the Package:**
-    Provides standard Laravel language files for multiple locales (e.g., validation messages, pagination, etc.).
-
+1.  **Встановити пакет:**
     ```bash
     composer require laravel-lang/common
     ```
-
-2.  **Update/Add Language Files:**
-    This command will download and update the language files based on your configuration (typically defined in `config/app.php` and `config/laravellocalization.php`).
+2.  **Додати нові локалі** (наприклад, uk, ru, pl):
+    ```bash
+    php artisan lang:add uk ru pl
+    ```
+3.  **Оновити мовні файли:**
     ```bash
     php artisan lang:update
     ```
 
-### 5. Create Super User & add roles
+---
 
-1. **RolesAndPermissionsSeeder**
+## 5. Створення початкових Користувачів та Ролей (Seeding)
 
+1.  **Створити Seeder:**
     ```bash
     php artisan make:seeder RolesAndPermissionsSeeder
     ```
-
-    If using Laravel 11, ensure the middleware aliases are registered in `bootstrap/app.php` within the `withMiddleware` closure. (For Laravel 10 and below, they would typically be registered in `app/Http/Kernel.php`.)
-
-    ```bash
-    $middleware->alias([
-        //
-        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-    ])
-    ```
-
-    ```bash
-    public function run(): void
-    {
-        // Reset cached roles and permissions
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-
-        //Super User
-        $role = Role::create(['name' => 'super-user']);
-        $user = User::create([
-            'name'      => 'Super User',
-            'email'     => 'acemind.ua@gmail.com',
-            'password'  => Hash::make('admin@admin'),
-            'email_verified_at' => now(),
-        ]);
-
-        $user->assignRole('super-user');
-
-        // Administrator
-        $role = Role::create(['name' => 'administrator']);
-
-        // create permissions for Model User
-        Permission::create(['name' => 'user-view']);
-        Permission::create(['name' => 'user-create']);
-        Permission::create(['name' => 'user-update']);
-        Permission::create(['name' => 'user-delete']);
-        // create permissions for Model Roles
-        Permission::create(['name' => 'role-view']);
-        Permission::create(['name' => 'role-create']);
-        Permission::create(['name' => 'role-update']);
-        Permission::create(['name' => 'role-delete']);
-
-        $role->givePermissionTo(Permission::all());
-
-        $role = Role::create(['name' => 'moder'])
-            ->givePermissionTo(
-                [
-                    'user-view',
-                    'user-update'
-                ]
-            );
-        $role = Role::create(['name' => 'auth']);
-    }
-    ```
-
-    Refresh DB start with Seeder
-
+2.  **Запуск Міграції з Seeder-ом:**
     ```bash
     php artisan migrate:fresh --seed
     ```
 
-### 6. First Controller
+> **Примітка:** Не забудьте додати код для створення ролей/дозволів/користувача у метод `run()` вашого `RolesAndPermissionsSeeder.php` (див. попередній крок).
 
-    ```bash
-    php artisan make:controller Admin\DashboardController
-    ```
+---
 
-    ```bash
-    php artisan make:controller Public\HomeController
-    ```
+## 6. Базові Компоненти та Контролери
 
-1.  **_Laravel Vue i18n_**
+### 6.1. Створення Контролерів та Ресурсів
 
-    Installation
+```bash
+# Базові контролери
+php artisan make:controller Admin\DashboardController
+php artisan make:controller Public\HomeController
+php artisan make:controller LocaleSwitcherController
 
-    ```bash
-    npm i laravel-vue-i18n
-    ```
+# Контролер для управління користувачами (CRUD)
+php artisan make:controller Admin\UserController --model=User --resource --requests
+php artisan make:resource UserResource
 
-    PHP Translations Available on Vue
+# Політика для User-моделі
+php artisan make:provider PolicyServiceProvider
+php artisan make:policy UserPolicy --model=User
+```
 
-    ```bash
-    import { i18nVue } from 'laravel-vue-i18n'
+### 6.2. Встановлення Фронтенд-Пакетів
 
-    .use(i18nVue, {
-        resolve: async lang => {
-            const langs = import.meta.glob('../../lang/*.json');
-            return await langs[`../../lang/${lang}.json`]();
-        }
-    })
-    ```
+```bash
+# i18n для Vue
+npm i laravel-vue-i18n
 
-    In order to load php translations, you can use this Vite plugin.
+# Іконки
+npm i @tabler/icons-vue
 
-    ```bash
-    // vite.config.js
-    import i18n from 'laravel-vue-i18n/vite';
+# UI/UX компоненти (наприклад, Dropdown Menu)
+npm install @headlessui/vue
 
-    export default defineConfig({
-        plugins: [
-            laravel([
-                'resources/css/app.css'
-                'resources/js/app.js',
-            ]),
-            vue(),
-
-            // Laravel >= 9
-            i18n(),
-
-            // Laravel < 9, since the lang folder is inside the resources folder
-            // you will need to pass as parameter:
-            // i18n('resources/lang'),
-        ],
-    });
-    ```
-
-    Add Locales
-
-    ```bash
-    php artisan lang:add ru uk pl
-    ```
-
-2.  📝 Код LocalizationSyncServiceProvider.php
-
-    ```bash
-    php artisan make:provider LocalizationSyncServiceProvider
-    ```
-
-### 7. Dashborad && Admin ControlPanel && Locale Switcher
-
-1. **_Login page_**
-2. **Icons**
-
-    Install @tabler/icons-vue:
-
-    ```bash
-    npm i @tabler/icons-vue
-    ```
-
-3. **_Users_**
-
-    ```bash
-    php artisan make:controller Admin\UserController --model=User --resource --requests
-    ```
-
-    ```bash
-    php artisan make:resource UserResource
-    ```
-
-    ```bash
-    php artisan make:provider PolicyServiceProvider
-    ```
-
-    ```bash
-    php artisan make:policy UserPolicy --model=User
-    ```
-
-4. Locale Swicher
-
-    ```bash
-    php artisan make:controller LocaleSwitcherController
-    ```
-
-5. Menu (Dropdown)
-
-    ```bash
-    npm install @headlessui/vue
-    ```
-
-6. [**VUE FLAGS**](https://www.npmjs.com/package/vue-flag-icon)
-
-    ```bash
-    npm i --save vue-flag-icon
-    ```
+# Прапорці для перемикача локалі
+npm i --save vue-flag-icon
+```
