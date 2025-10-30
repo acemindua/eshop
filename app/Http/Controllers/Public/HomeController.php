@@ -16,7 +16,9 @@ class HomeController extends Controller
     public function index(): Response
     {
         return Inertia::render('Public/Index', [
-            'data' => []
+            'data' => [
+                'locale' => app()->getLocale()
+            ]
         ]);
     }
 }

@@ -16,6 +16,12 @@ These steps cover initial dependency installation and asset compilation, essenti
 
 2.  **Install JavaScript/CSS Dependencies (NPM):**
 
+    Update the Plugin
+
+    ```bash
+    npm install @vitejs/plugin-vue@latest
+    ```
+
     ```bash
     npm install
     # Use the --force flag only if you encounter dependency resolution errors:
@@ -345,4 +351,51 @@ These steps cover initial dependency installation and asset compilation, essenti
 
     ```bash
     php artisan make:provider LocalizationSyncServiceProvider
+    ```
+
+### 7. Dashborad && Admin ControlPanel && Locale Switcher
+
+1. **_Login page_**
+2. **Icons**
+
+    Install @tabler/icons-vue:
+
+    ```bash
+    npm i @tabler/icons-vue
+    ```
+
+3. **_Users_**
+
+    ```bash
+    php artisan make:controller Admin\UserController --model=User --resource --requests
+    ```
+
+    ```bash
+    php artisan make:resource UserResource
+    ```
+
+    ```bash
+    php artisan make:provider PolicyServiceProvider
+    ```
+
+    ```bash
+    php artisan make:policy UserPolicy --model=User
+    ```
+
+4. Locale Swicher
+
+    ```bash
+    php artisan make:controller LocaleSwitcherController
+    ```
+
+5. Menu (Dropdown)
+
+    ```bash
+    npm install @headlessui/vue
+    ```
+
+6. [**VUE FLAGS**](https://www.npmjs.com/package/vue-flag-icon)
+
+    ```bash
+    npm i --save vue-flag-icon
     ```

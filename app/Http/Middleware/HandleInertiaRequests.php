@@ -38,6 +38,15 @@ class HandleInertiaRequests extends Middleware
                     'id'            => $request->user()->id,
                 ] : null
             ],
+            'config' => [
+
+                'locale'            => config('app.locale') ?: 'en',
+                'locales'           => config('translatable.locales') ?: [],
+                'localesMapping'    => config('laravellocalization.localesMapping') ?: [],
+            ],
+            'app' => [
+                'version'        => config('app.version'),
+            ]
         ];
     }
 }

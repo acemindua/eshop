@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LocaleSwitcherController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -23,3 +24,5 @@ Route::group(
         require __DIR__ . '/auth.php';
     }
 );
+
+Route::get('/locale/{locale}', [LocaleSwitcherController::class, 'change'])->name('locale.switcher');

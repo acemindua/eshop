@@ -5,16 +5,25 @@ import i18n from "laravel-vue-i18n/vite";
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd());
-    const appUrl = new URL(env.APP_URL);
-    const protocol = appUrl.protocol;
-    const hostname = appUrl.hostname;
-
+    const domain = env.APP_URL || "http://localhost";
+    let protocol = "http:";
+    let hostname = "localhost";
+    try {
+        const appUrl = new URL(domain);
+        protocol = appUrl.protocol;
+        hostname = appUrl.host;
+    } catch (e) {
+        console.error(
+            "Failed to parse APP_URL. Using defaults (http://localhost). Error:",
+            e.message
+        );
+    }
     return {
         server: {
             cors: {
                 origin: [
-                    `${protocol}//app.${hostname}`,
-                    `${protocol}//${hostname}`,
+                    `${protocol}//eshop.com`,
+                    `${protocol}//app.eshop.com`,
                 ],
                 methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
                 allowedHeaders: ["Content-Type", "Authorization"],

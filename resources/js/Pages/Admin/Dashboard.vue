@@ -1,5 +1,12 @@
 <template>
-    <div>Dashboard</div>
+    <Layout>
+        <Head>
+            <title>Dashboard</title>
+        </Head>
+        <div>Dashboard</div>
+    </Layout>
 </template>
 
-<script setup></script>
+<script setup>
+import Layout from "@/Layouts/Admin/DashboardAdminLayout.vue";
+</script>

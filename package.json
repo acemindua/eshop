@@ -10,7 +10,7 @@
         "@inertiajs/vue3": "^2.0.0",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/vite": "^4.0.0",
-        "@vitejs/plugin-vue": "^5.0.0",
+        "@vitejs/plugin-vue": "^6.0.1",
         "autoprefixer": "^10.4.12",
         "axios": "^1.11.0",
         "concurrently": "^9.0.1",
@@ -21,7 +21,10 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@headlessui/vue": "^1.7.23",
+        "@tabler/icons-vue": "^3.35.0",
         "laravel-vue-i18n": "^2.8.0",
-        "or": "^0.2.0"
+        "or": "^0.2.0",
+        "vue-flag-icon": "^2.1.0"
     }
 }

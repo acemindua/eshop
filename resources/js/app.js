@@ -6,6 +6,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { i18nVue } from "laravel-vue-i18n";
+import FlagIcon from "vue-flag-icon";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -26,6 +27,7 @@ createInertiaApp({
                     return await langs[`../../lang/${lang}.json`]();
                 },
             })
+            .use(FlagIcon)
             .component("Head", Head)
             .component("Link", Link)
             .mount(el);
