@@ -7,8 +7,10 @@ import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import { i18nVue } from "laravel-vue-i18n";
 import FlagIcon from "vue-flag-icon";
+import { createPinia } from "pinia";
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const pinia = createPinia();
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -28,6 +30,7 @@ createInertiaApp({
                 },
             })
             .use(FlagIcon)
+            .use(pinia)
             .component("Head", Head)
             .component("Link", Link)
             .mount(el);

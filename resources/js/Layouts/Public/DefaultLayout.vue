@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
+import Navigations from "@/Components/Navigations.vue";
 import LangSwitcher from "@/Components/Public/LangSwitcher.vue";
 </script>
 
@@ -15,12 +17,7 @@ import LangSwitcher from "@/Components/Public/LangSwitcher.vue";
                         <ApplicationLogo />
                     </Link>
 
-                    <nav
-                        class="flex items-center justify-between text-sm font-semibold capitalize"
-                    >
-                        <Link href="/">{{ $t("Home") }}</Link>
-                    </nav>
-
+                    <Navigations />
                     <div>
                         <LangSwitcher />
                     </div>
@@ -29,7 +26,12 @@ import LangSwitcher from "@/Components/Public/LangSwitcher.vue";
         </header>
         <main class="flex-grow border">
             <div class="mx-auto container border">
-                <slot />
+                <div class="border">
+                    <Breadcrumbs />
+                </div>
+                <div class="border">
+                    <slot />
+                </div>
             </div>
         </main>
         <footer>

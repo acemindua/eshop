@@ -204,3 +204,46 @@ npm install @headlessui/vue
 # Прапорці для перемикача локалі
 npm i --save vue-flag-icon
 ```
+
+## 7. Створення сторінок
+
+### 7.1 Створення Моделі та Міграції
+
+```bash
+# translatable Page:
+php artisan make:model Page -m
+php artisan make:model PageTranslation -m
+php artisan make:controller Admin\PageController --model=Page --resource --requests
+```
+
+### 7.2 Laravel-breadcrumbs [Instruction](https://velog.io/@corean/Laravel-9-inertia-1.0-breadcrumbs)
+
+```bash
+composer require diglactic/laravel-breadcrumbs
+composer require robertboes/inertia-breadcrumbs
+php artisan vendor:publish --tag="inertia-breadcrumbs-config"
+```
+
+### 7.3 Pages
+
+```bash
+php artisan make:resource PageResource
+php artisan make:policy PagePolicy --model=Page
+php artisan make:seeder PageSeeder
+php artisan make:factory PageFactory
+npm i lodash.debounce
+```
+
+### 7.4 Api
+
+```bash
+php artisan install:api
+```
+
+```bash
+npm i pinia
+```
+
+```bash
+php artisan make:controller  Api/HelpMainController
+```

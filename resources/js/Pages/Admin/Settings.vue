@@ -1,9 +1,7 @@
 <template>
     <Layout>
-        <Head>
-            <title>{{ $t("Settings") }}</title>
-        </Head>
-        <h1>{{ $t("Settings") }}</h1>
+        <Head :title="$t('Settings')" />
+        <h1 class="text-xl text-gray-800 font-semibold">{{ $t("Settings") }}</h1>
     </Layout>
 </template>
 

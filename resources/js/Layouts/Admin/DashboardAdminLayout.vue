@@ -3,8 +3,19 @@
         <template #sidenav>
             <ul>
                 <li>
-                    <AdminNavLink :href="route('admin.users.index')">
+                    <AdminNavLink
+                        :href="route('admin.users.index')"
+                        :active="$page.url.startsWith('/users')"
+                    >
                         {{ $t("Users") }}
+                    </AdminNavLink>
+                </li>
+                <li>
+                    <AdminNavLink
+                        :href="route('admin.pages.index')"
+                        :active="$page.url.startsWith('/pages')"
+                    >
+                        {{ $t("Pages") }}
                     </AdminNavLink>
                 </li>
             </ul>

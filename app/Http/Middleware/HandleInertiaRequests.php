@@ -39,10 +39,10 @@ class HandleInertiaRequests extends Middleware
                 ] : null
             ],
             'config' => [
-
                 'locale'            => config('app.locale') ?: 'en',
                 'locales'           => config('translatable.locales') ?: [],
                 'localesMapping'    => config('laravellocalization.localesMapping') ?: [],
+                'currentLocale'     => app()->getLocale() ?: 'en'
             ],
             'app' => [
                 'version'        => config('app.version'),

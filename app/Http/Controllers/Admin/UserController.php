@@ -24,7 +24,7 @@ class UserController extends Controller
         Gate::authorize('viewAny', User::class);
 
         $users = User::filter($filter)
-            ->whereHas('roles', fn($q) => env('APP_ENV') !== "local" ? $q->where('name', '!=', 'super-user') : null)
+            //->whereHas('roles', fn($q) => env('APP_ENV') !== "local" ? $q->where('name', '!=', 'super-user') : null)
             ->latest('updated_at')
             ->paginate(20)
             ->withQueryString();

@@ -1,12 +1,10 @@
 <template>
     <div
         v-if="hasMultipleLocales"
-        class="relative inline-block text-left text-sm"
+        class="relative inline-block text-left text-sm border"
     >
         <Menu>
-            <MenuButton
-                class="py-2 pl-3 uppercase inline-flex items-center"
-            >
+            <MenuButton class="py-2 pl-3 uppercase inline-flex items-center">
                 <span>{{ currentMappedLocale }}</span>
                 <IconChevronDown stroke="{2}" />
             </MenuButton>
@@ -34,7 +32,6 @@
                             @click="close"
                             class="inline-flex items-center px-4 py-2 uppercase hover:text-blue-500 transition-colors duration-100"
                         >
-                          
                             <span>{{ code }}</span>
                         </button>
                     </MenuItem>
