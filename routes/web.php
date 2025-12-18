@@ -11,6 +11,8 @@ Route::group(['middleware' => ['auth', 'verified', 'role:super-user|administrato
     Route::domain('app.' . parse_url(config('app.url'), PHP_URL_HOST))->name('admin.')->group(base_path('routes/admin.php'));
 });
 
+Route::get('/locale/{locale}', [LocaleSwitcherController::class, 'change'])->name('locale.switcher');
+
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
@@ -24,5 +26,3 @@ Route::group(
         require __DIR__ . '/auth.php';
     }
 );
-
-Route::get('/locale/{locale}', [LocaleSwitcherController::class, 'change'])->name('locale.switcher');

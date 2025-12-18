@@ -8,9 +8,9 @@ class UserFilter extends QueryFilter
     {
         return $this->builder
             ->where('name', 'LIKE', '%' . $search . '%')
-            ->orWhere("surname", "like", "%{$search}%")
-            ->orWhere("email", "like", "%{$search}%")
-            ->orWhere("phone", "like", "%{$search}%");
+            ->orWhere("email", "like", "%{$search}%");
+        //->orWhere("phone", "like", "%{$search}%");
+        //->orWhere("surname", "like", "%{$search}%")
     }
 
     public function active($status = '')

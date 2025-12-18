@@ -32,7 +32,7 @@ class PageFactory extends Factory
             $locales = array_keys(LaravelLocalization::getSupportedLocales());
             $translate = [];
             foreach ($locales as $locale) {
-                $title = fake()->sentence(3);
+                $title = $locale . '-' . fake()->sentence(3);
                 $translate[] = [
                     'locale' => $locale,
                     'title' => $title,

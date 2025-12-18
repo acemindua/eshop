@@ -10,8 +10,8 @@ const props = defineProps({
 });
 
 const baseClasses =
-    "inline-flex items-center p-1 px-2 rounded-lg text-sm leading-5 text-slate-600 transition duration-150 ease-in-out hover:bg-slate-100";
-const activeClasses = "bg-slate-100";
+    "inline-flex space-x-2 w-full items-center p-2 rounded-lg text-sm leading-5 text-slate-600 transition duration-150 ease-in-out hover:bg-slate-100";
+const activeClasses = "";
 const classes = computed(
     () => `${baseClasses} ${props.active ? activeClasses : ""} ${props.class}`
 );
@@ -20,7 +20,7 @@ const classes = computed(
 <template>
     <Link :href="href" :class="classes">
         <span
-            class="mr-2 flex items-center"
+            class="flex items-center w-5 h-5"
             :class="[active ? 'text-blue-700' : '', iconClass]"
         >
             <slot name="icon" />

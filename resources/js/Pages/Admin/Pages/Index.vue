@@ -1,26 +1,29 @@
 <template>
-    <Layout>
-        <Head :title="$t('Pages')" />
-        <div class="flex flex-col space-y-2">
-            <h1 class="text-xl text-gray-800 font-semibold">
-                {{ $t("Pages") }}
-            </h1>
-            <!-- DataTable Pages-->
-            <section>
-                <DataTable
-                    :items="items"
-                    :meta="meta"
-                    :selected-items="selectedItems"
-                    @update:selectedItems="selectedItems = $event"
-                    @delete="deleteValueItem"
-                />
-            </section>
+    <div class="flex flex-col space-y-2">
+        <!-- Action Buttons -->
+        <section
+            class="md:flex items-center justify-between pt-4 gap-4 space-y-2"
+        >
+            <InputSearch v-model="searchText" />
+            <ButtonsGroup :buttons="actionButtons" />
+        </section>
 
-            <section>
-                <VarDump :data="data" />
-            </section>
-        </div>
-    </Layout>
+        <!-- DataTable Pages-->
+        <section>
+            <DataTable
+                :items="items"
+                :meta="meta"
+                :selected-items="selectedItems"
+                @update:selectedItems="selectedItems = $event"
+                @delete="deleteValueItem"
+                model="pages"
+            />
+        </section>
+
+        <section v-if="$page.props.app.mode === 'local'">
+            <VarDump :data="data" />
+        </section>
+    </div>
 </template>
 <script setup>
 import Layout from "@/Layouts/Admin/DashboardAdminLayout.vue";
@@ -29,6 +32,12 @@ import VarDump from "@/Shared/VarDump.vue";
 import { computed, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import debounce from "lodash.debounce";
+import InputSearch from "@/Components/UI/InputSearch.vue";
+import ButtonsGroup from "@/Components/UI/Buttons/Admin/ButtonsGroup.vue";
+
+defineOptions({
+    layout: Layout,
+});
 
 const props = defineProps({
     data: {
@@ -57,4 +66,26 @@ watch(
 const deleteValueItem = (item) => {
     router.delete(route("admin.pages.destroy", item.id));
 };
+const handleImport = () => {
+    console.log("Importing...");
+};
+const handleCreate = () => {
+    router.visit(route("admin.pages.create"));
+};
+
+const actionButtons = [
+    {
+        label: "import",
+        action: handleImport,
+        type: "secondary",
+        icon: "IconCloudUpload",
+    },
+    {
+        label: "create",
+        loadingLabel: "Saving...",
+        action: handleCreate,
+        type: "primary",
+        icon: "IconCirclePlus",
+    },
+];
 </script>

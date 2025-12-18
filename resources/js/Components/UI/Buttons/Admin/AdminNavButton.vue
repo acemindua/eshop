@@ -1,8 +1,12 @@
 <template>
     <Link
         :href="href"
-        class="inline-block border rounded-lg p-1"
-        :class="active ? 'border-slate-400' : ''"
+        class="inline-block text-gray-600 dark:text-slate-400 rounded-lg p-2"
+        :class="
+            active
+                ? 'dark:bg-indigo-700 text-indigo-700 dark:text-slate-50 bg-indigo-50 rounded-lg'
+                : ''
+        "
     >
         <slot
     /></Link>

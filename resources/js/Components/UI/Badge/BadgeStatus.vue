@@ -12,7 +12,7 @@
 import { computed } from "vue";
 
 const props = defineProps({
-    active: Number,
+    active: [Number, Boolean],
 });
 
 const classes = computed(() =>

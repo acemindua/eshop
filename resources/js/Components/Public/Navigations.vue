@@ -22,20 +22,27 @@
 
 <script setup>
 import useApiResourceService from "@/Composables/useApiResourceService";
-import { usePage, Link } from "@inertiajs/vue3";
-import { onBeforeMount, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
+const props = defineProps({
+    locale: {
+        type: String,
+        default: "en",
+    },
+});
 const { loading, fetchData } = useApiResourceService();
 
 const items = ref([]);
 
+const currentLocale = computed(() => {
+    return props.locale || "en";
+});
+
 const getMenu = async () => {
-    // Corrected to use a safe chain for configuration access
-    const currentLocale = usePage().props?.config?.currentLocale || "en";
+    items.value = [];
 
     try {
-        // Assuming 'route' helper is globally available (standard Laravel/Inertia setup)
-        const url = route("api.get.menu", { locale: currentLocale });
+        const url = route("api.get.menu", { locale: currentLocale.value });
         const res = await fetchData(url);
 
         if (res && res.data && Array.isArray(res.data.items)) {
@@ -51,7 +58,14 @@ const getMenu = async () => {
     }
 };
 
-onBeforeMount(() => {
-    getMenu();
-});
+watch(
+    currentLocale,
+    (newLocale, oldLocale) => {
+        // Якщо нова локаль відрізняється від старої, викликаємо оновлення
+        if (newLocale !== oldLocale) {
+            getMenu();
+        }
+    },
+    { immediate: true }
+);
 </script>

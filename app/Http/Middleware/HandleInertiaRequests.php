@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Facades\Settings;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -32,21 +35,26 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                $request->user() ? [
-                    'name'          => $request->user()->name,
-                    'email'         => $request->user()->email,
-                    'id'            => $request->user()->id,
-                ] : null
+                'user' =>  $request->user() ?
+                    new UserResource($request->user()) : null
             ],
             'config' => [
                 'locale'            => config('app.locale') ?: 'en',
                 'locales'           => config('translatable.locales') ?: [],
+                'supportedLocales'  => LaravelLocalization::getSupportedLocales(),
                 'localesMapping'    => config('laravellocalization.localesMapping') ?: [],
                 'currentLocale'     => app()->getLocale() ?: 'en'
             ],
             'app' => [
-                'version'        => config('app.version'),
-            ]
+                'name'          => Settings::get('site_name') ?: config('app.name'),
+                'version'       => config('app.version'),
+                'mode'          => config('app.env')
+            ],
+            'settings'      => fn() => Settings::all(),
+            'alert'         => fn() => $request->session()->get('alert'),
+            'flash'         => [
+                'message'   => fn() => $request->session()->get('message'),
+            ],
         ];
     }
 }

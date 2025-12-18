@@ -35,56 +35,9 @@ class LocalizationSyncServiceProvider extends ServiceProvider
 
         foreach ($supportedLocales as $localeKey => $localeData) {
 
-            // Якщо існує регіональний код (наприклад, 'en_GB')
-            if (! empty($localeData['regional'])) {
-
-                // Розділяємо на код мови ('en') та код країни ('GB')
-                // Використовуємо регіональний код, який має вигляд 'lang_COUNTRY'
-                $regionalCode = $localeData['regional'];
-
-                // Розділяємо за символом '_' (підкреслення)
-                if (str_contains($regionalCode, '_')) {
-                    [$langCode, $countryCode] = explode('_', $regionalCode, 2);
-
-                    // Код країни завжди у верхньому регістрі (наприклад, 'GB', 'UA')
-                    $countryCode = strtoupper($countryCode);
-
-                    if (! empty($countryCode)) {
-                        // Якщо ключ мови ('en', 'es') ще не існує, створюємо масив
-                        if (! isset($translatableLocales[$langCode])) {
-                            $translatableLocales[$langCode] = [];
-                        }
-
-                        // Додаємо код країни до масиву
-                        $translatableLocales[$langCode][] = $countryCode;
-                    }
-                }
-            } else {
-                // Якщо регіональний код порожній, додаємо простий код мови ('ace')
-                // Це також важливо для коректної роботи array_unique
-                $translatableLocales[] = $localeKey;
-            }
+            $translatableLocales[] = $localeKey;
         }
 
-        // Очищаємо дублікати країн у кожній мові (хоча це малоймовірно)
-        foreach ($translatableLocales as $key => $value) {
-            if (is_array($value)) {
-                $translatableLocales[$key] = array_unique($value);
-            }
-        }
-
-        // 3. Перевизначити конфігурацію 'translatable.locales' під час завантаження
         Config::set('translatable.locales', $translatableLocales);
-
-        // 💡 Додатково: Встановлення Fallback Locale
-        // Якщо ви використовуєте 'en' як fallback, встановіть його повний регіональний код,
-        // якщо він є активним і вимагається пакетом translatable.
-        /*
-        $defaultLocaleKey = config('app.fallback_locale', 'en');
-        if (isset($supportedLocales[$defaultLocaleKey]['regional'])) {
-            $fullFallback = str_replace('_', '-', $supportedLocales[$defaultLocaleKey]['regional']);
-            Config::set('translatable.fallback_locale', $fullFallback);
-        }
-        */
     }
 }

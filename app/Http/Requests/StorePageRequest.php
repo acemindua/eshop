@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Astrotomic\Translatable\Validation\RuleFactory;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StorePageRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class StorePageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return Auth::check();
     }
 
     /**
@@ -21,8 +24,17 @@ class StorePageRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return RuleFactory::make([
+            '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('page_translations', 'title')->using(function ($q) {
+                $q->where('locale',  'in_array',  config('translatable.locales'));
+            })],
+            '%description%' => ['nullable', 'string'],
+            '%content%' => ['nullable', 'string'],
+            '%meta_title%' => ['nullable', 'string', 'max:255'],
+            '%meta_description%' => ['nullable', 'string', 'max:255'],
+            '%meta_keywords%' => ['nullable', 'string', 'max:255'],
+            'public' => ['required', 'boolean'],
+            'order' => ['required', 'integer'],
+        ]);
     }
 }

@@ -1,11 +1,11 @@
 import { reactive, computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
-export default function useLocales() {
+export default function useLocales(current) {
     const page = usePage();
     const state = reactive({
-        locales: page.props?.config?.locales || {},
-        currentLocale: page.props?.config?.locale || "en",
+        locales: page.props?.config?.supportedLocales || {},
+        currentLocale: current || page.props?.config?.locale,
         mapping: page.props?.config?.localesMapping || [],
     });
 

@@ -1,49 +1,15 @@
 <template>
-  
-   
-        <!-- Контейнер Інспектора Даних -->
-        <div
-            class="w-full max-w-xl mx-auto rounded-xl shadow-2xl transition-all duration-300 bg-gray-900 overflow-hidden border border-gray-700 transform scale-100"
-        >
-            <!-- Хедер / Панель із кнопкою закриття -->
-            <div class="p-3 bg-gray-800 flex items-center justify-between">
-                <h3
-                    class="text-xs font-semibold uppercase tracking-wider text-indigo-400"
-                >
-                    Інспектор Даних (JSON)
-                </h3>
-
-                <!-- Кнопка закриття -->
-                <button
-                    @click="emit('close')"
-                    class="p-1 rounded-full text-gray-400 hover:text-white hover:bg-red-500 transition"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Область Контенту -->
-            <div class="relative overflow-auto max-h-[80vh]">
-                <pre
-                    class="p-4 text-left font-mono text-sm leading-relaxed text-green-300 whitespace-pre-wrap"
-                    >{{ formattedData }}
-                </pre>
-            </div>
+    <!-- Контейнер Інспектора Даних -->
+    <div class="bg-slate-200 dark:bg-slate-800 rounded-lg">
+        <!-- Область Контенту -->
+        <div class="relative overflow-auto max-h-[80vh]">
+            <pre
+                class="p-8 border dark:border-slate-700 rounded-lg border-slate-200 text-left font-mono text-xs leading-relaxed text-slate-600 dark:text-slate-500 whitespace-pre-wrap"
+                >{{ formattedData }}
+                </pre
+            >
         </div>
-
+    </div>
 </template>
 
 <script setup>

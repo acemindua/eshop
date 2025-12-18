@@ -1,0 +1,37 @@
+/* Styles for the content inside CKEditor */
+
+/* Style the text that has a footnote (the anchor) */
+.ck-content .footnote-anchor {
+    /* Subtle visual indicator for the text associated with the footnote */
+    border-bottom: 1px dotted #888;
+    cursor: help;
+    /* Suggests interactivity */
+    position: relative;
+    /* Optional: add some padding to prevent the border from clipping on descenders */
+    padding-bottom: 1px;
+}
+
+/* Style the footnote marker (the [N] text) which uses the superscript attribute */
+.ck-content sup[title] {
+    /* Style for the superscript number marker */
+    font-size: 0.75em;
+    /* Smaller size */
+    vertical-align: super;
+    line-height: 0;
+    margin-left: 2px;
+    /* Small space after the anchor text */
+    cursor: help;
+    /* Same cursor as the anchor for consistency */
+    /* Remove any default browser/editor decoration that might interfere */
+    text-decoration: none;
+    font-weight: bold;
+    /* Make the marker stand out a little */
+    color: #007bff;
+    /* Example color for the marker */
+}
+
+/* Ensure the superscript marker from the plugin is styled */
+.ck-content [data-cke-display-name="span"].footnote-anchor+sup[data-cke-display-name="text"] {
+    /* This targets the marker right after the anchor span */
+    /* Styles are mostly handled by the generic sup[title] above */
+}

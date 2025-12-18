@@ -3,16 +3,18 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasPermissionTo('user-view');
     }
 
     /**
@@ -20,7 +22,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return false;
+        return $user->hasPermissionTo('user-view') || $user->id === $model->id;
     }
 
     /**
@@ -28,7 +30,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasPermissionTo('user-create');
     }
 
     /**
@@ -36,7 +38,18 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return false;
+        // Якщо користувач не є суперюзером, але хоче редагувати суперюзера — забороняємо
+        if (!$user->hasRole('super-user') && $model->hasRole('super-user')) {
+            return false;
+        }
+
+        // Якщо користувач не є admin або super-user, але хоче редагувати admin — забороняємо
+        if (!$user->hasAnyRole(['super-user', 'admin']) && $model->hasRole('admin')) {
+            return false;
+        }
+
+        return $user->hasPermissionTo('user-update')
+            || $user->id === $model->id;
     }
 
     /**
@@ -44,7 +57,22 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return false;
+        // Перевіряємо, чи має користувач дозвіл на видалення
+        if (!$user->hasPermissionTo('user-delete')) {
+            return false;
+        }
+
+        // Забороняємо видаляти самого себе
+        if ($user->id === $model->id) {
+            return false;
+        }
+
+        // Забороняємо видаляти супер-адміністраторів
+        if ($model->hasRole('super-user')) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

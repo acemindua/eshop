@@ -247,3 +247,59 @@ npm i pinia
 ```bash
 php artisan make:controller  Api/HelpMainController
 ```
+
+### 8 E-Commerce
+
+## 8.1 Categories
+
+```bash
+php artisan make:model Category -m
+php artisan make:model CategoryTranslation -m
+php artisan make:controller Admin/Commerce/CategoryController --model=Category --resource --requests
+php artisan make:resource CategoryResource
+php artisan make:policy CategoryPolicy --model=Category
+php artisan make:seeder CategorySeeder
+php artisan make:factory CategoryFactory
+```
+
+### 8.2 Products/Items
+
+```bash
+php artisan make:model Item -m
+php artisan make:model ItemTranslation -m
+php artisan make:controller Admin/Commerce/ItemController --model=Item --resource --requests
+php artisan make:resource ItemResource
+php artisan make:policy ItemPolicy --model=Item
+php artisan make:seeder ItemSeeder
+php artisan make:factory ItemFactory
+```
+
+### 2025.12.10.v0.8.3
+
+## Options
+
+```
+php artisan make:model Option -m
+php artisan make:seeder OptionSeeder
+php artisan db:seed --class=OptionSeeder
+php artisan make:provider SettingsServiceProvider
+php artisan make:migration add_last_activity_to_users_table --table=users
+php artisan make:middleware UserActivity
+npm i vue-the-mask
+npm install sweetalert2
+```
+
+### 0.12 MathType [https://www.npmjs.com/package/@wiris/mathtype-ckeditor5]
+
+    ```
+    npm install @ckeditor/ckeditor5-vue
+    npm install @ckeditor/ckeditor5-ui @ckeditor/ckeditor5-core
+    npm i @wiris/mathtype-ckeditor5
+    ```
+
+```
+npm i floating-vue
+npm i moment
+```
+
+### 2025.12.18.v0.9

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Facades\Settings;
 use App\Filters\PageFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
@@ -25,7 +26,7 @@ class PageController extends Controller
         $pages = Page::filter($filter)
             ->orderBy('public', 'desc')
             ->latest('updated_at')
-            ->paginate(10)
+            ->paginate(Settings::get('items_per_page'))
             ->withQueryString();
 
         return Inertia::render('Admin/Pages/Index', [
@@ -41,7 +42,15 @@ class PageController extends Controller
      */
     public function create(): Response
     {
+        Gate::authorize('create', Page::class);
+        //
+        $nextOrder = (Page::max('order') ?? 0) + 1;
+
         return Inertia::render('Admin/Pages/Create', [
+            'data' => [
+                'public' => false,
+                'order' => $nextOrder
+            ],
             'status' => session('status'),
         ]);
     }
@@ -51,10 +60,14 @@ class PageController extends Controller
      */
     public function store(StorePageRequest $request): RedirectResponse
     {
+        Gate::authorize('create', Page::class);
+
+        $page = Page::create($request->validated());
+
         return redirect()->route('admin.pages.index')->with([
             'alert' => [
                 'type' => 'success',
-                'message' => "Page successfully created!",
+                'message' => "Page `" . $page->title . "`  successfully created!",
             ],
         ]);
     }
@@ -64,6 +77,9 @@ class PageController extends Controller
      */
     public function show(Page $page): Response
     {
+
+        Gate::authorize('view', $page);
+
         return Inertia::render('Admin/Pages/Show', [
             'status' => session('status'),
         ]);
@@ -74,7 +90,12 @@ class PageController extends Controller
      */
     public function edit(Page $page): Response
     {
+        Gate::authorize('update', $page);
+
         return Inertia::render('Admin/Pages/Edit', [
+            'data' => [
+                'page' => $page
+            ],
             'status' => session('status'),
         ]);
     }
@@ -84,10 +105,15 @@ class PageController extends Controller
      */
     public function update(UpdatePageRequest $request, Page $page): RedirectResponse
     {
+        Gate::authorize('update', $page);
+
+        $page->fill($request->validated());
+        $page->save();
+
         return redirect()->route('admin.pages.index')->with([
             'alert' => [
                 'type' => 'success',
-                'message' => "Page successfully updated!",
+                'message' => "Page `" . $page->title . "`  successfully updated!",
             ],
         ]);
     }
@@ -97,6 +123,10 @@ class PageController extends Controller
      */
     public function destroy(Page $page): RedirectResponse
     {
+        Gate::authorize('delete', $page);
+
+        $page->delete();
+
         return redirect()->route('admin.pages.index')->with([
             'alert' => [
                 'type' => 'success',

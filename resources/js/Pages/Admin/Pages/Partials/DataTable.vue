@@ -2,15 +2,23 @@
 import Pagination from "@/Components/Pagination.vue";
 import BadgeStatus from "@/Components/UI/Badge/BadgeStatus.vue";
 import Checkbox from "@/Components/UI/Checkbox.vue";
-import { IconEdit, IconSettings, IconTrash } from "@tabler/icons-vue";
+import {
+    IconEdit,
+    IconSearch,
+    IconSettings,
+    IconTrash,
+} from "@tabler/icons-vue";
+import Swal from "sweetalert2";
 import { ref, watch } from "vue";
 
 const props = defineProps({
     items: Array,
     selectedItems: Array,
     meta: Object,
+    model: String,
 });
 
+const count = ref(props?.meta?.from || 0);
 const emit = defineEmits(["update:selectedItems", "edit", "delete"]);
 
 const toggleAll = ref(false);
@@ -32,6 +40,25 @@ const toggleItem = (id) => {
         : [...props.selectedItems, id];
     emit("update:selectedItems", updated);
 };
+
+/**
+ * Confirm before delete
+ */
+const confirmDelete = async (item) => {
+    const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "This item will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+        emit("delete", item);
+    }
+};
 </script>
 
 <template>
@@ -42,8 +69,10 @@ const toggleItem = (id) => {
                     <th class="p-3 w-12">
                         <Checkbox class="mx-auto" v-model:checked="toggleAll" />
                     </th>
-
-                    <th class="p-3 text-start">{{ $t("Title") }}</th>
+                    <th class="p-3 text-center w-16">#</th>
+                    <th class="p-3 text-start w-full md:w-auto">
+                        {{ $t("Title") }}
+                    </th>
                     <th class="p-3 text-center w-48">{{ $t("Status") }}</th>
                     <th class="p-3 w-48">
                         <IconSettings :stroke="2" size="18" class="mx-auto" />
@@ -53,7 +82,7 @@ const toggleItem = (id) => {
             <tbody>
                 <tr
                     v-if="items.length > 0"
-                    v-for="item in items"
+                    v-for="(item, key) in items"
                     :key="item.id"
                     class="hover:bg-slate-50 border-t border-slate-200 dark:border-slate-700 dark:hover:bg-slate-950/25 odd:bg-white dark:odd:bg-slate-900 even:bg-slate-50 dark:even:bg-slate-800"
                 >
@@ -64,25 +93,41 @@ const toggleItem = (id) => {
                             @update:checked="() => toggleItem(item.id)"
                         />
                     </td>
-                    <td class="p-2">{{ item.title }}</td>
+                    <td class="p-2 text-center text-gray-500">
+                        {{ $formatSerial(count + key) }}
+                    </td>
+                    <td class="p-2">
+                        <p class="font-semibold">{{ item.title }}</p>
+                        <p
+                            class="text-xs text-gray-500 hover:text-indigo-400 duration-150 transition"
+                        >
+                            {{ `/${item.slug}` }}
+                        </p>
+                    </td>
                     <td class="p-2">
                         <div class="flex justify-center">
                             <BadgeStatus :active="item.public" />
                         </div>
                     </td>
                     <td class="p-2">
-                        <div class="flex justify-center items-center space-x-2">
-                            <Link :href="route('admin.pages.edit', item.id)">
-                                <IconEdit
-                                    :stroke="1"
-                                    size="18"
-                                    class="text-indigo-500"
-                                />
+                        <div class="flex justify-center items-center space-x-3">
+                            <Link
+                                :href="route(`admin.${model}.show`, item.id)"
+                                class="hover:text-green-500 transition-colors duration-150"
+                            >
+                                <IconSearch :stroke="1" size="18" />
                             </Link>
+                            <Link
+                                :href="route(`admin.${model}.edit`, item.id)"
+                                class="hover:text-indigo-500 transition-colors duration-150"
+                            >
+                                <IconEdit :stroke="1" size="18" />
+                            </Link>
+
                             <IconTrash
                                 :stroke="1"
                                 size="18"
-                                class="text-red-500 cursor-pointer"
+                                class="hover:text-red-500 cursor-pointer transition-colors duration-150"
                                 preserve-scroll
                                 preserve-state
                                 @click.prevent="confirmDelete(item)"

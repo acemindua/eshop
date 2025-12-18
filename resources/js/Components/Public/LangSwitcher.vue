@@ -1,10 +1,12 @@
 <template>
     <div
         v-if="hasMultipleLocales"
-        class="relative inline-block text-left text-sm border"
+        class="relative inline-block text-left text-sm z-50"
     >
         <Menu>
-            <MenuButton class="py-2 pl-3 uppercase inline-flex items-center">
+            <MenuButton
+                class="py-2 pl-3 uppercase inline-flex items-center border rounded-lg"
+            >
                 <span>{{ currentMappedLocale }}</span>
                 <IconChevronDown stroke="{2}" />
             </MenuButton>
@@ -45,18 +47,23 @@
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { loadLanguageAsync } from "laravel-vue-i18n";
 import useLocales from "@/Composables/useLocales";
-import { router } from "@inertiajs/vue3";
+import { router, usePage } from "@inertiajs/vue3";
 import { IconChevronDown } from "@tabler/icons-vue";
+import { computed } from "vue";
+
+const currentLocale = computed(() => {
+    return usePage().props?.config?.currentLocale || "en";
+});
 
 const { hasMultipleLocales, currentMappedLocale, localeKeysMapped } =
-    useLocales();
+    useLocales(currentLocale);
 
 const switchLanguage = async (locale) => {
     router.visit(route("locale.switcher", locale));
     try {
         await loadLanguageAsync(locale);
     } catch (error) {
-        console.error(`Ошибка при загрузке языка ${code}:`, error);
+        console.error(`Error loading language ${code}:`, error);
     }
 };
 </script>

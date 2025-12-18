@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ItemResource;
 use App\Http\Resources\PageResource;
+use App\Models\Category;
+use App\Models\Item;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,14 +31,77 @@ class HomeController extends Controller
     /**
      * 
      */
-    public function page(string $slug): Response
+    public function resolveDynamicRoute(string $slug, ?string $optional = null)
     {
-        $page = Page::whereTranslation('slug', $slug)->firstOrFail();
+        //
+        $item = Item::whereTranslation('slug', $slug)->first();
+        if ($item) {
+            return $this->itemShow($item);
+        }
 
-        return Inertia::render('Public/Index', [
+        // Page
+        $page = Page::whereTranslation('slug', $slug)->first();
+        if ($page) {
+            return $this->pageShow($page);
+        }
+
+        // Якщо нічого не знайдено — 404
+        abort(404);
+    }
+
+    /**
+     * 
+     */
+    public function pageShow(Page $page): Response
+    {
+        if (!$page) abort(404);
+
+        return Inertia::render('Public/PageShow', [
             'data' => [
                 'locale' => app()->getLocale(),
                 'page' => new PageResource($page) ?? null
+            ]
+        ]);
+    }
+
+    /**
+     * 
+     */
+    public function itemShow(Item $item): Response
+    {
+        if (!$item) abort(404);
+
+        return Inertia::render('Public/Commerce/ItemShow', [
+            'data' => [
+                'locale' => app()->getLocale(),
+                'item' => new ItemResource($item) ?? null
+            ]
+        ]);
+    }
+
+    /**
+     * 
+     */
+    public function categoryShow(string $slug): Response
+    {
+        $categorySlug = str_replace('category__', '', $slug);
+        $category = Category::query()
+            ->select('id')
+            ->with([
+                'items' => function ($query) {
+                    $query->where('public', true);
+                },
+                'childs' => function ($query) {
+                    $query->where('public', true);
+                }
+            ])
+            ->whereTranslation('slug', $categorySlug)
+            ->firstOrFail();
+
+        return Inertia::render('Public/Commerce/CategoryShow', [
+            'data' => [
+                'locale'        => app()->getLocale(),
+                'category'    => new CategoryResource($category) ?? null
             ]
         ]);
     }
