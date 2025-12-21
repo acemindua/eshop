@@ -27,6 +27,7 @@ class ItemFactory extends Factory
         return [
             'category_id'   => $this->faker->optional(0.8, null)->passthrough($randomCategoryId),
             'price'         => $this->faker->randomFloat(2, 1, 1000),
+            'quantity'      => $this->faker->randomFloat(2, 1, 1000),
             'public'        => $this->faker->boolean(80),
             'order'         => $this->faker->unique()->numberBetween(1, 1000),
         ];

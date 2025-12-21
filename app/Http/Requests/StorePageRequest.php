@@ -37,4 +37,16 @@ class StorePageRequest extends FormRequest
             'order' => ['required', 'integer'],
         ]);
     }
+
+    /**
+     * Підготовка даних перед валідацією
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            // Перетворюємо 'true'/'false' з фронтенда у булеве значення
+            'public' => filter_var($this->public, FILTER_VALIDATE_BOOLEAN),
+            'order'  => (int) ($this->order ?? 0),
+        ]);
+    }
 }

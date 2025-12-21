@@ -27,6 +27,19 @@
                         <span>{{ $t("Categories") }}</span>
                     </AdminNavLink>
                 </li>
+                <li>
+                    <AdminNavLink
+                        :href="route('admin.manufacturers.index')"
+                        :active="
+                            $page.url.startsWith('/commerce/manufacturers')
+                        "
+                    >
+                        <template #icon>
+                            <IconBuildingFactory2 stroke="{2}" />
+                        </template>
+                        <span>{{ $t("Manufacturers") }}</span>
+                    </AdminNavLink>
+                </li>
             </ul>
         </template>
 
@@ -40,6 +53,7 @@
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
 import Layout from "@/Layouts/Admin/AdminLayout.vue";
 import {
+    IconBuildingFactory2,
     IconCategory,
     IconPlant2,
     IconShoppingBag,

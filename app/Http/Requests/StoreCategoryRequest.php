@@ -33,8 +33,25 @@ class StoreCategoryRequest extends FormRequest
             '%meta_title%' => ['nullable', 'string', 'max:255'],
             '%meta_description%' => ['nullable', 'string', 'max:255'],
             '%meta_keywords%' => ['nullable', 'string', 'max:255'],
+            'category_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('categories', 'id'), // Перевірка, чи є такий ID у таблиці categories
+            ],
             'public' => ['required', 'boolean'],
             'order' => ['required', 'integer'],
+        ]);
+    }
+
+    /**
+     * Підготовка даних перед валідацією
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            // Перетворюємо 'true'/'false' з фронтенда у булеве значення
+            'public' => filter_var($this->public, FILTER_VALIDATE_BOOLEAN),
+            'order'  => (int) ($this->order ?? 0),
         ]);
     }
 }

@@ -25,6 +25,7 @@ class CategoryController extends Controller
         Gate::authorize('viewAny', Category::class);
         //
         $categories = Category::filter($filter)
+            ->with(['parent'])
             ->orderBy('public', 'desc')
             ->latest('updated_at')
             ->paginate(Settings::get('items_per_page'))
@@ -32,7 +33,7 @@ class CategoryController extends Controller
         //
         return Inertia::render('Admin/Commerce/Categories/Index', [
             'data' => [
-                'categories' => CategoryResource::collection($categories)
+                'items' => CategoryResource::collection($categories)
             ],
             'filters' => request()->only(['search', 'status']),
         ]);
@@ -50,6 +51,11 @@ class CategoryController extends Controller
 
         return Inertia::render('Admin/Commerce/Categories/Create', [
             'data' => [
+                'categories' => CategoryResource::collection(
+                    Category::query()
+                        ->select('id')
+                        ->get()
+                ),
                 'public' => false,
                 'order' => $nextOrder
             ],
@@ -102,6 +108,12 @@ class CategoryController extends Controller
         //
         return Inertia::render('Admin/Commerce/Categories/Edit', [
             'data' => [
+                'categories' => CategoryResource::collection(
+                    Category::query()
+                        ->select('id')
+                        ->where('id', '!=',  $category->id)
+                        ->get()
+                ),
                 'category' => $category
             ],
 

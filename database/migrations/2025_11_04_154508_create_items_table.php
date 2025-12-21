@@ -16,8 +16,13 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('category_id')->unsigned()->nullable();
 
+
+
             // price
             $table->decimal('price', 10, 2)->default(0);
+            $table->integer('quantity')->default(0);
+
+            $table->string('country', 2)->nullable();
 
             $table->boolean('public')->default(false);
             $table->integer('order')->default(1);

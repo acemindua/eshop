@@ -1,5 +1,6 @@
 <script setup>
 import CheckBoxSwitcher from "@/Components/UI/CheckBoxSwitcher.vue";
+import ComboboxSelect from "@/Components/UI/ComboboxSelect.vue";
 import InputError from "@/Components/UI/InputError.vue";
 import InputLabel from "@/Components/UI/InputLabel.vue";
 import TextInput from "@/Components/UI/TextInput.vue";
@@ -38,7 +39,23 @@ const booleanPublic = computed({
             </span>
         </div>
 
-        <div class="flex md:w-3/4 w-full flex-col space-y-4 bg-gray-50">
+        <div class="flex md:w-2/4 w-full flex-col space-y-4 bg-gray-50">
+            <!-- Category Select -->
+            <div>
+                <InputLabel
+                    for="category_id"
+                    :value="$t('Parent category')"
+                    class="flex items-center leading-6 font-semibold"
+                />
+                <ComboboxSelect
+                    id="category_id"
+                    v-model="form.category_id"
+                    :items="data.categories?.data || []"
+                    :class="{ 'border-red-500': errors.category_id }"
+                />
+                <InputError class="mt-2" :message="errors.category_id" />
+            </div>
+
             <div>
                 <InputLabel
                     for="order"

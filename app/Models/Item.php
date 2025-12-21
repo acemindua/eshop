@@ -46,6 +46,9 @@ class Item extends Model implements HasMedia, TranslatableContract
      */
     protected $fillable = [
         'category_id',
+        'manufacturer_id',
+        'country',
+        'quantity',
         'price',
         'public',
         'order',
@@ -83,6 +86,14 @@ class Item extends Model implements HasMedia, TranslatableContract
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * 
+     */
+    public function manufacturer()
+    {
+        return $this->belongsTo(Manufacturer::class);
     }
 
     /**

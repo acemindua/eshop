@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Commerce\CategoryController;
 use App\Http\Controllers\Admin\Commerce\ItemController;
+use App\Http\Controllers\Admin\Commerce\ManufacturerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\UserController;
@@ -23,6 +24,7 @@ Route::resources([
  */
 Route::prefix('commerce')->group(function () {
     Route::resources([
+        'manufacturers' => ManufacturerController::class,
         'categories'    => CategoryController::class,
         'items'         => ItemController::class,
     ]);

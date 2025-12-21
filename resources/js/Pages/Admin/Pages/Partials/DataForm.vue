@@ -38,7 +38,7 @@ const booleanPublic = computed({
             </span>
         </div>
 
-        <div class="flex md:w-3/4 w-full flex-col space-y-4 bg-gray-50">
+        <div class="flex md:w-2/4 w-full flex-col space-y-4 bg-gray-50">
             <div>
                 <InputLabel
                     for="order"

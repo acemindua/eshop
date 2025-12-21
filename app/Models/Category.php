@@ -11,6 +11,7 @@ use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\File;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -49,6 +50,13 @@ class Category extends Model implements HasMedia, TranslatableContract
     ];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['image'];
+
+    /**
      * Auto-generates slugs based on title if empty
      */
     protected static function boot(): void
@@ -73,6 +81,21 @@ class Category extends Model implements HasMedia, TranslatableContract
     public function scopeFilter(Builder $builder, QueryFilter $filter)
     {
         return $filter->apply($builder);
+    }
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    public function getImageAttribute()
+    {
+        if ($image = $this->getFirstMediaUrl('images', 'preview')) {
+            $mediaImage = $this->getMedia('images')->first();
+            if (File::exists($mediaImage->getPath())) {
+                return $image;
+            }
+        }
     }
 
     /**

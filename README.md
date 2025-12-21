@@ -278,7 +278,7 @@ php artisan make:factory ItemFactory
 
 ## Options
 
-```
+```bash
 php artisan make:model Option -m
 php artisan make:seeder OptionSeeder
 php artisan db:seed --class=OptionSeeder
@@ -291,15 +291,29 @@ npm install sweetalert2
 
 ### 0.12 MathType [https://www.npmjs.com/package/@wiris/mathtype-ckeditor5]
 
-    ```
+    ```bash
     npm install @ckeditor/ckeditor5-vue
     npm install @ckeditor/ckeditor5-ui @ckeditor/ckeditor5-core
     npm i @wiris/mathtype-ckeditor5
     ```
 
-```
+```bash
 npm i floating-vue
 npm i moment
 ```
 
 ### 2025.12.18.v0.9
+
+```bash
+php artisan make:model Manufacturer -m
+php artisan make:controller Admin/Commerce/ManufacturerController --model=Manufacturer --resource --requests
+php artisan make:resource ManufacturerResource
+php artisan make:policy ManufacturerPolicy --model=Manufacturer
+php artisan make:seeder ManufacturerSeeder
+php artisan make:factory ManufacturerFactory
+```
+
+```bash
+php artisan make:migration add_manufacturer_id_to_items_table
+composer require rinvex/countries
+```

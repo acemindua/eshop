@@ -72,8 +72,8 @@ const confirmDelete = async (item) => {
                     <th class="p-3 w-12">
                         <Checkbox class="mx-auto" v-model:checked="toggleAll" />
                     </th>
-                    <th class="p-3 text-center w-16">#</th>
-                    <th class="py-3 text-center w-[40px]">{{ $t("ava") }}</th>
+                    <th class="p-3 text-center w-24">#</th>
+                    <th class="py-3 text-center w-24">{{ $t("ava") }}</th>
 
                     <th class="p-3 text-start w-full md:w-auto">
                         {{ $t("Title") }}

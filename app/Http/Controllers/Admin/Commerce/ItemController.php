@@ -8,11 +8,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
+use App\Http\Resources\ManufacturerResource;
+use App\Models\Category;
+use App\Models\Manufacturer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
+use Rinvex\Country\CountryLoader;
 
 class ItemController extends Controller
 {
@@ -48,10 +53,30 @@ class ItemController extends Controller
         //
         $nextOrder = (Item::max('order') ?? 0) + 1;
 
+        $countries = collect(CountryLoader::countries())->map(function ($country) {
+            return [
+                'id'   => strtolower($country['iso_3166_1_alpha2']),
+                'title' => $country['name'],
+            ];
+        })->sortBy('title')->values();
+
         return Inertia::render('Admin/Commerce/Items/Create', [
             'data' => [
-                'public' => false,
-                'order' => $nextOrder
+                'categories' => CategoryResource::collection(
+                    Category::query()
+                        ->where('public', true)
+                        ->get()
+                ),
+                'manufacturers' => ManufacturerResource::collection(
+                    Manufacturer::query()
+                        ->where('public', true)
+                        ->get()
+                ),
+                'countries'     => $countries,
+                'quantity'      => 0,
+                'price'         => 0,
+                'public'        => false,
+                'order'         => $nextOrder
             ],
         ]);
     }
@@ -98,9 +123,28 @@ class ItemController extends Controller
         //
         Gate::authorize('update', $item);
         //
+
+        $countries = collect(CountryLoader::countries())->map(function ($country) {
+            return [
+                'id'   => strtolower($country['iso_3166_1_alpha2']),
+                'title' => $country['name'],
+            ];
+        })->sortBy('title')->values();
+
         return Inertia::render('Admin/Commerce/Items/Edit', [
             'data' => [
-                'item' => $item
+                'categories' => CategoryResource::collection(
+                    Category::query()
+                        ->select('id')
+                        ->get()
+                ),
+                'manufacturers' => ManufacturerResource::collection(
+                    Manufacturer::query()
+                        ->where('public', true)
+                        ->get()
+                ),
+                'countries'     => $countries,
+                'item'          => $item
             ],
         ]);
     }

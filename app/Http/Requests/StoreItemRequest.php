@@ -28,13 +28,38 @@ class StoreItemRequest extends FormRequest
             '%title%'           => ['required', 'min:3', 'string', 'max:255', Rule::unique('item_translations', 'title')->using(function ($q) {
                 $q->where('locale',  'in_array',  config('translatable.locales'));
             })],
-            '%description%' => ['nullable', 'string'],
-            '%content%' => ['nullable', 'string'],
-            '%meta_title%' => ['nullable', 'string', 'max:255'],
-            '%meta_description%' => ['nullable', 'string', 'max:255'],
-            '%meta_keywords%' => ['nullable', 'string', 'max:255'],
-            'public' => ['required', 'boolean'],
-            'order' => ['required', 'integer'],
+            '%description%'         => ['nullable', 'string'],
+            '%content%'             => ['nullable', 'string'],
+            '%meta_title%'          => ['nullable', 'string', 'max:255'],
+            '%meta_description%'    => ['nullable', 'string', 'max:255'],
+            '%meta_keywords%'       => ['nullable', 'string', 'max:255'],
+            'category_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('categories', 'id'), // Перевірка, чи є такий ID у таблиці categories
+            ],
+            'manufacturer_id'       => [
+                'nullable',
+                'integer',
+                Rule::exists('manufacturers', 'id'), // Перевірка, чи є такий ID у таблиці categories
+            ],
+            'country' => ['nullable', 'string', 'size:2'],
+            'quantity'              => ['nullable', 'integer', 'min:-9999'],
+            'price'     => ['required', 'numeric', 'min:0', 'max:999999.99'],
+            'public'    => ['required', 'boolean'],
+            'order'     => ['required', 'integer'],
+        ]);
+    }
+
+    /**
+     * Підготовка даних перед валідацією
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            // Перетворюємо 'true'/'false' з фронтенда у булеве значення
+            'public' => filter_var($this->public, FILTER_VALIDATE_BOOLEAN),
+            'order'  => (int) ($this->order ?? 0),
         ]);
     }
 }

@@ -70,8 +70,8 @@ const confirmDelete = async (item) => {
                     <th class="p-3 w-12">
                         <Checkbox class="mx-auto" v-model:checked="toggleAll" />
                     </th>
-                    <th class="p-3 text-center w-16">#</th>
-                    <th class="py-3 text-center">{{ $t("Media") }}</th>
+                    <th class="p-3 text-center w-24">#</th>
+                    <th class="py-3 text-center w-24">{{ $t("Media") }}</th>
                     <th class="p-3 text-start">{{ $t("Title") }}</th>
                     <th class="p-3 text-start">{{ $t("Parent") }}</th>
 
@@ -80,7 +80,7 @@ const confirmDelete = async (item) => {
                     <th class="p-3 w-48">
                         <IconSettings :stroke="2" size="18" class="mx-auto" />
                     </th>
-                    <th class="p-3 text-center">{{ $t("#ID") }}</th>
+                    <th class="p-3 text-center w-24">{{ $t("#ID") }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -101,10 +101,8 @@ const confirmDelete = async (item) => {
                         {{ $formatSerial(count + key) }}
                     </td>
                     <th class="p-1">
-                        <div v-if="item.images && item.images.length > 0">
-                            <ImageDataView
-                                :src="item?.images[0]?.preview || null"
-                            />
+                        <div>
+                            <ImageDataView :src="item?.image || null" />
                         </div>
                     </th>
                     <td class="p-2">
@@ -117,7 +115,7 @@ const confirmDelete = async (item) => {
                     </td>
 
                     <td class="p-2 text-xs text-gray-500">
-                        {{ item.parent }}
+                        {{ item.parent?.title || "—" }}
                     </td>
 
                     <td class="p-2">

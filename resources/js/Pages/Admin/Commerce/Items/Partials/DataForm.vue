@@ -1,5 +1,7 @@
 <script setup>
 import CheckBoxSwitcher from "@/Components/UI/CheckBoxSwitcher.vue";
+import ComboboxSelect from "@/Components/UI/ComboboxSelect.vue";
+import CountrySelect from "@/Components/UI/CountrySelect.vue";
 import InputError from "@/Components/UI/InputError.vue";
 import InputLabel from "@/Components/UI/InputLabel.vue";
 import TextInput from "@/Components/UI/TextInput.vue";
@@ -38,7 +40,88 @@ const booleanPublic = computed({
             </span>
         </div>
 
-        <div class="flex md:w-3/4 w-full flex-col space-y-4 bg-gray-50">
+        <div class="flex md:w-2/4 w-full flex-col space-y-4 bg-gray-50">
+            <!--Quantity-->
+            <div>
+                <InputLabel
+                    for="quantity"
+                    :value="$t('Quantity')"
+                    class="flex items-center leading-6 font-semibold"
+                />
+                <TextInput
+                    id="quantity"
+                    type="number"
+                    v-model="form.quantity"
+                    class="block w-full pr-4 text-start"
+                    :class="{ 'border-red-500': errors.quantity }"
+                />
+                <InputError class="mt-2" :message="errors.quantity" />
+            </div>
+            <!-- Price -->
+            <div>
+                <InputLabel
+                    for="price"
+                    :value="$t('Price')"
+                    class="flex items-center leading-6 font-semibold"
+                />
+                <TextInput
+                    id="price"
+                    type="number"
+                    v-model="form.price"
+                    class="block w-full pr-4 text-start"
+                    :class="{ 'border-red-500': errors.price }"
+                />
+                <InputError class="mt-2" :message="errors.price" />
+            </div>
+            <!-- Country Select -->
+            <div>
+                <InputLabel
+                    for="country"
+                    :value="$t('Country')"
+                    class="flex items-center leading-6 font-semibold"
+                />
+
+                <CountrySelect
+                    id="country"
+                    v-model="form.country"
+                    :items="data?.countries || []"
+                    :class="{ 'border-red-500': errors.country }"
+                />
+                <InputError class="mt-2" :message="errors.country" />
+            </div>
+            <!-- Manufacturer Select -->
+            <div>
+                <InputLabel
+                    for="manufacturer_id"
+                    :value="$t('Manufacturer')"
+                    class="flex items-center leading-6 font-semibold"
+                />
+                <ComboboxSelect
+                    id="manufacturer_id"
+                    v-model="form.manufacturer_id"
+                    :items="data.manufacturers?.data || []"
+                    :class="{ 'border-red-500': errors.manufacturer_id }"
+                />
+                <InputError class="mt-2" :message="errors.manufacturer_id" />
+            </div>
+
+            <!-- Category Select -->
+            <div>
+                <InputLabel
+                    for="category_id"
+                    :value="$t('Parent category')"
+                    class="flex items-center leading-6 font-semibold"
+                />
+                <ComboboxSelect
+                    id="category_id"
+                    v-model="form.category_id"
+                    :items="data.categories?.data || []"
+                    :class="{ 'border-red-500': errors.category_id }"
+                />
+                <InputError class="mt-2" :message="errors.category_id" />
+            </div>
+
+            <!---->
             <div>
                 <InputLabel
                     for="order"

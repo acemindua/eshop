@@ -21,7 +21,8 @@ class CategoryResource extends JsonResource
             'public'    => $this->public,
             'parent'    => $this->whenLoaded('parent', fn() => new CategoryResource($this->parent)),
             'childs'    => CategoryResource::collection($this->whenLoaded('childs')),
-            'items'     => ItemResource::collection($this->whenLoaded('items'))
+            'items'     => ItemResource::collection($this->whenLoaded('items')),
+            'image'     => $this->image,
         ];
     }
 }

@@ -18,16 +18,11 @@ const props = defineProps({
 <template>
     <div
         v-if="src"
-        class="rounded-lg mx-auto bg-white shadow"
+        class="rounded-lg mx-auto bg-gray-200 shadow overflow-hidden"
         :style="{
-            // Правильне об'єднання властивостей розмірів
             width: configs.width,
             height: configs.height,
-
-            // Правильне формування CSS-функції url()
             backgroundImage: `url('${src}')`,
-
-            // Додаткові стилі для відображення фонового зображення
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

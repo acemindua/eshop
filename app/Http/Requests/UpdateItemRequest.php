@@ -42,8 +42,33 @@ class UpdateItemRequest extends FormRequest
                     $q->where('locale',  'in_array', config('translatable.locales'));
                 })
             ],
-            'public' => ['required', 'boolean'],
-            'order' => ['required', 'integer'],
+            'category_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('categories', 'id'), // Перевірка, чи є такий ID у таблиці categories
+            ],
+            'manufacturer_id'       => [
+                'nullable',
+                'integer',
+                Rule::exists('manufacturers', 'id'), // Перевірка, чи є такий ID у таблиці categories
+            ],
+            'country' => ['nullable', 'string', 'size:2'],
+            'price'     => ['required', 'numeric', 'min:0', 'max:999999.99'],
+            'quantity'  => ['nullable', 'integer', 'min:-9999'],
+            'public'    => ['required', 'boolean'],
+            'order'     => ['required', 'integer'],
+        ]);
+    }
+
+    /**
+     * Підготовка даних перед валідацією
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            // Перетворюємо 'true'/'false' з фронтенда у булеве значення
+            'public' => filter_var($this->public, FILTER_VALIDATE_BOOLEAN),
+            'order'  => (int) ($this->order ?? 0),
         ]);
     }
 }

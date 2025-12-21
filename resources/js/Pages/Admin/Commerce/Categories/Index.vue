@@ -47,8 +47,8 @@ const props = defineProps({
 });
 
 const title = "Categories";
-const items = computed(() => props.data?.categories?.data || []);
-const meta = computed(() => props.data?.categories?.meta || []);
+const items = computed(() => props.data?.items?.data || []);
+const meta = computed(() => props.data?.items?.meta || []);
 const searchText = ref(props.filters.search);
 const selectedItems = ref([]);
 

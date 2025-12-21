@@ -126,8 +126,9 @@ Breadcrumbs::macro('resource', function (string $name, string $title) {
 $resources = [
     'pages' => __('Pages'),
     'users' => __('Users'),
-    'categories'    => __('Categories'),
-    'items'         => __('Items'),
+    'categories'            => __('Categories'),
+    'items'                 => __('Items'),
+    'manufacturers'         => __('Manufacturers'),
 ];
 
 foreach ($resources as $name => $title) {
