@@ -15,24 +15,25 @@ export default defineConfig(({ mode }) => {
     } catch (e) {
         console.error(
             "Failed to parse APP_URL. Using defaults (http://localhost). Error:",
-            e.message
+            e.message,
         );
     }
     return {
         server: {
-            cors: {
-                origin: [
-                    `${protocol}//eshop.com`,
-                    `${protocol}//app.eshop.com`,
-                ],
-                methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                allowedHeaders: ["Content-Type", "Authorization"],
-                credentials: true,
+            host: "127.0.0.1",
+            cors: false, // вимикаємо стандартний, пишемо свій
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods":
+                    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                "Access-Control-Allow-Headers":
+                    "X-Requested-With, content-type, Authorization",
             },
         },
         plugins: [
             laravel({
                 input: "resources/js/app.js",
+                ssr: "resources/js/ssr.js",
                 refresh: true,
             }),
             vue({

@@ -317,3 +317,52 @@ php artisan make:factory ManufacturerFactory
 php artisan make:migration add_manufacturer_id_to_items_table
 composer require rinvex/countries
 ```
+
+### 2025.12.18.v10
+
+```bash
+composer require laravel/socialite
+php artisan make:controller GoogleAuthController
+```
+
+### 2025.01.05.v10.1
+
+```bash
+php artisan make:controller Public/AccountController --model=User
+npm i --save lodash
+```
+
+### 2025.01.29.v10.2
+
+- npm i sortablejs
+
+### 2025.02.05.v10.3
+
+## SEO
+
+```bash
+npm install @vue/server-renderer
+php artisan inertia:publish
+php artisan vendor:publish --provider="Inertia\ServiceProvider"
+```
+
+### 2026.02.14.v11 Reviews
+
+```bash
+composer require codebyray/laravel-review-rateable
+
+php artisan config:clear
+php artisan route:clear
+php artisan vendor:publish --provider="CodeByRay\ReviewRateable\ReviewRateableServiceProvider"
+```
+
+### 2026.02.18.v12 Orders
+
+```bash
+php artisan make:model Order -m
+php artisan make:controller Admin/Commerce/OrderController --model=Order --resource --requests
+php artisan make:resource OrderResource
+php artisan make:policy OrderPolicy --model=Order
+php artisan make:seeder OrderSeeder
+php artisan make:factory OrderFactory
+```

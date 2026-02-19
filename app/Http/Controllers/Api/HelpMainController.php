@@ -44,8 +44,7 @@ class HelpMainController extends Controller
             }
 
             $pages = Page::query()
-                ->select('id')
-                ->where('public', true)
+                ->orderBy('order')
                 ->get();
 
             return response()->json([

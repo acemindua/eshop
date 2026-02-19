@@ -54,6 +54,7 @@ class UpdateItemRequest extends FormRequest
             ],
             'country' => ['nullable', 'string', 'size:2'],
             'price'     => ['required', 'numeric', 'min:0', 'max:999999.99'],
+            'old_price' => ['required', 'numeric', 'min:0', 'max:999999.99'],
             'quantity'  => ['nullable', 'integer', 'min:-9999'],
             'public'    => ['required', 'boolean'],
             'order'     => ['required', 'integer'],

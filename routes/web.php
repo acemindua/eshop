@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LocaleSwitcherController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -22,6 +23,11 @@ Route::group(
 
         //
         Route::domain(parse_url(config('app.url'), PHP_URL_HOST))->group(base_path('routes/public.php'));
+
+        // Route to redirect to Google's OAuth page
+        Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
+        // Route to handle the callback from Google
+        Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
         //
         require __DIR__ . '/auth.php';
     }

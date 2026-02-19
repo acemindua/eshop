@@ -1,7 +1,5 @@
 <template>
-    <nav
-        class="flex items-center space-x-2 justify-between text-sm font-semibold capitalize"
-    >
+    <nav class="flex items-center space-x-2 justify-between text-sm capitalize">
         <!-- Use a conditional check to ensure 'items' is ready before rendering -->
 
         <div v-if="loading" class="text-gray-500">Loading menu...</div>

@@ -1,11 +1,11 @@
 <template>
     <div
         v-if="hasMultipleLocales"
-        class="relative inline-block text-left text-sm z-50"
+        class="relative inline-block text-left text-sm"
     >
         <Menu>
             <MenuButton
-                class="py-2 pl-3 uppercase inline-flex items-center border rounded-lg"
+                class="py-2 pl-3 uppercase inline-flex items-center rounded-lg"
             >
                 <span>{{ currentMappedLocale }}</span>
                 <IconChevronDown stroke="{2}" />
@@ -20,7 +20,7 @@
                 leave-to-class="transform scale-95 opacity-0"
             >
                 <MenuItems
-                    class="absolute right-0 mt-2 bg-white rounded-md shadow-lg"
+                    class="absolute right-0 mt-2 bg-white rounded-md shadow-lg z-[1000]"
                 >
                     <MenuItem
                         v-for="(code, locale) in localeKeysMapped"

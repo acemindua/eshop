@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <!-- Основний пункт меню -->
+    <li>
         <Link
             :href="`/category__${data.slug}`"
             class="flex items-center justify-between p-3 transition-colors hover:bg-indigo-50/50"
@@ -8,8 +7,13 @@
         >
             <span class="font-medium text-gray-800">{{ data.title }}</span>
         </Link>
+    </li>
 
-        <!-- Підкатегорії -->
+    <!--  <div>
+        
+      
+
+       
         <div
             v-if="data.childs && data.childs.length"
             class="pl-4 pr-1 py-1 bg-gray-50/50"
@@ -20,7 +24,7 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script setup>

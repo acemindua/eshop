@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Filters\QueryFilter;
+use App\Traits\HasSeo;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Codebyray\ReviewRateable\Traits\ReviewRateable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -22,7 +24,8 @@ class Item extends Model implements HasMedia, TranslatableContract
 {
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use Translatable, HasFactory, InteractsWithMedia;
+    use Translatable, HasFactory, InteractsWithMedia, HasSeo;
+    use ReviewRateable;
 
     /**
      * The attributes that are translated.
@@ -50,9 +53,17 @@ class Item extends Model implements HasMedia, TranslatableContract
         'country',
         'quantity',
         'price',
+        'old_price',
         'public',
         'order',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['sorted_images'];
 
     /**
      * Auto-generates slugs based on title if empty
@@ -78,6 +89,14 @@ class Item extends Model implements HasMedia, TranslatableContract
     public function scopeFilter(Builder $builder, QueryFilter $filter)
     {
         return $filter->apply($builder);
+    }
+
+    /**
+     * 
+     */
+    public function translations(): HasMany
+    {
+        return $this->hasMany(ItemTranslation::class);
     }
 
     /**
@@ -137,5 +156,28 @@ class Item extends Model implements HasMedia, TranslatableContract
             ->format('webp')
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
+    }
+
+    /**
+     * Прямий зв'язок з відгуками
+     */
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(\Codebyray\ReviewRateable\Models\Review::class, 'reviewable');
+    }
+
+    /**
+     * Зв'язок з оцінками ЧЕРЕЗ відгуки
+     */
+    public function ratings(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(
+            \Codebyray\ReviewRateable\Models\Rating::class,
+            \Codebyray\ReviewRateable\Models\Review::class,
+            'reviewable_id', // Зовнішній ключ у таблиці reviews
+            'review_id',     // Зовнішній ключ у таблиці ratings
+            'id',            // Локальний ключ у таблиці items
+            'id'             // Локальний ключ у таблиці reviews
+        )->where('reviewable_type', Item::class);
     }
 }

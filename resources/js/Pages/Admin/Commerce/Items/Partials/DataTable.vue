@@ -100,11 +100,9 @@ const confirmDelete = async (item) => {
                     <td class="p-2 text-center text-gray-500">
                         {{ $formatSerial(count + key) }}
                     </td>
-                    <th class="p-1">
-                        <div v-if="item.images && item.images.length > 0">
-                            <ImageDataView :src="item.images[0].preview" />
-                        </div>
-                    </th>
+                    <td class="p-1">
+                        <ImageDataView :src="item.images?.[0]?.preview" />
+                    </td>
                     <td class="p-2">
                         <p class="font-semibold">{{ item.title }}</p>
                         <p

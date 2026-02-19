@@ -13,15 +13,15 @@ const baseClasses =
     "inline-flex space-x-2 w-full items-center p-2 rounded-lg text-sm leading-5 text-slate-600 transition duration-150 ease-in-out hover:bg-slate-100";
 const activeClasses = "";
 const classes = computed(
-    () => `${baseClasses} ${props.active ? activeClasses : ""} ${props.class}`
+    () => `${baseClasses} ${props.active ? activeClasses : ""} ${props.class}`,
 );
 </script>
 
 <template>
     <Link :href="href" :class="classes">
         <span
-            class="flex items-center w-5 h-5"
-            :class="[active ? 'text-blue-700' : '', iconClass]"
+            class="flex items-center justify-center rounded-lg transition duration-150 ease-in-out"
+            :class="[active ? 'text-brand ' : '', iconClass]"
         >
             <slot name="icon" />
         </span>

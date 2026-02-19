@@ -19,7 +19,9 @@ return new class extends Migration
 
 
             // price
+           
             $table->decimal('price', 10, 2)->default(0);
+            $table->decimal('old_price', 10, 2)->default(0);
             $table->integer('quantity')->default(0);
 
             $table->string('country', 2)->nullable();

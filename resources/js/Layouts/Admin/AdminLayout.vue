@@ -49,7 +49,7 @@ const isSecondarySidebarVisible = ref(true);
             >
                 <Transition name="sidebar-slide-fade">
                     <div
-                        class="bg-white dark:bg-slate-900 p-2 flex flex-col z-[60]"
+                        class="bg-gray-50 dark:bg-slate-900 p-2 flex flex-col z-[60]"
                     >
                         <AdminSidebar />
                     </div>
@@ -142,7 +142,7 @@ const isSecondarySidebarVisible = ref(true);
                                 </div>
                             </div>
 
-                            <UserSmallCard :data="$page.props.auth" />
+                            <UserSmallCard :data="$page.props.auth.user" />
                         </div>
                     </div>
                 </header>

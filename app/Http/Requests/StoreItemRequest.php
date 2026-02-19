@@ -46,6 +46,7 @@ class StoreItemRequest extends FormRequest
             'country' => ['nullable', 'string', 'size:2'],
             'quantity'              => ['nullable', 'integer', 'min:-9999'],
             'price'     => ['required', 'numeric', 'min:0', 'max:999999.99'],
+            'old_price' => ['required', 'numeric', 'min:0', 'max:999999.99'],
             'public'    => ['required', 'boolean'],
             'order'     => ['required', 'integer'],
         ]);

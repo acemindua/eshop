@@ -1,7 +1,7 @@
 import "../css/app.css";
 import "./bootstrap";
 
-import { createInertiaApp, Head, Link, usePage } from "@inertiajs/vue3";
+import { createInertiaApp, Head, Link, usePage, router } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
@@ -18,15 +18,11 @@ let appName = import.meta.env.VITE_APP_NAME || "Laravel";
 const pinia = createPinia();
 
 createInertiaApp({
-    title: (title, appName) => {
-        const { props } = usePage();
-        let siteName = props?.settings?.site_name || appName; // Значення за замовчуванням (fallback)
-        return `${title} - ${siteName}`;
-    },
+    title: (title) => title,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.vue`,
-            import.meta.glob("./Pages/**/*.vue")
+            import.meta.glob("./Pages/**/*.vue"),
         ),
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
@@ -48,6 +44,20 @@ createInertiaApp({
             .mount(el);
     },
     progress: {
-        color: "#4B5563",
+        color: "rgb( 40, 125, 245)",
     },
+});
+
+router.on("navigate", (event) => {
+    if (window.gtag) {
+        window.gtag("config", "G-XXXXXXXX", {
+            page_location: event.detail.page.url,
+            page_title: document.title,
+        });
+    }
+
+    // Для Facebook Pixel
+    if (window.fbq) {
+        window.fbq("track", "PageView");
+    }
 });

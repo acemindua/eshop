@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        /* Основний колір (наприклад, Indigo) */
+        --brand-color: 40 125 245;
+        /* RGB формат для роботи з прозорістю */
+        --brand-color-hover: 67 56 202;
+    }
+}

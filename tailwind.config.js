@@ -8,13 +8,21 @@ export default {
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
+        "./resources/**/*.vue", // Make sure this line exists!
         "./resources/js/**/*.vue",
     ],
 
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                sans: ["'Exo 2'", ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                brand: {
+                    DEFAULT: "rgb(var(--brand-color) / <alpha-value>)",
+                    hover: "rgb(var(--brand-color-hover) / <alpha-value>)",
+                    light: "rgb(var(--brand-color) / 0.1)", // для фонів іконок
+                },
             },
         },
     },

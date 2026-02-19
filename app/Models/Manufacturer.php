@@ -6,6 +6,7 @@ use App\Filters\QueryFilter;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\HasMedia;
@@ -89,5 +90,13 @@ class Manufacturer extends Model implements HasMedia
             ->format('webp')
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
+    }
+
+    /**
+     * Отримати всі товари цього виробника
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(Item::class);
     }
 }

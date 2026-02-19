@@ -10,15 +10,15 @@ defineProps({
 </script>
 
 <template>
-    <button
-        type="button"
-        class="border p-2 px-4 flex items-center space-x-2 rounded-lg hover:bg-gray-50 duration-150 transition-colors"
-    >
-        <component
-            :is="open ? IconX : IconCategory"
-            :stroke="2"
-            class="duration-200"
-        />
-        <span class="font-semibold">{{ $t("Catalog") }}</span>
-    </button>
+    <div>
+        <button
+            class="flex w-full items-center justify-center bg-brand text-white h-full p-2 px-6 font-semibold rounded-lg"
+        >
+            <div class="flex gap-2 items-center">
+                <IconCategory v-if="!open" :size="20" />
+                <IconX v-else :size="20" />
+                <span>{{ $t("Catalog") }}</span>
+            </div>
+        </button>
+    </div>
 </template>

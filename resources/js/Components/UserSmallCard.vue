@@ -41,5 +41,5 @@ const props = defineProps({
     },
 });
 
-const user = computed(() => props.data?.user?.data || {});
+const user = computed(() => props.data?.data || {});
 </script>

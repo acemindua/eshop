@@ -9,7 +9,7 @@ import AdminNavButton from "../UI/Buttons/Admin/AdminNavButton.vue";
         :href="route('admin.dashboard')"
         class="flex justify-center items-center"
     >
-        <ApplicationLogo class="w-10 h-10" />
+        <ApplicationLogo class="w-10 h-10 bg-brand" />
     </Link>
 
     <!-- Main nav buttons -->

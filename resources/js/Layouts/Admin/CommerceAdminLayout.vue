@@ -35,8 +35,9 @@
                         "
                     >
                         <template #icon>
-                            <IconBuildingFactory2 stroke="{2}" />
+                            <IconBrandApple stroke="{2}" />
                         </template>
+
                         <span>{{ $t("Manufacturers") }}</span>
                     </AdminNavLink>
                 </li>
@@ -53,6 +54,8 @@
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
 import Layout from "@/Layouts/Admin/AdminLayout.vue";
 import {
+    IconBrandApple,
+    IconBrandAppleFilled,
     IconBuildingFactory2,
     IconCategory,
     IconPlant2,

@@ -58,20 +58,37 @@ const booleanPublic = computed({
                 <InputError class="mt-2" :message="errors.quantity" />
             </div>
             <!-- Price -->
-            <div>
-                <InputLabel
-                    for="price"
-                    :value="$t('Price')"
-                    class="flex items-center leading-6 font-semibold"
-                />
-                <TextInput
-                    id="price"
-                    type="number"
-                    v-model="form.price"
-                    class="block w-full pr-4 text-start"
-                    :class="{ 'border-red-500': errors.price }"
-                />
-                <InputError class="mt-2" :message="errors.price" />
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <InputLabel
+                        for="price"
+                        :value="$t('Price')"
+                        class="flex items-center leading-6 font-semibold"
+                    />
+                    <TextInput
+                        id="price"
+                        type="number"
+                        v-model="form.price"
+                        class="block w-full pr-4 text-start"
+                        :class="{ 'border-red-500': errors.price }"
+                    />
+                    <InputError class="mt-2" :message="errors.price" />
+                </div>
+                <div>
+                    <InputLabel
+                        for="old_price"
+                        :value="$t('Old Price')"
+                        class="flex items-center leading-6 font-semibold"
+                    />
+                    <TextInput
+                        id="old_price"
+                        type="number"
+                        v-model="form.old_price"
+                        class="block w-full pr-4 text-start"
+                        :class="{ 'border-red-500': errors.old_price }"
+                    />
+                    <InputError class="mt-2" :message="errors.old_price" />
+                </div>
             </div>
             <!-- Country Select -->
             <div>

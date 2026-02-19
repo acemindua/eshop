@@ -25,6 +25,13 @@ class StoreManufacturerRequest extends FormRequest
     {
         return [
             'title'   => ['required', 'string', 'max:255', Rule::unique('manufacturers', 'title')],
+            'slug' => [
+                'required',
+                'min:3',
+                'string',
+                'max:255',
+                Rule::unique('manufacturers', 'slug'),
+            ],
             'country' => ['nullable', 'string', 'size:2'],
             'public'  => ['boolean'],
             'order'   => ['integer', 'min:0'],

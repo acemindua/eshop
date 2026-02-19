@@ -1,5 +1,5 @@
 <template>
-    <div class="py-8 text-sm text-gray-500 border-t">
+    <div class="py-8 text-sm">
         <p class="text-center md:text-left">
             &copy;{{ new Date().getFullYear() }}
             <Link href="/" class="hover:underline duration-150 transition">

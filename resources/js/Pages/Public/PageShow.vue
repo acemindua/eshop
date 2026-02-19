@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import Layout from "@/Layouts/Public/DefaultLayout.vue";
+import Layout from "@/Layouts/Public/Default/IndexLayout.vue";
 import VarDump from "@/Shared/VarDump.vue";
 import { computed } from "vue";
 
@@ -24,6 +24,4 @@ const props = defineProps({
 
 const page = computed(() => props.data?.page?.data || {});
 const displayTitle = computed(() => page.value.title || "Сторінка");
-
-
 </script>
