@@ -22,21 +22,29 @@ class User extends Authenticatable implements HasMedia
     use HasFactory, Notifiable, InteractsWithMedia, HasRoles;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Атрибути, які можна масово заповнювати.
      */
     protected $fillable = [
-        'name',
+        'name',                // Ім'я
+        'last_name',           // Прізвище
+        'middle_name',         // По-батькові
         'email',
         'password',
-        'last_activity'
+        'phone',
+        'birthday',            // Дата народження
+        'gender',              // Стать
+        'bonus_balance',       // Бонуси
+        'newsletter_accepted', // Згода на розсилку
+        'last_activity',       // Останній вхід
+        'provider',            // Socialite: google, facebook тощо
+        'provider_id',         // Socialite ID
+        'preferred_locale',    // uk/en
+        'default_city_ref',    // Для Нової Пошти
+        'default_warehouse_ref' // Для Нової Пошти
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Приховані атрибути.
      */
     protected $hidden = [
         'password',
@@ -44,27 +52,28 @@ class User extends Authenticatable implements HasMedia
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Приведення типів (Casting).
      */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'email_verified_at'     => 'datetime',
+            'password'              => 'hashed',
+            'birthday'              => 'date',
+            'newsletter_accepted'   => 'boolean',
+            'bonus_balance'         => 'decimal:2',
+            'last_activity'         => 'datetime',
+            'birthday'              => 'date:Y-m-d',
         ];
     }
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
+     * Поля, які додаються до JSON-відповіді.
      */
     protected $appends = ['avatar', 'full_name'];
 
     /**
-     * Filters
+     * Фільтрація запитів.
      */
     public function scopeFilter(Builder $builder, QueryFilter $filter)
     {
@@ -72,7 +81,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * @return bool
+     * Перевірка чи користувач онлайн.
      */
     public function online()
     {
@@ -80,36 +89,40 @@ class User extends Authenticatable implements HasMedia
     }
 
     /**
-     * @return string
+     * Аксесор для ПІБ.
+     * Повертає "Прізвище Ім'я По-батькові" з великої літери.
      */
     public function getFullNameAttribute()
     {
-        return ucwords("{$this->name} {$this->last_name}");
+        return collect([$this->last_name, $this->name, $this->middle_name])
+            ->filter()
+            ->map(fn($name) => mb_convert_case($name, MB_CASE_TITLE, "UTF-8"))
+            ->implode(' ');
     }
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * Аксесор для аватара.
      */
     public function getAvatarAttribute()
     {
         if ($image = $this->getFirstMediaUrl('avatars', 'preview')) {
             $mediaImage = $this->getMedia('avatars')->first();
-            if (File::exists($mediaImage->getPath())) {
+            if ($mediaImage && File::exists($mediaImage->getPath())) {
                 return $image;
             }
         }
+        // Можна додати дефолтний аватар тут, якщо файл відсутній
+        return null;
     }
 
     /**
-     *
+     * Конвертація медіафайлів (Spatie Media Library).
      */
     public function registerMediaConversions(Media $media = null): void
     {
         $this
             ->addMediaConversion('preview')
-            ->format('webp') // this was updated
+            ->format('webp')
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
     }

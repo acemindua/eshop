@@ -12,6 +12,8 @@
         "php": "^8.2",
         "astrotomic/laravel-translatable": "^11.16",
         "codebyray/laravel-review-rateable": "^2.1",
+        "daaner/novaposhta": "^1.4",
+        "darryldecode/cart": "^4.2",
         "diglactic/laravel-breadcrumbs": "^10.0",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel-lang/common": "^6.7",

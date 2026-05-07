@@ -21,6 +21,10 @@ class ItemPolicy
      */
     public function view(User $user, Item $item): bool
     {
+        if ($item->public) {
+            return true;
+        }
+
         return $user->hasPermissionTo('item-view');
     }
 

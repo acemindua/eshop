@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Facades\Settings;
 use App\Http\Resources\UserResource;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -46,9 +47,16 @@ class HandleInertiaRequests extends Middleware
                 'currentLocale'     => app()->getLocale() ?: 'en'
             ],
             'app' => [
+                'url'           => config('app.url'),
                 'name'          => Settings::get('site_name') ?: config('app.name'),
                 'version'       => config('app.version'),
                 'mode'          => config('app.env')
+            ],
+            'cart' => [
+                // Додаємо ->values(), щоб отримати чистий масив товарів для Vue
+                'items' => Cart::getContent()->values()->toArray(),
+                'total' => Cart::getTotal(),
+                'count' => Cart::getTotalQuantity(),
             ],
             'settings'      => fn() => Settings::all(),
             'alert'         => fn() => $request->session()->get('alert'),

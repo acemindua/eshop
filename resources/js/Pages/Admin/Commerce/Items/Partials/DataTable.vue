@@ -5,6 +5,7 @@ import Checkbox from "@/Components/UI/Checkbox.vue";
 import ImageDataView from "@/Components/UI/ImageDataView.vue";
 import {
     IconEdit,
+    IconLink,
     IconSearch,
     IconSettings,
     IconTrash,
@@ -28,7 +29,7 @@ watch(toggleAll, (val) => {
     if (val) {
         emit(
             "update:selectedItems",
-            props.items.map((i) => i.id)
+            props.items.map((i) => i.id),
         );
     } else {
         emit("update:selectedItems", []);
@@ -108,7 +109,17 @@ const confirmDelete = async (item) => {
                         <p
                             class="text-xs text-gray-500 hover:text-indigo-400 duration-150 transition"
                         >
-                            {{ `/${item.slug}` }}
+                            <a
+                                v-if="$page.props?.app?.url && item.slug"
+                                :href="`${$page.props?.app?.url}/${item.slug}`"
+                                target="_blank"
+                                class="inline-flex items-center gx-1"
+                                ><IconLink
+                                    :stroke="2"
+                                    :size="14"
+                                    class="text-indigo-500"
+                                /><span>{{ `/${item.slug}` }}</span></a
+                            >
                         </p>
                     </td>
 

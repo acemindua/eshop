@@ -89,20 +89,21 @@ Breadcrumbs::for(
 
 // Dashboard
 Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
-    $trail->push("Dashboard", route('admin.dashboard'));
+    $trail->push(__("Dashboard"), route('admin.dashboard'));
 });
-// Settings
-Breadcrumbs::for('admin.settings', function (BreadcrumbTrail $trail) {
+
+// Settings (Тепер це точка входу для налаштувань)
+Breadcrumbs::for('admin.settings.index', function (BreadcrumbTrail $trail) {
     $trail->parent('admin.dashboard');
-    $trail->push(__("Settings"), route('admin.settings'));
+    $trail->push(__("Settings"), route('admin.settings.index'));
 });
 
 // Автоматичне створення ресурсних ланцюжків
-Breadcrumbs::macro('resource', function (string $name, string $title) {
+Breadcrumbs::macro('resource', function (string $name, string $title, string $parent = 'admin.dashboard') {
     Breadcrumbs::for(
         "{$name}.index",
         fn(BreadcrumbTrail $trail) =>
-        $trail->parent('admin.dashboard')->push($title, route("{$name}.index"))
+        $trail->parent($parent)->push($title, route("{$name}.index"))
     );
 
     Breadcrumbs::for(
@@ -111,26 +112,43 @@ Breadcrumbs::macro('resource', function (string $name, string $title) {
         $trail->parent("{$name}.index")->push(__('New'), route("{$name}.create"))
     );
 
-    Breadcrumbs::for("{$name}.show", function (BreadcrumbTrail $trail, $model) use ($name) {
-        $trail->parent("{$name}.index");
-        $trail->push(($model->title ?? $model->name ?? ''), route("{$name}.edit", $model));
-    });
-
     Breadcrumbs::for("{$name}.edit", function (BreadcrumbTrail $trail, $model) use ($name) {
         $trail->parent("{$name}.index");
         $trail->push(__('Edit') . ': ' . ($model->title ?? $model->name ?? ''), route("{$name}.edit", $model));
     });
+
+    // Додаємо .show про всяк випадок
+    Breadcrumbs::for("{$name}.show", function (BreadcrumbTrail $trail, $model) use ($name) {
+        $trail->parent("{$name}.index");
+        $trail->push($model->title ?? $model->name ?? '', route("{$name}.show", $model));
+    });
 });
 
-// Admin ресурси
-$resources = [
-    'pages' => __('Pages'),
-    'users' => __('Users'),
-    'categories'            => __('Categories'),
-    'items'                 => __('Items'),
-    'manufacturers'         => __('Manufacturers'),
+// --- РЕЄСТРАЦІЯ РЕСУРСІВ З УРАХУВАННЯМ ГРУП ---
+
+// 1. Прямі ресурси (Dashboard)
+Breadcrumbs::resource('admin.pages', __('Pages'));
+Breadcrumbs::resource('admin.users', __('Users'));
+
+// 2. Commerce ресурси (Батько - Dashboard)
+$commerceResources = [
+    'items'         => __('Items'),
+    'categories'    => __('Categories'),
+    'manufacturers' => __('Manufacturers'),
+    'orders'        => __('Orders'),
 ];
 
-foreach ($resources as $name => $title) {
-    Breadcrumbs::resource("admin.{$name}", $title);
+foreach ($commerceResources as $name => $title) {
+    Breadcrumbs::resource("admin.commerce.{$name}", $title);
+}
+
+// 3. Settings ресурси (Батько - admin.settings.index)
+$settingsResources = [
+    'translations'    => __('Translations'),
+    'shippings'       => __('Shippings'),
+    'payment-methods' => __('Payment Methods'),
+];
+
+foreach ($settingsResources as $name => $title) {
+    Breadcrumbs::resource("admin.settings.{$name}", $title, 'admin.settings.index');
 }

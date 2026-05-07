@@ -2,64 +2,60 @@
 
 namespace App\Policies;
 
-use App\Models\Page;
+use App\Models\PaymentMethod;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
-class PagePolicy
+class PaymentMethodPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Чи може користувач переглядати список методів оплати.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('page-view');
+        return $user->hasPermissionTo('payment-method-view');
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Чи може користувач переглядати конкретний метод.
      */
-    public function view(User $user, Page $page): bool
+    public function view(User $user, PaymentMethod $paymentMethod): bool
     {
-        return $user->hasPermissionTo('page-view');
+        return $user->hasPermissionTo('payment-method-view');
     }
 
     /**
-     * Determine whether the user can create models.
+     * Чи може користувач створювати нові методи.
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('page-create');
+        return $user->hasPermissionTo('payment-method-create');
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Чи може користувач оновлювати метод.
      */
-    public function update(User $user, Page $page): bool
+    public function update(User $user, PaymentMethod $paymentMethod): bool
     {
-        return $user->hasPermissionTo('page-update');
+        return $user->hasPermissionTo('payment-method-update');
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Чи може користувач видаляти метод.
      */
-    public function delete(User $user, Page $page): bool
+    public function delete(User $user, PaymentMethod $paymentMethod): bool
     {
-        return $user->hasPermissionTo('page-delete');
+        return $user->hasPermissionTo('payment-method-delete');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Відновлення та остаточне видалення поки відключаємо (як і в PagePolicy).
      */
-    public function restore(User $user, Page $page): bool
+    public function restore(User $user, PaymentMethod $paymentMethod): bool
     {
         return false;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Page $page): bool
+    public function forceDelete(User $user, PaymentMethod $paymentMethod): bool
     {
         return false;
     }

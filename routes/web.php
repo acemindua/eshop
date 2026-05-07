@@ -12,7 +12,12 @@ Route::group(['middleware' => ['auth', 'verified', 'role:super-user|administrato
     Route::domain('app.' . parse_url(config('app.url'), PHP_URL_HOST))->name('admin.')->group(base_path('routes/admin.php'));
 });
 
+
+Route::post('/payments/webhook/{code}', [WebhookController::class, 'handle']);
+
 Route::get('/locale/{locale}', [LocaleSwitcherController::class, 'change'])->name('locale.switcher');
+
+Route::post('/cart/add', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
 
 Route::group(
     [

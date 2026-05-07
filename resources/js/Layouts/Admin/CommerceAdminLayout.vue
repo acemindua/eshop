@@ -1,43 +1,63 @@
 <template>
     <Layout>
         <template #sidenav>
-            <h4 class="uppercase text-xs font-semibold py-2 text-gray-600">
-                Commerce
-            </h4>
-            <ul class="mt-4">
+            <div class="w-full h-14 border-b flex items-center p-4">
+                <h4
+                    class="uppercase text-[12px] tracking-widest font-bold text-gray-500"
+                >
+                    <span>{{ $t("Commerce") }}</span>
+                </h4>
+            </div>
+
+            <ul class="flex flex-col w-full px-3 py-4">
+                <li></li>
                 <li>
                     <AdminNavLink
-                        :href="route('admin.items.index')"
-                        :active="$page.url.startsWith('/commerce/items')"
+                        :href="route('admin.commerce.orders.index')"
+                        :active="$page.url.startsWith('/admin/commerce/orders')"
                     >
                         <template #icon>
-                            <IconPlant2 stroke="{2}" />
+                            <IconShoppingBag stroke="2" />
+                        </template>
+                        <span>{{ $t("Orders") }}</span>
+                    </AdminNavLink>
+                </li>
+                <li>
+                    <AdminNavLink
+                        :href="route('admin.commerce.items.index')"
+                        :active="$page.url.startsWith('/admin/commerce/items')"
+                    >
+                        <template #icon>
+                            <IconPlant2 stroke="2" />
                         </template>
                         <span>{{ $t("Items") }}</span>
                     </AdminNavLink>
                 </li>
                 <li>
                     <AdminNavLink
-                        :href="route('admin.categories.index')"
-                        :active="$page.url.startsWith('/commerce/categories')"
+                        :href="route('admin.commerce.categories.index')"
+                        :active="
+                            $page.url.startsWith('/admin/commerce/categories')
+                        "
                     >
                         <template #icon>
-                            <IconCategory stroke="{2}" />
+                            <IconCategory stroke="2" />
                         </template>
                         <span>{{ $t("Categories") }}</span>
                     </AdminNavLink>
                 </li>
                 <li>
                     <AdminNavLink
-                        :href="route('admin.manufacturers.index')"
+                        :href="route('admin.commerce.manufacturers.index')"
                         :active="
-                            $page.url.startsWith('/commerce/manufacturers')
+                            $page.url.startsWith(
+                                '/admin/commerce/manufacturers',
+                            )
                         "
                     >
                         <template #icon>
-                            <IconBrandApple stroke="{2}" />
+                            <IconBuildingFactory2 stroke="2" />
                         </template>
-
                         <span>{{ $t("Manufacturers") }}</span>
                     </AdminNavLink>
                 </li>
@@ -54,12 +74,9 @@
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
 import Layout from "@/Layouts/Admin/AdminLayout.vue";
 import {
-    IconBrandApple,
-    IconBrandAppleFilled,
     IconBuildingFactory2,
     IconCategory,
     IconPlant2,
     IconShoppingBag,
-    IconUsers,
 } from "@tabler/icons-vue";
 </script>

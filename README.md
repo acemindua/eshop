@@ -365,4 +365,50 @@ php artisan make:resource OrderResource
 php artisan make:policy OrderPolicy --model=Order
 php artisan make:seeder OrderSeeder
 php artisan make:factory OrderFactory
+
+php artisan make:model OrderItem -m
 ```
+
+### 2025.02.05.v10.2 BuyButton and Controllers
+
+```bash
+composer require darryldecode/cart
+
+php artisan vendor:publish --provider="DarrylDecode\Cart\CartServiceProvider" --tag="config"
+
+php artisan make:controller CartController
+```
+
+```bash
+php artisan make:controller Admin/TranslationController
+```
+
+```bash
+php artisan make:migration add_details_to_users_table --table=users
+```
+
+```bash
+php artisan make:model Shipping -m
+php artisan make:controller Admin/ShippingController --model=Shipping --resource --requests
+php artisan make:resource ShippingResource
+php artisan make:policy ShippingPolicy --model=Shipping
+php artisan make:seeder ShippingSeeder
+php artisan make:factory ShippingFactory
+
+
+php artisan make:controller  Api/NovaPoshtaController
+```
+
+```bash
+php artisan make:model PaymentMethod -m
+php artisan make:model PaymentMethodTranslation -m
+php artisan make:controller Admin/PaymentMethodController --model=PaymentMethod --resource --requests
+php artisan make:resource PaymentMethodResource
+php artisan make:policy PaymentMethodPolicy --model=PaymentMethod
+php artisan make:seeder PaymentMethodSeeder
+php artisan make:factory PaymentMethodFactory
+
+```
+
+
+### 2026.05.07.v10.3

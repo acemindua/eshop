@@ -56,22 +56,22 @@ watch(
     searchText,
     debounce((value) => {
         router.get(
-            route("admin.items.index"),
+            route("admin.commerce.items.index"),
             { search: value },
-            { preserveState: true, replace: true }
+            { preserveState: true, replace: true },
         );
-    }, 500)
+    }, 500),
 );
 
 //
 const deleteValueItem = (item) => {
-    router.delete(route("admin.items.destroy", item.id));
+    router.delete(route("admin.commerce.items.destroy", item.id));
 };
 const handleImport = () => {
     console.log("Importing...");
 };
 const handleCreate = () => {
-    router.visit(route("admin.items.create"));
+    router.visit(route("admin.commerce.items.create"));
 };
 
 const actionButtons = [

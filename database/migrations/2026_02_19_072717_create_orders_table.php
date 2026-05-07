@@ -13,7 +13,20 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('number')->unique();
+            $table->string('title')->nullable();
+            $table->string('status')->default('pending')->index();
+            $table->decimal('total_price', 15, 2)->default(0.00);
+            $table->decimal('shipping_price', 15, 2)->default(0.00);
+            $table->string('currency', 3)->default('UAH');
+            $table->string('customer_name')->nullable();
+            $table->string('customer_email')->nullable();
+            $table->text('shipping_address')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

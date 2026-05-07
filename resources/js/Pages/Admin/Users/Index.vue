@@ -1,11 +1,11 @@
 <template>
-    <div class="flex flex-col space-y-2 w-full">
-        <section
-            class="md:flex items-center justify-between pt-4 gap-4 space-y-2"
-        >
+    <div class="flex flex-col space-y-4 w-full">
+        <!-- Action Buttons -->
+        <section class="md:flex items-center justify-between gap-2 space-y-2">
             <InputSearch v-model="searchText" />
+            <ButtonsGroup :buttons="actionButtons" />
         </section>
-        <!-- DataTable -->
+
         <section>
             <DataTable
                 :items="items"
@@ -17,24 +17,25 @@
             />
         </section>
 
-        <!-- VArDump -->
         <section>
             <VarDump :data="data" />
         </section>
     </div>
 </template>
+
 <script setup>
-import Layout from "@/Layouts/Admin/DashboardAdminLayout.vue";
+// Ми НЕ використовуємо defineOptions для лейауту тут,
+// якщо хочемо передати йому v-model напряму.
+// Або використовуємо стандартний підхід Inertia (нижче).
+
 import VarDump from "@/Shared/VarDump.vue";
 import DataTable from "./Partials/DataTable.vue";
 import { computed, ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import debounce from "lodash.debounce";
 import InputSearch from "@/Components/UI/InputSearch.vue";
-
-defineOptions({
-    layout: Layout,
-});
+import DashboardAdminLayout from "@/Layouts/Admin/DashboardAdminLayout.vue";
+import ButtonsGroup from "@/Components/UI/Buttons/Admin/ButtonsGroup.vue";
 
 const props = defineProps({
     data: {
@@ -43,9 +44,14 @@ const props = defineProps({
     filters: Object,
 });
 
+// Налаштування лейауту
+defineOptions({
+    layout: DashboardAdminLayout,
+});
+
 const items = computed(() => props.data?.users?.data || []);
 const meta = computed(() => props.data?.users?.meta || []);
-const searchText = ref(props.filters.search);
+const searchText = ref(props.filters?.search || "");
 const selectedItems = ref([]);
 
 watch(
@@ -54,13 +60,37 @@ watch(
         router.get(
             route("admin.users.index"),
             { search: value },
-            { preserveState: true, replace: true }
+            { preserveState: true, replace: true },
         );
-    }, 500)
+    }, 500),
 );
 
-//
 const deleteValueItem = (item) => {
-    router.delete(route("admin.users.destroy", item.id));
+    if (confirm("Ви впевнені, що хочете видалити цього користувача?")) {
+        router.delete(route("admin.users.destroy", item.id));
+    }
 };
+
+const handleImport = () => {
+    console.log("Importing...");
+};
+const handleCreate = () => {
+    router.visit(route("admin.users.create"));
+};
+
+const actionButtons = [
+    {
+        label: "import",
+        action: handleImport,
+        type: "secondary",
+        icon: "IconCloudUpload",
+    },
+    {
+        label: "create",
+        loadingLabel: "Saving...",
+        action: handleCreate,
+        type: "primary",
+        icon: "IconCirclePlus",
+    },
+];
 </script>

@@ -5,4 +5,5 @@ return [
     App\Providers\LocalizationSyncServiceProvider::class,
     App\Providers\PolicyServiceProvider::class,
     App\Providers\SettingsServiceProvider::class,
+    DarrylDecode\Cart\CartServiceProvider::class,
 ];

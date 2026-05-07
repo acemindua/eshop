@@ -1,5 +1,5 @@
 <template>
-    <div class="flex space-x-4 relative z-20">
+    <div class="flex space-x-2 relative z-20">
         <template v-for="btn in buttons" :key="btn.label">
             <component
                 :is="btn.type === 'primary' ? PrimaryButton : SecondaryButton"

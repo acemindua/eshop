@@ -1,6 +1,5 @@
 <template>
     <div class="flex flex-col space-y-2">
-        <!-- Action Buttons -->
         <section
             ref="scrollAnchor"
             class="flex items-center justify-between pt-4"
@@ -9,7 +8,6 @@
             <ButtonsGroup :buttons="actionButtons" />
         </section>
 
-        <!-- Tabs Section -->
         <section>
             <TabGroup :selectedIndex="activeTab" @change="changeTab">
                 <TabList
@@ -183,8 +181,8 @@ function changeTab(index) {
 
 // Form filling logic when page data is available
 onBeforeMount(() => {
-    if (props.data.item) {
-        fillForm(props.data.item);
+    if (props.data?.item) {
+        fillForm(props.data?.item);
     }
 });
 

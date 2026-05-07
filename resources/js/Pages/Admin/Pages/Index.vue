@@ -1,9 +1,7 @@
 <template>
     <div class="flex flex-col space-y-2">
         <!-- Action Buttons -->
-        <section
-            class="md:flex items-center justify-between pt-4 gap-4 space-y-2"
-        >
+        <section class="md:flex items-center justify-between gap-4 space-y-2">
             <InputSearch v-model="searchText" />
             <ButtonsGroup :buttons="actionButtons" />
         </section>
@@ -57,9 +55,9 @@ watch(
         router.get(
             route("admin.pages.index"),
             { search: value },
-            { preserveState: true, replace: true }
+            { preserveState: true, replace: true },
         );
-    }, 500)
+    }, 500),
 );
 
 //

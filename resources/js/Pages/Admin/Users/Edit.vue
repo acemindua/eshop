@@ -3,11 +3,7 @@
         <!-- Action Buttons -->
         <section class="flex items-center justify-between pt-4">
             <span></span>
-            <ActionButtons
-                :loading="loading"
-                :cancel-action="cancel"
-                :submit-action="submit"
-            />
+            <ButtonsGroup :buttons="actionButtons" :loading="loading" />
         </section>
 
         <section>
@@ -56,7 +52,7 @@ import { router } from "@inertiajs/vue3";
 import { computed, reactive, ref } from "vue";
 import ButtonTabGroup from "@/Components/UI/Buttons/Admin/ButtonTabGroup.vue";
 import GeneralForm from "./Partials/GeneralForm.vue";
-import ActionButtons from "@/Components/UI/Buttons/Admin/ActionButtons.vue";
+import ButtonsGroup from "@/Components/UI/Buttons/Admin/ButtonsGroup.vue";
 
 defineOptions({ layout: Layout });
 const props = defineProps({ data: Object, errors: Object });
@@ -83,7 +79,14 @@ const handleUpload = (file) => {
 const loading = ref(false);
 const recentlySuccessful = ref(false);
 
-const submit = () => {
+// Logic for tabs
+const activeTab = ref(0);
+const tabs = ref([{ key: "general", label: "Profile" }]);
+// Tab switch
+function changeTab(index) {
+    activeTab.value = index;
+}
+const handleSave = () => {
     router.post(route("admin.users.update", user.value.id), form, {
         forceFormData: true,
         preserveState: true,
@@ -95,16 +98,22 @@ const submit = () => {
         onFinish: () => (loading.value = false),
     });
 };
-
-// Cancel action handler
-const cancel = () => {
+const handleCancel = () => {
     router.visit(route("admin.users.index"));
 };
-// Logic for tabs
-const activeTab = ref(0);
-const tabs = ref([{ key: "general", label: "Profile" }]);
-// Tab switch
-function changeTab(index) {
-    activeTab.value = index;
-}
+const actionButtons = [
+    {
+        label: "cancel",
+        action: handleCancel,
+        type: "secondary",
+        icon: "IconCancel",
+    },
+    {
+        label: "save",
+        loadingLabel: "Saving...",
+        action: handleSave,
+        type: "primary",
+        icon: "IconDeviceFloppy",
+    },
+];
 </script>

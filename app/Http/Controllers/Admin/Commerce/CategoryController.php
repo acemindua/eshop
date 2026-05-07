@@ -17,20 +17,20 @@ use Inertia\Response;
 class CategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of categories.
+     * Includes the parent relationship to show hierarchy in the table.
      */
     public function index(CategoryFilter $filter): Response
     {
-        //
         Gate::authorize('viewAny', Category::class);
-        //
+
         $categories = Category::filter($filter)
-            ->with(['parent'])
+            ->with(['parent']) // Optimized to prevent N+1 queries
             ->orderBy('public', 'desc')
             ->latest('updated_at')
-            ->paginate(Settings::get('items_per_page'))
+            ->paginate(Settings::get('items_per_page', 15))
             ->withQueryString();
-        //
+
         return Inertia::render('Admin/Commerce/Categories/Index', [
             'data' => [
                 'items' => CategoryResource::collection($categories)
@@ -40,121 +40,116 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new category.
      */
     public function create(): Response
     {
-        //
         Gate::authorize('create', Category::class);
-        //
-        $nextOrder = (Category::max('order') ?? 0) + 1;
 
         return Inertia::render('Admin/Commerce/Categories/Create', [
             'data' => [
-                'categories' => CategoryResource::collection(
-                    Category::query()
-                        ->select('id')
-                        ->get()
-                ),
-                'public' => false,
-                'order' => $nextOrder
+                'categories' => CategoryResource::collection($this->getParentOptions()),
+                'public'     => false,
+                'order'      => (Category::max('order') ?? 0) + 1,
             ],
-
         ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created category.
      */
     public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        //
         Gate::authorize('create', Category::class);
 
         $category = Category::create($request->validated());
 
-        //
         return redirect()->route('admin.categories.index')->with([
             'alert' => [
-                'type' => 'success',
-                'message' => "Category `" . $category->title . "` successfully created!",
+                'type'    => 'success',
+                'message' => "Category `{$category->title}` successfully created!",
             ],
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * Display a specific category.
      */
     public function show(Category $category): Response
     {
-        //
         Gate::authorize('view', $category);
-        //
+
         return Inertia::render('Admin/Commerce/Categories/Show', [
             'data' => [
-                'category' => $category
+                'category' => new CategoryResource($category->load('parent'))
             ],
-
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing.
+     * Excludes current category from parent options to prevent circular dependency.
      */
     public function edit(Category $category): Response
     {
-        //
         Gate::authorize('update', $category);
-        //
+
         return Inertia::render('Admin/Commerce/Categories/Edit', [
             'data' => [
-                'categories' => CategoryResource::collection(
-                    Category::query()
-                        ->select('id')
-                        ->where('id', '!=',  $category->id)
-                        ->get()
-                ),
-                'category' => $category
+                'category'   => new CategoryResource($category),
+                'categories' => CategoryResource::collection($this->getParentOptions($category->id)),
             ],
-
         ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the category in storage.
      */
     public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
-        //
         Gate::authorize('update', $category);
-        //
-        $category->fill($request->validated());
-        $category->save();
+
+        $category->update($request->validated());
 
         return redirect()->route('admin.categories.index')->with([
             'alert' => [
-                'type' => 'success',
-                'message' => "Category `" . $category->title . "`  successfully updated!",
+                'type'    => 'success',
+                'message' => "Category `{$category->title}` successfully updated!",
             ],
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the category and its media.
      */
     public function destroy(Category $category): RedirectResponse
     {
-        //
         Gate::authorize('delete', $category);
-        //
+
         $category->clearMediaCollection('images');
         $category->delete();
 
         return redirect()->route('admin.categories.index')->with([
             'alert' => [
-                'type' => 'success',
+                'type'    => 'success',
                 'message' => "Category successfully deleted!",
             ],
         ]);
+    }
+
+    /**
+     * Helper: Fetch potential parent categories.
+     * If $excludeId is provided, that category and potentially its children 
+     * should be filtered out to prevent circular references.
+     */
+    private function getParentOptions(?int $excludeId = null)
+    {
+        $query = Category::query()->select(['id', 'title', 'parent_id']);
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        return $query->get();
     }
 }

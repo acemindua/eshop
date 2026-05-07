@@ -15,11 +15,7 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->unsigned()->nullable();
-
-
-
             // price
-           
             $table->decimal('price', 10, 2)->default(0);
             $table->decimal('old_price', 10, 2)->default(0);
             $table->integer('quantity')->default(0);

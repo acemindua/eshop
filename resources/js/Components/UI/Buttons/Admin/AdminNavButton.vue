@@ -1,22 +1,24 @@
 <template>
     <Link
         :href="href"
-        class="inline-block text-gray-600 dark:text-slate-400 rounded-lg p-2"
-        :class="
+        :class="[
+            'inline-block p-2 rounded-lg transition-all duration-200',
             active
-                ? 'text-white dark:text-slate-50 bg-brand rounded-lg shadow-inner'
-                : ''
-        "
+                ? 'text-brand bg-gray-100 dark:bg-slate-800 shadow-inner'
+                : 'text-gray-600 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800/50',
+        ]"
     >
-        <slot
-    /></Link>
+        <slot />
+    </Link>
 </template>
 
 <script setup>
+import { Link } from "@inertiajs/vue3";
+
 defineProps({
     href: {
         type: String,
-        required: true, // Href should typically be required for a Link
+        required: true,
     },
     active: {
         type: Boolean,

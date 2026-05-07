@@ -69,6 +69,29 @@ class SettingsManager
     }
 
     /**
+     * Зберігає або оновлює налаштування в БД та скидає кеш.
+     * * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public function set(string $key, mixed $value): void
+    {
+        // Якщо значення - масив або об'єкт, перетворюємо в JSON
+        if (is_array($value) || is_object($value)) {
+            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        // Оновлюємо або створюємо запис у таблиці options
+        Option::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value]
+        );
+
+        // Обов'язково чистимо кеш, щоб при наступному get() дані підтягнулися з БД
+        $this->forgetCache();
+    }
+
+    /**
      * Очищає кеш налаштувань.
      */
     public function forgetCache(): void

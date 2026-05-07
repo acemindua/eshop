@@ -33,6 +33,8 @@ createInertiaApp({
                     const langs = import.meta.glob("../../lang/*.json");
                     return await langs[`../../lang/${lang}.json`]();
                 },
+                // Якщо хочете, щоб замість порожнього рядка виводився сам ключ
+                onMissingKey: (key) => key,
             })
             .use(FlagIcon)
             .use(pinia)
