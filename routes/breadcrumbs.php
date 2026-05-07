@@ -144,9 +144,10 @@ foreach ($commerceResources as $name => $title) {
 
 // 3. Settings ресурси (Батько - admin.settings.index)
 $settingsResources = [
-    'translations'    => __('Translations'),
-    'shippings'       => __('Shippings'),
-    'payment-methods' => __('Payment Methods'),
+    'translations'      => __('Translations'),
+    'shippings'         => __('Shippings'),
+    'payment-methods'   => __('Payment Methods'),
+    'versions'          => __('App Roadmap & Versions'),
 ];
 
 foreach ($settingsResources as $name => $title) {

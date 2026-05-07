@@ -1,25 +1,29 @@
 <template>
     <Head :title="$t('Payment Methods')" />
 
-    <section class="md:flex items-center justify-between pt-4 gap-4 space-y-2">
-        <InputSearch v-model="searchText" />
-        <ButtonsGroup :buttons="actionButtons" />
-    </section>
+    <div class="flex flex-col space-y-2 w-full">
+        <section
+            class="md:flex items-center justify-between pt-4 gap-4 space-y-2"
+        >
+            <InputSearch v-model="searchText" />
+            <ButtonsGroup :buttons="actionButtons" />
+        </section>
 
-    <section>
-        <DataTable
-            :items="items"
-            :meta="meta"
-            :selected-items="selectedItems"
-            @update:selectedItems="selectedItems = $event"
-            @delete="deletePaymentMethod"
-            model="payment-methods"
-        />
-    </section>
+        <section>
+            <DataTable
+                :items="items"
+                :meta="meta"
+                :selected-items="selectedItems"
+                @update:selectedItems="selectedItems = $event"
+                @delete="deletePaymentMethod"
+                model="payment-methods"
+            />
+        </section>
 
-    <section v-if="$page.props.app.mode === 'local'">
-        <VarDump :data="data" />
-    </section>
+        <section v-if="$page.props.app.mode === 'local'">
+            <VarDump :data="data" />
+        </section>
+    </div>
 </template>
 
 <script setup>

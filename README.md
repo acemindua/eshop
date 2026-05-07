@@ -410,5 +410,18 @@ php artisan make:factory PaymentMethodFactory
 
 ```
 
+### Timeline & Versioning System (v1.10.3) — 2026.05.07
 
-### 2026.05.07.v10.3
+- Roadmap
+
+```bash
+php artisan make:model AppVersion -m
+php artisan make:controller Admin/Settings/AppVersionController --model=AppVersion --resource --requests
+php artisan make:resource AppVersionResource
+php artisan make:policy AppVersionPolicy --model=AppVersion
+php artisan make:seeder AppVersionSeeder
+
+php artisan db:seed --class=AppVersionSeeder
+
+php artisan make:migration add_status_to_app_versions_table
+```

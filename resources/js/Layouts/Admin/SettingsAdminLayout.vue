@@ -73,6 +73,28 @@
                         <span>{{ $t("Payment Methods") }}</span>
                     </AdminNavLink>
                 </li>
+
+                <li>
+                    <AdminNavLink
+                        :href="route('admin.settings.versions.index')"
+                        :active="
+                            $page.url.startsWith('/admin/settings/versions')
+                        "
+                    >
+                        <template #icon>
+                            <component
+                                :is="
+                                    $page.url.startsWith('/settings/versions')
+                                        ? IconDirectionsFilled
+                                        : IconDirections
+                                "
+                                stroke="1"
+                                class="w-5 h-5"
+                            />
+                        </template>
+                        <span>{{ $t("Roadmap & versions") }}</span>
+                    </AdminNavLink>
+                </li>
             </ul>
         </template>
 
@@ -90,6 +112,11 @@ import {
     IconClipboardFilled,
     IconCreditCard,
     IconCreditCardFilled,
+    IconDirections,
+    IconDirectionsFilled,
+    IconLanguageHiragana,
+    IconSettings,
+    IconTruckDelivery,
     IconUser,
     IconUserFilled,
 } from "@tabler/icons-vue";

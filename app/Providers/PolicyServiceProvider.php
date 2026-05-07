@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\AppVersion;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Manufacturer;
 use App\Models\Page;
 use App\Models\User;
 use App\Models\PaymentMethod; // Імпортуємо модель
+use App\Policies\AppVersionPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\ItemPolicy;
 use App\Policies\ManufacturerPolicy;
@@ -41,8 +43,7 @@ class PolicyServiceProvider extends ServiceProvider
         Gate::policy(Item::class, ItemPolicy::class);
         Gate::policy(Page::class, PagePolicy::class);
         Gate::policy(Manufacturer::class, ManufacturerPolicy::class);
-
-        // Реєструємо політику для методів оплати
         Gate::policy(PaymentMethod::class, PaymentMethodPolicy::class);
+        Gate::policy(AppVersion::class, AppVersionPolicy::class);
     }
 }

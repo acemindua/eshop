@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             ShippingSeeder::class,
             PaymentMethodSeeder::class,
+            AppVersionSeeder::class
         ]);
     }
 }

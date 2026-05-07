@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Commerce\{
     ManufacturerController,
     OrderController
 };
+use App\Http\Controllers\Admin\Settings\AppVersionController;
 use Illuminate\Support\Facades\Route;
 
 // Dashboard
@@ -21,7 +22,22 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 // Settings Group
 Route::prefix('settings')->name('settings.')->group(function () {
+    // 1. Roadmap & Versions (Виділяємо в окремий під-префікс)
+    Route::prefix('versions')->name('versions.')->group(function () {
+        Route::get('/', [AppVersionController::class, 'index'])->name('index');
+        Route::post('/', [AppVersionController::class, 'store'])->name('store');
+        Route::put('/{appVersion}', [AppVersionController::class, 'update'])->name('update');
+        Route::delete('/{appVersion}', [AppVersionController::class, 'destroy'])->name('destroy');
 
+        // Керування завданнями (Items) всередині версій
+        Route::post('/{app_version}/items', [AppVersionController::class, 'addItem'])->name('items.store');
+        Route::prefix('items/{item}')->group(function () {
+            Route::patch('/toggle', [AppVersionController::class, 'toggleItem'])->name('items.toggle');
+            Route::put('/', [AppVersionController::class, 'updateItem'])->name('items.update');
+            Route::patch('/move', [AppVersionController::class, 'moveItem'])->name('items.move');
+            Route::delete('/', [AppVersionController::class, 'deleteItem'])->name('items.destroy');
+        });
+    });
     // General Settings
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/', 'settings')->name('index');
