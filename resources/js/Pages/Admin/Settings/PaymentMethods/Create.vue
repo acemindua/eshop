@@ -2,19 +2,17 @@
     <Head :title="$t('Create Payment Method')" />
 
     <div class="flex flex-col space-y-2">
+        <!-- Action Buttons -->
         <section class="flex items-center justify-between pt-4">
-            <h1
-                class="text-lg font-bold uppercase tracking-tight text-slate-700"
-            >
-                {{ $t("New Payment Method") }}
-            </h1>
+            <span></span>
             <ButtonsGroup :buttons="actionButtons" />
         </section>
 
+        <!-- Tabs Section -->
         <section>
             <TabGroup :selectedIndex="activeTab" @change="changeTab">
                 <TabList
-                    class="flex items-center w-full border-b border-gray-300 bg-white dark:bg-slate-900"
+                    class="flex items-center w-full border-b border-gray-300"
                 >
                     <Tab
                         v-for="tab in tabs"
@@ -31,26 +29,22 @@
                 <TabPanels class="mt-2">
                     <Transition name="slot-fade" mode="out-in" appear>
                         <TabPanel>
-                            <div class="bg-white dark:bg-slate-900 border p-6">
-                                <GeneralForm
-                                    :form="form"
-                                    :errors="errors"
-                                    :is-editing="isEditing"
-                                />
-                            </div>
+                            <GeneralForm
+                                :form="form"
+                                :errors="errors"
+                                :is-editing="isEditing"
+                            />
                         </TabPanel>
                     </Transition>
 
                     <Transition name="slot-fade" mode="out-in" appear>
                         <TabPanel>
-                            <div class="bg-white dark:bg-slate-900 border p-6">
-                                <DataForm
-                                    :form="form"
-                                    :data="data"
-                                    :errors="errors"
-                                    :is-editing="isEditing"
-                                />
-                            </div>
+                            <DataForm
+                                :form="form"
+                                :data="data"
+                                :errors="errors"
+                                :is-editing="isEditing"
+                            />
                         </TabPanel>
                     </Transition>
                 </TabPanels>
@@ -86,7 +80,10 @@ defineOptions({
 });
 
 const props = defineProps({
-    data: Object,
+    data: {
+        type: Object,
+        default: () => ({}), // Повертаємо порожній об'єкт замість undefined
+    },
     errors: Object,
 });
 
@@ -98,28 +95,35 @@ const tabs = ref([
     { key: "general", label: "General Content" },
     { key: "data", label: "Technical Data" },
 ]);
+// Initialize translated form attributes
+const translatedAttributes = ["title", "description", "payment_details"];
 
-// Атрибути, що потребують перекладу (UA/EN)
-const translatedAttributes = ["title", "description", "instructions"];
-
+// Form initialization and handling
 const { form, initForm } = useTranslatableForm(translatedAttributes);
 
-// Додаємо технічні поля, яких немає в перекладах
-onBeforeMount(() => {
-    initForm({
-        code: "",
-        icon: "IconCreditCard",
-        commission_fixed: 0,
-        commission_percent: 0,
-        is_active: true,
-        sort_order: 0,
-        ...props.data,
-    });
-});
-
+// Handle tab changes
 function changeTab(index) {
     activeTab.value = index;
 }
+
+onBeforeMount(() => {
+    // 1. Ініціалізуємо перекладні поля
+    initForm(props.data);
+
+    // 2. Додаємо технічні поля, яких немає в об'єкті за замовчуванням
+    // Це гарантує, що Vue побачить ці ключі і не видасть undefined
+    const defaultTechnicalFields = {
+        code: "",
+        driver: "manual",
+        sort_order: 0,
+        is_active: 1,
+        commission_percent: 0,
+        commission_fixed: 0,
+    };
+
+    // Мержимо технічні поля в об'єкт форми
+    Object.assign(form, { ...defaultTechnicalFields, ...props.data });
+});
 
 const handleCancel = () => {
     router.visit(route("admin.settings.payment-methods.index"));

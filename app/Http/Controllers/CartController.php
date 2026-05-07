@@ -3,6 +3,7 @@
 namespace App\Http\Controllers; // Переконайтеся, що шлях відповідає вашим роутам
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentMethod;
 use App\Models\Shipping;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Illuminate\Http\Request;
@@ -71,25 +72,18 @@ class CartController extends Controller
         if (Cart::isEmpty()) {
             return redirect()->route('cart.index');
         }
-
+        $paymentMethods = PaymentMethod::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(function ($method) {
+                return [
+                    'code' => $method->code,
+                    'label' => $method->title, // Завдяки вашим перекладам тут буде текст потрібною мовою
+                    'description' => $method->description,
+                ];
+            });
         return Inertia::render('Public/Commerce/Checkout', [
-            'paymentMethods' => [
-                [
-                    'code' => 'card',
-                    'label' => 'Оплата картою (LiqPay/Mono)',
-                    'description' => 'Миттєва оплата онлайн без комісії'
-                ],
-                [
-                    'code' => 'cash',
-                    'label' => 'Накладений платіж',
-                    'description' => 'Оплата при отриманні у відділенні'
-                ],
-                [
-                    'code' => 'iban',
-                    'label' => 'Оплата за реквізитами IBAN',
-                    'description' => 'Для юридичних та фізичних осіб'
-                ]
-            ],
+            'paymentMethods' => $paymentMethods,
             'shippingMethods' => Shipping::where('is_active', true)
                 ->orderBy('sort_order')
                 ->get()

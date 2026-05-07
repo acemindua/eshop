@@ -29,7 +29,7 @@ class UpdatePaymentMethodRequest extends FormRequest
             // Трансльовані поля
             '%title%'               => ['required', 'string', 'max:255'],
             '%description%'         => ['nullable', 'string'],
-            '%instructions%'        => ['nullable', 'string'],
+            '%payment_details%'        => ['nullable', 'string'],
 
             // Системні поля
             // Rule::unique дозволяє ігнорувати поточний запис при оновленні

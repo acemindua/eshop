@@ -63,19 +63,25 @@
                     />
                 </div>
             </div>
-            <div v-if="`content`" class="mb-3">
+            <!-- Реквізити: з'являються тільки якщо entityType === 'invoice' -->
+
+            <div v-if="`payment_details`" class="mb-3">
                 <InputLabel
-                    :value="`Content (${code})`"
+                    :value="`Payment Details / Bank Requisites (${code})`"
                     class="flex leading-6 items-center font-semibold"
                 />
                 <div class="w-full sm:col-span-3">
-                    <TextEditor v-model="model.content" />
+                    <TextEditor
+                        v-model="model.payment_details"
+                        :placeholder="`Отримувач: ФОП Кондюх Роман Євгенович&#10;ЄДРПОУ: 12345678&#10;IBAN: UA00...`"
+                    />
                     <p class="mt-1 text-xs text-gray-500">
-                        Main content of the page, visible to users.
+                        Enter official bank details. These will be shown to
+                        customers choosing non-cash payment.
                     </p>
                     <InputError
                         class="mt-2"
-                        :message="errors[`${code}.content`]"
+                        :message="errors[`${code}.payment_details`]"
                     />
                 </div>
             </div>
@@ -84,11 +90,11 @@
 </template>
 
 <script setup>
-import InputError from "./UI/InputError.vue";
-import InputLabel from "./UI/InputLabel.vue";
-import TextareaInput from "./UI/TextareaInput.vue";
-import TextEditor from "./UI/TextEditor.vue";
-import TextInput from "./UI/TextInput.vue";
+import InputError from "@/Components/UI/InputError.vue";
+import InputLabel from "@/Components/UI/InputLabel.vue";
+import TextareaInput from "@/Components/UI/TextareaInput.vue";
+import TextEditor from "@/Components/UI/TextEditor.vue";
+import TextInput from "@/Components/UI/TextInput.vue";
 
 const props = defineProps({
     code: {

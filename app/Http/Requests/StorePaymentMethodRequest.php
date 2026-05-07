@@ -9,56 +9,56 @@ use Illuminate\Validation\Rule;
 
 class StorePaymentMethodRequest extends FormRequest
 {
-    /**
-     * Перевіряємо, чи авторизований користувач (адмін)
-     */
     public function authorize(): bool
     {
         return Auth::check();
     }
 
-    /**
-     * Правила валідації з використанням RuleFactory
-     */
     public function rules(): array
     {
         return RuleFactory::make([
-            // Трансльовані поля (автоматично для всіх мов)
-            '%title%'               => ['required', 'string', 'max:255'],
-            '%description%'         => ['nullable', 'string'],
-            '%instructions%'        => ['nullable', 'string'],
+            // %title% буде обов'язковим лише для 'uk', для інших — за бажанням
+            '%title%' => [
+                Rule::requiredIf(fn() => app()->getLocale() === 'uk'),
+                'nullable',
+                'string',
+                'max:255'
+            ],
+            '%description%'  => ['nullable', 'string'],
+            '%payment_details%' => ['nullable', 'string'],
 
-            // Системні поля
-            'code'                  => ['required', 'string', 'max:50', Rule::unique('payment_methods', 'code')],
-            'driver'                => ['required', 'string', 'max:255'], // Напр. App\Services\Payments\Drivers\MonoDriver
-            'icon'                  => ['nullable', 'string', 'max:50'],
-
-            // Налаштування API (JSON)
-            'settings'              => ['nullable', 'array'],
-            'settings.api_token'    => ['nullable', 'string'], // Можна додати специфічні правила для ключів
-            'settings.public_key'   => ['nullable', 'string'],
-            'settings.private_key'  => ['nullable', 'string'],
-
-            // Комісії та параметри відображення
-            'commission_fixed'      => ['required', 'numeric', 'min:0'],
-            'commission_percent'    => ['required', 'numeric', 'min:0', 'max:100'],
-            'is_active'             => ['required', 'boolean'],
-            'sort_order'            => ['required', 'integer'],
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                'alpha_dash',
+                Rule::unique('payment_methods', 'code')->ignore($this->route('payment_method'))
+            ],
+            'driver'            => ['required', 'string', 'max:255'],
+            'icon'              => ['nullable', 'string', 'max:50'],
+            'settings'          => ['nullable', 'array'],
+            'commission_fixed'  => ['required', 'numeric', 'min:0'],
+            'commission_percent' => ['required', 'numeric', 'min:0', 'max:100'],
+            'is_active'         => ['required', 'boolean'],
+            'sort_order'        => ['required', 'integer'],
         ]);
     }
 
-    /**
-     * Підготовка даних (типізація)
-     */
     protected function prepareForValidation()
     {
         $this->merge([
-            'is_active'          => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN),
+            'is_active'          => $this->boolean('is_active'), // Більш чистий метод Laravel
             'sort_order'         => (int) ($this->sort_order ?? 0),
             'commission_fixed'   => (float) ($this->commission_fixed ?? 0),
             'commission_percent' => (float) ($this->commission_percent ?? 0),
-            // Якщо settings прийшли як рядок, перетворюємо в масив
-            'settings'           => is_array($this->settings) ? $this->settings : json_decode($this->settings, true),
+            'settings'           => $this->parseSettings(),
         ]);
+    }
+
+    private function parseSettings(): array
+    {
+        if (is_array($this->settings)) return $this->settings;
+        if (is_string($this->settings)) return json_decode($this->settings, true) ?? [];
+        return [];
     }
 }

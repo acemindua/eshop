@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentMethod;
@@ -17,7 +17,10 @@ class PaymentMethodController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Settings/PaymentMethods/Index', [
-            'paymentMethods' => PaymentMethod::orderBy('sort_order')->paginate(10),
+            'data' => [
+                'paymentMethods' => PaymentMethod::orderBy('sort_order')->paginate(10),
+            ]
+
         ]);
     }
 
@@ -47,7 +50,10 @@ class PaymentMethodController extends Controller
     public function edit(PaymentMethod $paymentMethod)
     {
         return Inertia::render('Admin/Settings/PaymentMethods/Edit', [
-            'paymentMethod' => $paymentMethod->load('translations'),
+            'data' => [
+                'paymentMethod' => $paymentMethod->load('translations'),
+            ]
+
         ]);
     }
 

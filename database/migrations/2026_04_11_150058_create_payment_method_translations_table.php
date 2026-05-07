@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('title'); // Назва: "Оплата за реквізитами", "LiqPay"
             $table->text('description')->nullable(); // Опис для клієнта
-            $table->text('instructions')->nullable(); // Інструкції (наприклад, номер карти)
+            $table->text('payment_details')->nullable(); // Інструкції (наприклад, номер карти)
 
             $table->unique(['payment_method_id', 'locale']);
         });

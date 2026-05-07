@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\{
     UserController,
     TranslationController,
     ShippingController,
-    PaymentMethodController
 };
 use App\Http\Controllers\Admin\Commerce\{
     CategoryController,
@@ -14,7 +13,7 @@ use App\Http\Controllers\Admin\Commerce\{
     ManufacturerController,
     OrderController
 };
-use App\Http\Controllers\Admin\Settings\AppVersionController;
+use App\Http\Controllers\Admin\Settings\{AppVersionController, PaymentMethodController};
 use Illuminate\Support\Facades\Route;
 
 // Dashboard

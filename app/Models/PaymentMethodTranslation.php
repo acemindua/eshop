@@ -19,6 +19,6 @@ class PaymentMethodTranslation extends Model
     protected $fillable = [
         'title',
         'description',
-        'instructions',
+        'payment_details',
     ];
 }

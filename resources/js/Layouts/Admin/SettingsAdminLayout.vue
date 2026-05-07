@@ -58,11 +58,14 @@
                                 '/admin/settings/payment-methods',
                             )
                         "
+                        :show-text="isSidebarVisible"
                     >
                         <template #icon>
                             <component
                                 :is="
-                                    $page.url.startsWith('/pages')
+                                    $page.url.startsWith(
+                                        '/settings/payment-methods',
+                                    )
                                         ? IconCreditCardFilled
                                         : IconCreditCard
                                 "
@@ -108,8 +111,6 @@
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue"; // Шлях залежить від вашої структури
 import { ref } from "vue";
 import {
-    IconClipboard,
-    IconClipboardFilled,
     IconCreditCard,
     IconCreditCardFilled,
     IconDirections,
@@ -117,8 +118,6 @@ import {
     IconLanguageHiragana,
     IconSettings,
     IconTruckDelivery,
-    IconUser,
-    IconUserFilled,
 } from "@tabler/icons-vue";
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
 

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('alias')->unique(); // 'nova_poshta', 'ukr_poshta', 'pickup'
             $table->string('name'); // Назва для відображення
+            // Якщо ви не хочете зберігати реквізити в JSON, можна окремим полем:
+            $table->text('payment_details')->nullable();
             $table->boolean('is_active')->default(false);
             $table->json('settings')->nullable(); // API ключі, націнки, ліміти
             $table->integer('sort_order')->default(0);

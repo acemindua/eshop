@@ -17,10 +17,11 @@ return new class extends Migration
 
             // Системний код (напр. 'monobank', 'liqpay')
             $table->string('code')->unique();
-
+            $table->decimal('commission_fixed', 10, 2)->default(0);
+            $table->decimal('commission_percent', 5, 2)->default(0);
             // Повний шлях до класу драйвера 
             // Напр. 'App\Services\Payments\Drivers\MonoDriver'
-            $table->string('driver');
+            $table->string('driver')->default('manual');
 
             // JSON поле для всіх технічних налаштувань (API токени, ключі)
             $table->json('settings')->nullable();

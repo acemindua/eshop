@@ -1,72 +1,72 @@
-<script setup>
-const props = defineProps({
-    modelValue: String, // Значення вибраного методу (напр. 'card', 'cash')
-    methods: Array, // Масив доступних методів з бекенду
-    errors: Object,
-});
-
-const emit = defineEmits(["update:modelValue"]);
-
-const selectMethod = (code) => {
-    emit("update:modelValue", code);
-};
-</script>
-
+<!-- Partials/PaymentMethods.vue -->
 <template>
-    <div class="bg-white border border-gray-200 p-6">
-        <div class="grid grid-cols-1 gap-3">
-            <div
-                v-for="method in methods"
-                :key="method.code"
-                @click="selectMethod(method.code)"
-                :class="[
-                    'relative flex items-center p-4 cursor-pointer transition-all border',
-                    modelValue === method.code
-                        ? 'border-black bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-400',
-                ]"
-            >
-                <div class="mr-4 flex items-center justify-center">
+    <div class="space-y-3">
+        <div
+            v-for="method in methods"
+            :key="method.code"
+            @click="updateValue(method.code)"
+            class="group relative flex cursor-pointer border p-4 transition-all duration-200"
+            :class="[
+                modelValue === method.code
+                    ? 'border-black bg-gray-50 ring-1 ring-black'
+                    : 'border-gray-200 hover:border-gray-400',
+            ]"
+        >
+            <div class="flex h-5 items-center">
+                <div
+                    class="flex h-4 w-4 items-center justify-center rounded-full border"
+                    :class="
+                        modelValue === method.code
+                            ? 'border-black'
+                            : 'border-gray-300'
+                    "
+                >
                     <div
-                        class="w-4 h-4 border border-black flex items-center justify-center"
-                        :class="
-                            modelValue === method.code ? 'bg-black' : 'bg-white'
-                        "
-                    >
-                        <div
-                            v-if="modelValue === method.code"
-                            class="w-1.5 h-1.5 bg-white"
-                        ></div>
-                    </div>
+                        v-if="modelValue === method.code"
+                        class="h-2 w-2 rounded-full bg-black"
+                    ></div>
                 </div>
+            </div>
 
-                <div class="flex-grow">
-                    <p class="text-sm font-bold uppercase tracking-tight">
-                        {{ method.label }}
-                    </p>
-                    <p
-                        v-if="method.description"
-                        class="text-xs text-gray-500 mt-1"
-                    >
-                        {{ method.description }}
-                    </p>
-                </div>
-
-                <div v-if="method.icon" class="ml-auto opacity-60">
-                    <component :is="method.icon" class="w-6 h-6" />
-                </div>
+            <div class="ml-4 flex flex-col">
+                <span
+                    class="text-xs font-bold uppercase tracking-wider"
+                    :class="
+                        modelValue === method.code
+                            ? 'text-black'
+                            : 'text-gray-500'
+                    "
+                >
+                    {{ method.label }}
+                </span>
+                <span
+                    v-if="method.description"
+                    class="mt-1 text-[11px] text-gray-400 leading-relaxed"
+                >
+                    {{ method.description }}
+                </span>
             </div>
         </div>
 
-        <p v-if="errors?.payment_method" class="text-red-500 text-xs mt-3">
-            {{ errors.payment_method }}
-        </p>
+        <InputError
+            v-if="errors.payment_method"
+            :message="errors.payment_method"
+            class="mt-2"
+        />
     </div>
 </template>
 
-<style scoped>
-/* У вашому стилі: жодних заокруглень */
-div {
-    border-radius: 0 !important;
-}
-</style>
+<script setup>
+import InputError from "@/Components/UI/InputError.vue";
+
+const props = defineProps({
+    methods: Array,
+    errors: Object,
+});
+
+const modelValue = defineModel();
+
+const updateValue = (code) => {
+    modelValue.value = code;
+};
+</script>

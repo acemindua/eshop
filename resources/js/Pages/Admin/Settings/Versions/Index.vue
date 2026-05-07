@@ -194,7 +194,7 @@
 <script setup>
 import { reactive, computed, watch, onMounted } from "vue";
 import { Head, router } from "@inertiajs/vue3";
-import Layout from "@/Layouts/Admin/DashboardAdminLayout.vue";
+import Layout from "@/Layouts/Admin/SettingsAdminLayout.vue";
 import {
     IconTrash,
     IconSend,

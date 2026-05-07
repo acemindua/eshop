@@ -6,27 +6,15 @@ import ShippingInfo from "./Partials/ShippingInfo.vue";
 import PaymentMethods from "./Partials/PaymentMethods.vue"; // Наш новий компонент
 import OrderSummary from "./Partials/OrderSummary.vue";
 
+const props = defineProps({
+    paymentMethods: {
+        type: Array,
+        required: true,
+    },
+});
+
 const page = usePage();
 const cart = computed(() => page.props.cart);
-
-// Доступні методи оплати (можна передавати з бекенду через props)
-const paymentMethods = [
-    {
-        code: "card",
-        label: "Оплата картою (LiqPay)",
-        description: "Миттєва оплата онлайн без комісії",
-    },
-    {
-        code: "cash",
-        label: "При отриманні",
-        description: "Оплата готівкою або картою у відділенні",
-    },
-    {
-        code: "invoice",
-        label: "Безготівковий розрахунок",
-        description: "Для юридичних осіб (рахунок-фактура)",
-    },
-];
 
 const form = useForm({
     first_name: "",

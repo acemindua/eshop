@@ -14,7 +14,7 @@ class PaymentMethod extends Model implements TranslatableContract
     public $translatedAttributes = [
         'title',
         'description',
-        'instructions',
+        'payment_details',
     ];
 
     protected $fillable = [
