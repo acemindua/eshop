@@ -442,5 +442,11 @@ php artisan make:seeder WarehouseSeeder
 ### Checkout (v1.10.5) - 2026.05.11
 
 ```bash
-npm install vee-validate --save
+
+```
+
+### Checkout->Delivery (v1.10.6) - 2026.05.13
+
+```bash
+
 ```

@@ -4,7 +4,7 @@ import { ref, watch, computed } from "vue";
 import ContactInfo from "./Partials/ContactInfo.vue";
 import ShippingInfo from "./Partials/ShippingInfo.vue";
 import PaymentMethods from "./Partials/PaymentMethods.vue";
-import OrderSummary from "./Partials/OrderSummary.vue";
+import OrderSummary from "./Checkout/Partials/OrderSummary.vue";
 import InputError from "@/Components/UI/InputError.vue";
 
 const props = defineProps({

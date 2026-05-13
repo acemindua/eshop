@@ -38,7 +38,6 @@
         "pinia": "^3.0.3",
         "sortablejs": "^1.15.6",
         "sweetalert2": "^11.26.4",
-        "vee-validate": "^4.15.1",
         "vue-flag-icon": "^2.1.0",
         "vue-the-mask": "^0.11.1"
     }

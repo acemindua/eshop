@@ -12,7 +12,7 @@ class ShippingSeeder extends Seeder
         $methods = [
             [
                 'alias' => 'nova_poshta',
-                'name' => 'Нова Пошта',
+                'title' => 'Нова Пошта',
                 'is_active' => true,
                 'sort_order' => 1,
                 'settings' => [ // Завдяки casts у моделі можна передавати масив
@@ -23,7 +23,7 @@ class ShippingSeeder extends Seeder
             ],
             [
                 'alias' => 'delivery',
-                'name' => 'Delivery (Делівері)',
+                'title' => 'Delivery (Делівері)',
                 'is_active' => true,
                 'sort_order' => 2,
                 'settings' => [
@@ -33,14 +33,14 @@ class ShippingSeeder extends Seeder
             ],
             [
                 'alias' => 'ukr_poshta',
-                'name' => 'Укрпошта',
+                'title' => 'Укрпошта',
                 'is_active' => false,
                 'sort_order' => 3,
                 'settings' => ['api_key' => ''],
             ],
             [
                 'alias' => 'pickup',
-                'name' => 'Самовивіз зі складу',
+                'title' => 'Самовивіз зі складу',
                 'is_active' => true,
                 'sort_order' => 4,
                 'settings' => [

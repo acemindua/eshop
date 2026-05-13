@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\ShippingFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Shipping;
 use App\Http\Resources\ShippingResource;
@@ -17,14 +18,20 @@ class ShippingController extends Controller
     /**
      * Список усіх служб доставки.
      */
-    public function index(): Response
+    public function index(ShippingFilter $filter): Response
     {
         Gate::authorize('viewAny', Shipping::class);
 
-        return Inertia::render('Admin/Shipping/Index', [
-            'shippings' => ShippingResource::collection(
-                Shipping::orderBy('sort_order')->get()
-            ),
+        $shippings = Shipping::filter($filter)
+            ->paginate(request('per_page', 15))
+            ->withQueryString();
+
+        return inertia('Admin/Settings/Shippings/Index', [
+            'data' => [
+                'shippings' => ShippingResource::collection($shippings),
+            ],
+
+            'filters' => request()->all(['search', 'is_active', 'sort']),
         ]);
     }
 
@@ -35,7 +42,7 @@ class ShippingController extends Controller
     {
         Gate::authorize('update', $shipping);
 
-        return Inertia::render('Admin/Shipping/Edit', [
+        return Inertia::render('Admin/Settings/Shippings/Edit', [
             'shipping' => new ShippingResource($shipping),
         ]);
     }
@@ -57,9 +64,9 @@ class ShippingController extends Controller
 
         $shipping->update($data);
 
-        return redirect()->route('admin.shippings.index')->with([
+        return redirect()->route('admin.settings.shippings.index')->with([
             'alert' => [
-                'type'    => 'success',
+                'type' => 'success',
                 'message' => "Налаштування доставки `{$shipping->name}` оновлено.",
             ],
         ]);
@@ -76,7 +83,7 @@ class ShippingController extends Controller
 
         return back()->with([
             'alert' => [
-                'type'    => 'success',
+                'type' => 'success',
                 'message' => 'Статус доставки змінено.',
             ],
         ]);
@@ -93,7 +100,7 @@ class ShippingController extends Controller
 
         return redirect()->route('admin.shippings.index')->with([
             'alert' => [
-                'type'    => 'success',
+                'type' => 'success',
                 'message' => "Метод доставки `{$shipping->name}` додано.",
             ],
         ]);

@@ -54,7 +54,7 @@ Route::prefix('settings')->name('settings.')->group(function () {
     Route::resource('warehouses', WarehouseController::class);
     Route::patch('warehouses/{warehouse}/toggle', [WarehouseController::class, 'toggle'])->name('warehouses.toggle');
     // Shipping Methods
-    Route::resource('shippings', ShippingController::class)->only(['index', 'edit', 'update']);
+    Route::resource('shippings', ShippingController::class);
     Route::patch('shippings/{shipping}/toggle', [ShippingController::class, 'toggle'])->name('shippings.toggle');
 
     // Payment Methods (Перенесено сюди для логіки)

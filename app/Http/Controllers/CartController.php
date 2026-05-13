@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\WarehouseResource;
 use App\Models\Item;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\Shipping;
 use App\Models\PaymentMethod;
 use App\Models\Warehouse;
@@ -64,7 +64,7 @@ class CartController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function checkout()
+    public function checkout(Request $request)
     {
         if (Cart::isEmpty()) {
             return redirect()->route('cart.index');
@@ -83,8 +83,9 @@ class CartController extends Controller
             ->orderBy('sort_order')
             ->get();
 
-        return Inertia::render('Public/Commerce/Checkout', [
+        return Inertia::render('Public/Commerce/Checkout/Index', [
             'data' => [
+                'authUser'=>$request->user() ? new UserResource($request->user()) : null,
                 'paymentMethods'  => $paymentMethods,
                 'shippingMethods' => $shippingMethods,
                 'warehouses' => WarehouseResource::collection(

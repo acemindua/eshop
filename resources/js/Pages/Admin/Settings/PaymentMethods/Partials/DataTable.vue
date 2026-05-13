@@ -103,7 +103,7 @@ const confirmDelete = async (item) => {
             </thead>
             <tbody>
                 <tr
-                    v-if="items.length > 0"
+                    v-if="items?.length > 0"
                     v-for="(item, key) in items"
                     :key="item.id"
                     class="group hover:bg-slate-50 border-t border-slate-100 transition-colors"

@@ -26,6 +26,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'name'      => 'Super User',
             'email'     => 'acemind.ua@gmail.com',
             'password'  => Hash::make('admin@admin'),
+            'phone' =>'380982925252',
             'email_verified_at' => now(),
         ]);
 

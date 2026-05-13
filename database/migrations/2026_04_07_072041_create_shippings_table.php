@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('alias')->unique();
 
             // Назва, яку бачить клієнт (н-р: "Самовивіз", "Нова Пошта")
-            $table->string('name');
+            $table->string('title');
 
             // Короткий опис (н-р: "Доставка у відділення", "Безкоштовно з нашого складу")
             $table->string('description')->nullable();

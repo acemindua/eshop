@@ -18,10 +18,10 @@ class ShippingResource extends JsonResource
         return [
             'id'          => $this->id,
             'alias'       => $this->alias,
-            'name'        => $this->name,
+            'title'        => $this->title,
             'description' => $this->description,
             'price'       => (float) $this->price,
-            'is_active'   => $this->is_active,
+            'is_active'        => $this->is_active,
             'sort_order'  => $this->sort_order,
 
             // Додаємо хелпери, щоб на фронті (Vue) легше було маніпулювати умовами

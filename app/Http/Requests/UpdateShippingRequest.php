@@ -22,7 +22,7 @@ class UpdateShippingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
 
             // Якщо alias редагується, додаємо унікальність з ігноруванням поточної моделі
             'alias' => [
@@ -64,7 +64,7 @@ class UpdateShippingRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'назва',
+            'title' => 'назва',
             'alias' => 'аліас',
             'description' => 'опис',
             'price' => 'ціна',

@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Filters\QueryFilter;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Contracts\Database\Query\Builder;
 
 class Shipping extends Model
 {
@@ -12,7 +15,7 @@ class Shipping extends Model
 
     protected $fillable = [
         'alias',
-        'name',
+        'title',
         'description',
         'price',
         'is_active',
@@ -33,6 +36,13 @@ class Shipping extends Model
         ];
     }
 
+     /**
+     * Filters
+     */
+    public function scopeFilter(Builder $builder, QueryFilter $filter)
+    {
+        return $filter->apply($builder);
+    }
     /*
     |--------------------------------------------------------------------------
     | Relationships

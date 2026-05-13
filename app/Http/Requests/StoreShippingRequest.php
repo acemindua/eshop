@@ -21,7 +21,7 @@ class StoreShippingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
 
             'alias' => [
                 'required',
@@ -61,7 +61,7 @@ class StoreShippingRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'Назва методу',
+            'title' => 'Назва методу',
             'alias' => 'Аліас (код)',
             'description' => 'Опис доставки',
             'price' => 'Вартість',
