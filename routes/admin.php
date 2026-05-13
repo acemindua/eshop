@@ -61,6 +61,7 @@ Route::prefix('settings')->name('settings.')->group(function () {
     Route::resource('payment-methods', PaymentMethodController::class);
 });
 
+
 // Core Resources
 Route::resources([
     'users' => UserController::class,
