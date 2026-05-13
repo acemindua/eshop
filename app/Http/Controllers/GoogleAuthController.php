@@ -17,6 +17,13 @@ class GoogleAuthController extends Controller
      */
     public function redirect()
     {
+        // Якщо ми ініціюємо логін з конкретної сторінки (наприклад, checkout),
+        // Laravel може автоматично запам'ятати її, але для надійності
+        // можна вручну встановити intended URL, якщо є referer.
+        if (!session()->has('url.intended') && url()->previous() !== url()->current()) {
+            session(['url.intended' => url()->previous()]);
+        }
+
         return Socialite::driver('google')->redirect();
     }
 
@@ -26,10 +33,8 @@ class GoogleAuthController extends Controller
     public function callback()
     {
         try {
-            // Get the user information from Google
             $user = Socialite::driver('google')->user();
         } catch (Throwable $e) {
-
             return redirect('/')->with([
                 'alert' => [
                     'type' => 'error',
@@ -38,33 +43,30 @@ class GoogleAuthController extends Controller
             ]);
         }
 
-        // Перевіряємо, чи Google повернув name, якщо ні - даємо значення за замовчуванням
         $name = $user->name ?? 'User ' . Str::random(5);
-
-        // Check if the user already exists in the database
         $existingUser = User::where('email', $user->email)->first();
 
         if ($existingUser) {
-            // Log the user in if they already exist
             Auth::login($existingUser);
         } else {
-
-            // Otherwise, create a new user and log them in
             $newUser = User::create([
                 'email' => $user->email,
                 'name' => $name,
-                'password' => Hash::make(Str::random(16)), // Set a random password
+                'password' => Hash::make(Str::random(16)),
                 'email_verified_at' => now()
             ]);
 
-            $newUser->assignRole('auth');
+            // Припускаємо, що у тебе стоїть Spatie Permissions
+            if (method_exists($newUser, 'assignRole')) {
+                $newUser->assignRole('auth');
+            }
 
             event(new Registered($newUser));
-
             Auth::login($newUser);
         }
 
-        // Redirect the user to the dashboard or any other secure page
-        return redirect('/');
+        // ВАЖЛИВО: intended('/') спробує повернути юзера туди, де він був.
+        // Якщо в сесії немає збереженого шляху, він піде на '/'
+        return redirect()->intended('/checkout');
     }
 }

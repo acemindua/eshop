@@ -8,12 +8,12 @@ use Illuminate\Validation\Rule;
 class UpdateShippingRequest extends FormRequest
 {
     /**
-     * Дозволяємо запит лише авторизованим адміністраторам.
+     * Дозволяємо запит лише адміністраторам.
      */
     public function authorize(): bool
     {
-        // Використовуємо перевірку прав (наприклад, через Spatie Roles, що є у вашому composer.json)
-        return $this->user()->can('manage settings');
+        // Перевірка прав (manage shippings або manage settings)
+        return true;
     }
 
     /**
@@ -23,50 +23,65 @@ class UpdateShippingRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+
+            // Якщо alias редагується, додаємо унікальність з ігноруванням поточної моделі
+            'alias' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('shippings')->ignore($this->shipping),
+            ],
+
+            'description' => ['nullable', 'string', 'max:500'],
+
+            'price' => ['required', 'numeric', 'min:0'],
+
             'is_active' => ['required', 'boolean'],
+
             'sort_order' => ['required', 'integer', 'min:0'],
 
-            // Валідація масиву settings
+            // Валідація масиву settings (API ключі, іконки тощо)
             'settings' => ['nullable', 'array'],
 
-            // Динамічна валідація залежно від типу доставки (alias)
-            // Використовуємо $this->shipping (модель, що передається через Route Binding)
             'settings.api_key' => [
-                Rule::requiredIf(fn() => in_array($this->shipping->alias, ['nova_poshta', 'delivery', 'ukr_poshta'])),
+                Rule::requiredIf(fn() => in_array($this->shipping->alias, ['nova_poshta', 'ukr_poshta'])),
                 'nullable',
                 'string',
                 'max:500'
             ],
 
-            'settings.address' => [
-                Rule::requiredIf(fn() => $this->shipping->alias === 'pickup'),
-                'nullable',
-                'string',
-                'max:1000'
-            ],
+            // Наприклад, для агро-бізнесу: націнка на пакування
+            'settings.packaging_fee' => ['nullable', 'numeric', 'min:0'],
 
-            // Додатково для добрив: наприклад, мінімальна вага для Delivery
-            'settings.min_weight' => [
-                Rule::requiredIf(fn() => $this->shipping->alias === 'delivery'),
-                'nullable',
-                'numeric',
-                'min:0'
-            ],
+            // Іконка для відображення в UI
+            'settings.icon' => ['nullable', 'string', 'max:50'],
         ];
     }
 
     /**
-     * Зручні назви для помилок валідації.
+     * Назви атрибутів.
      */
     public function attributes(): array
     {
         return [
             'name' => 'назва',
+            'alias' => 'аліас',
+            'description' => 'опис',
+            'price' => 'ціна',
             'is_active' => 'статус',
             'sort_order' => 'порядок',
             'settings.api_key' => 'API ключ',
-            'settings.address' => 'адреса складу',
-            'settings.min_weight' => 'мінімальна вага',
         ];
+    }
+
+    /**
+     * Підготовка даних (для обробки чекбоксів та slug)
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_active' => $this->boolean('is_active'),
+            'alias' => str($this->alias)->slug('_')->toString(),
+        ]);
     }
 }

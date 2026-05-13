@@ -66,7 +66,7 @@ const title = computed(() => {
                     <div
                         v-if="$slots.sidenav"
                         v-show="isSecondarySidebarVisible"
-                        class="w-60 border-l dark:border-slate-800 bg-white dark:bg-slate-900 z-50 relative"
+                        class="w-[200px] border-l dark:border-slate-800 bg-white dark:bg-slate-900 z-50 relative"
                     >
                         <slot name="sidenav" />
                     </div>

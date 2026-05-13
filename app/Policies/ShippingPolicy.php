@@ -4,63 +4,66 @@ namespace App\Policies;
 
 use App\Models\Shipping;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ShippingPolicy
 {
+    use HandlesAuthorization;
+
     /**
-     * Determine whether the user can view any models.
+     * Перегляд списку методів доставки.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        // Дозволяємо перегляд адмінам або менеджерам налаштувань
+        return $user->hasPermissionTo('shipping-view');
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Перегляд конкретного методу.
      */
     public function view(User $user, Shipping $shipping): bool
     {
-        return false;
+        return $user->hasPermissionTo('shipping-view');
     }
 
     /**
-     * Determine whether the user can create models.
+     * Створення нового методу доставки.
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasPermissionTo('shipping-create');
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Оновлення налаштувань доставки (API ключі, ціни).
      */
     public function update(User $user, Shipping $shipping): bool
     {
-        return false;
+        return $user->hasPermissionTo('shipping-update');
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Видалення методу доставки.
      */
     public function delete(User $user, Shipping $shipping): bool
     {
-        return false;
+        return $user->hasPermissionTo('shipping-delete');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Відновлення (якщо додаси SoftDeletes).
      */
     public function restore(User $user, Shipping $shipping): bool
     {
-        return false;
+        return $user->hasPermissionTo('shipping-update');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Остаточне видалення.
      */
     public function forceDelete(User $user, Shipping $shipping): bool
     {
-        return false;
+        return $user->hasPermissionTo('shipping-delete');
     }
 }

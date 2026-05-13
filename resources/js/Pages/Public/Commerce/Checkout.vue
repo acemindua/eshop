@@ -1,156 +1,116 @@
 <script setup>
+import { ref, computed, watch } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
-import { ref, watch, computed } from "vue";
-import ContactInfo from "./Partials/ContactInfo.vue";
-import ShippingInfo from "./Partials/ShippingInfo.vue";
-import PaymentMethods from "./Partials/PaymentMethods.vue"; // Наш новий компонент
+import CheckoutLayout from "./Partials/CheckoutLayout.vue";
+import StepContact from "./Steps/StepContact.vue";
+import StepDelivery from "./Steps/StepDelivery.vue";
+import StepPayment from "./Steps/StepPayment.vue";
 import OrderSummary from "./Partials/OrderSummary.vue";
+import AuthModal from "@/Components/Public/Auth/AuthModal.vue";
 
 const props = defineProps({
-    paymentMethods: {
-        type: Array,
-        required: true,
-    },
-});
-
-const page = usePage();
-const cart = computed(() => page.props.cart);
-
-const form = useForm({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-    delivery_method: "pickup",
-    payment_method: "card", // дефолтний метод
-    city_ref: "",
-    city_name: "",
-    warehouse_ref: "",
-    warehouse_name: "",
+    cart: Object,
 });
 
 const isAuthModalOpen = ref(false);
+const authMode = ref("login");
 
-const syncUserData = (user) => {
-    if (user) {
-        const data = user.data || user;
-        form.first_name = data.first_name || data.name || "";
-        form.last_name = data.last_name || "";
-        form.email = data.email || "";
-        form.phone = data.phone || "";
-        form.defaults();
-    }
+const openLogin = () => {
+    authMode.value = "login";
+    isAuthModalOpen.value = true;
+};
+const currentStep = ref(1);
+
+const page = usePage();
+
+// 1. ПЕРЕВІР СТРУКТУРУ: якщо у тебе стандартний ресурс Laravel, то там .data.
+// Якщо просто масив пропсів - прибери .data.
+// Також додаємо фолбек на порожні рядки відразу тут.
+const user = computed(() => page.props?.auth?.user?.data || {});
+
+const form = useForm({
+    // Використовуємо оператор ?? для гарантії String
+    name: user.value?.name ?? "",
+    last_name: user.value?.last_name ?? "",
+    email: user.value?.email ?? "",
+    phone: user.value?.phone ?? "+380",
+    password: "",
+
+    different_recipient: false,
+    recipient_name: "",
+    recipient_last_name: "",
+    recipient_phone: "+380",
+
+    delivery_method: "nova_poshta",
+    city: null,
+    warehouse: null,
+
+    payment_method: "card",
+});
+
+const submit = () => {
+    form.post(route("checkout.store"));
 };
 
+// 2. ВИПРАВЛЕННЯ WATCH:
+// Потрібно слідкувати за функцією, яка повертає значення, або за user.value.
+// Також додаємо перевірку на наявність даних у newUser.
 watch(
-    () => page.props.auth.user,
-    (newUser) => syncUserData(newUser),
-    { immediate: true, deep: true },
+    () => user.value,
+    (newUser) => {
+        if (newUser && Object.keys(newUser).length > 0) {
+            form.name = newUser.name ?? "";
+            form.last_name = newUser.last_name ?? "";
+            form.email = newUser.email ?? "";
+            // Оновлюємо телефон тільки якщо він є у юзера і не порожній
+            if (newUser.phone) {
+                form.phone = newUser.phone;
+            }
+        }
+    },
+    { deep: true }, // Додаємо deep, якщо об'єкт user може змінюватися всередині
 );
-
-const submitOrder = () => {
-    form.post(route("orders.store"));
-};
 </script>
 
 <template>
-    <div class="max-w-6xl mx-auto py-12 px-4">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            <div class="lg:col-span-8 space-y-10">
-                <ContactInfo
-                    v-model:first_name="form.first_name"
-                    v-model:last_name="form.last_name"
-                    v-model:email="form.email"
-                    v-model:phone="form.phone"
-                    :errors="form.errors"
-                    @open-auth="isAuthModalOpen = true"
-                />
-
-                <div class="bg-white p-6 border border-gray-200 shadow-sm">
-                    <h2
-                        class="text-sm font-bold uppercase tracking-[0.2em] mb-8 text-black"
-                    >
-                        2. Спосіб доставки
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <button
-                            @click="form.delivery_method = 'pickup'"
-                            class="border p-5 flex flex-col text-left transition-all"
-                            :class="
-                                form.delivery_method === 'pickup'
-                                    ? 'border-black bg-black text-white'
-                                    : 'border-gray-200 text-gray-400 hover:border-black'
-                            "
-                        >
-                            <span
-                                class="text-xs font-bold uppercase tracking-widest"
-                                >Самовивіз</span
-                            >
-                            <span class="text-[10px] mt-1 opacity-70"
-                                >Львів, вул. Промислова, 5</span
-                            >
-                        </button>
-
-                        <button
-                            @click="form.delivery_method = 'nova_poshta'"
-                            class="border p-5 flex flex-col text-left transition-all"
-                            :class="
-                                form.delivery_method === 'nova_poshta'
-                                    ? 'border-black bg-black text-white'
-                                    : 'border-gray-200 text-gray-400 hover:border-black'
-                            "
-                        >
-                            <span
-                                class="text-xs font-bold uppercase tracking-widest"
-                                >Нова Пошта</span
-                            >
-                            <span class="text-[10px] mt-1 opacity-70"
-                                >У відділення</span
-                            >
-                        </button>
-                    </div>
-
-                    <Transition
-                        enter-active-class="transition duration-300 ease-out"
-                        enter-from-class="opacity-0 -translate-y-4"
-                        enter-to-class="opacity-100 translate-y-0"
-                    >
-                        <div
-                            v-if="form.delivery_method === 'nova_poshta'"
-                            class="mt-8 pt-8 border-t border-gray-100"
-                        >
-                            <ShippingInfo
-                                v-model:city_ref="form.city_ref"
-                                v-model:city_name="form.city_name"
-                                v-model:warehouse_ref="form.warehouse_ref"
-                                v-model:warehouse_name="form.warehouse_name"
-                                :errors="form.errors"
-                            />
-                        </div>
-                    </Transition>
-                </div>
-
-                <div class="bg-white p-6 border border-gray-200 shadow-sm">
-                    <h2
-                        class="text-sm font-bold uppercase tracking-[0.2em] mb-8 text-black"
-                    >
-                        3. Спосіб оплати
-                    </h2>
-                    <PaymentMethods
-                        v-model="form.payment_method"
-                        :methods="paymentMethods"
-                        :errors="form.errors"
+    <div class="max-w-7xl mx-auto px-4 py-10">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-x-12">
+            <!-- Ліва частина: Кроки -->
+            <div class="lg:col-span-7 space-y-6">
+                <CheckoutLayout :current-step="currentStep">
+                   
+                    <StepContact
+                        v-if="currentStep === 1"
+                        :form="form"
+                        @next="currentStep = 2"
+                        @open-auth="openLogin"
                     />
-                </div>
-            </div>
 
-            <aside class="lg:col-span-4">
-                <OrderSummary
-                    :cart="cart"
-                    :processing="form.processing"
-                    @submit="submitOrder"
-                />
-            </aside>
+                    <StepDelivery
+                        v-if="currentStep === 2"
+                        :form="form"
+                        @next="currentStep = 3"
+                        @back="currentStep = 1"
+                    />
+
+                    <StepPayment
+                        v-if="currentStep === 3"
+                        :form="form"
+                        @back="currentStep = 2"
+                        @submit="submit"
+                    />
+                </CheckoutLayout>
+            </div>
+            <!-- Модалка чекає тут -->
+            <AuthModal
+                :is-open="isAuthModalOpen"
+                :initial-mode="authMode"
+                @close="isAuthModalOpen = false"
+            />
+            <!-- Права частина: Кошик (Sticky) -->
+            <div class="lg:col-span-5 mt-10 lg:mt-0">
+                <OrderSummary :cart="cart" :form="form" />
+            </div>
         </div>
     </div>
 </template>

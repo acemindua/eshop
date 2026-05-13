@@ -30,10 +30,13 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard', absolute: false));
+        // Якщо в сесії немає конкретного наміру, 
+        // беремо URL сторінки, з якої було відправлено форму (referer)
+        $fallback = url()->previous() ?: route('home');
+
+        return redirect()->intended($fallback);
     }
 
     /**

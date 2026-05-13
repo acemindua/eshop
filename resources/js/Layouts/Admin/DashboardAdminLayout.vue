@@ -53,14 +53,12 @@ const userFlag = computed(() => {
                 </h4>
             </div>
 
-            <ul class="flex flex-col w-full px-3 py-4">
+            <ul class="flex flex-col w-full border-b divide-y">
                 <li v-if="auth_user" class="mb-2">
                     <div
                         class="m-4 flex flex-col gap-2 items-center justify-center text-xs"
                     >
-                        <div
-                            class="relative flex items-center justify-center mb-2"
-                        >
+                        <div class="relative flex items-center justify-center">
                             <!-- Аватар користувача -->
                             <img
                                 :src="
@@ -84,7 +82,7 @@ const userFlag = computed(() => {
                         </div>
                         <p class="font-semibold">{{ auth_user.full_name }}</p>
                         <p
-                            class="flex items-center justify-center bg-brand rounded-full h-5 px-2 relative"
+                            class="flex items-center justify-center bg-gray-600 rounded-full h-5 px-2 relative"
                         >
                             <span
                                 class="text-xs text-gray-50 -top-[2px] relative"
@@ -95,54 +93,48 @@ const userFlag = computed(() => {
                         <p class="text-gray-400 truncate w-full text-center">
                             {{ auth_user.email }}
                         </p>
-
-                        <div
-                            class="border-t border-dashed border-brand mt-2 w-[50%]"
-                        ></div>
                     </div>
                 </li>
-                <li>
-                    <AdminNavLink
-                        :href="route('admin.users.index')"
-                        :active="$page.url.startsWith('/users')"
-                        :show-text="isSidebarVisible"
-                    >
-                        <template #icon>
-                            <component
-                                :is="
-                                    $page.url.startsWith('/users')
-                                        ? IconUserFilled
-                                        : IconUser
-                                "
-                                stroke="1"
-                                class="w-5 h-5"
-                            />
-                        </template>
 
-                        {{ $t("Users") }}
-                    </AdminNavLink>
-                </li>
-                <li>
-                    <AdminNavLink
-                        :href="route('admin.pages.index')"
-                        :active="$page.url.startsWith('/pages')"
-                        :show-text="isSidebarVisible"
-                    >
-                        <template #icon>
-                            <component
-                                :is="
-                                    $page.url.startsWith('/pages')
-                                        ? IconClipboardFilled
-                                        : IconClipboard
-                                "
-                                stroke="1"
-                                class="w-5 h-5"
-                            />
-                        </template>
+                <AdminNavLink
+                    :href="route('admin.users.index')"
+                    :active="$page.url.startsWith('/users')"
+                    :show-text="isSidebarVisible"
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url.startsWith('/users')
+                                    ? IconUserFilled
+                                    : IconUser
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
 
-                        {{ $t("Pages") }}
-                    </AdminNavLink>
-                </li>
+                    {{ $t("Users") }}
+                </AdminNavLink>
+
+                <AdminNavLink
+                    :href="route('admin.pages.index')"
+                    :active="$page.url.startsWith('/pages')"
+                    :show-text="isSidebarVisible"
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url.startsWith('/pages')
+                                    ? IconClipboardFilled
+                                    : IconClipboard
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
+
+                    {{ $t("Pages") }}
+                </AdminNavLink>
             </ul>
         </template>
 

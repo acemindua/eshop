@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <AdminLayout v-model:isSidebarVisible="isSidebarVisible">
         <template #sidenav>
             <div class="w-full h-14 border-b flex items-center p-4">
                 <h4
@@ -9,9 +9,28 @@
                 </h4>
             </div>
 
-            <ul class="flex flex-col w-full px-3 py-4">
-                <li></li>
-                <li>
+            <ul class="flex flex-col w-full border-b divide-y">
+                <AdminNavLink
+                    :href="route('admin.commerce.orders.index')"
+                    :active="$page.url == '/commerce/orders'"
+                    :show-text="isSidebarVisible"
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url == '/commerce/orders'
+                                    ? IconBasketFilled
+                                    : IconBasket
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
+
+                    {{ $t("Orders") }}
+                </AdminNavLink>
+
+                <!--     <li>
                     <AdminNavLink
                         :href="route('admin.commerce.orders.index')"
                         :active="$page.url.startsWith('/admin/commerce/orders')"
@@ -60,23 +79,22 @@
                         </template>
                         <span>{{ $t("Manufacturers") }}</span>
                     </AdminNavLink>
-                </li>
+                </li> -->
             </ul>
         </template>
 
         <div>
             <slot />
         </div>
-    </Layout>
+    </AdminLayout>
 </template>
 
 <script setup>
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
-import Layout from "@/Layouts/Admin/AdminLayout.vue";
-import {
-    IconBuildingFactory2,
-    IconCategory,
-    IconPlant2,
-    IconShoppingBag,
-} from "@tabler/icons-vue";
+import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
+import { IconBasket, IconBasketFilled } from "@tabler/icons-vue";
+import { ref } from "vue";
+
+// Оголошуємо стан тут, щоб він був доступний у шаблоні DashboardAdminLayout
+const isSidebarVisible = ref(true);
 </script>

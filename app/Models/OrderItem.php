@@ -10,61 +10,40 @@ class OrderItem extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     * We include historical data like title and price.
-     */
     protected $fillable = [
         'order_id',
-        'item_id',
-        'title',
+        'product_id', // Зв'язок з актуальним товаром
+        'title',      // Історична назва на момент покупки
         'quantity',
-        'price',
+        'price',      // Ціна на момент покупки
         'total_price',
-        'tax_amount',
-        'options',
+        'options',    // Характеристики (колір, розмір тощо)
     ];
 
-    /**
-     * The attributes that should be cast.
-     * JSON options are automatically converted to an array.
-     */
     protected $casts = [
         'price'       => 'decimal:2',
         'total_price' => 'decimal:2',
-        'tax_amount'  => 'decimal:2',
-        'options'     => 'array', // Useful for storing size, color, etc.
+        'options'     => 'array',
     ];
 
-    /**
-     * Relationship: Link back to the main order.
-     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
     /**
-     * Relationship: Link to the current product.
-     * Note: This might be null if the product was deleted from the catalog.
+     * Зв'язок з товаром (може бути null, якщо товар видалено)
      */
-    public function item(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Item::class, 'product_id');
     }
 
-    /**
-     * Model Boot Logic:
-     * Automatically calculate the total_price before saving.
-     */
     protected static function booted(): void
     {
-        static::creating(function (OrderItem $orderItem) {
-            $orderItem->total_price = $orderItem->price * $orderItem->quantity;
-        });
-
-        static::updating(function (OrderItem $orderItem) {
-            $orderItem->total_price = $orderItem->price * $orderItem->quantity;
+        static::saving(function (OrderItem $item) {
+            // Розрахунок загальної суми рядка автоматично
+            $item->total_price = $item->price * $item->quantity;
         });
     }
 }

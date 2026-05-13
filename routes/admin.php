@@ -13,7 +13,7 @@ use App\Http\Controllers\Admin\Commerce\{
     ManufacturerController,
     OrderController
 };
-use App\Http\Controllers\Admin\Settings\{AppVersionController, PaymentMethodController};
+use App\Http\Controllers\Admin\Settings\{AppVersionController, PaymentMethodController, WarehouseController};
 use Illuminate\Support\Facades\Route;
 
 // Dashboard
@@ -50,7 +50,9 @@ Route::prefix('settings')->name('settings.')->group(function () {
         Route::post('/scan', 'scan')->name('scan');
         Route::post('/update-all', 'updateAll')->name('update-all');
     });
-
+    // Warehouses (Склади)
+    Route::resource('warehouses', WarehouseController::class);
+    Route::patch('warehouses/{warehouse}/toggle', [WarehouseController::class, 'toggle'])->name('warehouses.toggle');
     // Shipping Methods
     Route::resource('shippings', ShippingController::class)->only(['index', 'edit', 'update']);
     Route::patch('shippings/{shipping}/toggle', [ShippingController::class, 'toggle'])->name('shippings.toggle');

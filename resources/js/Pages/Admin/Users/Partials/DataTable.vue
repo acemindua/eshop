@@ -13,6 +13,7 @@ import {
 import { ref, watch } from "vue";
 
 import Swal from "sweetalert2";
+import useLocales from "@/Composables/useLocales";
 
 const props = defineProps({
     items: Array,
@@ -30,7 +31,7 @@ watch(toggleAll, (val) => {
     if (val) {
         emit(
             "update:selectedItems",
-            props.items.map((i) => i.id)
+            props.items.map((i) => i.id),
         );
     } else {
         emit("update:selectedItems", []);
@@ -61,6 +62,22 @@ const confirmDelete = async (item) => {
     if (result.isConfirmed) {
         emit("delete", item);
     }
+};
+
+const getIconLokale = (locale) => {
+    if (!locale) return "gb";
+    const { state } = useLocales();
+    // Пріоритет 1: Дивимось у localesMapping (uk -> ua)
+    if (state.mapping[locale]) {
+        return state.mapping[locale];
+    }
+
+    // Пріоритет 2: Дивимось у supportedLocales -> regional (uk_UA -> ua)
+    const supported = state.locales[locale];
+    if (supported && supported.regional) {
+        return supported.regional.split("_")[1].toLowerCase();
+    }
+    return "gb";
 };
 </script>
 
@@ -102,10 +119,25 @@ const confirmDelete = async (item) => {
                         {{ $formatSerial(count + key) }}
                     </td>
                     <th class="p-1">
-                        <ImageDataView
-                            :src="item?.avatar"
-                            :configs="{ width: '36px', height: '36px' }"
-                        />
+                        <div
+                            class="relative flex items-center justify-center w-12 h-12 mx-auto"
+                        >
+                            <ImageDataView
+                                :src="item?.avatar"
+                                :configs="{ width: '36px', height: '36px' }"
+                            />
+
+                            <div
+                                class="absolute bottom-1 right-1 border-0 rounded-full w-5 h-5 flex items-center justify-center bg-white"
+                            >
+                                <!-- Прапорець як бейдж -->
+                                <flag
+                                    :iso="getIconLokale(item?.locale) || 'gb'"
+                                    :title="item?.locale || 'gb'"
+                                    class="rounded-full"
+                                />
+                            </div>
+                        </div>
                     </th>
                     <td class="p-2">
                         <div class="flex flex-col">

@@ -425,3 +425,22 @@ php artisan db:seed --class=AppVersionSeeder
 
 php artisan make:migration add_status_to_app_versions_table
 ```
+
+### Orders (v1.10.4) - 2026.05.08
+
+-- Warehouse
+
+```bash
+php artisan make:model Warehouse -m
+
+php artisan make:controller Admin/Settings/WarehouseController --model=Warehouse --resource --requests
+php artisan make:resource WarehouseResource
+php artisan make:policy WarehousePolicy --model=Warehouse
+php artisan make:seeder WarehouseSeeder
+```
+
+### Checkout (v1.10.5) - 2026.05.11
+
+```bash
+npm install vee-validate --save
+```

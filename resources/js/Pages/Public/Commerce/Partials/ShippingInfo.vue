@@ -4,7 +4,6 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import BaseSelect from "@/Components/UI/BaseSelect.vue";
 
-// PROPS
 const props = defineProps({
     city_ref: String,
     city_name: String,
@@ -13,7 +12,6 @@ const props = defineProps({
     errors: Object,
 });
 
-// EMITS
 const emit = defineEmits([
     "update:city_ref",
     "update:city_name",
@@ -21,7 +19,6 @@ const emit = defineEmits([
     "update:warehouse_name",
 ]);
 
-// STATE
 const selectedCity = ref(null);
 const queryCity = ref("");
 const cities = ref([]);
@@ -32,11 +29,9 @@ const queryWarehouse = ref("");
 const warehouses = ref([]);
 const isWarehouseLoading = ref(false);
 
-// HELPERS
 const cleanSearch = (val) =>
     val.replace(/^(місто|м\.|село|с\.|смт)\s+/gi, "").trim();
 
-// API: Cities
 const fetchCities = async (query) => {
     isCityLoading.value = true;
     try {
@@ -45,33 +40,25 @@ const fetchCities = async (query) => {
         });
         cities.value = data;
     } catch (e) {
-        console.error("City loading error:", e);
+        console.error(e);
     } finally {
         isCityLoading.value = false;
     }
 };
 
-// API: Warehouses
 const fetchWarehouses = async (cityRef) => {
-    if (!cityRef) {
-        warehouses.value = [];
-        return;
-    }
-
+    if (!cityRef) return;
     isWarehouseLoading.value = true;
     try {
         const { data } = await axios.get(route("api.np.warehouses"), {
             params: { city_ref: cityRef },
         });
         warehouses.value = data;
-    } catch (e) {
-        console.error("Warehouse loading error:", e);
     } finally {
         isWarehouseLoading.value = false;
     }
 };
 
-// ✅ DEBOUNCE (lodash)
 const debouncedFetchCities = debounce((val) => {
     if (!val || val.length < 3) {
         cities.value = [];
@@ -80,84 +67,67 @@ const debouncedFetchCities = debounce((val) => {
     fetchCities(val);
 }, 400);
 
-// WATCH: City query
-watch(queryCity, (val) => {
-    debouncedFetchCities(val);
-});
+watch(queryCity, (val) => debouncedFetchCities(val));
 
-// WATCH: Selected city
-watch(selectedCity, async (city) => {
-    emit("update:city_ref", city?.ref || "");
-    emit("update:city_name", city?.present || "");
+watch(selectedCity, async (newCity) => {
+    emit("update:city_ref", newCity?.ref || "");
+    emit("update:city_name", newCity?.present || "");
 
     selectedWarehouse.value = null;
-    queryWarehouse.value = "";
-    warehouses.value = [];
+    emit("update:warehouse_ref", "");
+    emit("update:warehouse_name", "");
 
-    if (city?.ref) {
-        await fetchWarehouses(city.ref);
-    }
+    if (newCity?.ref) await fetchWarehouses(newCity.ref);
 });
 
-// WATCH: Selected warehouse
 watch(selectedWarehouse, (w) => {
     emit("update:warehouse_ref", w?.ref || "");
     emit("update:warehouse_name", w?.name || "");
 });
 
-// COMPUTED
 const filteredWarehouses = computed(() => {
     if (!queryWarehouse.value) return warehouses.value;
-
-    const q = queryWarehouse.value.toLowerCase();
-
-    return warehouses.value.filter((w) => w.name?.toLowerCase().includes(q));
+    return warehouses.value.filter((w) =>
+        w.name?.toLowerCase().includes(queryWarehouse.value.toLowerCase()),
+    );
 });
 
-// INIT
 onMounted(async () => {
     if (props.city_ref) {
-        selectedCity.value = {
-            ref: props.city_ref,
-            present: props.city_name,
-        };
-
+        selectedCity.value = { ref: props.city_ref, present: props.city_name };
         queryCity.value = props.city_name || "";
-
+        await fetchWarehouses(props.city_ref);
         if (props.warehouse_ref) {
-            await fetchWarehouses(props.city_ref);
-
-            selectedWarehouse.value = {
-                ref: props.warehouse_ref,
-                name: props.warehouse_name,
-            };
+            selectedWarehouse.value = warehouses.value.find(
+                (w) => w.ref === props.warehouse_ref,
+            ) || { ref: props.warehouse_ref, name: props.warehouse_name };
         }
     }
 });
 
-onBeforeUnmount(() => {
-    debouncedFetchCities.cancel();
-});
+onBeforeUnmount(() => debouncedFetchCities.cancel());
 </script>
 
 <template>
-    <div class="bg-white p-6 border border-gray-200 shadow-sm space-y-8">
-        <h2 class="text-sm font-bold uppercase tracking-[0.2em] text-black">
-            2. Доставка (Нова Пошта)
-        </h2>
+    <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in duration-500"
+    >
+        <BaseSelect
+            label="Місто"
+            placeholder="Введіть місто..."
+            display-key="present"
+            v-model="selectedCity"
+            :options="cities"
+            :loading="isCityLoading"
+            :error="errors?.city_ref"
+            @query-change="(v) => (queryCity = v)"
+        />
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <BaseSelect
-                label="Місто"
-                placeholder="Львів..."
-                display-key="present"
-                v-model="selectedCity"
-                :options="cities"
-                :loading="isCityLoading"
-                :error="errors?.city_ref"
-                @query-change="(v) => (queryCity = v)"
-            />
-
+        <Transition
+            enter-active-class="transition duration-200"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+        >
             <BaseSelect
                 v-if="selectedCity"
                 label="Відділення"
@@ -170,6 +140,6 @@ onBeforeUnmount(() => {
                 show-check
                 @query-change="(v) => (queryWarehouse = v)"
             />
-        </div>
+        </Transition>
     </div>
 </template>

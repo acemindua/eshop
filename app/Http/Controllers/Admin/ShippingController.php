@@ -7,6 +7,7 @@ use App\Models\Shipping;
 use App\Http\Resources\ShippingResource;
 use App\Http\Requests\StoreShippingRequest;
 use App\Http\Requests\UpdateShippingRequest;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
@@ -18,6 +19,8 @@ class ShippingController extends Controller
      */
     public function index(): Response
     {
+        Gate::authorize('viewAny', Shipping::class);
+
         return Inertia::render('Admin/Shipping/Index', [
             'shippings' => ShippingResource::collection(
                 Shipping::orderBy('sort_order')->get()
@@ -30,6 +33,8 @@ class ShippingController extends Controller
      */
     public function edit(Shipping $shipping): Response
     {
+        Gate::authorize('update', $shipping);
+
         return Inertia::render('Admin/Shipping/Edit', [
             'shipping' => new ShippingResource($shipping),
         ]);
@@ -40,32 +45,57 @@ class ShippingController extends Controller
      */
     public function update(UpdateShippingRequest $request, Shipping $shipping): RedirectResponse
     {
+        Gate::authorize('update', $shipping);
+
         $data = $request->validated();
 
-        if ($shipping->slug === 'nova-poshta' && !empty($data['api_key'])) {
-            // Використовуємо метод set, який ми щойно додали
-            // Він оновить БД і сам почистить кеш
-            \App\Facades\Settings::set('nova_poshta_key', $data['api_key']);
-
-            unset($data['api_key']);
+        // Перевіряємо через 'alias', як домовлялися раніше
+        if ($shipping->alias === 'nova_poshta' && isset($data['settings']['api_key'])) {
+            // Якщо ти хочеш дублювати ключ у глобальний конфіг Settings
+            \App\Facades\Settings::set('nova_poshta_key', $data['settings']['api_key']);
         }
 
         $shipping->update($data);
 
-        return redirect()->route('admin.shippings.index')
-            ->with('success', "Налаштування успішно оновлено.");
+        return redirect()->route('admin.shippings.index')->with([
+            'alert' => [
+                'type'    => 'success',
+                'message' => "Налаштування доставки `{$shipping->name}` оновлено.",
+            ],
+        ]);
     }
 
     /**
-     * Швидке перемикання статусу (is_active) через AJAX/Inertia.
+     * Швидке перемикання статусу.
      */
     public function toggle(Shipping $shipping): RedirectResponse
     {
+        Gate::authorize('update', $shipping);
+
         $shipping->update(['is_active' => !$shipping->is_active]);
 
-        return back()->with('success', 'Статус доставки змінено.');
+        return back()->with([
+            'alert' => [
+                'type'    => 'success',
+                'message' => 'Статус доставки змінено.',
+            ],
+        ]);
     }
 
-    // Методи create/store/destroy зазвичай не використовуються для типів доставки, 
-    // оскільки вони жорстко прописані в логіці (нова пошта, укрпошта тощо).
+    /**
+     * Створення (якщо агро-бізнес додасть власну логістику)
+     */
+    public function store(StoreShippingRequest $request): RedirectResponse
+    {
+        Gate::authorize('create', Shipping::class);
+
+        $shipping = Shipping::create($request->validated());
+
+        return redirect()->route('admin.shippings.index')->with([
+            'alert' => [
+                'type'    => 'success',
+                'message' => "Метод доставки `{$shipping->name}` додано.",
+            ],
+        ]);
+    }
 }

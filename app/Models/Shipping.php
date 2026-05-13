@@ -4,40 +4,87 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Shipping extends Model
 {
     use HasFactory;
 
-    /**
-     * Атрибути, які можна масово призначати.
-     */
     protected $fillable = [
         'alias',
         'name',
+        'description',
+        'price',
         'is_active',
         'settings',
         'sort_order',
     ];
 
     /**
-     * Атрибути, які мають бути приведені до певних типів.
-     * Laravel 12 підтримує метод casts() замість властивості $casts.
+     * Laravel 12 Casts
      */
     protected function casts(): array
     {
         return [
             'is_active' => 'boolean',
-            'settings' => 'array', // Автоматично перетворює JSON у масив і навпаки
+            'settings' => 'array',
             'sort_order' => 'integer',
+            'price' => 'decimal:2',
         ];
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Скоуп для отримання лише активних методів доставки (для фронтенду)
+     * Замовлення, пов'язані з цим методом доставки
      */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true)->orderBy('sort_order');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Helpers (Логіка для фронтенду та контролерів)
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Чи є цей метод самовивозом
+     */
+    public function isPickup(): bool
+    {
+        return $this->alias === 'pickup';
+    }
+
+    /**
+     * Чи потребує цей метод API інструментів (НП/Укрпошта)
+     */
+    public function isExternal(): bool
+    {
+        return in_array($this->alias, ['nova_poshta', 'ukr_poshta']);
+    }
+
+    /**
+     * Отримати іконку з налаштувань або дефолтну
+     */
+    public function getIconAttribute(): string
+    {
+        return $this->settings['icon'] ?? 'truck';
     }
 }

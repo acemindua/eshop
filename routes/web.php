@@ -13,7 +13,7 @@ Route::group(['middleware' => ['auth', 'verified', 'role:super-user|administrato
 });
 
 
-Route::post('/payments/webhook/{code}', [WebhookController::class, 'handle']);
+/*Route::post('/payments/webhook/{code}', [WebhookController::class, 'handle']);*/
 
 Route::get('/locale/{locale}', [LocaleSwitcherController::class, 'change'])->name('locale.switcher');
 

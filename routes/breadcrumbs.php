@@ -148,6 +148,7 @@ $settingsResources = [
     'shippings'         => __('Shippings'),
     'payment-methods'   => __('Payment Methods'),
     'versions'          => __('App Roadmap & Versions'),
+    'warehouses'        => __('Warehouses'),
 ];
 
 foreach ($settingsResources as $name => $title) {

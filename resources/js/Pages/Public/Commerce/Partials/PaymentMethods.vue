@@ -1,10 +1,50 @@
-<!-- Partials/PaymentMethods.vue -->
+<script setup>
+import InputError from "@/Components/UI/InputError.vue";
+import { watch, onMounted } from "vue";
+
+const props = defineProps({
+    methods: {
+        type: Array,
+        required: true,
+        default: () => [],
+    },
+    errors: {
+        type: Object,
+        default: () => ({}),
+    },
+});
+
+const modelValue = defineModel();
+
+// Функція примусового вибору
+const selectFirstIfNone = () => {
+    if (props.methods.length > 0 && !modelValue.value) {
+        modelValue.value = props.methods[0].code;
+    }
+};
+
+// Стежимо за методами. Якщо вони прийшли пізніше — вибираємо перший
+watch(
+    () => props.methods,
+    (newMethods) => {
+        if (newMethods && newMethods.length > 0) {
+            selectFirstIfNone();
+        }
+    },
+    { immediate: true, deep: true },
+);
+
+onMounted(() => {
+    selectFirstIfNone();
+});
+</script>
+
 <template>
     <div class="space-y-3">
         <div
             v-for="method in methods"
             :key="method.code"
-            @click="updateValue(method.code)"
+            @click="modelValue = method.code"
             class="group relative flex cursor-pointer border p-4 transition-all duration-200"
             :class="[
                 modelValue === method.code
@@ -49,24 +89,8 @@
         </div>
 
         <InputError
-            v-if="errors.payment_method"
+            v-if="errors?.payment_method"
             :message="errors.payment_method"
-            class="mt-2"
         />
     </div>
 </template>
-
-<script setup>
-import InputError from "@/Components/UI/InputError.vue";
-
-const props = defineProps({
-    methods: Array,
-    errors: Object,
-});
-
-const modelValue = defineModel();
-
-const updateValue = (code) => {
-    modelValue.value = code;
-};
-</script>

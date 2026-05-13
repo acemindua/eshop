@@ -12,21 +12,26 @@ class ShippingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // Перевіряємо, чи це запит від адміністратора (залежить від вашої логіки авторизації)
-        $isAdmin = $request->user()?->can('manage shippings');
+        // Логіка визначення адміна (можеш адаптувати під свою систему ролей)
+        $isAdmin = $request->user()?->hasRole('admin');
 
         return [
-            'id'         => $this->id,
-            'alias'      => $this->alias,
-            'name'       => $this->name,
-            'is_active'  => $this->is_active,
-            'sort_order' => $this->sort_order,
+            'id'          => $this->id,
+            'alias'       => $this->alias,
+            'name'        => $this->name,
+            'description' => $this->description,
+            'price'       => (float) $this->price,
+            'is_active'   => $this->is_active,
+            'sort_order'  => $this->sort_order,
 
-            // Для адмінки віддаємо всі налаштування, 
-            // для фронтенду — тільки публічні (наприклад, адресу складу)
-            'settings'   => $isAdmin ? $this->settings : $this->getPublicSettings(),
+            // Додаємо хелпери, щоб на фронті (Vue) легше було маніпулювати умовами
+            'is_pickup'   => $this->isPickup(),
+            'is_external' => $this->isExternal(),
 
-            'updated_at' => $this->updated_at?->format('d.m.Y H:i'),
+            // Для адмінки віддаємо все, для фронту — фільтруємо
+            'settings'    => $isAdmin ? $this->settings : $this->getPublicSettings(),
+
+            'updated_at'  => $this->updated_at?->format('d.m.Y H:i'),
         ];
     }
 
@@ -37,8 +42,18 @@ class ShippingResource extends JsonResource
     {
         $settings = $this->settings ?? [];
 
-        // Видаляємо приватні ключі перед відправкою на фронтенд
-        unset($settings['api_key'], $settings['api_secret'], $settings['token']);
+        // Список ключів, які не мають потрапити в браузер
+        $privateKeys = [
+            'api_key',
+            'api_secret',
+            'token',
+            'test_mode_key',
+            'merchant_id'
+        ];
+
+        foreach ($privateKeys as $key) {
+            unset($settings[$key]);
+        }
 
         return $settings;
     }

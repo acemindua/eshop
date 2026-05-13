@@ -520,6 +520,7 @@ const Disabled$2 = "Disabled";
 const Discard$4 = "Discard";
 const Done$4 = "Done";
 const Down$4 = "Down";
+const Draft$2 = "Draft";
 const Duplicate$4 = "Duplicate";
 const Edit$4 = "Edit";
 const Email$4 = "Email";
@@ -612,6 +613,8 @@ const Up$4 = "Up";
 const Update$4 = "Update";
 const User$4 = "User";
 const Users$2 = "Users";
+const Version$2 = "Version";
+const Versions$2 = "Versions";
 const View$4 = "View";
 const Yes$4 = "Yes";
 const ava$2 = "ava";
@@ -625,6 +628,7 @@ const of$4 = "of";
 const other$2 = "other";
 const password$4 = "The provided password is incorrect.";
 const results$4 = "results";
+const tasks$2 = "tasks";
 const to$4 = "to";
 const en = {
   "#ID": "#ID",
@@ -653,6 +657,7 @@ const en = {
   Apply: Apply$2,
   Archive: Archive$4,
   "Are you sure you want to delete this payment method?": "Are you sure you want to delete this payment method?",
+  "Are you sure you want to delete this?": "Are you sure you want to delete this?",
   "Are you sure you want to delete your account?": "Are you sure you want to delete your account?",
   Assign: Assign$4,
   Associate: Associate$4,
@@ -705,6 +710,7 @@ const en = {
   Created: Created$4,
   "Current Password": "Current Password",
   Dashboard: Dashboard$4,
+  "Date": "Date",
   Delete: Delete$4,
   "Delete :name": "Delete :name",
   "Delete Account": "Delete Account",
@@ -717,6 +723,7 @@ const en = {
   "Display Order": "Display Order",
   Done: Done$4,
   Down: Down$4,
+  Draft: Draft$2,
   Duplicate: Duplicate$4,
   "Duplicate :name": "Duplicate :name",
   Edit: Edit$4,
@@ -775,16 +782,20 @@ into your web browser:`,
   Import: Import$4,
   "Import :name": "Import :name",
   "In Cart": "In Cart",
+  "In Progress": "In Progress",
   "Insufficient Storage": "Insufficient Storage",
   "Internal Server Error": "Internal Server Error",
   Introduction: Introduction$4,
   "Invalid JSON was returned from the route.": "Invalid JSON was returned from the route.",
   "Invalid SSL Certificate": "Invalid SSL Certificate",
   "Invalid filename.": "Invalid filename.",
+  "Inventory Overview": "Inventory Overview",
+  "Inventory Value": "Inventory Value",
   Items: Items$2,
   Language: Language$2,
   "Last Name": "Last Name",
   "Last name": "Last name",
+  "Latest Updates": "Latest Updates",
   "Length Required": "Length Required",
   Like: Like$4,
   Load: Load$4,
@@ -827,6 +838,8 @@ into your web browser:`,
   "No Content": "No Content",
   "No items found": "No items found",
   "No payment methods found.": "No payment methods found.",
+  "No version history available": "No version history available",
+  "No versions found": "No versions found",
   "Non-Authoritative Information": "Non-Authoritative Information",
   "Not Acceptable": "Not Acceptable",
   "Not Extended": "Not Extended",
@@ -847,6 +860,7 @@ into your web browser:`,
   "Order Summary": "Order Summary",
   Orders: Orders$2,
   "Origin Is Unreachable": "Origin Is Unreachable",
+  "Out of stock": "Out of stock",
   "Page Expired": "Page Expired",
   Pages: Pages$2,
   "Pagination Navigation": "Pagination Navigation",
@@ -864,6 +878,7 @@ into your web browser:`,
   Petro: Petro$2,
   Petrovych: Petrovych$2,
   Phone: Phone$2,
+  "Plan (Roadmap)": "Plan (Roadmap)",
   "Please click the button below to verify your email address.": "Please click the button below to verify your email address.",
   "Precondition Failed": "Precondition Failed",
   "Precondition Required": "Precondition Required",
@@ -883,6 +898,7 @@ into your web browser:`,
   Record: Record$4,
   "Regards,": "Regards,",
   Register: Register$4,
+  "Release / Roadmap Progress": "Release / Roadmap Progress",
   "Remember me": "Remember me",
   Remove: Remove$2,
   "Request Header Fields Too Large": "Request Header Fields Too Large",
@@ -894,6 +910,7 @@ into your web browser:`,
   Restore: Restore$4,
   "Restore :name": "Restore :name",
   "Retry With": "Retry With",
+  "Roadmap & versions": "Roadmap & versions",
   "SSL Handshake Failed": "SSL Handshake Failed",
   Save: Save$4,
   "Save & Close": "Save & Close",
@@ -926,6 +943,7 @@ into your web browser:`,
   Start: Start$4,
   "Start Shopping": "Start Shopping",
   Status: Status$2,
+  "Stock Alert": "Stock Alert",
   Stop: Stop$4,
   Submit: Submit$4,
   Subscribe: Subscribe$4,
@@ -976,9 +994,12 @@ into your web browser:`,
   Users: Users$2,
   "Variant Also Negotiates": "Variant Also Negotiates",
   "Verify Email Address": "Verify Email Address",
+  Version: Version$2,
+  Versions: Versions$2,
   View: View$4,
   "View :name": "View :name",
   "View Cart": "View Cart",
+  "View Full Roadmap & History": "View Full Roadmap & History",
   "Warehouse / Delivery Address": "Warehouse / Delivery Address",
   "Warehouse/Address": "Warehouse/Address",
   "Web Server is Down": "Web Server is Down",
@@ -990,6 +1011,7 @@ into your web browser:`,
   "Your Cart": "Your Cart",
   "Your cart is empty": "Your cart is empty",
   "Your email address is unverified.": "Your email address is unverified.",
+  "active this month": "active this month",
   ava: ava$2,
   email: email$4,
   errors: errors$4,
@@ -1003,7 +1025,9 @@ into your web browser:`,
   other: other$2,
   password: password$4,
   "phone number": "phone number",
+  "public": "public",
   results: results$4,
+  tasks: tasks$2,
   to: to$4,
   "Інша": "Інша",
   "Історія замовлень": "Історія замовлень",
@@ -1074,6 +1098,7 @@ const __vite_glob_1_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Discard: Discard$4,
   Done: Done$4,
   Down: Down$4,
+  Draft: Draft$2,
   Duplicate: Duplicate$4,
   Edit: Edit$4,
   Email: Email$4,
@@ -1166,6 +1191,8 @@ const __vite_glob_1_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Update: Update$4,
   User: User$4,
   Users: Users$2,
+  Version: Version$2,
+  Versions: Versions$2,
   View: View$4,
   Yes: Yes$4,
   ava: ava$2,
@@ -1180,6 +1207,7 @@ const __vite_glob_1_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   other: other$2,
   password: password$4,
   results: results$4,
+  tasks: tasks$2,
   to: to$4
 }, Symbol.toStringTag, { value: "Module" }));
 const Accept$3 = "Aceptar";
@@ -4157,6 +4185,7 @@ const Disabled$1 = "Disabled";
 const Discard$2 = "Odrzuć";
 const Done$2 = "Gotowe";
 const Down$2 = "W dół";
+const Draft$1 = "Draft";
 const Duplicate$2 = "Duplikuj";
 const Edit$2 = "Edytuj";
 const Email$2 = "E-mail";
@@ -4249,6 +4278,8 @@ const Up$2 = "W górę";
 const Update$2 = "Aktualizacja";
 const User$2 = "Użytkownik";
 const Users$1 = "Users";
+const Version$1 = "Version";
+const Versions$1 = "Versions";
 const View$2 = "Widok";
 const Yes$2 = "Tak";
 const ava$1 = "ava";
@@ -4262,6 +4293,7 @@ const of$2 = "z";
 const other$1 = "other";
 const password$2 = "Hasło jest nieprawidłowe.";
 const results$2 = "wyników";
+const tasks$1 = "tasks";
 const to$2 = "do";
 const pl = {
   "#ID": "#ID",
@@ -4290,6 +4322,7 @@ const pl = {
   Apply: Apply$1,
   Archive: Archive$2,
   "Are you sure you want to delete this payment method?": "Are you sure you want to delete this payment method?",
+  "Are you sure you want to delete this?": "Are you sure you want to delete this?",
   "Are you sure you want to delete your account?": "Czy na pewno chcesz usunąć swoje konto?",
   Assign: Assign$2,
   Associate: Associate$2,
@@ -4342,6 +4375,7 @@ const pl = {
   Created: Created$2,
   "Current Password": "Aktualne Hasło",
   Dashboard: Dashboard$2,
+  "Date": "Date",
   Delete: Delete$2,
   "Delete :name": "Usuń :name",
   "Delete Account": "Usuń Konto",
@@ -4354,6 +4388,7 @@ const pl = {
   "Display Order": "Display Order",
   Done: Done$2,
   Down: Down$2,
+  Draft: Draft$1,
   Duplicate: Duplicate$2,
   "Duplicate :name": "Duplikuj :name",
   Edit: Edit$2,
@@ -4411,16 +4446,20 @@ const pl = {
   Import: Import$2,
   "Import :name": "Importuj :name",
   "In Cart": "In Cart",
+  "In Progress": "In Progress",
   "Insufficient Storage": "Niewystarczające miejsce do przechowywania",
   "Internal Server Error": "Wewnętrzny błąd serwera",
   Introduction: Introduction$2,
   "Invalid JSON was returned from the route.": "Routing zwrócił nieprawidłowy kod JSON.",
   "Invalid SSL Certificate": "Nieprawidłowy certyfikat SSL",
   "Invalid filename.": "Nieprawidłowa nazwa pliku.",
+  "Inventory Overview": "Inventory Overview",
+  "Inventory Value": "Inventory Value",
   Items: Items$1,
   Language: Language$1,
   "Last Name": "Last Name",
   "Last name": "Last name",
+  "Latest Updates": "Latest Updates",
   "Length Required": "Wymagana długość",
   Like: Like$2,
   Load: Load$2,
@@ -4463,6 +4502,8 @@ const pl = {
   "No Content": "Brak treści",
   "No items found": "No items found",
   "No payment methods found.": "No payment methods found.",
+  "No version history available": "No version history available",
+  "No versions found": "No versions found",
   "Non-Authoritative Information": "Informacje niepotwierdzone",
   "Not Acceptable": "Niedopuszczalne",
   "Not Extended": "Nie rozszerzono",
@@ -4483,6 +4524,7 @@ const pl = {
   "Order Summary": "Order Summary",
   Orders: Orders$1,
   "Origin Is Unreachable": "Serwer źródłowy jest nieosiągalny",
+  "Out of stock": "Out of stock",
   "Page Expired": "Strona Wygasła",
   Pages: Pages$1,
   "Pagination Navigation": "Nawigacja Stron",
@@ -4500,6 +4542,7 @@ const pl = {
   Petro: Petro$1,
   Petrovych: Petrovych$1,
   Phone: Phone$1,
+  "Plan (Roadmap)": "Plan (Roadmap)",
   "Please click the button below to verify your email address.": "Kliknij poniższy przycisk aby zweryfikować swój adres e-mail.",
   "Precondition Failed": "Warunek wstępny niespełniony",
   "Precondition Required": "Wymagany warunek wstępny",
@@ -4519,6 +4562,7 @@ const pl = {
   Record: Record$2,
   "Regards,": "Z poważaniem,",
   Register: Register$2,
+  "Release / Roadmap Progress": "Release / Roadmap Progress",
   "Remember me": "Zapamiętaj mnie",
   Remove: Remove$1,
   "Request Header Fields Too Large": "Za duże pola nagłówka żądania",
@@ -4530,6 +4574,7 @@ const pl = {
   Restore: Restore$2,
   "Restore :name": "Przywróć :name",
   "Retry With": "Spróbuj ponownie z użyciem",
+  "Roadmap & versions": "Roadmap & versions",
   "SSL Handshake Failed": "Nieudane uzgadnianie SSL",
   Save: Save$2,
   "Save & Close": "Zapisz i zamknij",
@@ -4562,6 +4607,7 @@ const pl = {
   Start: Start$2,
   "Start Shopping": "Start Shopping",
   Status: Status$1,
+  "Stock Alert": "Stock Alert",
   Stop: Stop$2,
   Submit: Submit$2,
   Subscribe: Subscribe$2,
@@ -4612,9 +4658,12 @@ const pl = {
   Users: Users$1,
   "Variant Also Negotiates": "Wariant również prowadzi negocjacje",
   "Verify Email Address": "Zweryfikuj Adres E-mail",
+  Version: Version$1,
+  Versions: Versions$1,
   View: View$2,
   "View :name": "Zobacz :name",
   "View Cart": "View Cart",
+  "View Full Roadmap & History": "View Full Roadmap & History",
   "Warehouse / Delivery Address": "Warehouse / Delivery Address",
   "Warehouse/Address": "Warehouse/Address",
   "Web Server is Down": "Serwer sieciowy nie działa",
@@ -4626,6 +4675,7 @@ const pl = {
   "Your Cart": "Your Cart",
   "Your cart is empty": "Your cart is empty",
   "Your email address is unverified.": "Adres e-mail nie został zweryfikowany.",
+  "active this month": "active this month",
   ava: ava$1,
   email: email$2,
   errors: errors$2,
@@ -4639,7 +4689,9 @@ const pl = {
   other: other$1,
   password: password$2,
   "phone number": "phone number",
+  "public": "public",
   results: results$2,
+  tasks: tasks$1,
   to: to$2,
   "Інша": "Інша",
   "Історія замовлень": "Історія замовлень",
@@ -4710,6 +4762,7 @@ const __vite_glob_1_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Discard: Discard$2,
   Done: Done$2,
   Down: Down$2,
+  Draft: Draft$1,
   Duplicate: Duplicate$2,
   Edit: Edit$2,
   Email: Email$2,
@@ -4802,6 +4855,8 @@ const __vite_glob_1_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Update: Update$2,
   User: User$2,
   Users: Users$1,
+  Version: Version$1,
+  Versions: Versions$1,
   View: View$2,
   Yes: Yes$2,
   ava: ava$1,
@@ -4816,6 +4871,7 @@ const __vite_glob_1_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   other: other$1,
   password: password$2,
   results: results$2,
+  tasks: tasks$1,
   to: to$2
 }, Symbol.toStringTag, { value: "Module" }));
 const Accept$1 = "Принять";
@@ -5331,6 +5387,7 @@ const Disabled = "Disabled";
 const Discard = "Відкинути";
 const Done = "Готово";
 const Down = "вниз";
+const Draft = "Draft";
 const Duplicate = "дублікат";
 const Edit = "Редагувати";
 const Email = "Електронна пошта";
@@ -5423,6 +5480,8 @@ const Up = "вгору";
 const Update = "Оновити";
 const User = "Користувач";
 const Users = "Користувачі";
+const Version = "Version";
+const Versions = "Versions";
 const View = "Переглянути";
 const Yes = "Так";
 const ava = "ava";
@@ -5436,6 +5495,7 @@ const of = "з";
 const other = "other";
 const password = "Пароль невірний.";
 const results = "результати";
+const tasks = "tasks";
 const to = "до";
 const uk = {
   "#ID": "#ID",
@@ -5464,6 +5524,7 @@ const uk = {
   Apply,
   Archive,
   "Are you sure you want to delete this payment method?": "Are you sure you want to delete this payment method?",
+  "Are you sure you want to delete this?": "Are you sure you want to delete this?",
   "Are you sure you want to delete your account?": "Ви впевнені, що хочете видалити свій обліковий запис?",
   Assign,
   Associate,
@@ -5516,6 +5577,7 @@ const uk = {
   Created,
   "Current Password": "Поточний пароль",
   Dashboard,
+  "Date": "Date",
   Delete,
   "Delete :name": "Видалити :name",
   "Delete Account": "Видалити обліковий запис",
@@ -5528,6 +5590,7 @@ const uk = {
   "Display Order": "Display Order",
   Done,
   Down,
+  Draft,
   Duplicate,
   "Duplicate :name": "Дублікат: ім'я",
   Edit,
@@ -5585,16 +5648,20 @@ const uk = {
   Import,
   "Import :name": "Імпорт :name",
   "In Cart": "In Cart",
+  "In Progress": "In Progress",
   "Insufficient Storage": "Недостатньо місця",
   "Internal Server Error": "Внутрішня помилка сервера",
   Introduction,
   "Invalid JSON was returned from the route.": "З маршруту повернуто недійсний JSON.",
   "Invalid SSL Certificate": "Недійсний сертифікат SSL",
   "Invalid filename.": "Недійсна назва файлу.",
+  "Inventory Overview": "Inventory Overview",
+  "Inventory Value": "Inventory Value",
   Items,
   Language,
   "Last Name": "Last Name",
   "Last name": "Last name",
+  "Latest Updates": "Latest Updates",
   "Length Required": "Необхідна довжина",
   Like,
   Load,
@@ -5637,6 +5704,8 @@ const uk = {
   "No Content": "Немає вмісту",
   "No items found": "No items found",
   "No payment methods found.": "No payment methods found.",
+  "No version history available": "No version history available",
+  "No versions found": "No versions found",
   "Non-Authoritative Information": "Інформація не авторитетна",
   "Not Acceptable": "Не прийнятний",
   "Not Extended": "Не розширено",
@@ -5657,6 +5726,7 @@ const uk = {
   "Order Summary": "Order Summary",
   Orders,
   "Origin Is Unreachable": "Джерело недоступне",
+  "Out of stock": "Out of stock",
   "Page Expired": "Час сесії минув",
   Pages,
   "Pagination Navigation": "Навігація пагінацією",
@@ -5674,6 +5744,7 @@ const uk = {
   Petro,
   Petrovych,
   Phone,
+  "Plan (Roadmap)": "Plan (Roadmap)",
   "Please click the button below to verify your email address.": "Будь ласка, натисніть кнопку нижче, щоб підтвердити свою електронну адресу.",
   "Precondition Failed": "Хибна умова",
   "Precondition Required": "Необхідна передумова",
@@ -5693,6 +5764,7 @@ const uk = {
   Record,
   "Regards,": "З повагою,",
   Register,
+  "Release / Roadmap Progress": "Release / Roadmap Progress",
   "Remember me": "Запам'ятати мене",
   Remove,
   "Request Header Fields Too Large": "Завеликі поля заголовка запиту",
@@ -5704,6 +5776,7 @@ const uk = {
   Restore,
   "Restore :name": "Відновити :name",
   "Retry With": "Повторити з",
+  "Roadmap & versions": "Roadmap & versions",
   "SSL Handshake Failed": "Помилка рукостискання SSL",
   Save,
   "Save & Close": "Зберегти та закрити",
@@ -5736,6 +5809,7 @@ const uk = {
   Start,
   "Start Shopping": "Start Shopping",
   Status,
+  "Stock Alert": "Stock Alert",
   Stop,
   Submit,
   Subscribe,
@@ -5786,9 +5860,12 @@ const uk = {
   Users,
   "Variant Also Negotiates": "Варіант також веде переговори",
   "Verify Email Address": "Підтвердьте електронну адресу",
+  Version,
+  Versions,
   View,
   "View :name": "Переглянути :name",
   "View Cart": "View Cart",
+  "View Full Roadmap & History": "View Full Roadmap & History",
   "Warehouse / Delivery Address": "Warehouse / Delivery Address",
   "Warehouse/Address": "Warehouse/Address",
   "Web Server is Down": "Веб-сервер не працює",
@@ -5800,6 +5877,7 @@ const uk = {
   "Your Cart": "Your Cart",
   "Your cart is empty": "Your cart is empty",
   "Your email address is unverified.": "Ваша електронна адреса неверифікована.",
+  "active this month": "active this month",
   ava,
   email,
   errors,
@@ -5813,7 +5891,9 @@ const uk = {
   other,
   password,
   "phone number": "phone number",
+  "public": "public",
   results,
+  tasks,
   to,
   "Інша": "Інша",
   "Історія замовлень": "Історія замовлень",
@@ -5884,6 +5964,7 @@ const __vite_glob_1_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   Discard,
   Done,
   Down,
+  Draft,
   Duplicate,
   Edit,
   Email,
@@ -5976,6 +6057,8 @@ const __vite_glob_1_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   Update,
   User,
   Users,
+  Version,
+  Versions,
   View,
   Yes,
   ava,
@@ -5990,6 +6073,7 @@ const __vite_glob_1_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   other,
   password,
   results,
+  tasks,
   to
 }, Symbol.toStringTag, { value: "Module" }));
 async function resolvePageComponent(path, pages) {
@@ -6424,7 +6508,7 @@ createServer(
     title: (title) => title,
     resolve: (name2) => resolvePageComponent(
       `./Pages/${name2}.vue`,
-      /* @__PURE__ */ Object.assign({ "./Pages/Admin/Commerce/Categories/Create.vue": () => import("./assets/Create-CsE6qGtE.js"), "./Pages/Admin/Commerce/Categories/Edit.vue": () => import("./assets/Edit-TfYVBy48.js"), "./Pages/Admin/Commerce/Categories/Index.vue": () => import("./assets/Index-CwJ-YH6e.js"), "./Pages/Admin/Commerce/Categories/Partials/DataForm.vue": () => import("./assets/DataForm-B3QXRLbV.js"), "./Pages/Admin/Commerce/Categories/Partials/DataTable.vue": () => import("./assets/DataTable-PSUq8oPU.js"), "./Pages/Admin/Commerce/Categories/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-CnGI8lpM.js"), "./Pages/Admin/Commerce/Categories/Partials/SEOForm.vue": () => import("./assets/SEOForm-s1BicO37.js"), "./Pages/Admin/Commerce/Categories/Show.vue": () => import("./assets/Show-DElB_rN_.js"), "./Pages/Admin/Commerce/Items/Create.vue": () => import("./assets/Create-D-eKvK6J.js"), "./Pages/Admin/Commerce/Items/Edit.vue": () => import("./assets/Edit-To3f5-nw.js"), "./Pages/Admin/Commerce/Items/Index.vue": () => import("./assets/Index-D_D62j0l.js"), "./Pages/Admin/Commerce/Items/Partials/DataForm.vue": () => import("./assets/DataForm-CO_vufZN.js"), "./Pages/Admin/Commerce/Items/Partials/DataTable.vue": () => import("./assets/DataTable-DSkpuIyt.js"), "./Pages/Admin/Commerce/Items/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-Bk1ybhgP.js"), "./Pages/Admin/Commerce/Items/Partials/MediaForm.vue": () => import("./assets/MediaForm-Qqh1aNzJ.js"), "./Pages/Admin/Commerce/Items/Partials/SEOForm.vue": () => import("./assets/SEOForm-CMu4sIYF.js"), "./Pages/Admin/Commerce/Items/Show.vue": () => import("./assets/Show-BuBgrZm_.js"), "./Pages/Admin/Commerce/Manufacturers/Create.vue": () => import("./assets/Create-fEcLHPsv.js"), "./Pages/Admin/Commerce/Manufacturers/Edit.vue": () => import("./assets/Edit-f0-Rcf8c.js"), "./Pages/Admin/Commerce/Manufacturers/Index.vue": () => import("./assets/Index-B2yVabfg.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/DataForm.vue": () => import("./assets/DataForm-Dge5wuvW.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/DataTable.vue": () => import("./assets/DataTable-DFPiZH-M.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-DHX6vFD4.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/SEOForm.vue": () => import("./assets/SEOForm-BvI4G_Kw.js"), "./Pages/Admin/Commerce/Manufacturers/Show.vue": () => import("./assets/Show-Dm21z19N.js"), "./Pages/Admin/Commerce/Orders/Create.vue": () => import("./assets/Create-CMJiZdEf.js"), "./Pages/Admin/Commerce/Orders/Edit.vue": () => import("./assets/Edit-ByHXykiV.js"), "./Pages/Admin/Commerce/Orders/Index.vue": () => import("./assets/Index-CoY0mtZW.js"), "./Pages/Admin/Commerce/Orders/Partials/DataForm.vue": () => import("./assets/DataForm-CHnfIpJK.js"), "./Pages/Admin/Commerce/Orders/Partials/DataTable.vue": () => import("./assets/DataTable-DOxXcfeu.js"), "./Pages/Admin/Commerce/Orders/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-9N_H0Q63.js"), "./Pages/Admin/Dashboard.vue": () => import("./assets/Dashboard-DDtUs4YB.js"), "./Pages/Admin/Pages/Create.vue": () => import("./assets/Create-CaryISzv.js"), "./Pages/Admin/Pages/Edit.vue": () => import("./assets/Edit-DBKqIOla.js"), "./Pages/Admin/Pages/Index.vue": () => import("./assets/Index-DB1L6j3p.js"), "./Pages/Admin/Pages/Partials/DataForm.vue": () => import("./assets/DataForm-DnEeoE_V.js"), "./Pages/Admin/Pages/Partials/DataTable.vue": () => import("./assets/DataTable-B0fCQbDE.js"), "./Pages/Admin/Pages/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-CQbKESUd.js"), "./Pages/Admin/Pages/Partials/SEOForm.vue": () => import("./assets/SEOForm-C2R59pZk.js"), "./Pages/Admin/Pages/Show.vue": () => import("./assets/Show-a9_U7STt.js"), "./Pages/Admin/Settings.vue": () => import("./assets/Settings-C-MVu24u.js"), "./Pages/Admin/Settings/PaymentMethods/Create.vue": () => import("./assets/Create-DiSjeyQF.js"), "./Pages/Admin/Settings/PaymentMethods/Edit.vue": () => import("./assets/Edit-BovCAfpv.js"), "./Pages/Admin/Settings/PaymentMethods/Index.vue": () => import("./assets/Index-B4-b19ha.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataForm.vue": () => import("./assets/DataForm-CiiYJMcf.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataTable.vue": () => import("./assets/DataTable-8X8pruKI.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-D2gvA39T.js"), "./Pages/Admin/Settings/Versions/Index.vue": () => import("./assets/Index-BiQM1uzz.js"), "./Pages/Admin/Settings/Versions/Partials/DataTable.vue": () => import("./assets/DataTable-DHQZECI5.js"), "./Pages/Admin/Shipping/Edit.vue": () => import("./assets/Edit-Czku9_6_.js"), "./Pages/Admin/Shipping/Index.vue": () => import("./assets/Index-CgRYyIQD.js"), "./Pages/Admin/Translations/Index.vue": () => import("./assets/Index-0-cOPlUW.js"), "./Pages/Admin/Users/Edit.vue": () => import("./assets/Edit-ZY5Kyiut.js"), "./Pages/Admin/Users/Index.vue": () => import("./assets/Index-D6JwqheF.js"), "./Pages/Admin/Users/Partials/DataTable.vue": () => import("./assets/DataTable-Ct81Zt11.js"), "./Pages/Admin/Users/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-ClKKxoZl.js"), "./Pages/Admin/Users/Show.vue": () => import("./assets/Show-DmmhBl6d.js"), "./Pages/Auth/Login.vue": () => import("./assets/Login-CxP7Eqx8.js"), "./Pages/Public/Account/Index.vue": () => import("./assets/Index-d2OM9Tiv.js"), "./Pages/Public/Commerce/Cart.vue": () => import("./assets/Cart-QQkk0VFD.js"), "./Pages/Public/Commerce/CategoryShow.vue": () => import("./assets/CategoryShow-BoGFPVnz.js"), "./Pages/Public/Commerce/Checkout.vue": () => import("./assets/Checkout-DHTWX3hB.js"), "./Pages/Public/Commerce/Partials/ContactInfo.vue": () => import("./assets/ContactInfo-D4O8YCXR.js"), "./Pages/Public/Commerce/Partials/OrderSummary.vue": () => import("./assets/OrderSummary-DfYxl1tG.js"), "./Pages/Public/Commerce/Partials/PaymentMethods.vue": () => import("./assets/PaymentMethods-BcEiRLV7.js"), "./Pages/Public/Commerce/Partials/ShippingInfo.vue": () => import("./assets/ShippingInfo-CtXPp1uw.js"), "./Pages/Public/Commerce/View.vue": () => import("./assets/View-DR0d_U0v.js"), "./Pages/Public/Home.vue": () => import("./assets/Home-BB1wIuRg.js"), "./Pages/Public/Index.vue": () => import("./assets/Index-Dm0BKrdc.js"), "./Pages/Public/PageShow.vue": () => import("./assets/PageShow-CR4bgVkC.js"), "./Pages/Public/Search.vue": () => import("./assets/Search-BVl8TdAz.js") })
+      /* @__PURE__ */ Object.assign({ "./Pages/Admin/Commerce/Categories/Create.vue": () => import("./assets/Create-MaXogRYV.js"), "./Pages/Admin/Commerce/Categories/Edit.vue": () => import("./assets/Edit-B4p502gY.js"), "./Pages/Admin/Commerce/Categories/Index.vue": () => import("./assets/Index-CwJ-YH6e.js"), "./Pages/Admin/Commerce/Categories/Partials/DataForm.vue": () => import("./assets/DataForm-COnNiCFZ.js"), "./Pages/Admin/Commerce/Categories/Partials/DataTable.vue": () => import("./assets/DataTable-PSUq8oPU.js"), "./Pages/Admin/Commerce/Categories/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-Dl3eFMED.js"), "./Pages/Admin/Commerce/Categories/Partials/SEOForm.vue": () => import("./assets/SEOForm-CTKpYnzu.js"), "./Pages/Admin/Commerce/Categories/Show.vue": () => import("./assets/Show-DElB_rN_.js"), "./Pages/Admin/Commerce/Items/Create.vue": () => import("./assets/Create-hCD5J4r9.js"), "./Pages/Admin/Commerce/Items/Edit.vue": () => import("./assets/Edit-CgvKKiDb.js"), "./Pages/Admin/Commerce/Items/Index.vue": () => import("./assets/Index-D_D62j0l.js"), "./Pages/Admin/Commerce/Items/Partials/DataForm.vue": () => import("./assets/DataForm-D8EvEaas.js"), "./Pages/Admin/Commerce/Items/Partials/DataTable.vue": () => import("./assets/DataTable-DSkpuIyt.js"), "./Pages/Admin/Commerce/Items/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-Ac8p3cP3.js"), "./Pages/Admin/Commerce/Items/Partials/MediaForm.vue": () => import("./assets/MediaForm-Qqh1aNzJ.js"), "./Pages/Admin/Commerce/Items/Partials/SEOForm.vue": () => import("./assets/SEOForm-Mh2f5GBk.js"), "./Pages/Admin/Commerce/Items/Show.vue": () => import("./assets/Show-BuBgrZm_.js"), "./Pages/Admin/Commerce/Manufacturers/Create.vue": () => import("./assets/Create-XArUkgPl.js"), "./Pages/Admin/Commerce/Manufacturers/Edit.vue": () => import("./assets/Edit-Djp2wk3e.js"), "./Pages/Admin/Commerce/Manufacturers/Index.vue": () => import("./assets/Index-B2yVabfg.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/DataForm.vue": () => import("./assets/DataForm-Dge5wuvW.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/DataTable.vue": () => import("./assets/DataTable-DFPiZH-M.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-DaurV57s.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/SEOForm.vue": () => import("./assets/SEOForm-CBLih2-J.js"), "./Pages/Admin/Commerce/Manufacturers/Show.vue": () => import("./assets/Show-Dm21z19N.js"), "./Pages/Admin/Commerce/Orders/Create.vue": () => import("./assets/Create-CMJiZdEf.js"), "./Pages/Admin/Commerce/Orders/Edit.vue": () => import("./assets/Edit-ByHXykiV.js"), "./Pages/Admin/Commerce/Orders/Index.vue": () => import("./assets/Index-CoY0mtZW.js"), "./Pages/Admin/Commerce/Orders/Partials/DataForm.vue": () => import("./assets/DataForm-CHnfIpJK.js"), "./Pages/Admin/Commerce/Orders/Partials/DataTable.vue": () => import("./assets/DataTable-DOxXcfeu.js"), "./Pages/Admin/Commerce/Orders/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-9N_H0Q63.js"), "./Pages/Admin/Dashboard.vue": () => import("./assets/Dashboard-CphZYqnP.js"), "./Pages/Admin/Pages/Create.vue": () => import("./assets/Create-C42HiMUB.js"), "./Pages/Admin/Pages/Edit.vue": () => import("./assets/Edit-CsPlJgSr.js"), "./Pages/Admin/Pages/Index.vue": () => import("./assets/Index-0ZZfHh7B.js"), "./Pages/Admin/Pages/Partials/DataForm.vue": () => import("./assets/DataForm-BP0xeYFb.js"), "./Pages/Admin/Pages/Partials/DataTable.vue": () => import("./assets/DataTable-B0fCQbDE.js"), "./Pages/Admin/Pages/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-DgieA4P3.js"), "./Pages/Admin/Pages/Partials/SEOForm.vue": () => import("./assets/SEOForm-glcHmKL7.js"), "./Pages/Admin/Pages/Show.vue": () => import("./assets/Show-CRAt51hl.js"), "./Pages/Admin/Settings.vue": () => import("./assets/Settings-DB3F443j.js"), "./Pages/Admin/Settings/PaymentMethods/Create.vue": () => import("./assets/Create-jCY36zvf.js"), "./Pages/Admin/Settings/PaymentMethods/Edit.vue": () => import("./assets/Edit-BAl1zh_f.js"), "./Pages/Admin/Settings/PaymentMethods/Index.vue": () => import("./assets/Index-BHebhoXt.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataForm.vue": () => import("./assets/DataForm-CH0dM7yX.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataTable.vue": () => import("./assets/DataTable-8X8pruKI.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-CJH1Vw0e.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/TranslationContent.vue": () => import("./assets/TranslationContent-Wl77zc-R.js"), "./Pages/Admin/Settings/Versions/Index.vue": () => import("./assets/Index-D3ArORyZ.js"), "./Pages/Admin/Shipping/Edit.vue": () => import("./assets/Edit-hKTB7ljr.js"), "./Pages/Admin/Shipping/Index.vue": () => import("./assets/Index-Cd6AkTKe.js"), "./Pages/Admin/Translations/Index.vue": () => import("./assets/Index-BfCfntcK.js"), "./Pages/Admin/Users/Edit.vue": () => import("./assets/Edit-DW7ViA1g.js"), "./Pages/Admin/Users/Index.vue": () => import("./assets/Index-CurL0FQH.js"), "./Pages/Admin/Users/Partials/DataTable.vue": () => import("./assets/DataTable-pSh6dVMx.js"), "./Pages/Admin/Users/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-BbV_A8Se.js"), "./Pages/Admin/Users/Show.vue": () => import("./assets/Show-BM6-db5E.js"), "./Pages/Auth/Login.vue": () => import("./assets/Login-Cw5ogb4N.js"), "./Pages/Public/Account/Index.vue": () => import("./assets/Index-BmfALL68.js"), "./Pages/Public/Commerce/Cart.vue": () => import("./assets/Cart-QQkk0VFD.js"), "./Pages/Public/Commerce/CategoryShow.vue": () => import("./assets/CategoryShow-B9ubf_sI.js"), "./Pages/Public/Commerce/Checkout.vue": () => import("./assets/Checkout-8Yf4xoWd.js"), "./Pages/Public/Commerce/Partials/ContactInfo.vue": () => import("./assets/ContactInfo-D4O8YCXR.js"), "./Pages/Public/Commerce/Partials/OrderSummary.vue": () => import("./assets/OrderSummary-DfYxl1tG.js"), "./Pages/Public/Commerce/Partials/PaymentMethods.vue": () => import("./assets/PaymentMethods-DTuBeBcN.js"), "./Pages/Public/Commerce/Partials/ShippingInfo.vue": () => import("./assets/ShippingInfo-CtXPp1uw.js"), "./Pages/Public/Commerce/View.vue": () => import("./assets/View-BefJtPRb.js"), "./Pages/Public/Home.vue": () => import("./assets/Home-D-RIEmEy.js"), "./Pages/Public/Index.vue": () => import("./assets/Index-DbyYYBWI.js"), "./Pages/Public/PageShow.vue": () => import("./assets/PageShow-DupBoEj8.js"), "./Pages/Public/Search.vue": () => import("./assets/Search-OnU4iqQh.js") })
     ),
     setup({ App, props, plugin }) {
       const pinia = createPinia();

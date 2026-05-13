@@ -16,6 +16,7 @@ class PaymentMethodSeeder extends Seeder
             [
                 'code' => 'cash',
                 'name' => 'Оплата при отриманні',
+                'driver' => 'manual', // Додаємо обов'язкове поле
                 'is_active' => true,
                 'settings' => [],
                 'sort_order' => 2,
@@ -37,6 +38,7 @@ class PaymentMethodSeeder extends Seeder
             [
                 'code' => 'invoice',
                 'name' => 'Безготівковий розрахунок',
+                'driver' => 'manual', // Додаємо обов'язкове поле
                 'is_active' => true, // Змінив на true, щоб був доступний
                 'settings' => [
                     'iban' => '',
