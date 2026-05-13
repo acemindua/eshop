@@ -450,4 +450,4 @@ php artisan make:seeder WarehouseSeeder
 ```bash
 
 ```
-### v1.10.6 Update System
+### Update System  (v1.10.7) - 2026.05.13

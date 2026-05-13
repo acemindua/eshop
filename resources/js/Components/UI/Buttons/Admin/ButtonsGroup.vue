@@ -1,16 +1,19 @@
 <template>
-    <div class="flex space-x-2 relative z-20">
-        <template v-for="btn in buttons" :key="btn.label">
+    <div class="flex items-center space-x-2 relative z-20">
+        <template v-for="(btn, index) in buttons" :key="btn.id || index">
             <component
                 :is="btn.type === 'primary' ? PrimaryButton : SecondaryButton"
-                @click.prevent="btn.action"
-                :disabled="loading"
-                :class="{ 'opacity-50': loading }"
+                v-bind="btn.extraProps"
+                :disabled="loading || btn.disabled"
+                :class="{ 'opacity-50 cursor-not-allowed': loading || btn.disabled }"
+                @click.prevent="!loading && !btn.disabled && btn.action()"
             >
-                <template #icon v-if="btn.icon">
-                    <component :is="iconMap[btn.icon]" :stroke="2" />
+                <!-- Іконка -->
+                <template #icon v-if="btn.icon && iconMap[btn.icon]">
+                    <component :is="iconMap[btn.icon]" :size="18" :stroke="2" />
                 </template>
 
+                <!-- Текст із підтримкою i18n -->
                 <span>
                     {{
                         loading && btn.loadingLabel
@@ -37,15 +40,13 @@ import {
 
 const props = defineProps({
     loading: { type: Boolean, default: false },
-    // Масив конфігурації кнопок
     buttons: {
         type: Array,
         required: true,
-        // Приклад структури: [{ label: 'Save', action: func, type: 'primary', icon: IconComponent }]
+        // Очікуємо: { label: String, action: Function, type: String, icon: String, loadingLabel: String }
     },
 });
 
-// Словник доступних іконок
 const iconMap = {
     IconCancel,
     IconDeviceFloppy,

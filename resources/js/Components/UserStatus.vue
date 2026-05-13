@@ -1,7 +1,14 @@
 <template>
-    <div :class="['flex items-center space-x-1', sizeClasses[size]]">
-        <div :class="['w-2 h-2 rounded-full', statusColor, statusRing]"></div>
+    <div :class="['flex items-center space-x-1.5', sizeClasses[size]]">
+        <!-- Крапка статусу з динамічним розміром -->
+        <div :class="[
+            dotSizeClasses[size],
+            'rounded-full transition-colors duration-300', 
+            statusColor, 
+            statusRing
+        ]"></div>
 
+        <!-- Текст статусу -->
         <span v-if="description" :class="statusTextColor">
             {{ statusText }}
         </span>
@@ -16,13 +23,12 @@ const props = defineProps({
     user: {
         type: Object,
         required: true,
-        // Очікуємо: { last_activity_human: '5 хвилин тому', is_online: true/false }
     },
-    // Розмір компонента: 'sm' або 'md'
+    // Додано підтримку 'xs'
     size: {
         type: String,
         default: "sm",
-        validator: (value) => ["sm", "md"].includes(value),
+        validator: (value) => ["xs", "sm", "md"].includes(value),
     },
     description: {
         type: Boolean,
@@ -31,33 +37,13 @@ const props = defineProps({
 });
 
 // --- КОНФІГУРАЦІЯ ---
-const ACTIVE_THRESHOLD_MINUTES = 15; // Межа для статусу "Неактивний"
-
-// Отримуємо останню активність як Carbon Human (як ми створили аксесор)
-const lastActivity = computed(() => props.user.last_activity);
 const isOnline = computed(() => props.user.is_online);
+const lastActivity = computed(() => props.user.last_activity);
 
 // --- ОБЧИСЛЕННЯ СТАТУСУ ---
-
 const activityStatus = computed(() => {
-    if (isOnline.value) {
-        return "online";
-    }
-
-    // Якщо є last_activity, але користувач не онлайн, перевіряємо, чи був він нещодавно
-    // Ми покладаємося на аксесор last_activity_human для відображення,
-    // але для логіки "неактивний" потрібен сам час (last_activity)
-
-    // *Примітка: Якщо last_activity_human виглядає як "10 хвилин тому",
-    // але не більше ACTIVE_THRESHOLD_MINUTES, можна вважати його "Неактивним".
-    // Оскільки аксесор 'last_activity_human' не містить точної інформації
-    // для порівняння, ми просто використовуємо його як 'Offline'.
-
-    if (lastActivity.value) {
-        // Якщо користувач не онлайн, але є час активності:
-        return "offline";
-    }
-
+    if (isOnline.value) return "online";
+    if (lastActivity.value) return "offline";
     return "never";
 });
 
@@ -65,43 +51,43 @@ const activityStatus = computed(() => {
 
 const statusColor = computed(() => {
     switch (activityStatus.value) {
-        case "online":
-            return "bg-green-500";
-        case "offline":
-            return "bg-yellow-500";
-        case "never":
-        default:
-            return "bg-gray-400";
+        case "online": return "bg-green-500";
+        case "offline": return "bg-yellow-500";
+        case "never": return "bg-gray-400";
+        default: return "bg-gray-400";
     }
 });
 
 const statusTextColor = computed(() => {
     switch (activityStatus.value) {
-        case "online":
-            return "text-green-600 font-medium";
-        case "offline":
-            return "text-yellow-600";
-        case "never":
-        default:
-            return "text-gray-500 italic";
+        case "online": return "text-green-600 font-medium";
+        case "offline": return "text-yellow-600";
+        case "never": return "text-gray-500 italic";
+        default: return "text-gray-500";
     }
 });
 
 const statusText = computed(() => {
     switch (activityStatus.value) {
-        case "online":
-            return "Онлайн";
-        case "offline":
-            return `Останній візит: ${lastActivity.value}`;
-        case "never":
-        default:
-            return "Не заходив";
+        case "online": return "Онлайн";
+        case "offline": return `Був: ${lastActivity.value}`;
+        case "never": return "Не заходив";
+        default: return "Невідомо";
     }
 });
 
+// Класи для контейнера (розмір шрифту)
 const sizeClasses = {
+    xs: "text-[10px] leading-tight",
     sm: "text-xs",
     md: "text-sm",
+};
+
+// Класи для крапки (щоб вона була меншою на 'xs')
+const dotSizeClasses = {
+    xs: "w-1.5 h-1.5",
+    sm: "w-2 h-2",
+    md: "w-2.5 h-2.5",
 };
 
 const statusRing = computed(() => {
