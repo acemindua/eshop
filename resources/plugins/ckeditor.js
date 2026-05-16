@@ -1,4 +1,5 @@
 import "ckeditor5/ckeditor5.css";
+import "../css/ckeditor-custom.css";
 import {
     ClassicEditor,
     FindAndReplace,

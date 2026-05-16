@@ -4,6 +4,9 @@ import { ref } from "vue";
 import {
     IconClipboard,
     IconClipboardFilled,
+    IconManualGearbox,
+    IconManualGearboxFilled,
+    IconMenu2,
     IconUser,
     IconUserFilled,
 } from "@tabler/icons-vue";
@@ -54,48 +57,6 @@ const userFlag = computed(() => {
             </div>
 
             <ul class="flex flex-col w-full border-b divide-y">
-                <li v-if="auth_user" class="mb-2">
-                    <div
-                        class="m-4 flex flex-col gap-2 items-center justify-center text-xs"
-                    >
-                        <div class="relative flex items-center justify-center">
-                            <!-- Аватар користувача -->
-                            <img
-                                :src="
-                                    auth_user.avatar ||
-                                    '/images/default-avatar.png'
-                                "
-                                :alt="auth_user.full_name"
-                                class="rounded-xl w-14 h-14 object-cover border border-gray-100 shadow-sm"
-                            />
-
-                            <div
-                                class="absolute -top-1 -right-1 border-0 rounded-full w-5 h-5 flex items-center justify-center bg-white"
-                            >
-                                <!-- Прапорець як бейдж -->
-                                <flag
-                                    :iso="userFlag"
-                                    :title="auth_user.locale"
-                                    class="rounded-full"
-                                />
-                            </div>
-                        </div>
-                        <p class="font-semibold">{{ auth_user.full_name }}</p>
-                        <p
-                            class="flex items-center justify-center bg-gray-600 rounded-full h-5 px-2 relative"
-                        >
-                            <span
-                                class="text-xs text-gray-50 -top-[2px] relative"
-                            >
-                                {{ auth_user.role }}
-                            </span>
-                        </p>
-                        <p class="text-gray-400 truncate w-full text-center">
-                            {{ auth_user.email }}
-                        </p>
-                    </div>
-                </li>
-
                 <AdminNavLink
                     :href="route('admin.users.index')"
                     :active="$page.url.startsWith('/users')"
@@ -134,6 +95,25 @@ const userFlag = computed(() => {
                     </template>
 
                     {{ $t("Pages") }}
+                </AdminNavLink>
+
+                <AdminNavLink
+                    :href="route('admin.menus.index')"
+                    :active="$page.url.startsWith('/menus')"
+                    :show-text="isSidebarVisible"
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url.startsWith('/menus')
+                                    ? IconManualGearboxFilled
+                                    : IconManualGearbox
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
+                    {{ $t("Menus") }}
                 </AdminNavLink>
             </ul>
         </template>

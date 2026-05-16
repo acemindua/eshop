@@ -1,0 +1,148 @@
+/* ==========================================================================
+   CKEditor 5 Custom Theme
+   Base color palette: Slate (neutral) & Indigo (accent)
+   ========================================================================== */
+
+:root {
+    /* --- Головна колірна гама --- */
+    --ck-color-focus-border: #6366f1;
+    /* Indigo 500 */
+    --ck-color-shadow-inner: rgba(99, 102, 241, 0.08);
+
+    /* --- Рамки та фони --- */
+    --ck-color-base-border: #e2e8f0;
+    /* Slate 200 */
+    --ck-color-base-background: #ffffff;
+    --ck-color-toolbar-background: #f8fafc;
+    /* Slate 50 */
+    --ck-color-toolbar-border: #e2e8f0;
+
+    /* --- Кнопки та випадаючі списки --- */
+    --ck-color-button-default-hover-background: #f1f5f9;
+    --ck-color-button-on-background: #eef2ff;
+    /* Indigo 50 */
+    --ck-color-button-on-color: #4f46e5;
+    /* Indigo 600 */
+    --ck-color-dropdown-panel-background: #ffffff;
+    --ck-color-dropdown-panel-border: #e2e8f0;
+
+    /* --- Округлення (Radius) --- */
+    --ck-border-radius: 0.75rem;
+    /* 12px - як у твоїх TextInput */
+
+    /* --- Текст --- */
+    --ck-color-text: #334155;
+    /* Slate 700 */
+    --ck-font-size-base: 14px;
+}
+
+/* 1. Контейнер редактора
+   ========================================================================== */
+.ck-editor {
+    @apply shadow-sm transition-all duration-300;
+}
+
+/* 2. Панель інструментів (Toolbar)
+   ========================================================================== */
+.ck.ck-editor__top .ck-sticky-panel .ck-toolbar {
+    border-radius: 12px 12px 0 0 !important;
+    border-bottom-width: 1px !important;
+    background: var(--ck-color-toolbar-background) !important;
+    padding: 0.4rem !important;
+}
+
+.ck.ck-toolbar__separator {
+    background: #cbd5e1 !important;
+    /* Slate 300 */
+    margin-left: 6px !important;
+    margin-right: 6px !important;
+}
+
+/* Стиль кнопок */
+.ck.ck-button {
+    border-radius: 6px !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* 3. Зона редагування (Content Area)
+   ========================================================================== */
+.ck-editor__editable {
+    min-height: 350px;
+    padding: 1.5rem 2rem !important;
+    border-radius: 0 0 12px 12px !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+/* Ефект фокусу (як у Tailwind focus:ring) */
+.ck-editor__editable.ck-focused {
+    border-color: #6366f1 !important;
+    /* Indigo 500 */
+    box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.08) !important;
+    transition: all 0.3s ease;
+}
+
+/* 4. Внутрішня типографіка (Content Styling)
+   ========================================================================== */
+.ck-content {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #334155;
+    line-height: 1.7;
+}
+
+.ck-content h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-top: 1.5rem;
+}
+
+.ck-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 1.25rem;
+    border: none;
+}
+
+.ck-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.ck-content blockquote {
+    border-left: 4px solid #6366f1 !important;
+    background: #f8fafc;
+    padding: 1rem 1.5rem !important;
+    font-style: italic;
+    color: #475569;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 5. Кастомний плагін Footnote
+   ========================================================================== */
+.ck-content .footnote {
+    color: #4f46e5;
+    background-color: #eef2ff;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.85em;
+    transition: background 0.2s;
+}
+
+.ck-content .footnote:hover {
+    background-color: #e0e7ff;
+}
+
+/* 6. Повноекранний режим (Fullscreen)
+   ========================================================================== */
+.ck-editor.ck-editor--fullscreen {
+    z-index: 10000 !important;
+}
+
+.ck-editor--fullscreen .ck-editor__editable {
+    min-height: calc(100vh - 100px) !important;
+}

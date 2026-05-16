@@ -1,83 +1,78 @@
-import { reactive } from "vue";
-// Імпортуємо наш новий композабл useLocales
+import { ref, reactive, toRefs } from "vue";
 import useLocales from "./useLocales";
 
-/**
- * Composable for handling translatable forms.
- * Automatically creates fields for multiple locales.
- *
- * @param {Array} translatedAttributes - list of translated field names (e.g., ['title', 'description'])
- */
 export default function useTranslatableForm(translatedAttributes = []) {
-    // 1. Отримуємо дані про локалі за допомогою useLocales
-    // Зауваження: current не передаємо, оскільки в даному контексті нам потрібні
-    // лише всі доступні локалі для ініціалізації форми.
-    const {
-        state: localeState, // Перейменовуємо state для уникнення конфлікту
-        localeKeys,
-        hasMultipleLocales,
-        currentMappedLocale, // Може бути корисним для відображення
-        localeKeysMapped, // Може бути корисним для відображення
-    } = useLocales();
+    const { localeKeys, locales, hasMultipleLocales } = useLocales();
 
-    // Об'єкт доступних локалей
-    const locales = localeState.locales;
-
-    // Реактивна форма
-    const form = reactive({});
+    // Використовуємо ref для самого об'єкта форми
+    // Це дає змогу легко скидати форму до початкового стану
+    const form = reactive({
+        processing: false, // Додаємо стан обробки запиту
+    });
 
     /**
-     * Initialize form with default values and empty translations
-     *
-     * @param {Object} defaultValues - non-translated default fields (e.g., { active: true })
+     * Створює чисту структуру для перекладів
      */
-    const initForm = (defaultValues = {}) => {
-        // Clear previous form data
-        Object.keys(form).forEach((key) => delete form[key]);
-
-        // Set base values (not translated)
-        Object.assign(form, defaultValues);
-
-        // Set empty translation fields for each locale
-        // Використовуємо localeKeys для ітерації
+    const generateEmptyTranslations = () => {
+        const translations = {};
         localeKeys.value.forEach((code) => {
-            form[code] = {};
+            translations[code] = {};
             translatedAttributes.forEach((attr) => {
-                form[code][attr] = "";
+                translations[code][attr] = "";
             });
         });
+        return translations;
     };
 
     /**
-     * Fill form translations from an existing item with `translations`
-     *
-     * @param {Object} item - an object that contains a `translations` array
+     * Ініціалізація форми (для Create)
+     */
+    const initForm = (defaultValues = {}) => {
+        // Очищаємо всі ключі крім системних
+        Object.keys(form).forEach((key) => {
+            if (key !== "processing") delete form[key];
+        });
+
+        // Додаємо базові значення
+        Object.assign(form, defaultValues);
+
+        // Додаємо структуру перекладів
+        const translations = generateEmptyTranslations();
+        Object.assign(form, translations);
+    };
+
+    /**
+     * Заповнення форми (для Edit)
      */
     const fillForm = (item) => {
-        // Спочатку ініціалізуємо форму базовими значеннями
-        initForm(item);
+        if (!item) return;
 
-        if (!item.translations) return;
+        // 1. Спочатку заповнюємо базові поля (id, public, order тощо)
+        Object.assign(form, item);
 
-        for (const trans of item.translations) {
-            // Перевіряємо, чи існує локаль у формі
-            if (!form[trans.locale]) continue;
+        // 2. Ініціалізуємо порожні переклади (щоб уникнути undefined)
+        const emptyTrans = generateEmptyTranslations();
+        Object.assign(form, emptyTrans);
 
-            translatedAttributes.forEach((attr) => {
-                form[trans.locale][attr] = trans[attr] ?? "";
+        // 3. Наповнюємо реальними даними з масиву translations
+        if (item.translations && Array.isArray(item.translations)) {
+            item.translations.forEach((trans) => {
+                const code = trans.locale;
+                if (form[code]) {
+                    translatedAttributes.forEach((attr) => {
+                        form[code][attr] = trans[attr] ?? "";
+                    });
+                }
             });
         }
-
-        form._method = "put";
     };
 
     return {
-        form,
-        locales, // Тепер це locales з useLocales
-        localeKeys, // Додатково повертаємо ключі локалей
-        hasMultipleLocales, // Додатково повертаємо інформацію про множинні локалі
-        currentMappedLocale, // Додатково повертаємо поточну маповану локаль
-        localeKeysMapped, // Додатково повертаємо мапінг ключів локалей
+        form, // залишаємо reactive об'єкт
+        processing: toRefs(form).processing, // дозволяє використовувати як окрему змінну
+        locales,
+        localeKeys,
+        hasMultipleLocales,
         initForm,
         fillForm,
     };

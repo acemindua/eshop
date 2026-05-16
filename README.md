@@ -447,7 +447,16 @@ php artisan make:seeder WarehouseSeeder
 
 ### Checkout->Delivery (v1.10.6) - 2026.05.13
 
-```bash
+### Update System (v1.10.7) - 2026.05.13
 
+### Update System (v1.10.8) - 2026.05.14
+
+### Menu
+
+```bash
+php artisan make:model Menu -mcr
+php artisan make:model MenuItem -m
+php artisan make:policy MenuPolicy
+
+npm i vuedraggable
 ```
-### Update System  (v1.10.7) - 2026.05.13

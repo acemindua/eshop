@@ -1,0 +1,422 @@
+import { ref, onBeforeMount, mergeProps, unref, withCtx, createTextVNode, toDisplayString, createVNode, openBlock, createBlock, Fragment, renderList, Transition, useSSRContext } from "vue";
+import { ssrRenderAttrs, ssrRenderComponent, ssrRenderList, ssrInterpolate } from "vue/server-renderer";
+import { B as ButtonsGroup } from "./ButtonsGroup-CwkMyX54.js";
+import { _ as _sfc_main$2 } from "./ButtonTabGroup-DbwGHxsz.js";
+import { u as useTranslatableForm } from "./useTranslatableForm-CkxPCqve.js";
+import { _ as _sfc_main$1 } from "./CommerceAdminLayout-BAhB0ZKI.js";
+import { V as VarDump } from "./VarDump-DqvrPBoK.js";
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import _sfc_main$5 from "./DataForm-D8EvEaas.js";
+import _sfc_main$4 from "./SEOForm-ByND2QpS.js";
+import _sfc_main$3 from "./GeneralForm-Dqpyucw_.js";
+import "../ssr.js";
+import { router } from "@inertiajs/core";
+import "./_plugin-vue_export-helper-1tPrXgE0.js";
+import "@tabler/icons-vue";
+import "./useLocales-V6QHCGCa.js";
+import "./AdminLayout-BRIf9gc0.js";
+import "./Breadcrumbs-DA__G0nP.js";
+import "pinia";
+import "./ApplicationLogo-DsJOFw9w.js";
+import "./CheckBoxSwitcher-DfwzQzd4.js";
+import "./ComboboxSelect-Wa-V4Q9H.js";
+import "./CountrySelect-CzfB0WgS.js";
+import "./InputError-Cp3nFeNd.js";
+import "./TextInput-Dmmb8A31.js";
+import "./LanguagesTabs-cLOUJkB8.js";
+import "./TranslationSEOContent-DLPm0vLl.js";
+import "./TextareaInput-DKTcDXJH.js";
+import "./TranslationContent-b8__8l34.js";
+import "./TextEditor-sUHg17QC.js";
+import "@ckeditor/ckeditor5-vue";
+import "ckeditor5";
+import "@wiris/mathtype-ckeditor5/dist/index.js";
+import "@vue/shared";
+import "@vue/compiler-ssr";
+import "node:stream";
+import "lodash-es";
+import "laravel-precognition";
+import "@inertiajs/core/server";
+import "@floating-ui/dom";
+const _sfc_main = /* @__PURE__ */ Object.assign({
+  layout: _sfc_main$1
+}, {
+  __name: "Create",
+  __ssrInlineRender: true,
+  props: {
+    data: Object,
+    errors: Object
+  },
+  setup(__props) {
+    const props = __props;
+    const activeTab = ref(0);
+    const tabs = ref([
+      { key: "general", label: "General" },
+      { key: "seo", label: "SEO" },
+      { key: "data", label: "Data" }
+    ]);
+    const isEditing = ref(false);
+    const loading = ref(false);
+    const recentlySuccessful = ref(false);
+    const translatedAttributes = [
+      "title",
+      "description",
+      "content",
+      "meta_title",
+      "meta_description",
+      "meta_keywords"
+    ];
+    const { form, initForm } = useTranslatableForm(translatedAttributes);
+    function changeTab(index) {
+      activeTab.value = index;
+    }
+    onBeforeMount(() => {
+      initForm(props.data);
+    });
+    const handleCancel = () => {
+      router.visit(route("admin.items.index"));
+    };
+    const handleSave = () => {
+      router.post(route("admin.items.store"), form, {
+        forceFormData: true,
+        preserveState: true,
+        onStart: () => loading.value = true,
+        onSuccess: () => {
+          recentlySuccessful.value = true;
+          setTimeout(() => recentlySuccessful.value = false, 3e3);
+        },
+        onFinish: () => loading.value = false
+      });
+    };
+    const actionButtons = [
+      {
+        label: "cancel",
+        action: handleCancel,
+        type: "secondary",
+        icon: "IconCancel"
+      },
+      {
+        label: "save",
+        loadingLabel: "Saving...",
+        action: handleSave,
+        type: "primary",
+        icon: "IconDeviceFloppy"
+      }
+    ];
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "flex flex-col space-y-2" }, _attrs))}><section class="flex items-center justify-between pt-4"><span></span>`);
+      _push(ssrRenderComponent(ButtonsGroup, { buttons: actionButtons }, null, _parent));
+      _push(`</section><section>`);
+      _push(ssrRenderComponent(unref(TabGroup), {
+        selectedIndex: activeTab.value,
+        onChange: changeTab
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(unref(TabList), { class: "flex items-center w-full border-b border-gray-300" }, {
+              default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                if (_push3) {
+                  _push3(`<!--[-->`);
+                  ssrRenderList(tabs.value, (tab) => {
+                    _push3(ssrRenderComponent(unref(Tab), {
+                      key: tab.key,
+                      as: "template"
+                    }, {
+                      default: withCtx(({ selected }, _push4, _parent4, _scopeId3) => {
+                        if (_push4) {
+                          _push4(ssrRenderComponent(_sfc_main$2, { selected }, {
+                            default: withCtx((_3, _push5, _parent5, _scopeId4) => {
+                              if (_push5) {
+                                _push5(`${ssrInterpolate(_ctx.$t(tab.label))}`);
+                              } else {
+                                return [
+                                  createTextVNode(toDisplayString(_ctx.$t(tab.label)), 1)
+                                ];
+                              }
+                            }),
+                            _: 2
+                          }, _parent4, _scopeId3));
+                        } else {
+                          return [
+                            createVNode(_sfc_main$2, { selected }, {
+                              default: withCtx(() => [
+                                createTextVNode(toDisplayString(_ctx.$t(tab.label)), 1)
+                              ]),
+                              _: 2
+                            }, 1032, ["selected"])
+                          ];
+                        }
+                      }),
+                      _: 2
+                    }, _parent3, _scopeId2));
+                  });
+                  _push3(`<!--]-->`);
+                } else {
+                  return [
+                    (openBlock(true), createBlock(Fragment, null, renderList(tabs.value, (tab) => {
+                      return openBlock(), createBlock(unref(Tab), {
+                        key: tab.key,
+                        as: "template"
+                      }, {
+                        default: withCtx(({ selected }) => [
+                          createVNode(_sfc_main$2, { selected }, {
+                            default: withCtx(() => [
+                              createTextVNode(toDisplayString(_ctx.$t(tab.label)), 1)
+                            ]),
+                            _: 2
+                          }, 1032, ["selected"])
+                        ]),
+                        _: 2
+                      }, 1024);
+                    }), 128))
+                  ];
+                }
+              }),
+              _: 1
+            }, _parent2, _scopeId));
+            _push2(ssrRenderComponent(unref(TabPanels), { class: "mt-2" }, {
+              default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                if (_push3) {
+                  _push3(`<template>`);
+                  _push3(ssrRenderComponent(unref(TabPanel), null, {
+                    default: withCtx((_3, _push4, _parent4, _scopeId3) => {
+                      if (_push4) {
+                        _push4(ssrRenderComponent(_sfc_main$3, {
+                          form: unref(form),
+                          errors: __props.errors,
+                          "is-editing": isEditing.value
+                        }, null, _parent4, _scopeId3));
+                      } else {
+                        return [
+                          createVNode(_sfc_main$3, {
+                            form: unref(form),
+                            errors: __props.errors,
+                            "is-editing": isEditing.value
+                          }, null, 8, ["form", "errors", "is-editing"])
+                        ];
+                      }
+                    }),
+                    _: 1
+                  }, _parent3, _scopeId2));
+                  _push3(`</template><template>`);
+                  _push3(ssrRenderComponent(unref(TabPanel), null, {
+                    default: withCtx((_3, _push4, _parent4, _scopeId3) => {
+                      if (_push4) {
+                        _push4(ssrRenderComponent(_sfc_main$4, {
+                          form: unref(form),
+                          errors: __props.errors,
+                          "is-editing": isEditing.value
+                        }, null, _parent4, _scopeId3));
+                      } else {
+                        return [
+                          createVNode(_sfc_main$4, {
+                            form: unref(form),
+                            errors: __props.errors,
+                            "is-editing": isEditing.value
+                          }, null, 8, ["form", "errors", "is-editing"])
+                        ];
+                      }
+                    }),
+                    _: 1
+                  }, _parent3, _scopeId2));
+                  _push3(`</template><template>`);
+                  _push3(ssrRenderComponent(unref(TabPanel), null, {
+                    default: withCtx((_3, _push4, _parent4, _scopeId3) => {
+                      if (_push4) {
+                        _push4(ssrRenderComponent(_sfc_main$5, {
+                          form: unref(form),
+                          data: __props.data,
+                          errors: __props.errors,
+                          "is-editing": isEditing.value
+                        }, null, _parent4, _scopeId3));
+                      } else {
+                        return [
+                          createVNode(_sfc_main$5, {
+                            form: unref(form),
+                            data: __props.data,
+                            errors: __props.errors,
+                            "is-editing": isEditing.value
+                          }, null, 8, ["form", "data", "errors", "is-editing"])
+                        ];
+                      }
+                    }),
+                    _: 1
+                  }, _parent3, _scopeId2));
+                  _push3(`</template>`);
+                } else {
+                  return [
+                    createVNode(Transition, {
+                      name: "slot-fade",
+                      mode: "out-in",
+                      appear: ""
+                    }, {
+                      default: withCtx(() => [
+                        createVNode(unref(TabPanel), null, {
+                          default: withCtx(() => [
+                            createVNode(_sfc_main$3, {
+                              form: unref(form),
+                              errors: __props.errors,
+                              "is-editing": isEditing.value
+                            }, null, 8, ["form", "errors", "is-editing"])
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    }),
+                    createVNode(Transition, {
+                      name: "slot-fade",
+                      mode: "out-in",
+                      appear: ""
+                    }, {
+                      default: withCtx(() => [
+                        createVNode(unref(TabPanel), null, {
+                          default: withCtx(() => [
+                            createVNode(_sfc_main$4, {
+                              form: unref(form),
+                              errors: __props.errors,
+                              "is-editing": isEditing.value
+                            }, null, 8, ["form", "errors", "is-editing"])
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    }),
+                    createVNode(Transition, {
+                      name: "slot-fade",
+                      mode: "out-in",
+                      appear: ""
+                    }, {
+                      default: withCtx(() => [
+                        createVNode(unref(TabPanel), null, {
+                          default: withCtx(() => [
+                            createVNode(_sfc_main$5, {
+                              form: unref(form),
+                              data: __props.data,
+                              errors: __props.errors,
+                              "is-editing": isEditing.value
+                            }, null, 8, ["form", "data", "errors", "is-editing"])
+                          ]),
+                          _: 1
+                        })
+                      ]),
+                      _: 1
+                    })
+                  ];
+                }
+              }),
+              _: 1
+            }, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(unref(TabList), { class: "flex items-center w-full border-b border-gray-300" }, {
+                default: withCtx(() => [
+                  (openBlock(true), createBlock(Fragment, null, renderList(tabs.value, (tab) => {
+                    return openBlock(), createBlock(unref(Tab), {
+                      key: tab.key,
+                      as: "template"
+                    }, {
+                      default: withCtx(({ selected }) => [
+                        createVNode(_sfc_main$2, { selected }, {
+                          default: withCtx(() => [
+                            createTextVNode(toDisplayString(_ctx.$t(tab.label)), 1)
+                          ]),
+                          _: 2
+                        }, 1032, ["selected"])
+                      ]),
+                      _: 2
+                    }, 1024);
+                  }), 128))
+                ]),
+                _: 1
+              }),
+              createVNode(unref(TabPanels), { class: "mt-2" }, {
+                default: withCtx(() => [
+                  createVNode(Transition, {
+                    name: "slot-fade",
+                    mode: "out-in",
+                    appear: ""
+                  }, {
+                    default: withCtx(() => [
+                      createVNode(unref(TabPanel), null, {
+                        default: withCtx(() => [
+                          createVNode(_sfc_main$3, {
+                            form: unref(form),
+                            errors: __props.errors,
+                            "is-editing": isEditing.value
+                          }, null, 8, ["form", "errors", "is-editing"])
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  }),
+                  createVNode(Transition, {
+                    name: "slot-fade",
+                    mode: "out-in",
+                    appear: ""
+                  }, {
+                    default: withCtx(() => [
+                      createVNode(unref(TabPanel), null, {
+                        default: withCtx(() => [
+                          createVNode(_sfc_main$4, {
+                            form: unref(form),
+                            errors: __props.errors,
+                            "is-editing": isEditing.value
+                          }, null, 8, ["form", "errors", "is-editing"])
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  }),
+                  createVNode(Transition, {
+                    name: "slot-fade",
+                    mode: "out-in",
+                    appear: ""
+                  }, {
+                    default: withCtx(() => [
+                      createVNode(unref(TabPanel), null, {
+                        default: withCtx(() => [
+                          createVNode(_sfc_main$5, {
+                            form: unref(form),
+                            data: __props.data,
+                            errors: __props.errors,
+                            "is-editing": isEditing.value
+                          }, null, 8, ["form", "data", "errors", "is-editing"])
+                        ]),
+                        _: 1
+                      })
+                    ]),
+                    _: 1
+                  })
+                ]),
+                _: 1
+              })
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`</section>`);
+      if (_ctx.$page.props.app.mode === "local") {
+        _push(`<section>`);
+        _push(ssrRenderComponent(VarDump, { data: __props.data }, null, _parent));
+        _push(`</section>`);
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`</div>`);
+    };
+  }
+});
+const _sfc_setup = _sfc_main.setup;
+_sfc_main.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Pages/Admin/Commerce/Items/Create.vue");
+  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
+};
+export {
+  _sfc_main as default
+};

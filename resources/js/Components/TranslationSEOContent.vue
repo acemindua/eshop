@@ -1,149 +1,166 @@
 <template>
-    <div
-        v-if="'meta_title' in model"
-        class="md:flex gap-6 w-full border rounded-lg p-2 md:p-6 lg:p-12 bg-gray-50"
-    >
-        <div class="w-full md:w-1/5 pb-4">
-            <h2 class="uppercase font-semibold">Meta tags</h2>
-            <span class="py-2 text-sm text-gray-600">SEO content</span>
+    <div class="md:flex gap-8 py-6">
+        <!-- Left Sidebar: Context -->
+        <div class="md:w-1/4 mb-6 md:mb-0">
+            <h2
+                class="text-lg font-bold text-slate-800 flex items-center gap-2"
+            >
+                SEO Optimization
+            </h2>
+            <p class="mt-2 text-sm text-slate-500 leading-relaxed">
+                Configure meta tags and indexing settings for the
+                <span
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-indigo-100 text-indigo-700 uppercase tracking-wider"
+                >
+                    {{ code }}
+                </span>
+                version.
+            </p>
         </div>
 
-        <div class="flex md:w-3/4 w-full flex-col space-y-4 bg-gray-50">
-            <div v-if="'slug' in model" class="mb-3">
-                <div class="flex items-center space-x-1">
-                    <span class="text-red-500">*</span>
-                    <InputLabel
-                        :for="`${code}.slug`"
-                        :value="`Slug (${code})`"
-                        class="flex leading-6 items-center font-semibold"
+        <div
+            class="w-full md:w-3/4 space-y-8 bg-white p-6 rounded-xl border border-slate-200 shadow-sm"
+        >
+            <!-- URL Slug Section -->
+            <div
+                v-if="'slug' in model"
+                class="space-y-2 pb-6 border-b border-slate-100"
+            >
+                <InputLabel
+                    :for="`${code}.slug`"
+                    value="URL Slug"
+                    class="font-bold uppercase"
+                />
+                <div class="flex">
+                    <span
+                        class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-slate-300 bg-slate-50 text-slate-500 text-xs font-mono"
+                    >
+                        /{{ code }}/
+                    </span>
+                    <TextInput
+                        :id="`${code}.slug`"
+                        v-model="model.slug"
+                        type="text"
+                        class="block w-full rounded-l-none"
+                        placeholder="example-page-url"
+                        :class="{ 'border-red-500': errors[`${code}.slug`] }"
                     />
                 </div>
-                <div class="w-full sm:col-span-3">
-                    <div class="relative w-full">
-                        <TextInput
-                            :id="`${code}.slug`"
-                            type="text"
-                            v-model="model.slug"
-                            class="block w-full"
-                            :placeholder="`slug`"
-                            :class="{
-                                'border-red-500': errors[`${code}.slug`],
-                            }"
-                        />
-                    </div>
-
-                    <InputError
-                        class="mt-2"
-                        :message="errors[`${code}.slug`]"
-                    />
-                </div>
+                <InputError :message="errors[`${code}.slug`]" />
             </div>
 
-            <div v-if="'meta_title' in model" class="mb-3">
-                <div class="flex items-center space-x-1">
+            <!-- Meta Title Field -->
+            <div v-if="'meta_title' in model" class="space-y-2">
+                <div class="flex justify-between items-center">
                     <InputLabel
                         :for="`${code}.meta_title`"
-                        :value="`Meta title (${code})`"
-                        class="flex leading-6 items-center font-semibold"
+                        value="Meta Title"
+                        class="font-bold uppercase"
                     />
-                </div>
-
-                <div class="w-full sm:col-span-3">
-                    <TextInput
-                        :id="`${code}.meta_title`"
-                        type="text"
-                        v-model="model.meta_title"
-                        class="block w-full"
-                        :placeholder="`meta_title (${code})`"
+                    <span
+                        class="text-[10px] font-mono text-slate-400"
                         :class="{
-                            'border-red-500': errors[`${code}.meta_title`],
+                            'text-red-500': model.meta_title?.length > 60,
                         }"
-                    />
-                    <p class="mt-1 text-xs text-gray-500">
-                        SEO meta title, shown in browser tabs and search
-                        results.
-                    </p>
-
-                    <InputError
-                        class="mt-2"
-                        :message="errors[`${code}.meta_title`]"
-                    />
+                    >
+                        {{ model.meta_title?.length || 0 }}/60
+                    </span>
                 </div>
-            </div>
-
-            <div v-if="'meta_description' in model" class="mb-3">
-                <InputLabel
-                    :for="`${code}.meta_description`"
-                    :value="`Meta description (${code})`"
-                    class="flex leading-6 items-center font-semibold"
+                <TextInput
+                    :id="`${code}.meta_title`"
+                    v-model="model.meta_title"
+                    type="text"
+                    class="block w-full"
+                    :class="{ 'border-red-500': errors[`${code}.meta_title`] }"
                 />
-                <div class="w-full sm:col-span-3">
-                    <TextareaInput
-                        :id="`${code}.meta_description`"
-                        v-model="model.meta_description"
-                        class="block w-full"
-                    />
-                    <p class="mt-1 text-xs text-gray-500">
-                        SEO meta description, helps improve search engine
-                        snippets.
-                    </p>
-                    <InputError
-                        class="mt-2"
-                        :message="errors[`${code}.meta_description`]"
-                    />
-                </div>
+                <InputError :message="errors[`${code}.meta_title`]" />
             </div>
 
-            <div v-if="'meta_keywords' in model" class="mb-3">
-                <div class="flex items-center space-x-1">
+            <!-- Meta Description Field -->
+            <div v-if="'meta_description' in model" class="space-y-2">
+                <div class="flex justify-between items-center">
                     <InputLabel
-                        :for="`${code}.meta_keywords`"
-                        :value="`Meta keywords (${code})`"
-                        class="flex leading-6 items-center font-semibold"
+                        :for="`${code}.meta_description`"
+                        value="Meta Description"
+                        class="font-bold uppercase"
                     />
-                </div>
-
-                <div class="w-full sm:col-span-3">
-                    <TextInput
-                        :id="`${code}.meta_keywords`"
-                        type="text"
-                        v-model="model.meta_keywords"
-                        class="block w-full"
-                        :placeholder="`meta_keywords (${code})`"
+                    <span
+                        class="text-[10px] font-mono text-slate-400"
                         :class="{
-                            'border-red-500': errors[`${code}.meta_keywords`],
+                            'text-red-500':
+                                model.meta_description?.length > 160,
                         }"
-                        @keydown.space.prevent="appendComma"
-                        @keydown.enter.prevent="appendComma"
-                    />
-                    <p class="mt-2 text-xs text-gray-500">
-                        Enter keywords separated automatically by commas as you
-                        type. Press space or enter to add a comma.
-                    </p>
-                    <InputError
-                        class="mt-2"
-                        :message="errors[`${code}.meta_keywords`]"
-                    />
+                    >
+                        {{ model.meta_description?.length || 0 }}/160
+                    </span>
                 </div>
+                <TextareaInput
+                    :id="`${code}.meta_description`"
+                    v-model="model.meta_description"
+                    rows="3"
+                    class="block w-full"
+                    :class="{
+                        'border-red-500': errors[`${code}.meta_description`],
+                    }"
+                />
+                <InputError :message="errors[`${code}.meta_description`]" />
+            </div>
+
+            <!-- Meta Keywords (FIXED) -->
+            <div v-if="'meta_keywords' in model" class="space-y-2 pt-2">
+                <InputLabel
+                    :for="`${code}.meta_keywords`"
+                    value="Meta Keywords"
+                    class="font-bold uppercase"
+                />
+
+                <TextInput
+                    :id="`${code}.meta_keywords`"
+                    :model-value="model.meta_keywords || ''"
+                    @input="handleKeywordInput"
+                    type="text"
+                    class="block w-full text-sm font-mono"
+                    placeholder="property, rent, kyiv"
+                />
+
+                <div
+                    class="flex items-start gap-2 bg-slate-50 p-3 rounded-lg border border-slate-100"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4 text-indigo-500 mt-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                    </svg>
+                    <p class="text-[11px] text-slate-500 leading-tight">
+                        <strong>Smart Formatting:</strong> Spaces are
+                        automatically converted to commas.
+                    </p>
+                </div>
+                <InputError :message="errors[`${code}.meta_keywords`]" />
             </div>
         </div>
     </div>
 </template>
+
 <script setup>
-import InputError from "./UI/InputError.vue";
-import InputLabel from "./UI/InputLabel.vue";
-import TextareaInput from "./UI/TextareaInput.vue";
-import TextInput from "./UI/TextInput.vue";
+import InputError from "@/Components/UI/InputError.vue";
+import InputLabel from "@/Components/UI/InputLabel.vue";
+import TextInput from "@/Components/UI/TextInput.vue";
+import TextareaInput from "@/Components/UI/TextareaInput.vue";
 
 const props = defineProps({
-    errors: Object,
-    code: {
-        type: String,
-    },
-    isEditing: {
-        type: Boolean,
-        default: false,
-    },
+    errors: { type: Object, default: () => ({}) },
+    code: { type: String },
+    isEditing: { type: Boolean, default: false },
 });
 
 const model = defineModel({
@@ -151,15 +168,27 @@ const model = defineModel({
     required: true,
 });
 
-const appendComma = () => {
-    if (!model.value.meta_keywords) return;
+/**
+ * Handles the keyword input logic.
+ * Converts spaces/multiple commas into proper comma-separated format.
+ */
+const handleKeywordInput = (e) => {
+    let value = e.target.value || "";
 
-    const trimmed = model.value.meta_keywords
-        .toLowerCase()
-        .trim()
-        .replace(/\s*,\s*$/, "");
-    if (trimmed) {
-        model.value.meta_keywords = trimmed + ", ";
-    }
+    // 1. Convert any space to a comma
+    // 2. Remove duplicate commas
+    // 3. Ensure "comma + space" format
+    // 4. Remove leading commas/spaces
+    let formatted = value
+        .replace(/\s+/g, ", ")
+        .replace(/,+/g, ",")
+        .replace(/,\s*/g, ", ")
+        .replace(/^\s*,\s*/, "");
+
+    // Update the parent model
+    model.value.meta_keywords = formatted;
+
+    // Optional: force the input value to show the formatted version immediately
+    e.target.value = formatted;
 };
 </script>

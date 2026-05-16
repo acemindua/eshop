@@ -6,6 +6,7 @@ use App\Models\AppVersion;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Manufacturer;
+use App\Models\Menu;
 use App\Models\Page;
 use App\Models\User;
 use App\Models\PaymentMethod; // Імпортуємо модель
@@ -14,6 +15,7 @@ use App\Policies\AppVersionPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\ItemPolicy;
 use App\Policies\ManufacturerPolicy;
+use App\Policies\MenuPolicy;
 use App\Policies\PagePolicy;
 use App\Policies\UserPolicy;
 use App\Policies\PaymentMethodPolicy; // Імпортуємо політику
@@ -48,5 +50,6 @@ class PolicyServiceProvider extends ServiceProvider
         Gate::policy(PaymentMethod::class, PaymentMethodPolicy::class);
         Gate::policy(AppVersion::class, AppVersionPolicy::class);
         Gate::policy(Shipping::class, ShippingPolicy::class);
+        Gate::policy(Menu::class, MenuPolicy::class);
     }
 }

@@ -1,88 +1,123 @@
 <template>
-    <div class="flex flex-col py-4">
-        <div v-if="countLanguages">
-            <!-- class="text-sm font-semibold sticky top-0" -->
-            <ul class="flex space-x-2 mb-2">
-                <!-- class="flex md:flex-col md:absolute top-0 -left-20 gap-2 py-2" -->
+    <div class="flex flex-col">
+        <!-- Tab Navigation: Compact & Scrollable -->
+        <div
+            v-if="countLanguages > 1"
+            class="mb-3 overflow-x-auto no-scrollbar"
+        >
+            <ul class="flex flex-nowrap gap-2 pb-1">
                 <li
                     v-for="(locale, code) in locales"
                     :key="code"
                     class="relative"
                 >
                     <button
-                        @click.prevent="changeTab(code)"
-                        class="px-3 py-2 bg-gray-50 shadow rounded-lg hover:bg-indigo-100 transition-colors duration-200 inline-flex items-center space-x-2 tracking-wide line-clamp-3"
-                        :class="{
-                            'bg-indigo-50 shadow-inner text-indigo-500':
-                                code === selected,
-                            'bg-red-300': errors[`${code}.title`],
-                        }"
+                        @click.prevent="selected = code"
+                        type="button"
+                        class="px-3 py-2 rounded-lg border transition-all duration-200 inline-flex items-center gap-2 group"
+                        :class="[
+                            selected === code
+                                ? 'bg-white border-indigo-200 text-indigo-700 ring-4 ring-indigo-50 shadow-sm'
+                                : 'bg-gray-50 border-gray-100 text-gray-500 hover:bg-gray-100 hover:text-gray-700',
+                            hasError(code) ? 'border-red-200 bg-red-50/50' : '',
+                        ]"
                     >
+                        <!-- Flag Icon -->
                         <flag
-                            :iso="splitRegion(locale.regional)"
-                            :title="locale.name"
-                            class="rounded-full text-xl shadow-lg"
+                            v-if="locale.regional"
+                            :iso="getCountryCode(locale.regional)"
+                            class="rounded-sm text-[14px] shrink-0 shadow-sm opacity-90 group-hover:opacity-100"
                         />
 
-                        <span class="hidden md:block capitalize text-xs">{{
-                            locale.name
-                        }}</span>
+                        <!-- Language Code (Small & Bold) -->
+                        <span
+                            class="font-bold text-[11px] uppercase tracking-wider md:hidden"
+                        >
+                            {{ code }}
+                        </span>
+
+                        <!-- Native Name (Desktop Only) -->
+                        <span
+                            class="capitalize text-[12px] hidden md:block font-medium opacity-80 group-hover:opacity-100 transition-opacity"
+                        >
+                            {{ locale.native }}
+                        </span>
                     </button>
 
-                    <div
-                        v-if="errors[`${code}.title`]"
-                        class="absolute bottom-2 right-2 flex h-2 w-2"
+                    <!-- Error Indicator: Animated Pulse -->
+                    <span
+                        v-if="hasError(code)"
+                        class="absolute top-1 right-1 flex h-3 w-3 z-50"
                     >
                         <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
+                            class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"
                         ></span>
                         <span
-                            class="relative inline-flex rounded-full h-2 w-2 bg-red-500"
+                            class="h-3 w-3 rounded-full bg-red-500 border-2 border-white shadow-sm"
                         ></span>
-                    </div>
+                    </span>
                 </li>
             </ul>
         </div>
-        <div>
+
+        <!-- Content Container -->
+        <div class="transition-all duration-300 overflow-hidden">
             <slot />
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { computed, onMounted } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
 const props = defineProps({
-    modelValue: String,
-    errors: Object,
-    locale: {
-        type: String,
-        default: "uk",
-    },
+    errors: { type: Object, default: () => ({}) },
+    // Додаємо новий пропс для масиву полів поточного таба
+    fields: { type: Array, default: () => [] },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const selected = defineModel({ type: String });
 
 const page = usePage();
-const locales = ref(page.props.config.supportedLocales);
+const locales = computed(() => page.props.config.supportedLocales || {});
+const countLanguages = computed(() => Object.keys(locales.value).length);
 
-const countLanguages = computed(() => {
-    return Object.keys(locales).length > 1 ? true : false;
+onMounted(() => {
+    if (!selected.value && countLanguages.value > 0) {
+        selected.value = Object.keys(locales.value)[0];
+    }
 });
 
-const selected = ref(props.modelValue || props.locale);
+/**
+ * Оптимізована перевірка помилок:
+ * Перевіряє, чи є помилка для конкретної мови (code)
+ * серед полів, які належать до поточного таба (props.fields)
+ */
+const hasError = (code) => {
+    const errorKeys = Object.keys(props.errors || {});
 
-function splitRegion($region) {
-    return $region.split("_")[1].toLowerCase();
-}
+    // Якщо поля не передані, перевіряємо просто наявність будь-якої помилки для цієї мови
+    if (props.fields.length === 0) {
+        return errorKeys.some((k) => k.startsWith(`${code}.`));
+    }
 
-const changeTab = (item) => {
-    selected.value = item;
+    // Перевіряємо, чи є ключ помилки у форматі "uk.поле", де "поле" є в нашому списку таба
+    return errorKeys.some((k) => {
+        return props.fields.some((field) => k === `${code}.${field}`);
+    });
 };
 
-// Слідкування за зміною значення selected та emit події для оновлення modelValue
-watch(selected, (newValue) => {
-    emit("update:modelValue", newValue);
-});
+const getCountryCode = (r) =>
+    r && r.includes("_") ? r.split("_")[1].toLowerCase() : "uk";
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+</style>

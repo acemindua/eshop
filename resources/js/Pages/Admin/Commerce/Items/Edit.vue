@@ -83,7 +83,7 @@
         >
             <div
                 v-if="isScrolled"
-                class="fixed bottom-6 right-[30%] md:rigth-[50%]"
+                class="fixed bottom-6 right-[50%] md:rigth-[50%]"
             >
                 <ButtonsGroup :buttons="actionButtons" />
             </div>

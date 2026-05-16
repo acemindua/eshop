@@ -1,11 +1,10 @@
 <script setup>
-import AdminSidebar from "@/Components/Admin/AdminSidebar.vue";
-import UserSmallCard from "@/Components/UserSmallCard.vue";
 import Breadcrumbs from "@/Components/Breadcrumbs.vue";
 import { usePage, Head } from "@inertiajs/vue3";
 import { IconChevronLeft, IconLogout } from "@tabler/icons-vue";
 import { computed, ref } from "vue";
 import AlertMessage from "@/Components/AlertMessage.vue";
+import AdminSidebar from "@/Shared/AdminSidebar.vue";
 
 // Синхронізація видимості сайдбару з батьківським компонентом
 const isSidebarVisible = defineModel("isSidebarVisible", { default: true });

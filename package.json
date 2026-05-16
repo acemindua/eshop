@@ -39,6 +39,7 @@
         "sortablejs": "^1.15.6",
         "sweetalert2": "^11.26.4",
         "vue-flag-icon": "^2.1.0",
-        "vue-the-mask": "^0.11.1"
+        "vue-the-mask": "^0.11.1",
+        "vuedraggable": "^4.1.0"
     }
 }

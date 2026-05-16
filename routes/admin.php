@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\{
-    DashboardController,
-    PageController,
-    UserController,
+    MenuController,
     TranslationController,
     ShippingController,
 };
@@ -13,12 +11,26 @@ use App\Http\Controllers\Admin\Commerce\{
     ManufacturerController,
     OrderController
 };
+use App\Http\Controllers\Admin\Dashboard\{DashboardController, PageController, UserController};
+
 use App\Http\Controllers\Admin\Settings\{AppVersionController, PaymentMethodController, WarehouseController};
 use Illuminate\Support\Facades\Route;
 
 // Dashboard
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+// Core Resources
+Route::resources([
+    'users' => UserController::class,
+    'pages' => PageController::class,
+    'menus' => MenuController::class
+]);
 
+Route::post('menus/{menu}/structure', [MenuController::class, 'updateStructure'])
+    ->name('menus.structure');
+// Додаємо методи для роботи з пунктами прямо в MenuController
+Route::post('menus/items/store', [MenuController::class, 'storeItem'])->name('menu-items.store');
+Route::delete('menus/items/{menuItem}', [MenuController::class, 'destroyItem'])->name('menu-items.destroy');
+Route::post('menus/reorder', [MenuController::class, 'reorder'])->name('menu-items.reorder');
 // Settings Group
 Route::prefix('settings')->name('settings.')->group(function () {
     // 1. Roadmap & Versions (Виділяємо в окремий під-префікс)
@@ -61,12 +73,6 @@ Route::prefix('settings')->name('settings.')->group(function () {
     Route::resource('payment-methods', PaymentMethodController::class);
 });
 
-
-// Core Resources
-Route::resources([
-    'users' => UserController::class,
-    'pages' => PageController::class,
-]);
 
 // Commerce Group
 Route::prefix('commerce')->name('commerce.')->group(function () {
