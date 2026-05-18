@@ -92,11 +92,6 @@ Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
     $trail->push(__("Dashboard"), route('admin.dashboard'));
 });
 
-// Settings (Тепер це точка входу для налаштувань)
-Breadcrumbs::for('admin.settings.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin.dashboard');
-    $trail->push(__("Settings"), route('admin.settings.index'));
-});
 
 // Автоматичне створення ресурсних ланцюжків
 Breadcrumbs::macro('resource', function (string $name, string $title, string $parent = 'admin.dashboard') {
@@ -125,10 +120,28 @@ Breadcrumbs::macro('resource', function (string $name, string $title, string $pa
 });
 
 // --- РЕЄСТРАЦІЯ РЕСУРСІВ З УРАХУВАННЯМ ГРУП ---
-
 // 1. Прямі ресурси (Dashboard)
 Breadcrumbs::resource('admin.pages', __('Pages'));
 Breadcrumbs::resource('admin.users', __('Users'));
+
+// Settings (Тепер це точка входу для налаштувань)
+Breadcrumbs::for('admin.settings.options', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push(__("Settings"), route('admin.settings.options'));
+});
+
+// 3. Settings ресурси (Батько - admin.settings.index)
+$settingsResources = [
+    'translations'      => __('Translations'),
+    'shippings'         => __('Shippings'),
+    'payment-methods'   => __('Payment Methods'),
+    'versions'          => __('App Roadmap & Versions'),
+    'warehouses'        => __('Warehouses'),
+];
+
+foreach ($settingsResources as $name => $title) {
+    Breadcrumbs::resource("admin.settings.{$name}", $title, 'admin.settings.options');
+}
 
 // 2. Commerce ресурси (Батько - Dashboard)
 $commerceResources = [
@@ -142,15 +155,3 @@ foreach ($commerceResources as $name => $title) {
     Breadcrumbs::resource("admin.commerce.{$name}", $title);
 }
 
-// 3. Settings ресурси (Батько - admin.settings.index)
-$settingsResources = [
-    'translations'      => __('Translations'),
-    'shippings'         => __('Shippings'),
-    'payment-methods'   => __('Payment Methods'),
-    'versions'          => __('App Roadmap & Versions'),
-    'warehouses'        => __('Warehouses'),
-];
-
-foreach ($settingsResources as $name => $title) {
-    Breadcrumbs::resource("admin.settings.{$name}", $title, 'admin.settings.index');
-}

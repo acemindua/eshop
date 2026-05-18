@@ -25,7 +25,7 @@ const props = defineProps({
     <!-- Render Image as Background for better 'cover' control -->
     <div
         v-if="src"
-        class="rounded-lg mx-auto bg-slate-200 dark:bg-slate-800 shadow-sm overflow-hidden"
+        class="rounded-lg mx-auto bg-slate-50 dark:bg-slate-800 shadow-sm overflow-hidden"
         :style="{
             width: configs.width,
             height: configs.height,
@@ -39,7 +39,7 @@ const props = defineProps({
     <!-- Placeholder when no source is provided -->
     <div
         v-else
-        class="flex items-center justify-center rounded-lg mx-auto text-slate-400 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm"
+        class="flex items-center justify-center rounded-lg mx-auto text-slate-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm"
         :style="{ width: configs.width, height: configs.height }"
     >
         <IconPhotoScan :stroke="1.5" size="20" />

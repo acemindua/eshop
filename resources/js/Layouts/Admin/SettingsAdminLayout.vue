@@ -21,46 +21,36 @@ import {
     IconWorldFilled,
 } from "@tabler/icons-vue";
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
-// Оголошуємо стан тут, щоб він був доступний у шаблоні DashboardAdminLayout
-const isSidebarVisible = ref(true);
+
 </script>
 
 <template>
-    <AdminLayout v-model:isSidebarVisible="isSidebarVisible">
+    <AdminLayout>
         <template #sidenav>
             <div class="w-full h-14 border-b flex items-center p-4">
-                <h4
-                    class="uppercase text-[12px] tracking-widest font-bold text-gray-500"
-                >
+                <h4 class="uppercase text-[12px] tracking-widest font-bold text-gray-500">
                     <span>{{ $t("Settings") }}</span>
                 </h4>
             </div>
 
             <ul class="flex flex-col w-full border-b divide-y">
-                <AdminNavLink
-                    :href="route('admin.settings.index')"
-                    :active="$page.url == '/settings'"
-                    :show-text="isSidebarVisible"
-                >
+                  <li class="uppercase text-xs pt-4 pb-2 px-4 font-semibold text-gray-400">
+                    <span>{{ $t("Core") }}</span>
+                </li>
+                <AdminNavLink :href="route('admin.settings.options')" :active="$page.url == '/settings'">
                     <template #icon>
-                        <component
-                            :is="
-                                $page.url == '/settings'
-                                    ? IconSettingsFilled
-                                    : IconSettings
-                            "
-                            stroke="1"
-                            class="w-5 h-5"
-                        />
+                        <component :is="$page.url == '/settings'
+                                ? IconSettingsFilled
+                                : IconSettings
+                            " stroke="1" class="w-5 h-5" />
                     </template>
 
                     {{ $t("General") }}
                 </AdminNavLink>
-
                 <AdminNavLink
                     :href="route('admin.settings.translations.index')"
                     :active="$page.url === '/settings/translations'"
-                    :show-text="isSidebarVisible"
+                    
                 >
                     <template #icon>
                         <component
@@ -77,9 +67,33 @@ const isSidebarVisible = ref(true);
                     {{ $t("Translations") }}
                 </AdminNavLink>
                 <AdminNavLink
+                    :href="route('admin.settings.versions.index')"
+                    :active="$page.url === '/settings/versions'"
+                    
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url.startsWith('/settings/versions')
+                                    ? IconDirectionsFilled
+                                    : IconDirections
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
+
+                    {{ $t("Roadmap & versions") }}
+                </AdminNavLink>
+                 <li class="uppercase text-xs pt-4 pb-2 px-4 font-semibold text-gray-400">
+                    <span>{{ $t("Commerce") }}</span>
+                </li>
+                <!--  
+                
+                <AdminNavLink
                     :href="route('admin.settings.warehouses.index')"
                     :active="$page.url.startsWith('/settings/warehouses')"
-                    :show-text="isSidebarVisible"
+                    
                 >
                     <template #icon>
                         <component
@@ -99,7 +113,7 @@ const isSidebarVisible = ref(true);
                 <AdminNavLink
                     :href="route('admin.settings.shippings.index')"
                     :active="$page.url === '/settings/shippings'"
-                    :show-text="isSidebarVisible"
+                    
                 >
                     <template #icon>
                         <component
@@ -119,7 +133,7 @@ const isSidebarVisible = ref(true);
                 <AdminNavLink
                     :href="route('admin.settings.payment-methods.index')"
                     :active="$page.url === '/settings/payment-methods'"
-                    :show-text="isSidebarVisible"
+                    
                 >
                     <template #icon>
                         <component
@@ -157,7 +171,7 @@ const isSidebarVisible = ref(true);
 
                     {{ $t("Roadmap & versions") }}
                 </AdminNavLink>
-                <!--  
+               
               
 
                 

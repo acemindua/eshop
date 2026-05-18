@@ -1,59 +1,38 @@
 <script setup>
-import {
-    ref,
-    watch,
-    defineExpose,
-    defineProps,
-    defineEmits,
-    onMounted,
-} from "vue";
+import { ref, onMounted, useTemplateRef } from "vue";
 
 const props = defineProps({
-    modelValue: {
-        type: [String, Number, null],
-        required: true,
-    },
     disabled: {
         type: Boolean,
         default: false,
     },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+// Автоматично створює двостороннє зв'язування (v-model)
+const model = defineModel({ type: [String, Number, null], required: true });
 
-const input = ref(null);
-
-const internalValue = ref(props.modelValue);
-
-watch(
-    () => props.modelValue,
-    (newVal) => {
-        internalValue.value = newVal;
-    }
-);
-
-watch(internalValue, (newVal) => {
-    emit("update:modelValue", newVal);
-});
+// Сучасний спосіб отримання посилань на DOM-елементи у Vue 3
+const inputRef = useTemplateRef("input");
 
 onMounted(() => {
-    if (input.value?.hasAttribute("autofocus") && !props.disabled) {
-        input.value.focus();
+    if (inputRef.value?.hasAttribute("autofocus") && !props.disabled) {
+        inputRef.value.focus();
     }
 });
 
 defineExpose({
     focus: () => {
-        if (!props.disabled) input.value?.focus();
+        if (!props.disabled) inputRef.value?.focus();
     },
 });
 </script>
 
 <template>
     <input
-        class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        v-model="internalValue"
         ref="input"
+        v-model="model"
         :disabled="disabled"
+        type="text"
+        class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 placeholder-slate-400 shadow-sm transition-all focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-50"
     />
 </template>

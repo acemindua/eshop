@@ -61,4 +61,32 @@ class UserFilter extends QueryFilter
 
         return $this->builder;
     }
+/**
+     * Сортування за полем
+     * @param string $value Поле для сортування
+     */
+    public function field($value)
+    {
+        if (empty($value)) return $this->builder;
+
+        // 1. Валідація напрямку сортування
+        $direction = request('direction', 'asc');
+        $direction = in_array(strtolower($direction), ['asc', 'desc']) ? strtolower($direction) : 'asc';
+
+        // 2. Реалізація сортування за складеним ім'ям (Прізвище + Ім'я + По батькові)
+        if ($value === 'full_name') {
+            return $this->builder->orderBy('last_name', $direction)
+                                 ->orderBy('name', $direction)
+                                 ->orderBy('middle_name', $direction);
+        }
+
+        // 3. Захист від SQL-ін'єкцій через динамічні назви колонок (White-list)
+        $allowedSortFields = ['id', 'email', 'phone', 'created_at', 'last_activity'];
+
+        if (in_array($value, $allowedSortFields)) {
+            return $this->builder->orderBy($value, $direction);
+        }
+
+        return $this->builder;
+    }
 }

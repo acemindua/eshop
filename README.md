@@ -1,3 +1,12 @@
+### Update System (v1.11.0) - 2026.05.16
+
+1.  **Оптимізація 'Settings'**
+
+
+
+
+
+
 # 🚀 Project Setup and Package Installation Guide
 
 Цей посібник містить детальні кроки для налаштування проекту та встановлення ключових Laravel-пакетів для **управління дозволами (Permissions), медіа-бібліотекою (Media Library)** та **локалізації (Localization)**.
