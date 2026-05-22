@@ -4,45 +4,40 @@ namespace App\Http\Controllers\Admin;
 
 use App\Facades\Settings;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AppVersionResource;
-use App\Models\AppVersion;
-use App\Models\Item;
 use App\Models\Option;
-use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class AdminController extends Controller
 {
-
-    // Dashboard
+    /**
+     * Display the main admin dashboard.
+     */
     public function dashboard(): Response
     {
-        return Inertia::render('Admin/Dashboard', [
-            
-        ]);
+        return Inertia::render('Admin/Dashboard');
     }
 
-    // Settings
+    /**
+     * Show global system settings and options.
+     */
     public function options(): Response
     {
         return Inertia::render('Admin/Settings/Options', [
             'data' => [
-                'settings' => Option::all(),
+                'settings' => Option::all(['id', 'key', 'value', 'description']),
             ],
         ]);
     }
 
     /**
-     * Обробляє POST-запит на оновлення всіх налаштувань.
-     * Викликається при відправці форми.
+     * Handle the batch update process for global settings.
      */
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
-        // 1. Валідація вхідних даних
         $validated = $request->validate([
             'settings' => 'required|array',
             'settings.*.id' => 'required|integer|exists:options,id',
@@ -51,25 +46,27 @@ class AdminController extends Controller
         ]);
 
         try {
-            // 2. Використання транзакції для безпечного масового оновлення
             DB::transaction(function () use ($validated) {
                 foreach ($validated['settings'] as $optionData) {
-                    Option::where('id', $optionData['id'])
-                        ->update([
-                            'value' => $optionData['value']
-                        ]);
+                    Settings::set($optionData['key'], $optionData['value']);
                 }
             });
 
-            // 3. Очищення кешу (якщо він буде реалізований)
-            Settings::forgetCache();
-
-            return redirect()->back()
-                ->with('success', 'Налаштування сайту успішно оновлено!');
+            // Повертаємо уніфіковану структуру 'alert' для успішного результату
+            return redirect()->back()->with([
+                'alert' => [
+                    'type'    => 'success',
+                    'message' => 'Налаштування сайту успішно оновлено!',
+                ],
+            ]);
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Помилка при оновленні налаштувань.');
+            // Повертаємо уніфіковану структуру 'alert' для помилки
+            return redirect()->back()->with([
+                'alert' => [
+                    'type'    => 'error',
+                    'message' => 'Помилка при оновленні налаштувань.',
+                ],
+            ]);
         }
     }
-
 }

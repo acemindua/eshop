@@ -1,11 +1,17 @@
+### Refactors: (v1.11.2) - 2026.05.21
+
+**Admin/Users\***
+
+### Update System: (v1.11.1) - 2026.05.19
+
+--Translations
+--Versions
+--General
+--Warehouses
+
 ### Update System (v1.11.0) - 2026.05.16
 
 1.  **Оптимізація 'Settings'**
-
-
-
-
-
 
 # 🚀 Project Setup and Package Installation Guide
 

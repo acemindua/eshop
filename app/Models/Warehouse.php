@@ -3,18 +3,24 @@
 namespace App\Models;
 
 use App\Filters\QueryFilter;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\Builder;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Warehouse extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory;
+    use InteractsWithMedia;
 
     /**
-     * Поля для масового заповнення
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
      */
     protected $fillable = [
         'title',
@@ -23,12 +29,14 @@ class Warehouse extends Model implements HasMedia
         'map_link',
         'working_hours',
         'phone',
-        'sort_order', // Додано для можливості сортування
-        'is_active'
+        'sort_order',
+        'is_active',
     ];
 
     /**
-     * Приведення типів
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
      */
     protected $casts = [
         'is_active' => 'boolean',
@@ -36,19 +44,50 @@ class Warehouse extends Model implements HasMedia
     ];
 
     /**
-     * Видалив $with = ['translations'], бо ми відмовились від перекладів
+     * Create a new model instance pre-populated with default values for the frontend form.
+     *
+     * @return self
      */
+    public static function makeWithDefaults(): self
+    {
+        return new self([
+            'is_active' => true,
+            'sort_order' => (self::max('sort_order') ?? 0) + 1,
+        ]);
+    }
 
     /**
-     * Фільтрація через кастомні фільтри
+     * The "booted" method of the model.
+     * Sets up model event hooks.
+     *
+     * @return void
      */
-    public function scopeFilter(Builder $builder, QueryFilter $filter)
+    protected static function booted(): void
+    {
+        static::creating(function (Warehouse $warehouse) {
+            if (is_null($warehouse->sort_order)) {
+                $warehouse->sort_order = (self::max('sort_order') ?? 0) + 1;
+            }
+        });
+    }
+
+    /**
+     * Scope a query to apply custom request filters.
+     *
+     * @param Builder $builder
+     * @param QueryFilter $filter
+     * @return Builder
+     */
+    public function scopeFilter(Builder $builder, QueryFilter $filter): Builder
     {
         return $filter->apply($builder);
     }
 
     /**
-     * Тільки активні склади з правильним сортуванням
+     * Scope a query to only include active warehouses ordered by their sorting sequence.
+     *
+     * @param Builder $query
+     * @return void
      */
     public function scopeActive(Builder $query): void
     {
@@ -56,13 +95,32 @@ class Warehouse extends Model implements HasMedia
     }
 
     /**
-     * Реєстрація медіа-колекцій (фото складу)
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
      */
-    public function registerMediaCollections(): void
+    public function getImageAttribute()
     {
-        $this->addMediaCollection('images')
-            ->singleFile() // Зазвичай для одного складу достатньо одного фото
-            ->useFallbackUrl('/images/placeholder-warehouse.jpg')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+        if ($image = $this->getFirstMediaUrl('images', 'preview')) {
+            $mediaImage = $this->getMedia('images')->first();
+            if (File::exists($mediaImage->getPath())) {
+                return $image;
+            }
+        }
+    }
+
+
+    /**
+     * Register the media collections for the model.
+     *
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('preview')
+            ->format('webp')
+            ->fit(Fit::Contain, 300, 300)
+            ->nonQueued();
     }
 }

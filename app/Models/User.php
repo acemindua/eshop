@@ -126,4 +126,17 @@ class User extends Authenticatable implements HasMedia
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
     }
+
+    /**
+     * Очистити номер телефону від будь-яких символів, крім цифр.
+     * Можна викликати статично: User::cleanPhone($string)
+     */
+    public static function cleanPhone(?string $phone): string
+    {
+        if (!$phone) {
+            return '';
+        }
+
+        return preg_replace('/\D+/', '', $phone);
+    }
 }

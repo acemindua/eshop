@@ -1,7 +1,4 @@
-<?php // routes/breadcrumbs.php
-
-// Note: Laravel will automatically resolve `Breadcrumbs::` without
-// this import. This is nice for IDE syntax and refactoring.
+<?php
 
 use App\Models\Category;
 use App\Models\Item;
@@ -9,91 +6,69 @@ use App\Models\Page;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
-// This import is also not required, and you could replace `BreadcrumbTrail $trail`
-//  with `$trail`. This is nice for IDE type checking and completion.
+// --- FRONTEND BREADCRUMBS ---
 
 // Home
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push(__('Home'), route('home'));
 });
 
-// Category show
+// Category Show
 Breadcrumbs::for('category.show', function (BreadcrumbTrail $trail, string $slug) {
-
-    // 1. Оскільки ви шукаєте категорію за slug, приберіть префікс, якщо він є.
-    // Якщо slug вже чистий, str_replace нічого не змінить.
     $categorySlug = str_replace('category__', '', $slug);
-
-    // Знаходимо поточну категорію
     $category = Category::whereTranslation('slug', $categorySlug)->firstOrFail();
-
-    // Translation зазвичай містить slug і title
     $translation = $category->translations->first();
 
-    // 2. Рекурсивний виклик батьківської категорії
     if ($category->parent) {
-        // Якщо батько існує, викликаємо цей же маршрут, 
-        // але передаємо SLUG БАТЬКІВСЬКОЇ КАТЕГОРІЇ.
-        // Припускаємо, що батьківська категорія має власну трансляцію з коректним slug.
         $parentSlug = $category->parent->translations->first()->slug;
-
-        // Рекурсивний виклик
         $trail->parent('category.show', $parentSlug);
     } else {
-        // Якщо це категорія верхнього рівня, повертаємося до головної сторінки
         $trail->parent('home');
     }
 
-
-    // 3. Додавання поточної категорії
-    // Використовуємо title і slug поточної категорії (з об'єкта $category або $translation)
     $title = $category->title ?? $translation->title;
     $slugToUse = $category->slug ?? $translation->slug;
 
     $trail->push($title, route('category.show', $slugToUse));
 });
-Breadcrumbs::for(
-    'page.show',
-    function (BreadcrumbTrail $trail, string $slug) {
-        // Item
-        if ($item = Item::whereTranslation('slug', $slug)->first()) {
 
+// Dynamic Page / Product Show
+Breadcrumbs::for('page.show', function (BreadcrumbTrail $trail, string $slug) {
+    // Item Route Handler
+    if ($item = Item::whereTranslation('slug', $slug)->first()) {
+        $translation = $item->translations->first();
+        $title = $item->title ?? $translation->title;
 
-            // Translation зазвичай містить slug і title
-            $translation = $item->translations->first();
-            $title = $item->title ?? $translation->title;
-
-            if ($item->category) {
-                $trail->parent('category.show', $item->category->slug);
-            } else {
-                $trail->parent('home');
-            }
-
-            $trail->push($title, route('page.show',  $slug));
-        }
-        // Page
-        elseif ($page = Page::whereTranslation('slug', $slug)->first()) {
-
-
-            $trail->parent('home');
-            // Translation зазвичай містить slug і title
-            $translation = $page->translations->first();
-            $title = $page->title ?? $translation->title;
-            $trail->push($title, route('page.show',  $slug));
+        if ($item->category) {
+            $trail->parent('category.show', $item->category->slug);
         } else {
             $trail->parent('home');
-            $trail->push($slug, route('page.show',  $slug));
         }
+
+        $trail->push($title, route('page.show', $slug));
     }
-);
+    // Static Page Route Handler
+    elseif ($page = Page::whereTranslation('slug', $slug)->first()) {
+        $trail->parent('home');
+        $translation = $page->translations->first();
+        $title = $page->title ?? $translation->title;
+        $trail->push($title, route('page.show', $slug));
+    }
+    // Fallback Handler
+    else {
+        $trail->parent('home');
+        $trail->push($slug, route('page.show', $slug));
+    }
+});
+
+// --- ADMIN PANEL BREADCRUMBS ---
 
 // Dashboard
 Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
-    $trail->push(__("Dashboard"), route('admin.dashboard'));
+    $trail->push(__('Dashboard'), route('admin.dashboard'));
 });
 
-
-// Автоматичне створення ресурсних ланцюжків
+// Global Resource Macro for Backend Routes
 Breadcrumbs::macro('resource', function (string $name, string $title, string $parent = 'admin.dashboard') {
     Breadcrumbs::for(
         "{$name}.index",
@@ -108,50 +83,50 @@ Breadcrumbs::macro('resource', function (string $name, string $title, string $pa
     );
 
     Breadcrumbs::for("{$name}.edit", function (BreadcrumbTrail $trail, $model) use ($name) {
-        $trail->parent("{$name}.index");
-        $trail->push(__('Edit') . ': ' . ($model->title ?? $model->name ?? ''), route("{$name}.edit", $model));
+        $trail->parent("{$name}.index")
+            ->push(__('Edit') . ': ' . ($model->title ?? $model->name ?? ''), route("{$name}.edit", $model));
     });
 
-    // Додаємо .show про всяк випадок
     Breadcrumbs::for("{$name}.show", function (BreadcrumbTrail $trail, $model) use ($name) {
-        $trail->parent("{$name}.index");
-        $trail->push($model->title ?? $model->name ?? '', route("{$name}.show", $model));
+        $trail->parent("{$name}.index")
+            ->push($model->title ?? $model->name ?? '', route("{$name}.show", $model));
     });
 });
 
-// --- РЕЄСТРАЦІЯ РЕСУРСІВ З УРАХУВАННЯМ ГРУП ---
-// 1. Прямі ресурси (Dashboard)
+// Standalone Admin Resources
 Breadcrumbs::resource('admin.pages', __('Pages'));
 Breadcrumbs::resource('admin.users', __('Users'));
 
-// Settings (Тепер це точка входу для налаштувань)
+// Settings Option Group Root
 Breadcrumbs::for('admin.settings.options', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin.dashboard');
-    $trail->push(__("Settings"), route('admin.settings.options'));
+    $trail->parent('admin.dashboard')->push(__('Settings'), route('admin.settings.options'));
 });
 
-// 3. Settings ресурси (Батько - admin.settings.index)
+// Settings Resources Loop
 $settingsResources = [
-    'translations'      => __('Translations'),
-    'shippings'         => __('Shippings'),
-    'payment-methods'   => __('Payment Methods'),
-    'versions'          => __('App Roadmap & Versions'),
-    'warehouses'        => __('Warehouses'),
+    // Core settings
+    'versions'                 => __('App Roadmap & Versions'),
+    'translations'             => __('Translations'),
+
+
 ];
 
 foreach ($settingsResources as $name => $title) {
     Breadcrumbs::resource("admin.settings.{$name}", $title, 'admin.settings.options');
 }
 
-// 2. Commerce ресурси (Батько - Dashboard)
+// Commerce Resources Loop
 $commerceResources = [
     'items'         => __('Items'),
     'categories'    => __('Categories'),
     'manufacturers' => __('Manufacturers'),
     'orders'        => __('Orders'),
+    // Commerce settings
+    'shippings'       => __('Shippings'),
+    'payment-methods' => __('Payment Methods'), // Fixed missing dot separator
+    'warehouses'      => __('Warehouses'),
 ];
 
 foreach ($commerceResources as $name => $title) {
     Breadcrumbs::resource("admin.commerce.{$name}", $title);
 }
-

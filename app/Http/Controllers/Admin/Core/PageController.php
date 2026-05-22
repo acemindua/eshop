@@ -16,6 +16,9 @@ use Inertia\Response;
 
 class PageController extends Controller
 {
+
+    protected const DIRECTORY = 'Admin/Core/Pages';
+    protected const ROUTE_PREFIX = 'admin.pages';
     /**
      * Display a listing of the resource.
      */
@@ -29,11 +32,12 @@ class PageController extends Controller
             ->paginate(Settings::get('items_per_page'))
             ->withQueryString();
 
-        return Inertia::render('Admin/Core/Pages/Index', [
+        return Inertia::render(self::DIRECTORY . '/Index', [
             'data' => [
                 'items' => PageResource::collection($pages)
             ],
             'filters' => request()->all(['search', 'field', 'direction']),
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -46,12 +50,12 @@ class PageController extends Controller
         //
         $nextOrder = (Page::max('order') ?? 0) + 1;
 
-        return Inertia::render('Admin/Core/Pages/Form', [
+        return Inertia::render(self::DIRECTORY . '/Create', [
             'data' => [
                 'public' => false,
                 'order' => $nextOrder
             ],
-            'status' => session('status'),
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -64,7 +68,7 @@ class PageController extends Controller
 
         $page = Page::create($request->validated());
 
-        return redirect()->route('admin.pages.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type' => 'success',
                 'message' => "Page `" . $page->title . "`  successfully created!",
@@ -80,11 +84,11 @@ class PageController extends Controller
 
         Gate::authorize('view', $page);
 
-        return Inertia::render('Admin/Core/Pages/Show', [
+        return Inertia::render(self::DIRECTORY . '/Show', [
             'data' => [
                 'page' => $page
             ],
-            'status' => session('status'),
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -95,11 +99,11 @@ class PageController extends Controller
     {
         Gate::authorize('update', $page);
 
-        return Inertia::render('Admin/Core/Pages/Form', [
+        return Inertia::render(self::DIRECTORY . '/Edit', [
             'data' => [
                 'page' => $page
             ],
-            'status' => session('status'),
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -113,7 +117,7 @@ class PageController extends Controller
         $page->fill($request->validated());
         $page->save();
 
-        return redirect()->route('admin.pages.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type' => 'success',
                 'message' => "Page `" . $page->title . "`  successfully updated!",
@@ -130,7 +134,7 @@ class PageController extends Controller
 
         $page->delete();
 
-        return redirect()->route('admin.pages.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type' => 'success',
                 'message' => "Page successfully deleted!",

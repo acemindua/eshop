@@ -40,18 +40,4 @@ class UpdateWarehouseRequest extends FormRequest
             'image'         => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
         ];
     }
-
-    /**
-     * Атрибути для зрозумілих помилок
-     */
-    public function attributes(): array
-    {
-        return [
-            'title'         => 'назва складу',
-            'city'          => 'місто',
-            'address'       => 'адреса',
-            'working_hours' => 'графік роботи',
-            'map_link'      => 'посилання на карту',
-        ];
-    }
 }

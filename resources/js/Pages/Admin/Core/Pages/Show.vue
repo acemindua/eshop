@@ -1,3 +1,4 @@
+<!-- resources/js/Pages/Admin/Core/Pages/Show.vue -->
 <script setup>
 // Layout and UI Components
 import DashboardAdminLayout from "@/Layouts/Admin/DashboardAdminLayout.vue";
@@ -12,6 +13,4 @@ const props = defineProps({
 defineOptions({ layout: DashboardAdminLayout });
 </script>
 
-<template>
-   
-</template>
+<template></template>

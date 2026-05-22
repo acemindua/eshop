@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin\Settings;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class TranslationController extends Controller
 {
@@ -19,9 +21,9 @@ class TranslationController extends Controller
     }
 
     /**
-     * Швидке відображення списку перекладів з JSON файлів
+     * Display a listing of the translations from JSON files.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $allTranslations = [];
 
@@ -46,8 +48,8 @@ class TranslationController extends Controller
 
         $translationsArray = array_values($allTranslations);
 
-        // Сортування: спочатку ті, де є хоч одне порожнє поле, далі за алфавітом
-        usort($translationsArray, function ($a, $b) {
+        // Sort: items with at least one empty translation first, then alphabetically by key
+        usort($translationsArray, function (array $a, array $b): int {
             $aEmpty = $this->hasEmptyValue($a['values']);
             $bEmpty = $this->hasEmptyValue($b['values']);
 
@@ -63,35 +65,43 @@ class TranslationController extends Controller
     }
 
     /**
-     * Ручний пошук нових ключів у ресурсах ресурсу js/vue
+     * Scan JS/Vue/TS resources for new translation keys.
      */
-    public function sync()
+    public function sync(): RedirectResponse
     {
         $directory = resource_path('js');
         if (!File::exists($directory)) {
-            return back()->with('error', 'Директорію js не знайдено');
+            return back()->with('error', 'The "js" resources directory was not found.');
+        }
+
+        // Ensure the localization directory exists
+        if (!File::exists($this->langPath)) {
+            File::makeDirectory($this->langPath, 0755, true);
         }
 
         $foundKeys = [];
         $files = File::allFiles($directory);
+        $allowedExtensions = ['vue', 'js', 'jsx', 'ts', 'tsx'];
 
         foreach ($files as $file) {
-            if (!in_array($file->getExtension(), ['vue', 'js', 'jsx'])) {
+            if (!in_array($file->getExtension(), $allowedExtensions, true)) {
                 continue;
             }
 
             $content = $file->getContents();
 
-            // Пошук конструкцій $t('...') або __('...')
-            preg_match_all('/(?:\$t|__)\s*\(\s*[\'"](.+?)[\'"]\s*\)/', $content, $matches);
+            // Match both $t('...') and __('...') supporting single and double quotes cleanly
+            preg_match_all('/(?:\$t|__)\s*\(\s*(?:\'([^\']+)\'|"([^"]+)")\s*\)/', $content, $matches);
 
-            if (!empty($matches[1])) {
-                foreach ($matches[1] as $key) {
-                    if (str_contains($key, "'") || str_contains($key, "+") || str_contains($key, "`")) {
-                        continue;
-                    }
-                    $foundKeys[] = $key;
+            // Merge matches from single quotes (index 1) and double quotes (index 2)
+            $mergedMatches = array_merge(array_filter($matches[1]), array_filter($matches[2]));
+
+            foreach ($mergedMatches as $key) {
+                // Skip dynamic keys, concatenations, or template literals
+                if (preg_match('/[\'"+`]/', $key)) {
+                    continue;
                 }
+                $foundKeys[] = $key;
             }
         }
 
@@ -107,7 +117,7 @@ class TranslationController extends Controller
 
             $changed = false;
             foreach ($foundKeys as $key) {
-                // Нові ключі створюються ПУСТИМИ, щоб спрацьовували фільтри та підсвічування
+                // New keys are initialized as empty strings to trigger filters/highlights in UI
                 if (!isset($existing[$key])) {
                     $existing[$key] = "";
                     $changed = true;
@@ -119,43 +129,74 @@ class TranslationController extends Controller
             }
         }
 
-        return back()->with('success', 'Сканування завершено успішно!');
+        return back()->with('success', 'Scan completed successfully!');
     }
 
     /**
-     * Масове збереження ключів з форми
+     * Bulk update translation keys without deleting unsubmitted values.
      */
-    public function updateAll(Request $request)
+    public function updateAll(Request $request): RedirectResponse
     {
         $items = $request->input('items', []);
-        $dataByLocale = [];
 
-        foreach ($items as $item) {
-            foreach ($this->locales as $locale) {
-                $value = isset($item['values'][$locale]) ? trim((string)$item['values'][$locale]) : '';
-                $dataByLocale[$locale][$item['key']] = $value;
+        if (empty($items) || !is_array($items)) {
+            return back()->with('error', 'Invalid or empty translation data provided.');
+        }
+
+        foreach ($this->locales as $locale) {
+            $filePath = "{$this->langPath}/{$locale}.json";
+            $currentTranslations = [];
+
+            if (File::exists($filePath)) {
+                $currentTranslations = json_decode(File::get($filePath), true) ?: [];
+            }
+
+            $hasChanges = false;
+
+            foreach ($items as $item) {
+                if (!isset($item['key']) || trim((string)$item['key']) === '') {
+                    continue;
+                }
+
+                $key = $item['key'];
+                $newValue = isset($item['values'][$locale]) ? trim((string)$item['values'][$locale]) : '';
+
+                // Only updates the key-value pairs that were passed from the client side
+                $currentTranslations[$key] = $newValue;
+                $hasChanges = true;
+            }
+
+            if ($hasChanges) {
+                $this->saveToJson($locale, $currentTranslations);
             }
         }
 
-        foreach ($dataByLocale as $locale => $translations) {
-            $this->saveToJson($locale, $translations);
-        }
-
-        return back()->with('success', 'Переклади успішно збережено');
+        return back()->with('success', 'Translations updated successfully.');
     }
 
+    /**
+     * Check if any locale value is empty or contains only spaces.
+     */
     private function hasEmptyValue(array $values): bool
     {
         foreach ($values as $val) {
-            if (empty(trim((string) $val))) return true;
+            if (empty(trim((string) $val))) {
+                return true;
+            }
         }
         return false;
     }
 
+    /**
+     * Sort keys alphabetically and save to a JSON file.
+     */
     private function saveToJson(string $locale, array $data): void
     {
         ksort($data);
         $path = "{$this->langPath}/{$locale}.json";
-        File::put($path, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        File::put(
+            $path,
+            json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
     }
 }

@@ -60,6 +60,7 @@ import {
     IconFileImport,
     IconCirclePlus,
     IconCloudUpload,
+    IconX,
 } from "@tabler/icons-vue";
 
 const props = defineProps({

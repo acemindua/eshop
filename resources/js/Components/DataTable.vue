@@ -16,13 +16,13 @@ import Pagination from "./Pagination.vue";
  * @property {Array} items - List of records to display in the table
  * @property {Array} selectedItems - Array of IDs of currently selected rows
  * @property {Object} meta - Pagination metadata from Laravel/Inertia
- * @property {String} model - The model name used to generate resource routes
+ * @property {String} routePrefix - The route prefix used to generate resource routes
  */
 const props = defineProps({
     items: { type: Array, default: () => [] },
     selectedItems: { type: Array, default: () => [] },
     meta: Object,
-    model: String,
+    routePrefix: String,
     sortField: String,
     sortDirection: String,
 });
@@ -57,7 +57,6 @@ const toggleItem = (id) => {
         : [...props.selectedItems, id];
     emit("update:selectedItems", updated);
 };
-
 /**
  * Emits the delete event for a specific item
  * @param {Object} item - The item object to be deleted
@@ -70,14 +69,19 @@ const confirmDelete = (item) => {
         showCancelButton: true,
         confirmButtonText: "Delete",
         cancelButtonText: "Cancel",
-        confirmButtonColor: "#000000", // Black for a minimal look
-        cancelButtonColor: "#ffffff", // White
-        customClass: {
-            confirmButton: "order-2", // Modern alignment
-            cancelButton: "order-1 text-gray-500",
-        },
-        buttonsStyling: true,
+        buttonsStyling: false,
         reverseButtons: true,
+        customClass: {
+            popup: "rounded-xl border border-slate-100 dark:border-slate-800 dark:bg-slate-900 shadow-xl",
+            title: "text-slate-900 dark:text-slate-100 font-semibold text-xl",
+            htmlContainer: "text-slate-500 dark:text-slate-400 text-sm",
+            actions: "gap-3 my-4",
+            // Червона мінімалістична кнопка
+            confirmButton:
+                "px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600",
+            cancelButton:
+                "px-4 py-2 text-sm font-medium text-slate-600 bg-transparent hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800 rounded-lg transition-colors duration-200 focus:outline-none",
+        },
     }).then((result) => {
         if (result.isConfirmed) {
             emit("delete", item);
@@ -96,7 +100,7 @@ const confirmDelete = (item) => {
                     </th>
                     <!-- Dynamic headers slot -->
                     <slot name="headers"></slot>
-                    <th class="p-2 w-48">
+                    <th class="p-2 w-24">
                         <IconSettings :stroke="2" size="18" class="mx-auto" />
                     </th>
                     <th class="p-2">#id</th>
@@ -124,14 +128,14 @@ const confirmDelete = (item) => {
                     <td class="p-2">
                         <div class="flex justify-center items-center space-x-3">
                             <Link
-                                :href="route(`admin.${model}.show`, item.id)"
+                                :href="route(`${routePrefix}.show`, item.id)"
                                 class="hover:text-green-500 transition-colors duration-150"
                             >
                                 <IconSearch :stroke="1" size="18" />
                             </Link>
 
                             <Link
-                                :href="route(`admin.${model}.edit`, item.id)"
+                                :href="route(`${routePrefix}.edit`, item.id)"
                                 class="hover:text-indigo-500 transition-colors duration-150"
                             >
                                 <IconEdit :stroke="1" size="18" />

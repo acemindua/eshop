@@ -28,7 +28,7 @@ class AppVersionController extends Controller
             ->get()
             ->values();
 
-        return Inertia::render('Admin/Settings/Versions/Index', [
+        return Inertia::render('Admin/Settings/Versions/Form', [
             'data' => [
                 'versions' => $versions,
                 'filters' => request()->all(['search', 'status'])

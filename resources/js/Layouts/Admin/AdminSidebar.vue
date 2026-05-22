@@ -1,25 +1,40 @@
 <template>
     <div class="flex flex-col w-full h-full">
-        <Link :href="route('admin.dashboard')" class="flex justify-center items-center border-b h-14 w-14 p-2">
+        <Link
+            :href="route('admin.dashboard')"
+            class="flex justify-center items-center border-b border-slate-700 h-14 w-14 p-2"
+        >
             <ApplicationLogo class="w-full h-full bg-brand" />
         </Link>
 
-        <nav class="flex flex-col items-center flex-grow py-6 space-y-2">
-            <AdminNavButton v-tooltip="{
-                content: $t('Dashboard'),
-                placement: 'right',
-            }" :href="route('admin.dashboard')" :active="$page.component === 'Admin/Dashboard' ||
-                $page.url.startsWith('/users') ||
-                $page.url.startsWith('/pages') ||
-                $page.url.startsWith('/menus')
-                ">
-                <component :is="$page.component === 'Admin/Dashboard' ||
+        <nav
+            class="flex flex-col items-center justify-center flex-grow py-6 space-y-2"
+        >
+            <AdminNavButton
+                v-tooltip="{
+                    content: $t('Dashboard'),
+                    placement: 'right',
+                }"
+                :href="route('admin.dashboard')"
+                :active="
+                    $page.component === 'Admin/Dashboard' ||
                     $page.url.startsWith('/users') ||
                     $page.url.startsWith('/pages') ||
                     $page.url.startsWith('/menus')
-                    ? IconLayoutDashboardFilled
-                    : IconLayoutDashboard
-                    " :stroke="1" class="w-6 h-6" />
+                "
+            >
+                <component
+                    :is="
+                        $page.component === 'Admin/Dashboard' ||
+                        $page.url.startsWith('/users') ||
+                        $page.url.startsWith('/pages') ||
+                        $page.url.startsWith('/menus')
+                            ? IconLayoutDashboardFilled
+                            : IconLayoutDashboard
+                    "
+                    :stroke="1"
+                    class="w-6 h-6"
+                />
             </AdminNavButton>
             <!--   <AdminNavButton
                 v-tooltip="{
@@ -56,18 +71,23 @@
     -->
         </nav>
         <div class="flex flex-col items-center space-y-4 py-2">
-
-
-
-            <AdminNavButton v-tooltip="{
-                content: $t('Settings'),
-                placement: 'right',
-            }" :href="route('admin.settings.options')" :active="$page.url.startsWith('/settings')
-                ">
-                <component :is="$page.url.startsWith('/settings')
-                    ? IconSettingsFilled
-                    : IconSettings
-                    " :stroke="1" class="w-6 h-6" />
+            <AdminNavButton
+                v-tooltip="{
+                    content: $t('Settings'),
+                    placement: 'right',
+                }"
+                :href="route('admin.settings.options')"
+                :active="$page.url.startsWith('/settings')"
+            >
+                <component
+                    :is="
+                        $page.url.startsWith('/settings')
+                            ? IconSettingsFilled
+                            : IconSettings
+                    "
+                    :stroke="1"
+                    class="w-6 h-6"
+                />
             </AdminNavButton>
         </div>
     </div>

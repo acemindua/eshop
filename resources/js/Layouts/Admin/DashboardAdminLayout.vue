@@ -1,57 +1,87 @@
 <script setup>
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue"; // Шлях залежить від вашої структури
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
-import { IconClipboardFilled, IconClipboard, IconUser, IconUserFilled, IconManualGearbox, IconManualGearboxFilled } from "@tabler/icons-vue";
-
-
-
+import {
+    IconUser,
+    IconUserFilled,
+    IconManualGearbox,
+    IconManualGearboxFilled,
+    IconArticle,
+    IconArticleFilled,
+} from "@tabler/icons-vue";
 </script>
 
 <template>
     <AdminLayout>
         <template #sidenav>
             <div class="w-full h-14 border-b flex items-center p-4">
-                <h4 class="uppercase text-[12px] tracking-widest font-bold text-gray-500">
+                <h4
+                    class="uppercase text-[12px] tracking-widest font-bold text-gray-500"
+                >
                     <span>Dashboard</span>
                 </h4>
             </div>
             <ul class="flex flex-col w-full border-b divide-y">
-                <li class="uppercase text-xs pt-4 pb-2 px-4 font-semibold text-gray-400">
-                    <span>{{ $t("Core") }}</span>
+                <li class="uppercase text-xs pt-2 pb-2 px-4 text-brand">
+                    <span>{{ $t("Apps") }}</span>
                 </li>
-                <AdminNavLink :href="route('admin.users.index')" :active="$page.url.startsWith('/users')">
+                <AdminNavLink
+                    :href="route('admin.users.index')"
+                    :active="$page.url.startsWith('/users')"
+                >
                     <template #icon>
-                        <component :is="$page.url.startsWith('/users')
-                            ? IconUserFilled
-                            : IconUser" stroke="1" class="w-5 h-5" />
+                        <component
+                            :is="
+                                $page.url.startsWith('/users')
+                                    ? IconUserFilled
+                                    : IconUser
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
                     </template>
 
                     {{ $t("Users") }}
                 </AdminNavLink>
-                <AdminNavLink :href="route('admin.pages.index')" :active="$page.url.startsWith('/pages')">
+                <AdminNavLink
+                    :href="route('admin.pages.index')"
+                    :active="$page.url.startsWith('/pages')"
+                >
                     <template #icon>
-                        <component :is="$page.url.startsWith('/pages')
-                            ? IconClipboardFilled
-                            : IconClipboard
-                            " stroke="1" class="w-5 h-5" />
+                        <component
+                            :is="
+                                $page.url.startsWith('/pages')
+                                    ? IconArticleFilled
+                                    : IconArticle
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
                     </template>
 
                     {{ $t("Pages") }}
                 </AdminNavLink>
-                <li class="uppercase text-xs pt-4 pb-2 px-4 font-semibold text-gray-400">
+                <li class="uppercase text-xs pt-2 pb-2 px-4 text-brand">
                     <span>{{ $t("Options") }}</span>
                 </li>
-                <AdminNavLink :href="route('admin.menus.index')" :active="$page.url.startsWith('/menus')">
+                <AdminNavLink
+                    :href="route('admin.menus.index')"
+                    :active="$page.url.startsWith('/menus')"
+                >
                     <template #icon>
-                        <component :is="$page.url.startsWith('/menus')
-                            ? IconManualGearboxFilled
-                            : IconManualGearbox
-                            " stroke="1" class="w-5 h-5" />
+                        <component
+                            :is="
+                                $page.url.startsWith('/menus')
+                                    ? IconManualGearboxFilled
+                                    : IconManualGearbox
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
                     </template>
                     {{ $t("Menus") }}
                 </AdminNavLink>
             </ul>
-
         </template>
 
         <div>

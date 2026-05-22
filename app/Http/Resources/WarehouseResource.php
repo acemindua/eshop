@@ -26,8 +26,8 @@ class WarehouseResource extends JsonResource
             'sort_order'    => (int) $this->sort_order,
 
             // Медіа (фото складу)
-            'image'         => $this->getFirstMediaUrl('images'),
-            'thumbnail'     => $this->getFirstMediaUrl('images', 'thumb'), // якщо є конверсії
+            'image'         => $this->image,
+            //'thumbnail'     => $this->getFirstMediaUrl('images', 'thumb'), // якщо є конверсії
 
             'created_at'    => $this->created_at?->format('d.m.Y H:i'),
         ];

@@ -1,9 +1,14 @@
 <script setup>
-import { ref, onMounted, useTemplateRef } from "vue";
+import { onMounted, useTemplateRef } from "vue";
 
 const props = defineProps({
     disabled: {
         type: Boolean,
+        default: false,
+    },
+    // Додаємо пропс для відстеження помилки валідації
+    error: {
+        type: [String, Boolean],
         default: false,
     },
 });
@@ -33,6 +38,15 @@ defineExpose({
         v-model="model"
         :disabled="disabled"
         type="text"
-        class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 placeholder-slate-400 shadow-sm transition-all focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+        class="block w-full rounded-lg border px-3 py-2 text-sm shadow-sm transition-colors duration-200 outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60"
+        :class="[
+            // Базові стилі тексту та фону (світла + темна тема)
+            'bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500',
+
+            // Динамічні стилі залежно від наявності помилки
+            error
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500/10 dark:border-red-500/80 dark:focus:border-red-500'
+                : 'border-slate-200 hover:border-slate-300 focus:border-indigo-500 focus:ring-indigo-500/10 dark:border-slate-700 dark:hover:border-slate-600 dark:focus:border-indigo-500',
+        ]"
     />
 </template>
