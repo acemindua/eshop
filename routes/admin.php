@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\Core\{
-    MenuController,
+
     PageController,
-    UserController
+    UserController,
+    // Menu Management, Navigation Structures & Dynamic Link Collections
+    MenuController,
 };
 use App\Http\Controllers\Admin\Settings\{
     AppVersionController,

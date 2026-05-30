@@ -8,12 +8,15 @@ use App\Http\Controllers\Api\NovaPoshtaController;
 use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
 
+
+
+Route::get('/menus', [HelpMainController::class, 'menus'])->name('api.get.menu');
 /**
  * Commerce
  */
 Route::get('/commerce/items', [ApiItemsController::class, 'index'])->name('api.commerce.items');
 
-Route::get('/menu', [HelpMainController::class, 'getMenu'])->name('api.get.menu');
+Route::get('/menu', [HelpMainController::class, 'getMenu'])->name('api.menu');
 Route::get('/menu/categories', [HelpMainController::class, 'getCategories'])->name('api.get.categories');
 Route::post('/upload/image', [UploadImageController::class, 'store'])->name('api.upload.image');
 

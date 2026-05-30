@@ -1,3 +1,15 @@
+### Meenu: (v1.11.4) - 2026.05.27
+
+```bash
+
+```
+
+### Refactors: (v1.11.3) - 2026.05.22
+
+**Menu**
+**_CKEditor_**
+ckeditor-duplicated-modules
+
 ### Refactors: (v1.11.2) - 2026.05.21
 
 **Admin/Users\***

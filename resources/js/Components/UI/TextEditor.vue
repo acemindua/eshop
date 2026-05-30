@@ -1,11 +1,25 @@
+<!-- resources/js/Components/UI/TextEditor.vue -->
 <template>
-    <ckeditor v-model="editorHtml" :editor="CKEditor" />
+    <ckeditor
+        v-model="editorHtml"
+        :editor="ClassicEditor"
+        :config="ckeditorConfig"
+    />
 </template>
 
 <script setup>
 import { computed } from "vue";
+
+// 1. Імпортуємо ядро редактора та Vue-обгортку
+import { ClassicEditor } from "ckeditor5";
 import { Ckeditor } from "@ckeditor/ckeditor5-vue";
-import CKEditor from "../../../plugins/ckeditor";
+
+// 2. Імпортуємо наш новий конфіг (відкоригуй шлях, якщо твій файл в іншому місці)
+import { ckeditorConfig } from "../../../plugins/ckeditor.js";
+
+// 3. Стилі залишаємо в компоненті, щоб вони застосовувалися до UI
+import "ckeditor5/ckeditor5.css";
+import "../../../css/ckeditor-custom.css";
 
 const props = defineProps(["modelValue"]);
 const emit = defineEmits(["update:modelValue"]);
@@ -15,26 +29,3 @@ const editorHtml = computed({
     set: (value) => emit("update:modelValue", value),
 });
 </script>
-
-<style scope>
-.ck {
-}
-.ck a {
-    text-decoration: underline;
-    color: blueviolet;
-}
-.ck-rounded-corners {
-    border-radius: 0.375rem; /* 6px */
-}
-/* Для вмісту редактора */
-.ck-content .editor-tooltip-target {
-}
-
-/* Основний контейнер редактора */
-.ck-editor {
-}
-/* Область редагування */
-.ck-editor__editable {
-    height: 500px;
-}
-</style>

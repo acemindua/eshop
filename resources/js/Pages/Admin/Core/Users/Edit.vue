@@ -11,6 +11,7 @@ defineOptions({ layout: Layout });
 const props = defineProps({
     data: { type: Object },
     routePrefix: { type: String, default: () => null },
+    isEditing: { type: Boolean, default: false },
     errors: { type: Object, default: () => ({}) },
 });
 </script>
@@ -20,7 +21,7 @@ const props = defineProps({
         :data="props.data?.user?.data || {}"
         :roles="props.data?.roles || []"
         :route-prefix="props.routePrefix"
-        :is-editing="true"
-        :erros="props.errors"
+        :is-editing="props.isEditing"
+        :errors="props.errors"
     />
 </template>

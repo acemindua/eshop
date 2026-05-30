@@ -103,12 +103,13 @@ const confirmDelete = (item) => {
                     <th class="p-2 w-24">
                         <IconSettings :stroke="2" size="18" class="mx-auto" />
                     </th>
-                    <th class="p-2">#id</th>
+                    <th class="p-2 w-24">#id</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr
+                    v-if="items.length > 0"
                     v-for="item in items"
                     :key="item.id"
                     class="hover:bg-slate-50 border-t divide-x border-slate-200 dark:border-slate-700 dark:hover:bg-slate-950/25 odd:bg-white dark:odd:bg-slate-900 even:bg-slate-50 dark:even:bg-slate-800"
@@ -153,6 +154,15 @@ const confirmDelete = (item) => {
                     <!-- ID Column -->
                     <td class="p-2 text-center text-gray-500">
                         {{ item.id }}
+                    </td>
+                </tr>
+
+                <tr v-else>
+                    <td
+                        colspan="100%"
+                        class="p-4 text-center text-gray-500 border-t"
+                    >
+                        {{ $t("No records found.") }}
                     </td>
                 </tr>
             </tbody>

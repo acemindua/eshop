@@ -4,7 +4,6 @@ import vue from "@vitejs/plugin-vue";
 import i18n from "laravel-vue-i18n/vite";
 
 export default defineConfig(({ mode }) => {
-    
     const env = loadEnv(mode, process.cwd());
     const domain = env.APP_URL || "http://localhost";
     let protocol = "http:";
@@ -19,8 +18,12 @@ export default defineConfig(({ mode }) => {
             e.message,
         );
     }
+
     return {
-        
+        build: {
+            // Inline assets smaller than 4kb (default is 4096, increase if needed)
+            assetsInlineLimit: 4096,
+        },
         server: {
             host: "127.0.0.1",
             cors: false, // вимикаємо стандартний, пишемо свій
@@ -35,7 +38,7 @@ export default defineConfig(({ mode }) => {
         plugins: [
             laravel({
                 input: "resources/js/app.js",
-                ssr: 'resources/js/ssr.js',
+                ssr: "resources/js/ssr.js",
                 refresh: true,
             }),
             vue({
@@ -50,12 +53,12 @@ export default defineConfig(({ mode }) => {
         ],
         ssr: {
             noExternal: [
-                'moment',
-                'laravel-vue-i18n',
-                'vue-flag-icon',
-                'floating-vue',
-                '@inertiajs/vue3',
-                '@vue/server-renderer',
+                "moment",
+                "laravel-vue-i18n",
+                "vue-flag-icon",
+                "floating-vue",
+                "@inertiajs/vue3",
+                "@vue/server-renderer",
             ],
         },
     };

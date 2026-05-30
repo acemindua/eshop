@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Назва для адміна: "Main Menu"
+            $table->string('title'); // Назва для адміна: "Main Menu"
             $table->string('slug')->unique(); // "header", "footer"
             $table->timestamps();
         });

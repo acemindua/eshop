@@ -8,6 +8,7 @@ import SearchInput from "@/Components/Public/UI/SearchInput.vue";
 import UserLoginRegisterForm from "@/Components/Public/UserLoginRegisterForm.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import AppNavigations from "@/Components/AppNavigations.vue";
 
 /** */
 const catalogMenu = ref(false);
@@ -51,6 +52,12 @@ const goSearch = (e) => {
 
 <template>
     <div class="flex flex-col w-full min-h-screen bg-gray-200 text-sm gap-2">
+        <div>
+            <app-navigations
+                :slug="`header`"
+                :locale="$page.props?.config?.currentLocale || 'en'"
+            />
+        </div>
         <header class="bg-white p-4">
             <div class="w-full mx-auto">
                 <nav

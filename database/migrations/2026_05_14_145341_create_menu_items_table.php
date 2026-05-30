@@ -21,7 +21,7 @@ return new class extends Migration
             $table->nullableMorphs('model');
 
             // Кастомні дані, якщо модель не вибрана
-            $table->json('label')->nullable();
+            $table->string('label')->nullable();
             $table->string('url')->nullable();   // Кастомний URL (якщо не зі сторінки)
 
             $table->integer('order')->default(0);

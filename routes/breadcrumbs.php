@@ -96,7 +96,7 @@ Breadcrumbs::macro('resource', function (string $name, string $title, string $pa
 // Standalone Admin Resources
 Breadcrumbs::resource('admin.pages', __('Pages'));
 Breadcrumbs::resource('admin.users', __('Users'));
-
+Breadcrumbs::resource('admin.menus', __('Menus'));
 // Settings Option Group Root
 Breadcrumbs::for('admin.settings.options', function (BreadcrumbTrail $trail) {
     $trail->parent('admin.dashboard')->push(__('Settings'), route('admin.settings.options'));

@@ -29,9 +29,6 @@ const props = defineProps({
     routePrefix: { type: String, required: true },
 });
 
-const routePrefix = props.routePrefix;
-const items = computed(() => props.data?.items?.data || []);
-const metaItems = computed(() => props.data?.items?.meta || []);
 // --- State ---
 const searchText = ref(props.filters?.search || "");
 const selectedItems = ref([]);
@@ -41,9 +38,9 @@ const sortDirection = ref(props.filters?.direction || "desc");
 
 // --- Methods ---
 const handleImport = () => console.log("Importing...");
-const handleCreate = () => router.visit(route(`${routePrefix}.create`));
+const handleCreate = () => router.visit(route(`${props.routePrefix}.create`));
 const handleDelete = (item) => {
-    router.delete(route(`${routePrefix}.destroy`, item.id), {
+    router.delete(route(`${props.routePrefix}.destroy`, item.id), {
         preserveScroll: true,
         preserveState: false,
         onSuccess: () => {
@@ -79,7 +76,7 @@ watch(
     [searchText, sortField, sortDirection],
     debounce(([searchVal, field, direction]) => {
         router.get(
-            route(`${routePrefix}.index`),
+            route(`${props.routePrefix}.index`),
             { search: searchVal, field: field, direction: direction },
             {
                 preserveState: false,
@@ -129,9 +126,9 @@ defineOptions({ layout: DashboardAdminLayout });
         <!-- Main Data Section -->
         <section>
             <DataTable
-                :route-prefix="routePrefix"
-                :items="items"
-                :meta="metaItems"
+                :route-prefix="props.routePrefix"
+                :items="props.data?.items?.data || []"
+                :meta="props.data?.items?.meta || {}"
                 :selected-items="selectedItems"
                 @update:selectedItems="selectedItems = $event"
                 @delete="handleDelete"

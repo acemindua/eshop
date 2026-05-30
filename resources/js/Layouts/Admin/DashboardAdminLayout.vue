@@ -8,6 +8,8 @@ import {
     IconManualGearboxFilled,
     IconArticle,
     IconArticleFilled,
+    IconMenu2Filled,
+    IconMenu2,
 } from "@tabler/icons-vue";
 </script>
 
@@ -72,8 +74,8 @@ import {
                         <component
                             :is="
                                 $page.url.startsWith('/menus')
-                                    ? IconManualGearboxFilled
-                                    : IconManualGearbox
+                                    ? IconMenu2Filled
+                                    : IconMenu2
                             "
                             stroke="1"
                             class="w-5 h-5"

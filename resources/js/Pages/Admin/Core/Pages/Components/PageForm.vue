@@ -112,47 +112,49 @@ const actionButtons = computed(() => [
                       )
             "
         >
-            <TabGroup
-                :selectedIndex="activeTab"
-                @change="(index) => (activeTab = index)"
-            >
-                <TabList
-                    class="flex items-center w-full border-b border-gray-300"
+            <div class="border rounded-lg bg-gray-50 p-4">
+                <TabGroup
+                    :selectedIndex="activeTab"
+                    @change="(index) => (activeTab = index)"
                 >
-                    <Tab
-                        v-for="tab in tabs"
-                        :key="tab.key"
-                        as="template"
-                        v-slot="{ selected }"
+                    <TabList
+                        class="flex items-center w-full border-b border-gray-300"
                     >
-                        <ButtonTabGroup :selected="selected">
-                            <div class="flex items-center gap-2">
-                                {{ $t(tab.label) }}
-                                <!-- Індикатор помилок: червона крапка -->
-                                <span
-                                    v-if="hasTabErrors(tab)"
-                                    class="w-2 h-2 bg-red-500 rounded-full animate-pulse"
-                                />
-                            </div>
-                        </ButtonTabGroup>
-                    </Tab>
-                </TabList>
+                        <Tab
+                            v-for="tab in tabs"
+                            :key="tab.key"
+                            as="template"
+                            v-slot="{ selected }"
+                        >
+                            <ButtonTabGroup :selected="selected">
+                                <div class="flex items-center gap-2">
+                                    {{ $t(tab.label) }}
+                                    <!-- Індикатор помилок: червона крапка -->
+                                    <span
+                                        v-if="hasTabErrors(tab)"
+                                        class="w-2 h-2 bg-red-500 rounded-full animate-pulse"
+                                    />
+                                </div>
+                            </ButtonTabGroup>
+                        </Tab>
+                    </TabList>
 
-                <TabPanels class="mt-2">
-                    <TabPanel v-for="tab in tabs" :key="tab.key">
-                        <Transition name="slot-fade" mode="out-in" appear>
-                            <component
-                                :is="tab.component"
-                                :form="form"
-                                :errors="errors"
-                                :data="data"
-                                :is-editing="isEditing"
-                                :fields="tab.fields"
-                            />
-                        </Transition>
-                    </TabPanel>
-                </TabPanels>
-            </TabGroup>
+                    <TabPanels class="mt-2">
+                        <TabPanel v-for="tab in tabs" :key="tab.key">
+                            <Transition name="slot-fade" mode="out-in" appear>
+                                <component
+                                    :is="tab.component"
+                                    :form="form"
+                                    :errors="errors"
+                                    :data="data"
+                                    :is-editing="isEditing"
+                                    :fields="tab.fields"
+                                />
+                            </Transition>
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
+            </div>
         </StickyActions>
     </div>
 </template>

@@ -16,15 +16,16 @@ class MenuItem extends Model
         'order'
     ];
 
-    // Також переконайся, що label обробляється як масив (якщо використовуєш JSON для перекладів)
+    // Поле 'label' НЕ кастимо в array! Залишаємо його пустим або кастимо як string
     protected $casts = [
-        'label' => 'array',
+        'order' => 'integer',
     ];
 
     public function model()
     {
         return $this->morphTo();
     }
+
     public function children()
     {
         return $this->hasMany(MenuItem::class, 'parent_id')->with('children')->orderBy('order');

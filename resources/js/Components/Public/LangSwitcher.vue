@@ -59,11 +59,18 @@ const { hasMultipleLocales, currentMappedLocale, localeKeysMapped } =
     useLocales(currentLocale);
 
 const switchLanguage = async (locale) => {
-    router.visit(route("locale.switcher", locale));
-    try {
-        await loadLanguageAsync(locale);
-    } catch (error) {
-        console.error(`Error loading language ${code}:`, error);
-    }
+    // Спочатку робимо запит до бекенду для зміни сесії
+    router.visit(route("locale.switcher", locale), {
+        preserveScroll: true,
+        onSuccess: async () => {
+            // Після успішного завершення візиту підвантажуємо json-переклади для фронтенду
+            try {
+                await loadLanguageAsync(locale);
+            } catch (error) {
+                // Виправлено: code змінено на locale
+                console.error(`Error loading language ${locale}:`, error);
+            }
+        },
+    });
 };
 </script>

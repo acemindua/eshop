@@ -44,9 +44,7 @@ const title = computed(() => {
                 ]"
             >
                 <Transition name="sidebar-slide-fade">
-                    <div
-                        class="bg-slate-800 dark:bg-slate-900 flex flex-col z-[60]"
-                    >
+                    <div class="bg-slate-800 flex flex-col z-[60]">
                         <AdminSidebar />
                     </div>
                 </Transition>
@@ -55,12 +53,19 @@ const title = computed(() => {
                     @click.prevent="
                         isSecondarySidebarVisible = !isSecondarySidebarVisible
                     "
-                    class="bg-white dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-all duration-150 absolute z-[60] top-11 -right-3 w-6 h-6 border dark:border-slate-600 rounded-full flex items-center justify-center"
+                    class="transition-all duration-150 border absolute z-[60] top-11 -right-3 w-6 h-6 rounded-full flex items-center justify-center"
+                    :class="
+                        isSecondarySidebarVisible
+                            ? 'bg-white dark:bg-slate-700 dark:border-slate-600 hover:bg-brand hover:text-white dark:hover:bg-slate-600 '
+                            : 'bg-slate-800 hover:bg-brand text-white hover:bg-brand-dark '
+                    "
                 >
                     <IconChevronLeft
                         :size="16"
                         :stroke="1.5"
-                        :class="[isSecondarySidebarVisible ? '' : 'rotate-180']"
+                        :class="[
+                            isSecondarySidebarVisible ? '' : 'rotate-180 ',
+                        ]"
                     />
                 </button>
 

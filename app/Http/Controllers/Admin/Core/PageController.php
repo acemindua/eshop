@@ -55,7 +55,8 @@ class PageController extends Controller
                 'public' => false,
                 'order' => $nextOrder
             ],
-            'routePrefix' => self::ROUTE_PREFIX
+            'routePrefix' => self::ROUTE_PREFIX,
+            'isEditing' => false,
         ]);
     }
 
@@ -103,7 +104,8 @@ class PageController extends Controller
             'data' => [
                 'page' => $page
             ],
-            'routePrefix' => self::ROUTE_PREFIX
+            'routePrefix' => self::ROUTE_PREFIX,
+            'isEditing' => true,
         ]);
     }
 

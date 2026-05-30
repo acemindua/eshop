@@ -1,7 +1,5 @@
-import "ckeditor5/ckeditor5.css";
-import "../css/ckeditor-custom.css";
+// resources/js/Config/ckeditor.js
 import {
-    ClassicEditor,
     FindAndReplace,
     Undo,
     Heading,
@@ -42,60 +40,56 @@ import {
     Mention,
 } from "ckeditor5";
 
-import Footnote from "./Footnote/footnote";
-import "./Footnote/footnote.css";
+// Твої кастомні плагіни (коригуй шляхи відносно папки Config, якщо потрібно)
+import Footnote from "../plugins/Footnote/footnote.js";
 
-import MathType from "@wiris/mathtype-ckeditor5/dist/index.js";
-
-export default class CKEditor extends ClassicEditor {}
-
-CKEditor.builtinPlugins = [
-    FindAndReplace,
-    Undo,
-    Heading,
-    RemoveFormat,
-    Bold,
-    Italic,
-    Underline,
-    Strikethrough,
-    Code,
-    Subscript,
-    Superscript,
-    Link,
-    Table,
-    TableToolbar,
-    TableProperties,
-    TableCellProperties,
-    Footnote,
-    List,
-    ListProperties,
-    Image,
-    ImageCaption,
-    ImageResize,
-    ImageStyle,
-    ImageToolbar,
-    ImageInsert,
-    LinkImage,
-    SimpleUploadAdapter,
-    BlockQuote,
-    Alignment,
-    Indent,
-    IndentBlock,
-    SourceEditing,
-    Fullscreen,
-    Font,
-    MediaEmbed,
-    SpecialCharacters,
-    SpecialCharactersEssentials,
-    Emoji,
-    Mention,
-    //MathType,
-];
-
-CKEditor.defaultConfig = {
+export const ckeditorConfig = {
     licenseKey: "GPL",
     language: "en",
-    plugins: CKEditor.builtinPlugins,
+
+    // Реєструємо всі плагіни, включаючи активований MathType
+    plugins: [
+        FindAndReplace,
+        Undo,
+        Heading,
+        RemoveFormat,
+        Bold,
+        Italic,
+        Underline,
+        Strikethrough,
+        Code,
+        Subscript,
+        Superscript,
+        Link,
+        Table,
+        TableToolbar,
+        TableProperties,
+        TableCellProperties,
+        Footnote,
+        List,
+        ListProperties,
+        Image,
+        ImageCaption,
+        ImageResize,
+        ImageStyle,
+        ImageToolbar,
+        ImageInsert,
+        LinkImage,
+        SimpleUploadAdapter,
+        BlockQuote,
+        Alignment,
+        Indent,
+        IndentBlock,
+        SourceEditing,
+        Fullscreen,
+        Font,
+        MediaEmbed,
+        SpecialCharacters,
+        SpecialCharactersEssentials,
+        Emoji,
+        Mention,
+    ],
+
     heading: {
         options: [
             {
@@ -123,16 +117,17 @@ CKEditor.defaultConfig = {
             },
         ],
     },
+
     table: {
-        //defaultHeadings: { rows: 1, columns: 1 },
         contentToolbar: [
             "tableColumn",
             "tableRow",
             "mergeTableCells",
-            "tableProperties", // ← Додано до контекстної панелі таблиці
-            "tableCellProperties", // ← Додано до контекстної панелі таблиці
+            "tableProperties",
+            "tableCellProperties",
         ],
     },
+
     list: {
         properties: {
             styles: true,
@@ -140,6 +135,7 @@ CKEditor.defaultConfig = {
             reversed: true,
         },
     },
+
     image: {
         insert: {
             integrations: ["upload", "url"],
@@ -154,10 +150,16 @@ CKEditor.defaultConfig = {
             "linkImage",
         ],
     },
+
     simpleUpload: {
-        uploadUrl: route("api.upload.image"),
+        // Оскільки це звичайний JS файл, переконайся, що глобальна функція route() від Ziggy доступна в браузері
+        uploadUrl:
+            typeof route !== "undefined"
+                ? route("api.upload.image")
+                : "/api/upload-image",
         withCredentials: true,
     },
+
     emoji: {
         dropdownLimit: 5,
         skinTone: "medium",
@@ -169,7 +171,7 @@ CKEditor.defaultConfig = {
             12,
             14,
             16,
-            { title: "Default", model: "18px" }, // Встановлюємо 18px як опцію "Default"
+            { title: "Default", model: "18px" },
             20,
             22,
             24,
@@ -182,7 +184,6 @@ CKEditor.defaultConfig = {
 
     toolbar: [
         "findAndReplace",
-
         "|",
         "undo",
         "redo",
@@ -196,8 +197,6 @@ CKEditor.defaultConfig = {
         "strikethrough",
         "code",
         "|",
-        //"MathType",
-        //"ChemType",
         "subscript",
         "superscript",
         "|",
@@ -214,16 +213,12 @@ CKEditor.defaultConfig = {
         "link",
         "insertTable",
         "insertImage",
-        //"mediaEmbed",
-
         "|",
         "emoji",
         "specialCharacters",
         "blockQuote",
-
         "bulletedList",
         "numberedList",
-
         "|",
         "sourceEditing",
         "|",

@@ -4,11 +4,12 @@
         :errors="errors"
         :fields="['title', 'description', 'content']"
     >
-        <!-- Додаємо v-if, щоб не рендерити контент, поки об'єкт не готовий -->
+        <!-- Adding :key="selectedLocale" forces an explicit component rebuild on tab switch -->
         <TranslationContent
             v-if="
                 form[selectedLocale] && typeof form[selectedLocale] === 'object'
             "
+            :key="selectedLocale"
             :code="selectedLocale"
             v-model="form[selectedLocale]"
             :errors="errors"
@@ -26,15 +27,9 @@ import { ref } from "vue";
 const selectedLocale = ref(usePage().props.config.locale);
 
 const props = defineProps({
-    data: {
-        type: Object,
-        default: () => ({}),
-    },
+    data: { type: Object, default: () => ({}) },
     form: { type: Object },
     errors: { type: Object },
-    isEditing: {
-        type: Boolean,
-        default: false, // Якщо не передано — вважається "створення"
-    },
+    isEditing: { type: Boolean, default: false },
 });
 </script>
