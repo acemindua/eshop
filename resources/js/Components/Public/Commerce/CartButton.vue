@@ -1,42 +1,44 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
 import { usePage, Link } from "@inertiajs/vue3";
 import {
     IconGardenCart,
+    IconShoppingBag,
     IconTrash,
     IconX,
-    IconArrowRight,
 } from "@tabler/icons-vue";
 
 const page = usePage();
 const isOpen = ref(false);
 
-// Отримуємо дані з глобального пропса Inertia
 const cartItems = computed(() => page.props.cart?.items || []);
 const cartTotal = computed(() => page.props.cart?.total || 0);
 const cartCount = computed(() => page.props.cart?.count || 0);
 
-const toggleCart = () => {
-    isOpen.value = !isOpen.value;
+const toggleCart = () => (isOpen.value = !isOpen.value);
+const closeCart = () => (isOpen.value = false);
+
+// Закриття кошика при натисканні Escape
+const handleEsc = (e) => {
+    if (e.key === "Escape" && isOpen.value) closeCart();
 };
 
-const closeCart = () => {
-    isOpen.value = false;
-};
+onMounted(() => window.addEventListener("keydown", handleEsc));
+onUnmounted(() => window.removeEventListener("keydown", handleEsc));
 </script>
 
 <template>
     <div class="relative font-['Exo_2']">
         <button
             @click="toggleCart"
-            class="p-2 border rounded-lg hover:bg-gray-50 transition-colors relative group"
+            class="p-2 transition-colors relative group"
             :class="{ 'border-brand bg-brand/5': isOpen }"
         >
-            <IconGardenCart :stroke="1.5" :size="24" class="text-gray-700" />
+            <IconShoppingBag :stroke="1.5" :size="24" class="text-gray-700" />
 
             <span
                 v-if="cartCount > 0"
-                class="absolute -top-2 -right-2 bg-brand text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-sm"
+                class="absolute -top-2 -right-2 bg-gray-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-sm"
             >
                 {{ cartCount }}
             </span>
@@ -70,7 +72,10 @@ const closeCart = () => {
                     </button>
                 </div>
 
-                <div v-if="cartCount > 0" class="max-h-96 overflow-y-auto">
+                <div
+                    v-if="cartCount > 0"
+                    class="max-h-96 overflow-y-auto custom-scrollbar"
+                >
                     <div
                         v-for="item in cartItems"
                         :key="item.id"
@@ -82,10 +87,10 @@ const closeCart = () => {
                             <img
                                 v-if="item.attributes?.image"
                                 :src="item.attributes.image"
+                                :alt="item.name"
                                 class="object-cover w-full h-full"
                             />
                         </div>
-
                         <div class="flex-grow min-w-0">
                             <h4
                                 class="text-xs font-bold text-gray-900 truncate uppercase tracking-tight"
@@ -96,7 +101,6 @@ const closeCart = () => {
                                 {{ item.quantity }} × {{ item.price }} ₴
                             </div>
                         </div>
-
                         <div
                             class="text-sm font-black text-gray-900 whitespace-nowrap"
                         >
@@ -153,3 +157,17 @@ const closeCart = () => {
         ></div>
     </div>
 </template>
+
+<style scoped>
+/* Стильна смуга прокрутки для списку товарів */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #e5e7eb;
+    border-radius: 20px;
+}
+</style>

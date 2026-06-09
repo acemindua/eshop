@@ -38,6 +38,7 @@
         "pinia": "^3.0.3",
         "sortablejs": "^1.15.7",
         "sweetalert2": "^11.26.4",
+        "swiper": "^12.2.0",
         "vue-flag-icon": "^2.1.0",
         "vue-the-mask": "^0.11.1",
         "vuedraggable": "^4.1.0"

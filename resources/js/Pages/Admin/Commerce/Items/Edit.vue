@@ -1,7 +1,7 @@
 <!-- resources/js/Pages/Admin/Core/Pages/Create.vue -->
 <script setup>
 // Layout and UI Components
-import Layout from "@/Layouts/Admin/DashboardAdminLayout.vue";
+import Layout from "@/Layouts/Admin/CommerceAdminLayout.vue";
 import ItemForm from "./Components/ItemForm.vue";
 
 defineOptions({ layout: Layout });

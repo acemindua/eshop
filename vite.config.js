@@ -47,6 +47,10 @@ export default defineConfig(({ mode }) => {
                         base: null,
                         includeAbsolute: false,
                     },
+                    // Додаємо конфігурацію компілятора для ігнорування Web Components
+                    compilerOptions: {
+                        isCustomElement: (tag) => tag.startsWith("swiper-"),
+                    },
                 },
             }),
             i18n(),

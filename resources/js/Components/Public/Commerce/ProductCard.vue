@@ -46,10 +46,10 @@
                         v-if="data.old_price"
                         class="text-xs text-gray-400 line-through"
                     >
-                        {{ data.old_price }} ₴
+                        {{ $formatPrice(data.old_price) }}
                     </span>
                     <span class="text-lg font-bold text-black font-['Exo_2']">
-                        {{ data.price }} ₴
+                        {{ $formatPrice(data.price) }}
                     </span>
                 </div>
 
@@ -57,7 +57,7 @@
                     :id="data.id"
                     :title="data.title"
                     :price="data.price"
-                    class="scale-90 origin-right"
+                    class="scale-90 origin-right relative z-30 transition-all duration-300 group-hover:scale-100 group-hover:shadow-lg group-hover:shadow-indigo-500/20 group-hover:animate-pulse-once"
                 />
             </div>
         </div>
@@ -74,8 +74,9 @@
 import StarRating from "@/Components/Review/StarRating.vue";
 import { Link } from "@inertiajs/vue3"; // Ensure Link is imported
 import { IconMessage } from "@tabler/icons-vue";
-import { computed } from "vue";
+import { computed, getCurrentInstance, onMounted } from "vue";
 import ButtonBuy from "./ButtonBuy.vue";
+const { proxy } = getCurrentInstance();
 
 const props = defineProps({
     data: Object,
@@ -87,4 +88,27 @@ const hasReviews = computed(
 );
 const reviewsCount = computed(() => props.data?.average_reviews?.count || 0);
 const reviewsRating = computed(() => props.data?.average_reviews?.rating || 0);
+
+onMounted(() => {
+    console.log("Функція форматування:", proxy.$formatPrice);
+});
 </script>
+
+<style scoped>
+/* Анімація імпульсу для кнопки */
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.group:hover .group-hover\:animate-pulse-once {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+</style>

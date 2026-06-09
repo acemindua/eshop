@@ -5,7 +5,7 @@
     >
         <Menu>
             <MenuButton
-                class="py-2 uppercase inline-flex items-center rounded-lg"
+                class="py-2 uppercase inline-flex items-center "
             >
                 <span>{{ currentMappedLocale }}</span>
                 <IconChevronDown stroke="{2}" />

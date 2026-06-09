@@ -15,13 +15,12 @@
 
                 <AdminNavLink
                     :href="route('admin.commerce.items.index')"
-                    :active="$page.url == '/commerce/items'"
-                    :show-text="isSidebarVisible"
+                    :active="$page.url.startsWith('/commerce/items')"
                 >
                     <template #icon>
                         <component
                             :is="
-                                $page.url == '/commerce/items'
+                                $page.url.startsWith('/commerce/items')
                                     ? IconBasketFilled
                                     : IconBasket
                             "

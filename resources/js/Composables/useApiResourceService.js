@@ -48,11 +48,14 @@ export default function useApiResourceService() {
      * @returns {Promise}
      */
     const storeData = (url, data) =>
-        handleRequest(() =>
-            axios.post(url, data, {
-                headers: { "Content-Type": "multipart/form-data" },
-            })
-        );
+        handleRequest(() => {
+            const isFormData = data instanceof FormData;
+            return axios.post(url, data, {
+                headers: isFormData
+                    ? { "Content-Type": "multipart/form-data" }
+                    : {},
+            });
+        });
 
     /**
      * Send POST request to update a resource
@@ -62,11 +65,14 @@ export default function useApiResourceService() {
      * @returns {Promise}
      */
     const updateData = (url, data) =>
-        handleRequest(() =>
-            axios.post(url, data, {
-                headers: { "Content-Type": "multipart/form-data" },
-            })
-        );
+        handleRequest(() => {
+            const isFormData = data instanceof FormData;
+            return axios.post(url, data, {
+                headers: isFormData
+                    ? { "Content-Type": "multipart/form-data" }
+                    : {},
+            });
+        });
 
     /**
      * Send GET request to fetch data from API

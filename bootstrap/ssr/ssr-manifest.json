@@ -40,10 +40,10 @@
     "/build/assets/AdminLayout-E9pke2x_.css"
   ],
   "resources/js/Components/Admin/ImageList.vue": [
-    "/build/assets/MediaForm-Cg43czKz.js"
+    "/build/assets/MediaForm-DydSaB_1.js"
   ],
   "resources/js/Components/Admin/ImageUploader.vue": [
-    "/build/assets/MediaForm-Cg43czKz.js"
+    "/build/assets/MediaForm-DydSaB_1.js"
   ],
   "resources/js/Components/AlertMessage.vue": [
     "/build/assets/AdminLayout-Cvyy3vL0.js",
@@ -54,7 +54,7 @@
     "/build/assets/AdminLayout-E9pke2x_.css"
   ],
   "resources/js/Components/AppNavigations.vue": [
-    "/build/assets/Layout-Dndjz-1L.js"
+    "/build/assets/Layout-YV275AvK.js"
   ],
   "resources/js/Components/ApplicationLogo.vue": [
     "/build/assets/ApplicationLogo-CSNe_4RD.js",
@@ -107,55 +107,65 @@
     "/build/assets/StarRating-B5mfeG81.js"
   ],
   "resources/js/Components/Public/Commerce/CartButton.vue": [
-    "/build/assets/CartButton-DpDFDzWc.js"
+    "/build/assets/CartButton-CBNnYGs8.js",
+    "/build/assets/CartButton-DqWCFJu2.css"
+  ],
+  "resources/js/Components/Public/Commerce/CartButton.vue?vue&type=style&index=0&scoped=347f9bea&lang.css": [
+    "/build/assets/CartButton-CBNnYGs8.js",
+    "/build/assets/CartButton-DqWCFJu2.css"
   ],
   "resources/js/Components/Public/Commerce/MediaSlider.vue": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Components/Public/Commerce/MediaSlider.vue?vue&type=style&index=0&scoped=0fd1f971&lang.css": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Components/Public/Commerce/ProductCard.vue": [
-    "/build/assets/Home-BN57YOE3.js"
+    "/build/assets/Home-DvOIRCzr.js",
+    "/build/assets/Home-CUM_2kyC.css"
+  ],
+  "resources/js/Components/Public/Commerce/ProductCard.vue?vue&type=style&index=0&scoped=9f6ae15d&lang.css": [
+    "/build/assets/Home-DvOIRCzr.js",
+    "/build/assets/Home-CUM_2kyC.css"
   ],
   "resources/js/Components/Public/FooterComponent.vue": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/Components/Public/LangSwitcher.vue": [
-    "/build/assets/LangSwitcher-Dqdc_lAc.js"
+    "/build/assets/LangSwitcher-BIfY0gKc.js"
   ],
   "resources/js/Components/Public/MegaMenu.vue": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/Components/Public/MobileMegaMenu.vue": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/Components/Public/NavComponent.vue": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/Components/Public/NavComponent.vue?vue&type=style&index=0&scoped=8487a9b8&lang.css": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/Components/Public/SerchContainer.vue": [
     "/build/assets/UserLoginRegisterForm-CE0XGaOj.js"
   ],
   "resources/js/Components/Public/UI/Buttons/ButtonCatalog.vue": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/Components/Public/UI/Commerce/ItemCard.vue": [
-    "/build/assets/CategoryShow-CGKs-sr7.js",
+    "/build/assets/CategoryShow-B39OF8JK.js",
     "/build/assets/CategoryShow-CpHK1Ojk.css"
   ],
   "resources/js/Components/Public/UI/Commerce/ItemCard.vue?vue&type=style&index=0&scoped=66317f33&lang.css": [
-    "/build/assets/CategoryShow-CGKs-sr7.js",
+    "/build/assets/CategoryShow-B39OF8JK.js",
     "/build/assets/CategoryShow-CpHK1Ojk.css"
   ],
   "resources/js/Components/Public/UI/SearchInput.vue": [
@@ -165,26 +175,26 @@
     "/build/assets/UserLoginRegisterForm-CE0XGaOj.js"
   ],
   "resources/js/Components/Review/ReviewForm.vue": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Components/Review/ReviewList.vue": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Components/Review/ReviewList.vue?vue&type=style&index=0&scoped=982a9416&lang.css": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Components/Review/StarRating.vue": [
     "/build/assets/StarRating-B5mfeG81.js"
   ],
   "resources/js/Components/SchemaMarkup.vue": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Components/SeoMeta.vue": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Components/StickyActions.vue": [
@@ -278,7 +288,7 @@
     "/build/assets/Index-CG3GpUYR.js"
   ],
   "resources/js/Composables/useApiResourceService.js": [
-    "/build/assets/useApiResourceService-BibiLDfj.js"
+    "/build/assets/useApiResourceService-D0zlI-JQ.js"
   ],
   "resources/js/Composables/useFormatter.js": [
     "/build/assets/Index-CG3GpUYR.js"
@@ -287,7 +297,7 @@
     "/build/assets/useLocales-C-Tc7ETb.js"
   ],
   "resources/js/Composables/useMediaService.js": [
-    "/build/assets/MediaForm-Cg43czKz.js"
+    "/build/assets/MediaForm-DydSaB_1.js"
   ],
   "resources/js/Composables/useTranslatableForm.js": [
     "/build/assets/useTranslatableForm-Byt64ljS.js"
@@ -308,7 +318,7 @@
     "/build/assets/AdminLayout-E9pke2x_.css"
   ],
   "resources/js/Layouts/Admin/CommerceAdminLayout.vue": [
-    "/build/assets/CommerceAdminLayout-BtsdlPqn.js"
+    "/build/assets/CommerceAdminLayout-CP5cF2Nv.js"
   ],
   "resources/js/Layouts/Admin/DashboardAdminLayout.vue": [
     "/build/assets/DashboardAdminLayout-rLsLJxx7.js"
@@ -320,26 +330,26 @@
     "/build/assets/Login-Cq1qyTnU.js"
   ],
   "resources/js/Layouts/Public/Default/IndexLayout.vue": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/Layouts/Public/DefaultLayout.vue": [
-    "/build/assets/DefaultLayout-Jakv3XrT.js"
+    "/build/assets/DefaultLayout-DTeqHHYh.js"
   ],
   "resources/js/Layouts/Public/Landing/Layout.vue": [
-    "/build/assets/Layout-Dndjz-1L.js"
+    "/build/assets/Layout-YV275AvK.js"
   ],
   "resources/js/Layouts/Public/Landing/SimpleLayout.vue": [
-    "/build/assets/Cart-IacDKn63.js"
+    "/build/assets/Cart-qMsYqune.js"
   ],
   "resources/js/Pages/Admin/Commerce/Categories/Create.vue": [
-    "/build/assets/Create-DMG36XBe.js"
+    "/build/assets/Create-BghPxyHc.js"
   ],
   "resources/js/Pages/Admin/Commerce/Categories/Edit.vue": [
-    "/build/assets/Edit-BVRjC7TK.js"
+    "/build/assets/Edit-ZkjBqy_S.js"
   ],
   "resources/js/Pages/Admin/Commerce/Categories/Index.vue": [
-    "/build/assets/Index-BI5Vv5aX.js"
+    "/build/assets/Index-KnbSnMCY.js"
   ],
   "resources/js/Pages/Admin/Commerce/Categories/Partials/DataForm.vue": [
     "/build/assets/DataForm-BUKIS5db.js"
@@ -354,22 +364,22 @@
     "/build/assets/SEOForm-BiVUr_UX.js"
   ],
   "resources/js/Pages/Admin/Commerce/Categories/Show.vue": [
-    "/build/assets/Show--MP_LT7R.js"
+    "/build/assets/Show-BntFXOjW.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Components/ItemForm.vue": [
-    "/build/assets/ItemForm-BmOZrPt1.js"
+    "/build/assets/ItemForm-CmFShzS2.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Create.vue": [
-    "/build/assets/Create-wPma4RlG.js"
+    "/build/assets/Create-CGKAqElF.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Edit.vue": [
-    "/build/assets/Edit-DC-GKWEO.js"
+    "/build/assets/Edit-CEyESyih.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Index.vue": [
-    "/build/assets/Index-CbryuxtW.js"
+    "/build/assets/Index-DS2Dj-pb.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Partials/DataForm.vue": [
-    "/build/assets/DataForm-B_akD84S.js"
+    "/build/assets/DataForm-3lbwG0ON.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Partials/DataTable.vue": [
     "/build/assets/DataTable-DbTvLy0c.js"
@@ -378,22 +388,22 @@
     "/build/assets/GeneralForm-DhPCl2eP.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Partials/MediaForm.vue": [
-    "/build/assets/MediaForm-Cg43czKz.js"
+    "/build/assets/MediaForm-DydSaB_1.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Partials/SEOForm.vue": [
     "/build/assets/SEOForm-C6GVUx_h.js"
   ],
   "resources/js/Pages/Admin/Commerce/Items/Show.vue": [
-    "/build/assets/Show-D6CDFbs4.js"
+    "/build/assets/Show-DZBvuKh-.js"
   ],
   "resources/js/Pages/Admin/Commerce/Manufacturers/Create.vue": [
-    "/build/assets/Create-BzozDQnF.js"
+    "/build/assets/Create-ChtizGm9.js"
   ],
   "resources/js/Pages/Admin/Commerce/Manufacturers/Edit.vue": [
-    "/build/assets/Edit-_L3trO6N.js"
+    "/build/assets/Edit-DG1yW3BB.js"
   ],
   "resources/js/Pages/Admin/Commerce/Manufacturers/Index.vue": [
-    "/build/assets/Index-vyHz3JDP.js"
+    "/build/assets/Index-w8Jy8E6q.js"
   ],
   "resources/js/Pages/Admin/Commerce/Manufacturers/Partials/DataForm.vue": [
     "/build/assets/DataForm-Dge5wuvW.js"
@@ -411,13 +421,13 @@
     "/build/assets/Show-Dm21z19N.js"
   ],
   "resources/js/Pages/Admin/Commerce/Orders/Create.vue": [
-    "/build/assets/Create-CuXcEtHk.js"
+    "/build/assets/Create-Bm0ysMFa.js"
   ],
   "resources/js/Pages/Admin/Commerce/Orders/Edit.vue": [
     "/build/assets/Edit-ByHXykiV.js"
   ],
   "resources/js/Pages/Admin/Commerce/Orders/Index.vue": [
-    "/build/assets/Index-JG_nC89N.js"
+    "/build/assets/Index-BirsgMek.js"
   ],
   "resources/js/Pages/Admin/Commerce/Orders/Partials/DataForm.vue": [
     "/build/assets/DataForm-CHnfIpJK.js"
@@ -426,7 +436,7 @@
     "/build/assets/DataTable-CnUNAvfK.js"
   ],
   "resources/js/Pages/Admin/Commerce/Orders/Partials/GeneralForm.vue": [
-    "/build/assets/GeneralForm-9N_H0Q63.js"
+    "/build/assets/GeneralForm-CPUYmCCX.js"
   ],
   "resources/js/Pages/Admin/Commerce/Settings/Warehouses/Components/WarehouseForm.vue": [
     "/build/assets/WarehouseForm-DtqIL-vL.js"
@@ -571,22 +581,22 @@
     "/build/assets/Login-Cq1qyTnU.js"
   ],
   "resources/js/Pages/Public/Account/Index.vue": [
-    "/build/assets/Index-DIOjbv9z.js",
+    "/build/assets/Index-BbTYNHLt.js",
     "/build/assets/Index-CQZwOxjA.css"
   ],
   "resources/js/Pages/Public/Account/Index.vue?vue&type=style&index=0&scoped=ea8dd7fb&lang.css": [
-    "/build/assets/Index-DIOjbv9z.js",
+    "/build/assets/Index-BbTYNHLt.js",
     "/build/assets/Index-CQZwOxjA.css"
   ],
   "resources/js/Pages/Public/Commerce/Cart.vue": [
-    "/build/assets/Cart-IacDKn63.js"
+    "/build/assets/Cart-qMsYqune.js"
   ],
   "resources/js/Pages/Public/Commerce/CategoryShow.vue": [
-    "/build/assets/CategoryShow-CGKs-sr7.js",
+    "/build/assets/CategoryShow-B39OF8JK.js",
     "/build/assets/CategoryShow-CpHK1Ojk.css"
   ],
   "resources/js/Pages/Public/Commerce/CategoryShow.vue?vue&type=style&index=0&scoped=692e7df5&lang.css": [
-    "/build/assets/CategoryShow-CGKs-sr7.js",
+    "/build/assets/CategoryShow-B39OF8JK.js",
     "/build/assets/CategoryShow-CpHK1Ojk.css"
   ],
   "resources/js/Pages/Public/Commerce/Checkout/Index.vue": [
@@ -621,21 +631,26 @@
     "/build/assets/CheckoutOld-4emxxmWa.js"
   ],
   "resources/js/Pages/Public/Commerce/Components/BuyButton.vue": [
-    "/build/assets/BuyButton-21mHn8CJ.js",
-    "/build/assets/BuyButton-HexrbFsc.css"
+    "/build/assets/BuyButton-Cz_goqjB.js",
+    "/build/assets/BuyButton-B9R-GKUO.css"
   ],
-  "resources/js/Pages/Public/Commerce/Components/BuyButton.vue?vue&type=style&index=0&scoped=46d1e63f&lang.css": [
-    "/build/assets/BuyButton-21mHn8CJ.js",
-    "/build/assets/BuyButton-HexrbFsc.css"
+  "resources/js/Pages/Public/Commerce/Components/BuyButton.vue?vue&type=style&index=0&scoped=d0626f64&lang.css": [
+    "/build/assets/BuyButton-Cz_goqjB.js",
+    "/build/assets/BuyButton-B9R-GKUO.css"
   ],
   "resources/js/Pages/Public/Commerce/Components/PopularProducts.vue": [
-    "/build/assets/PopularProducts-CbbjliLD.js"
+    "/build/assets/PopularProducts-BqTToXX4.js",
+    "/build/assets/PopularProducts-sas88woA.css"
+  ],
+  "resources/js/Pages/Public/Commerce/Components/PopularProducts.vue?vue&type=style&index=0&scoped=dc14c900&lang.css": [
+    "/build/assets/PopularProducts-BqTToXX4.js",
+    "/build/assets/PopularProducts-sas88woA.css"
   ],
   "resources/js/Pages/Public/Commerce/Components/ProductCard.vue": [
-    "/build/assets/ProductCard-mCglwJt6.js"
+    "/build/assets/ProductCard-D_pkPyrN.js"
   ],
   "resources/js/Pages/Public/Commerce/Components/SkeletonProductCard.vue": [
-    "/build/assets/SkeletonProductCard-BvTpNmcI.js"
+    "/build/assets/SkeletonProductCard-GKuLREIM.js"
   ],
   "resources/js/Pages/Public/Commerce/Partials/ContactInfo.vue": [
     "/build/assets/ContactInfo-CigWYlzz.js",
@@ -652,27 +667,28 @@
     "/build/assets/ShippingInfo-Db75YONL.js"
   ],
   "resources/js/Pages/Public/Commerce/View.vue": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Pages/Public/Commerce/View.vue?vue&type=style&index=0&scoped=5b613656&lang.css": [
-    "/build/assets/View-BMafbhAM.js",
+    "/build/assets/View-BFOtspxJ.js",
     "/build/assets/View-DoLRFVnj.css"
   ],
   "resources/js/Pages/Public/Home.vue": [
-    "/build/assets/Home-BN57YOE3.js"
+    "/build/assets/Home-DvOIRCzr.js",
+    "/build/assets/Home-CUM_2kyC.css"
   ],
   "resources/js/Pages/Public/Index.vue": [
-    "/build/assets/Index-CJRUEwhi.js"
+    "/build/assets/Index-BRnhtZ2M.js"
   ],
   "resources/js/Pages/Public/Old.vue": [
-    "/build/assets/Old-eAOBLdXK.js"
+    "/build/assets/Old-CziEbZOS.js"
   ],
   "resources/js/Pages/Public/PageShow.vue": [
-    "/build/assets/PageShow-Bt26yCgd.js"
+    "/build/assets/PageShow-BQQFcGZ4.js"
   ],
   "resources/js/Pages/Public/Search.vue": [
-    "/build/assets/Search-DpBeQrO3.js"
+    "/build/assets/Search-CjAo9K1k.js"
   ],
   "resources/js/Shared/VarDump.vue": [
     "/build/assets/VarDump-DqvrPBoK.js",
@@ -687,7 +703,7 @@
     "/build/assets/AdminLayout-E9pke2x_.css"
   ],
   "resources/js/Stores/categoryStore.js": [
-    "/build/assets/IndexLayout-77U-rPBF.js",
+    "/build/assets/IndexLayout-CupuRGm_.js",
     "/build/assets/IndexLayout-KFm5XIHs.css"
   ],
   "resources/js/ssr.js": [],

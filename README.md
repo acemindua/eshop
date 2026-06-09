@@ -1,10 +1,17 @@
-# Release v1.11.5 — Refactors Settings 🚀 - 09.06.2026
+# Release v1.11.6
+
+## 🎨 Frontend Enhancements
+
+- **Dynamic Price Formatting:** Integrated global `$formatPrice` plugin to ensure uniform currency representation across the storefront.
+- **Visual Stability:** Optimized product card container height, preventing vertical layout shifts (CLS) when promotional prices are rendered.
+- **Skeleton Loading:** Deployed lightweight `animate-pulse` loaders to enhance perceived performance during asynchronous component hydration.
+- **Discount Intelligence:** Introduced a real-time calculated discount badge on images, highlighting promotional value to end-users.
 
 **Release Date:** 2026.05.30  
 **Target:** Core Media Management Engine & Form Accessibility Layer
 
 This release focuses on global architectural refactoring of the polymorphic media management system (Laravel + Vue 3), removing recursive payload anomalies, optimizing database interaction, and achieving strict compliance with modern web accessibility (a11y) and security standards.
-
+# Release v1.11.5 — Refactors Settings 🚀
 ---
 
 ## 🛠 What's Changed
@@ -43,8 +50,6 @@ $this->mediaService->getMedia(
     $validated['collection']
 );
 ```
-
-
 
 ### Refactors: (v1.11.3) - 2026.05.22
 
@@ -256,7 +261,7 @@ php artisan make:resource UserResource
 # Політика для User-моделі
 php artisan make:provider PolicyServiceProvider
 php artisan make:policy UserPolicy --model=User
-````
+```
 
 ### 6.2. Встановлення Фронтенд-Пакетів
 

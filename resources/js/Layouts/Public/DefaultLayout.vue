@@ -5,7 +5,6 @@ import LangSwitcher from "@/Components/Public/LangSwitcher.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import CartButton from "@/Components/Public/Commerce/CartButton.vue";
 import VarDump from "@/Shared/VarDump.vue";
-import PopularProducts from "@/Pages/Public/Commerce/Components/PopularProducts.vue";
 
 const page = usePage();
 
@@ -28,12 +27,12 @@ const currentYear = new Date().getFullYear();
 
     <div class="bg-white w-full min-h-screen flex flex-col justify-between">
         <div>
-            <header class="py-2 border-b border-gray-100">
+            <header class="py-3 border-b border-gray-100">
                 <div class="container mx-auto px-4">
                     <div class="flex items-center justify-between">
                         <Link href="/" class="flex items-center gap-2 group">
                             <ApplicationLogo
-                                class="w-10 h-10 bg-brand fill-current transition-transform"
+                                class="w-10 h-10 bg-gray-600 fill-current transition-transform"
                             />
                             <span
                                 class="text-lg font-bold uppercase text-gray-800"
@@ -42,7 +41,7 @@ const currentYear = new Date().getFullYear();
                             </span>
                         </Link>
 
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
                             <CartButton />
                             <LangSwitcher />
                         </div>
