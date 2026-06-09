@@ -44,7 +44,7 @@ const title = computed(() => {
                 ]"
             >
                 <Transition name="sidebar-slide-fade">
-                    <div class="bg-slate-800 flex flex-col z-[60]">
+                    <div class="bg-gray-100 flex flex-col z-[60]">
                         <AdminSidebar />
                     </div>
                 </Transition>
@@ -57,7 +57,7 @@ const title = computed(() => {
                     :class="
                         isSecondarySidebarVisible
                             ? 'bg-white dark:bg-slate-700 dark:border-slate-600 hover:bg-brand hover:text-white dark:hover:bg-slate-600 '
-                            : 'bg-slate-800 hover:bg-brand text-white hover:bg-brand-dark '
+                            : 'hover:bg-brand  hover:bg-brand-dark '
                     "
                 >
                     <IconChevronLeft

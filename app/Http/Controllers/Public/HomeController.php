@@ -18,37 +18,15 @@ use Inertia\Response;
 
 class HomeController extends Controller
 {
+
+    protected const DIRECTORY = 'Public';
+
     /**
      * 
      */
     public function index(): Response
     {
-
-        $products = Item::where('public', true)
-            ->withCount('ratings')
-            ->withAvg('ratings as average_rating', 'value')
-            ->latest()
-            ->take(10)
-            ->get();
-
-        return Inertia::render('Public/Home', [
-            'products' => ItemResource::collection($products)
-        ]);
-
-        $products = Item::where('public', true)->latest()->take(10)->get();
-        $settings =  Settings::all();
-
-        $page = collect([
-            'title'       => $settings['site_name'] ?? config('app.name'),
-            'description' => $settings['site_tagline'] ?? '',
-        ]);
-
-        return Inertia::render('Public/Home', [
-            'seo'      => (new \App\Services\SeoService())->generate($page),
-            'products' => ItemResource::collection($products), // Ось тут товари
-            'filters'  => ['sort' => 'newest', 'q' => ''],
-            'data'     => ['locale' => app()->getLocale()]
-        ]);
+        return Inertia::render(self::DIRECTORY . '/Index');
     }
 
     /**

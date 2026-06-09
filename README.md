@@ -1,8 +1,50 @@
-### Meenu: (v1.11.4) - 2026.05.27
+# Release v1.11.5 — Refactors Settings 🚀 - 09.06.2026
+
+**Release Date:** 2026.05.30  
+**Target:** Core Media Management Engine & Form Accessibility Layer
+
+This release focuses on global architectural refactoring of the polymorphic media management system (Laravel + Vue 3), removing recursive payload anomalies, optimizing database interaction, and achieving strict compliance with modern web accessibility (a11y) and security standards.
+
+---
+
+## 🛠 What's Changed
+
+### 🔄 Media Architecture & Backend Optimization (Laravel)
+
+- **Strict Typing Ingestion:** Enforced `declare(strict_types=1);` across the full controller and service pipeline to eliminate implicit type-coercion bugs.
+- **Mass Sequence Alignment:** Completely rewritten the `MediaService::sortMedia` method. Replaced slow, repetitive hydration loops (`SELECT` + `SAVE`) with atomic direct builder query executions (`where()->update()`), drastically lowering database overhead.
+- **REST API Standardization:** Refactored unified JSON payload structures with standardized boolean success flags (`success`), explicit messaging (`message`), and encapsulated Data Transfer Objects (`data`).
+- **Symfony HTTP Protocol Enforcement:** Swapped raw HTTP integer codes with descriptive semantic constants from `Symfony\Component\HttpFoundation\Response` (e.g., `HTTP_CREATED`, `HTTP_UNPROCESSABLE_ENTITY`).
+
+### 🧪 Frontend Decoupling & UI Enhancements (Vue 3)
+
+- **Destruction of Nested Payload Anomalies:** Fixed a critical bug in `MediaForm.vue` where structural metadata recursively wrapped around the layout payload. The sorting mechanism now safely delivers a pristine, flat array of numeric IDs (`[20, 19, 23...]`).
+- **Reactive Upload Micro-Optimizations:** Replaced global array re-renders with atomic `.find()` pointer mutations during parallel file uploads, updating individual file progress markers instantly without blocking the UI thread.
+- **Transient State Interceptors:** Enhanced thread safety by securing synchronous local item mapping during concurrent chunk streams using asynchronous cryptographic hashes (`temp-*`).
+
+### ♿ Accessibility (a11y) & UX Compliance
+
+- **Implicit Label Binding:** Resolved severe Lighthouse/DevTools accessibility violations by applying implicit nested element mapping on custom UI units (`<CountrySelect>`, `<ComboboxSelect>`).
+- **Elimination of DOM ID Duplications:** Removed redundant explicit HTML `for` and `id` properties, expanding client click-target areas and securing native autofill configurations for assistive screen readers.
+- **Tailwind Token Consolidation:** Audited and optimized inline CSS configurations, purging duplicate font-weight tokens (`font-semibold`) and improving design system predictability.
+
+---
+
+## 📦 Technical Details
+
+### Backend Payload Cast Guard
+
+Explicitly cast incoming query state metrics inside `MediaController` methods to match strict engine signatures:
 
 ```bash
-
+$this->mediaService->getMedia(
+    $validated['model_type'],
+    (int) $validated['model_id'], // Enforced type-safety cast boundary
+    $validated['collection']
+);
 ```
+
+
 
 ### Refactors: (v1.11.3) - 2026.05.22
 
@@ -214,7 +256,7 @@ php artisan make:resource UserResource
 # Політика для User-моделі
 php artisan make:provider PolicyServiceProvider
 php artisan make:policy UserPolicy --model=User
-```
+````
 
 ### 6.2. Встановлення Фронтенд-Пакетів
 

@@ -2,7 +2,7 @@
     <div class="flex flex-col w-full h-full">
         <Link
             :href="route('admin.dashboard')"
-            class="flex justify-center items-center border-b border-slate-700 h-14 w-14 p-2"
+            class="flex justify-center items-center border-b h-14 w-14 p-2"
         >
             <ApplicationLogo class="w-full h-full bg-brand" />
         </Link>
@@ -23,6 +23,25 @@
                         isDashboardActive
                             ? IconLayoutDashboardFilled
                             : IconLayoutDashboard
+                    "
+                    :stroke="1"
+                    class="w-6 h-6"
+                />
+            </AdminNavButton>
+
+            <AdminNavButton
+                v-tooltip="{
+                    content: $t('Commerce'),
+                    placement: 'right',
+                }"
+                :href="route('admin.commerce.items.index')"
+                :active="$page.url.startsWith('/commerce')"
+            >
+                <component
+                    :is="
+                        $page.url.startsWith('/commerce')
+                            ? IconShoppingCartFilled
+                            : IconShoppingCart
                     "
                     :stroke="1"
                     class="w-6 h-6"

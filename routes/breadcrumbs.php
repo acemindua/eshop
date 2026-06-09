@@ -107,6 +107,7 @@ $settingsResources = [
     // Core settings
     'versions'                 => __('App Roadmap & Versions'),
     'translations'             => __('Translations'),
+    'commerce.warehouses'      => __('Warehouses'),
 
 
 ];

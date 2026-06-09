@@ -1,4 +1,41 @@
 <template>
+    <AdminLayout>
+        <template #sidenav>
+            <div class="w-full h-14 border-b flex items-center p-4">
+                <h4
+                    class="uppercase text-[12px] tracking-widest font-bold text-gray-500"
+                >
+                    <span>Dashboard</span>
+                </h4>
+            </div>
+            <ul class="flex flex-col w-full border-b divide-y">
+                <li class="uppercase text-xs pt-2 pb-2 px-4 text-brand">
+                    <span>{{ $t("Apps") }}</span>
+                </li>
+
+                <AdminNavLink
+                    :href="route('admin.commerce.items.index')"
+                    :active="$page.url == '/commerce/items'"
+                    :show-text="isSidebarVisible"
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url == '/commerce/items'
+                                    ? IconBasketFilled
+                                    : IconBasket
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
+
+                    {{ $t("Items") }}
+                </AdminNavLink>
+            </ul>
+        </template>
+
+        <!-- 
     <AdminLayout v-model:isSidebarVisible="isSidebarVisible">
         <template #sidenav>
             <div class="w-full h-14 border-b flex items-center p-4">
@@ -10,6 +47,7 @@
             </div>
 
             <ul class="flex flex-col w-full border-b divide-y">
+              
                 <AdminNavLink
                     :href="route('admin.commerce.orders.index')"
                     :active="$page.url == '/commerce/orders'"
@@ -30,7 +68,7 @@
                     {{ $t("Orders") }}
                 </AdminNavLink>
 
-                <!--     <li>
+                  <li>
                     <AdminNavLink
                         :href="route('admin.commerce.orders.index')"
                         :active="$page.url.startsWith('/admin/commerce/orders')"
@@ -79,10 +117,10 @@
                         </template>
                         <span>{{ $t("Manufacturers") }}</span>
                     </AdminNavLink>
-                </li> -->
+                </li> 
             </ul>
         </template>
-
+-->
         <div>
             <slot />
         </div>

@@ -38,6 +38,7 @@ class WarehouseController extends Controller
                 'warehouses' => WarehouseResource::collection($warehouses)
             ],
             'filters' => request()->only(['search', 'active', 'field', 'direction']),
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -75,7 +76,7 @@ class WarehouseController extends Controller
         return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type'    => 'success',
-                'message' => "Склад `{$warehouse->title}` успішно створено!",
+                'message' => "Warehouse `{$warehouse->title}`  successfully created!",
             ],
         ]);
     }

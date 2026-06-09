@@ -95,28 +95,37 @@ onMounted(() => {
     sortableInstance = new Sortable(sortableContainer.value, {
         animation: 250,
         ghostClass: "opacity-10",
-        filter: ".cursor-wait", // Забороняємо тягати файли, що ще вантажаться
+        filter: ".cursor-wait",
         onEnd: (evt) => {
             const { oldIndex, newIndex } = evt;
             if (oldIndex === newIndex) return;
 
+            // Створюємо копію масиву
             const updatedImages = [...props.images];
             const [movedItem] = updatedImages.splice(oldIndex, 1);
             updatedImages.splice(newIndex, 0, movedItem);
 
-            // Повертаємо DOM вузол для Vue
-            const element = sortableContainer.value.children[newIndex];
-            const referenceElement =
-                sortableContainer.value.children[
-                    oldIndex > newIndex ? oldIndex + 1 : oldIndex
-                ];
-            sortableContainer.value.insertBefore(element, referenceElement);
+            // Оскільки Vue 3 іноді втрачає синхронізацію з SortableJS,
+            // ми змушуємо Sortable скасувати переміщення в DOM,
+            // щоб Vue відрендерив новий масив самостійно і чисто.
+            const totalChildren = sortableContainer.value.children;
+            if (oldIndex < newIndex) {
+                sortableContainer.value.insertBefore(
+                    totalChildren[newIndex],
+                    totalChildren[oldIndex],
+                );
+            } else {
+                sortableContainer.value.insertBefore(
+                    totalChildren[newIndex],
+                    totalChildren[oldIndex + 1],
+                );
+            }
 
+            // Передаємо масив вгору, батько сформує orderMap
             emit("reorder", updatedImages);
         },
     });
 });
-
 onUnmounted(() => {
     sortableInstance?.destroy();
 });

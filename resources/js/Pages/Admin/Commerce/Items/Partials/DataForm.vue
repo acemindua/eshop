@@ -46,7 +46,7 @@ const booleanPublic = computed({
                 <InputLabel
                     for="quantity"
                     :value="$t('Quantity')"
-                    class="flex items-center leading-6 font-semibold"
+                    class="flex items-center leading-6"
                 />
                 <TextInput
                     id="quantity"
@@ -63,7 +63,7 @@ const booleanPublic = computed({
                     <InputLabel
                         for="price"
                         :value="$t('Price')"
-                        class="flex items-center leading-6 font-semibold"
+                        class="flex items-center leading-6"
                     />
                     <TextInput
                         id="price"
@@ -78,7 +78,7 @@ const booleanPublic = computed({
                     <InputLabel
                         for="old_price"
                         :value="$t('Old Price')"
-                        class="flex items-center leading-6 font-semibold"
+                        class="flex items-center leading-6"
                     />
                     <TextInput
                         id="old_price"
@@ -92,49 +92,51 @@ const booleanPublic = computed({
             </div>
             <!-- Country Select -->
             <div>
-                <InputLabel
-                    for="country"
-                    :value="$t('Country')"
-                    class="flex items-center leading-6 font-semibold"
-                />
+                <InputLabel class="flex flex-col text-xs text-gray-600">
+                    <span class="flex items-center leading-6 mb-1.5">{{
+                        $t("Country")
+                    }}</span>
 
-                <CountrySelect
-                    id="country"
-                    v-model="form.country"
-                    :items="data?.countries || []"
-                    :class="{ 'border-red-500': errors.country }"
-                />
+                    <CountrySelect
+                        v-model="form.country"
+                        :items="data?.countries || []"
+                        :class="{ 'border-red-500': errors.country }"
+                    />
+                </InputLabel>
+
                 <InputError class="mt-2" :message="errors.country" />
             </div>
-            <!-- Manufacturer Select -->
             <div>
                 <InputLabel
-                    for="manufacturer_id"
-                    :value="$t('Manufacturer')"
-                    class="flex items-center leading-6 font-semibold"
-                />
-                <ComboboxSelect
-                    id="manufacturer_id"
-                    v-model="form.manufacturer_id"
-                    :items="data.manufacturers?.data || []"
-                    :class="{ 'border-red-500': errors.manufacturer_id }"
-                />
+                    class="flex flex-col text-xs font-semibold text-gray-600"
+                >
+                    <span class="flex items-center leading-6 mb-1.5">{{
+                        $t("Manufacturer")
+                    }}</span>
+
+                    <ComboboxSelect
+                        v-model="form.manufacturer_id"
+                        :items="data.manufacturers?.data || []"
+                        :class="{ 'border-red-500': errors.manufacturer_id }"
+                    />
+                </InputLabel>
                 <InputError class="mt-2" :message="errors.manufacturer_id" />
             </div>
 
-            <!-- Category Select -->
             <div>
                 <InputLabel
-                    for="category_id"
-                    :value="$t('Parent category')"
-                    class="flex items-center leading-6 font-semibold"
-                />
-                <ComboboxSelect
-                    id="category_id"
-                    v-model="form.category_id"
-                    :items="data.categories?.data || []"
-                    :class="{ 'border-red-500': errors.category_id }"
-                />
+                    class="flex flex-col text-xs font-semibold text-gray-600"
+                >
+                    <span class="flex items-center leading-6 mb-1.5">{{
+                        $t("Parent category")
+                    }}</span>
+
+                    <ComboboxSelect
+                        v-model="form.category_id"
+                        :items="data.categories?.data || []"
+                        :class="{ 'border-red-500': errors.category_id }"
+                    />
+                </InputLabel>
                 <InputError class="mt-2" :message="errors.category_id" />
             </div>
 
@@ -143,7 +145,7 @@ const booleanPublic = computed({
                 <InputLabel
                     for="order"
                     :value="$t('Order')"
-                    class="flex items-center leading-6 font-semibold"
+                    class="flex items-center leading-6"
                 />
                 <TextInput
                     id="order"
@@ -159,7 +161,7 @@ const booleanPublic = computed({
                 <InputLabel
                     for="public-switcher"
                     :value="$t('Status')"
-                    class="flex items-center leading-6 font-semibold mb-2"
+                    class="flex items-center leading-6 mb-2"
                 />
                 <div class="flex items-center space-x-4">
                     <CheckBoxSwitcher

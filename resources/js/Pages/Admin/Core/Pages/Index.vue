@@ -1,11 +1,11 @@
 <!-- resources/js/Pages/Admin/Core/Pages/Index.vue -->
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch } from "vue";
 import { router } from "@inertiajs/vue3";
 import debounce from "lodash.debounce";
 
 // Layout and UI Components
-import DashboardAdminLayout from "@/Layouts/Admin/DashboardAdminLayout.vue";
+import Layout from "@/Layouts/Admin/DashboardAdminLayout.vue";
 import ButtonsGroup from "@/Components/UI/Buttons/Admin/ButtonsGroup.vue";
 import InputSearch from "@/Components/UI/InputSearch.vue";
 import DataTable from "@/Components/DataTable.vue";
@@ -95,7 +95,7 @@ const handleSort = (field) => {
         sortDirection.value = "asc";
     }
 };
-defineOptions({ layout: DashboardAdminLayout });
+defineOptions({ layout: Layout });
 </script>
 
 <template>

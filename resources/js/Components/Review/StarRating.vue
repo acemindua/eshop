@@ -3,11 +3,11 @@
         <span
             v-for="star in maxStars"
             :key="star"
-            class="cursor-pointer transition-colors duration-200"
+            class="cursor-pointer transition-colors duration-200 text-sm"
             :class="{
-                'text-yellow-400': star <= currentRating, // Заповнені зірки
+                'text-gray-700': star <= currentRating, // Заповнені зірки
                 'text-gray-300': star > currentRating, // Незаповнені зірки
-                'hover:text-yellow-500': !readOnly, // Ефект при наведенні для інтерактивних зірок
+                'hover:text-gray-700': !readOnly, // Ефект при наведенні для інтерактивних зірок
             }"
             @click="setRating(star)"
             @mouseover="hoverRating = star"
@@ -72,7 +72,7 @@ watch(
     () => props.modelValue,
     (newVal) => {
         internalRating.value = newVal;
-    }
+    },
 );
 
 watch(
@@ -81,7 +81,7 @@ watch(
         if (props.readOnly) {
             internalRating.value = newVal;
         }
-    }
+    },
 );
 
 // Методи

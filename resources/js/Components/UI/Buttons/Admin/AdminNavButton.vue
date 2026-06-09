@@ -4,8 +4,8 @@
         :class="[
             'inline-block p-2 rounded-lg transition-all duration-200',
             active
-                ? 'text-brand bg-slate-900/50 dark:bg-slate-800 shadow-inner'
-                : 'text-gray-100 dark:text-slate-400 hover:bg-slate-900 dark:hover:bg-slate-800/50',
+                ? 'text-brand bg-gray-200 dark:bg-slate-800 shadow-inner'
+                : 'text-gray-600 dark:text-slate-400 hover:bg-gray-100 hover:text-brand dark:hover:bg-slate-800/50',
         ]"
     >
         <slot />

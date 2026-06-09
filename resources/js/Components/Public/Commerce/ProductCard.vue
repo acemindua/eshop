@@ -15,7 +15,7 @@
 
         <div class="p-2 flex flex-col flex-grow">
             <h3
-                class="font-semibold text-gray-800 transition-colors group-hover:text-brand line-clamp-2 h-12"
+                class="text-gray-800 transition-colors group-hover:text-brand line-clamp-2 h-12"
             >
                 {{ data.title }}
             </h3>

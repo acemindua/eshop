@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/menus', [HelpMainController::class, 'menus'])->name('api.get.menu');
+Route::get('/commerce/popular', [ApiItemsController::class, 'popular'])->name('api.commerce.popular');
 /**
  * Commerce
  */

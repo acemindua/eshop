@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\Commerce\ItemController;
 use App\Http\Controllers\Admin\Core\{
-
     PageController,
     UserController,
     // Menu Management, Navigation Structures & Dynamic Link Collections
@@ -34,6 +34,17 @@ Route::resources([
     'pages' => PageController::class,
     'menus' => MenuController::class,
 ]);
+
+Route::prefix('commerce')->name('commerce.')->group(function () {
+    Route::resources([
+        'items'         => ItemController::class,
+        //'manufacturers' => ManufacturerController::class,
+        //'categories'    => CategoryController::class,
+
+        //'orders'        => OrderController::class,
+    ]);
+});
+
 
 // Global System Configuration and Utility Boundaries Area
 Route::prefix('settings')->name('settings.')->group(function () {

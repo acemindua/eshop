@@ -1,4 +1,8 @@
 <template>
+    <pre>
+        {{ data }}
+    </pre>
+
     <LanguagesTabs
         v-model="selectedLocale"
         :errors="errors"

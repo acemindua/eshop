@@ -21,6 +21,10 @@ use Rinvex\Country\CountryLoader;
 
 class ItemController extends Controller
 {
+
+    protected const DIRECTORY = 'Admin/Commerce/Items';
+    protected const ROUTE_PREFIX = 'admin.commerce.items';
+
     /**
      * Display a listing of items with eager loading and filters.
      */
@@ -35,11 +39,12 @@ class ItemController extends Controller
             ->paginate(Settings::get('items_per_page', 15))
             ->withQueryString();
 
-        return Inertia::render('Admin/Commerce/Items/Index', [
+        return Inertia::render(self::DIRECTORY . '/Index', [
             'data' => [
                 'items' => ItemResource::collection($items)
             ],
-            'filters' => request()->only(['search', 'status']),
+            'filters' => request()->all(['search', 'status', 'field', 'direction']),
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -50,7 +55,7 @@ class ItemController extends Controller
     {
         Gate::authorize('create', Item::class);
 
-        return Inertia::render('Admin/Commerce/Items/Create', [
+        return Inertia::render(self::DIRECTORY . '/Create', [
             'data' => [
                 'categories'    => CategoryResource::collection($this->getActiveCategories()),
                 'manufacturers' => ManufacturerResource::collection($this->getActiveManufacturers()),
@@ -60,8 +65,10 @@ class ItemController extends Controller
                     'quantity' => 0,
                     'price'    => 0,
                     'public'   => false,
-                ]
+                ],
             ],
+            'routePrefix' => self::ROUTE_PREFIX,
+            'isEditing' => false,
         ]);
     }
 
@@ -74,7 +81,7 @@ class ItemController extends Controller
 
         $item = Item::create($request->validated());
 
-        return redirect()->route('admin.items.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type'    => 'success',
                 'message' => "Item `{$item->title}` successfully created!",
@@ -89,10 +96,11 @@ class ItemController extends Controller
     {
         Gate::authorize('view', $item);
 
-        return Inertia::render('Admin/Commerce/Items/Show', [
+        return Inertia::render(self::DIRECTORY . '/Show', [
             'data' => [
                 'item' => new ItemResource($item->load(['category', 'manufacturer']))
             ],
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -103,13 +111,15 @@ class ItemController extends Controller
     {
         Gate::authorize('update', $item);
 
-        return Inertia::render('Admin/Commerce/Items/Edit', [
+        return Inertia::render(self::DIRECTORY . '/Edit', [
             'data' => [
                 'item'          => $item,
                 'categories'    => CategoryResource::collection($this->getActiveCategories()),
                 'manufacturers' => ManufacturerResource::collection($this->getActiveManufacturers()),
                 'countries'     => $this->getCountriesList(),
             ],
+            'isEditing' => true,
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -122,7 +132,7 @@ class ItemController extends Controller
 
         $item->update($request->validated());
 
-        return redirect()->route('admin.items.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type'    => 'success',
                 'message' => "Item `{$item->title}` successfully updated!",
@@ -140,7 +150,7 @@ class ItemController extends Controller
         $item->clearMediaCollection('images');
         $item->delete();
 
-        return redirect()->route('admin.items.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type'    => 'success',
                 'message' => "Item successfully deleted!",

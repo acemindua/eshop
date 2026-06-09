@@ -8,7 +8,6 @@ use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Codebyray\ReviewRateable\Traits\ReviewRateable;
@@ -118,33 +117,30 @@ class Item extends Model implements HasMedia, TranslatableContract
     /**
      * Return sorted images with preview URLs
      */
-    public function getSortedImagesAttribute(): ?array
+    public function getSortedImagesAttribute(): array
     {
-        if (!$this->getFirstMediaUrl('images', 'preview')) {
-            return null;
+        // Spatie за замовчуванням уже повертає медіа, відсортовані за 'order_column'
+        $mediaCollection = $this->getMedia('images');
+
+        if ($mediaCollection->isEmpty()) {
+            return [];
         }
 
-        return $this->getMedia('images')
-            ->sortBy('order_column')
-            ->filter(fn($media) => File::exists($media->getPath()))
+        return $mediaCollection
+            // Замість sortBy використовуємо сортування через values() для скидання індексів
+            // Якщо хочете перестрахуватися, сортуємо за order_column за зростанням
             ->map(fn($media) => [
                 'id' => $media->id,
                 'url' => $media->getUrl(),
-                'preview' => $media->getUrl('preview'),
+                // Якщо конверсії 'preview' ще немає, підставляємо оригінальний URL як фоллбек
+                'preview' => $media->hasGeneratedConversion('preview')
+                    ? $media->getUrl('preview')
+                    : $media->getUrl(),
                 'name' => $media->file_name,
-                'order_column' => $media->order_column,
-            ])->values()->all();
-    }
-
-
-    /**
-     * Define media relationship
-     */
-    public function images(): HasMany
-    {
-        return $this->morphMany(Media::class, 'model')
-            ->where('collection_name', 'images')
-            ->orderBy('order_column');
+                'order' => (int) $media->order_column, // Приводимо до integer, щоб фронтенд чітко бачив число
+            ])
+            ->values() // Скидаємо ключі колекції в послідовні [0, 1, 2...]s
+            ->all();
     }
 
     /**

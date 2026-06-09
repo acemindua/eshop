@@ -5,7 +5,12 @@ import WarehouseForm from "./Components/WarehouseForm.vue";
 
 defineOptions({ layout: Layout });
 
-defineProps({ data: { type: Object } });
+const props = defineProps({
+    data: { type: Object },
+    routePrefix: { type: String, default: () => null },
+    isEditing: { type: Boolean, default: false },
+    errors: { type: Object, default: () => ({}) },
+});
 </script>
 
 <template>
