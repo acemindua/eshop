@@ -31,6 +31,24 @@
 
                     {{ $t("Items") }}
                 </AdminNavLink>
+                <AdminNavLink
+                    :href="route('admin.commerce.categories.index')"
+                    :active="$page.url.startsWith('/commerce/categories')"
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url.startsWith('/commerce/categories')
+                                    ? IconCategoryFilled
+                                    : IconCategory
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
+
+                    {{ $t("Categories") }}
+                </AdminNavLink>
             </ul>
         </template>
 
@@ -129,7 +147,12 @@
 <script setup>
 import AdminNavLink from "@/Components/Admin/AdminNavLink.vue";
 import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
-import { IconBasket, IconBasketFilled } from "@tabler/icons-vue";
+import {
+    IconBasket,
+    IconBasketFilled,
+    IconCategory,
+    IconCategoryFilled,
+} from "@tabler/icons-vue";
 import { ref } from "vue";
 
 // Оголошуємо стан тут, щоб він був доступний у шаблоні DashboardAdminLayout

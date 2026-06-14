@@ -1,4 +1,5 @@
 {
+    "reviews": ":count Bewertung|:count Bewertungen|:count Bewertungen",
     "(and :count more error)": "(und :count weiterer Fehler)",
     "(and :count more errors)": "(und :count weiterer Fehler)|(und :count weitere Fehler)|(und :count weitere Fehler)",
     "A decryption key is required.": "Ein Entschlüsselungsschlüssel ist nötig.",

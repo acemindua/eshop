@@ -46,7 +46,16 @@ class HomeController extends Controller
     /**
      * 
      */
-    public function resolveDynamicRoute(string $slug, ?string $optional = null)
+    public function resolve(string $slug, ?string $optional = null)
+    {
+        if ($category = Category::whereTranslation('slug', $slug)->first())  return app(CommerceController::class)->category($category);
+        if ($item = Item::whereTranslation('slug', $slug)->first())  return app(CommerceController::class)->view($item);
+    }
+
+    /**
+     * 
+     */
+   /*  public function resolveDynamicRoute(string $slug, ?string $optional = null)
     {
         //
         $item = Item::whereTranslation('slug', $slug)
@@ -65,12 +74,12 @@ class HomeController extends Controller
 
         // Якщо нічого не знайдено — 404
         abort(404);
-    }
+    } */
 
     /**
      * 
      */
-    public function pageShow(Page $page): Response
+  /*   public function pageShow(Page $page): Response
     {
         if (!$page) abort(404);
 
@@ -80,30 +89,32 @@ class HomeController extends Controller
                 'page' => new PageResource($page) ?? null
             ]
         ]);
-    }
+    } */
 
     /**
      * 
      */
-    public function itemShow(Item $item): Response
+   /*  public function itemShow(Item $item): Response
     {
         if (!$item) abort(404);
 
         return Inertia::render('Public/Commerce/View', [
-            'seo'       => (new \App\Services\SeoService())->generate($item),
-            'schema'    => (new \App\Services\SeoService())->generateSchema($item),
             'data' => [
-                'locale' => app()->getLocale(),
-                'item' => new ItemResource($item) ?? null
+                'locale'    => app()->getLocale(),
+                'item'      => new ItemResource($item) ?? null,
+                'seo'       => (new \App\Services\SeoService())->generate($item),
+                'schema'    => (new \App\Services\SeoService())->generateSchema($item),
             ]
         ]);
     }
-
+ */
     /**
      * 
      */
-    public function categoryShow(Request $request, string $slug): Response
+    /* public function categoryShow(Request $request, string $slug): Response
     {
+
+
         $categorySlug = str_replace('category__', '', $slug);
         $category = Category::whereTranslation('slug', $categorySlug)->firstOrFail();
 
@@ -129,7 +140,7 @@ class HomeController extends Controller
             $q->where('category_id', $category->id);
         })->get(['id', 'title']);
 
-        return Inertia::render('Public/Commerce/CategoryShow', [
+        return Inertia::render('Public/Commerce/Category', [
             'data' => [
                 'locale'   => app()->getLocale(),
                 'category' => new CategoryResource($category),
@@ -138,5 +149,5 @@ class HomeController extends Controller
             ],
             'filters' => $request->all(['min_price', 'max_price', 'manufacturers', 'q', 'sort']),
         ]);
-    }
+    } */
 }

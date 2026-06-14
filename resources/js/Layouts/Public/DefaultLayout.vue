@@ -5,7 +5,9 @@ import LangSwitcher from "@/Components/Public/LangSwitcher.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import CartButton from "@/Components/Public/Commerce/CartButton.vue";
 import VarDump from "@/Shared/VarDump.vue";
-
+import UserLoginRegisterForm from "@/Components/Public/UserLoginRegisterForm.vue";
+import Breadcrumbs from "@/Components/Breadcrumbs.vue";
+import AppNavigations from "@/Components/AppNavigations.vue";
 const page = usePage();
 
 // Безпечне отримання заголовку сторінки
@@ -16,6 +18,10 @@ const title = computed(() => {
         : "Home";
 });
 const currentYear = new Date().getFullYear();
+const isHomePage = computed(() => {
+    const url = page.url;
+    return /^\/(?:[a-z]{2}\/?)?$/.test(url);
+});
 </script>
 
 <template>
@@ -25,32 +31,57 @@ const currentYear = new Date().getFullYear();
         "
     />
 
-    <div class="bg-white w-full min-h-screen flex flex-col justify-between">
+    <div
+        class="w-full min-h-screen flex flex-col justify-between"
+    >
+        <!-- <div class="bg-gray-100">
+            <div class="container mx-auto px-4">
+                <div
+                    class="flex items-center justify-between w-full "
+                >
+                    <AppNavigations
+                        :slug="`header`"
+                        :locale="$page.props?.config?.currentLocale || 'en'"
+                    />
+                   
+                </div>
+            </div>
+        </div> -->
         <div>
-            <header class="py-3 border-b border-gray-100">
+            <header class="py-3 border-b border-gray-100 bg-white">
                 <div class="container mx-auto px-4">
                     <div class="flex items-center justify-between">
-                        <Link href="/" class="flex items-center gap-2 group">
-                            <ApplicationLogo
-                                class="w-10 h-10 bg-gray-600 fill-current transition-transform"
-                            />
-                            <span
-                                class="text-lg font-bold uppercase text-gray-800"
-                            >
-                                {{ page.props.app?.name }}
-                            </span>
-                        </Link>
-
                         <div class="flex items-center gap-2">
-                            <CartButton />
-                            <LangSwitcher />
+                            <Link
+                                href="/"
+                                class="flex items-center gap-2 group"
+                            >
+                                <ApplicationLogo
+                                    class="w-10 h-10 bg-brand fill-current transition-transform"
+                                />
+                                <span
+                                    class="hidden md:block text-lg font-bold text-gray-800"
+                                >
+                                    {{ page.props.app?.name }}
+                                </span>
+                            </Link>
+                            <lang-switcher />
+                        </div>
+
+                        <div class="flex items-center gap-4">
+                            <user-login-register-form />
+                            <cart-button />
                         </div>
                     </div>
                 </div>
             </header>
 
             <main class="container mx-auto px-4 py-6">
-                <div>
+                <div class="flex flex-col space-y-4">
+                    <div v-if="!isHomePage && $page.props?.breadcrumbs?.length">
+                        <Breadcrumbs />
+                    </div>
+
                     <slot />
                 </div>
             </main>
@@ -72,9 +103,6 @@ const currentYear = new Date().getFullYear();
                         <ApplicationLogo
                             class="w-8 h-8 bg-brand fill-current"
                         />
-                        <span class="text-lg font-bold uppercase text-gray-750">
-                            {{ page.props.app?.name }}
-                        </span>
                     </Link>
                     <div class="text-sm text-gray-500">
                         &copy; {{ currentYear }} {{ page.props.app?.name }}. All

@@ -1,93 +1,94 @@
 <template>
-    <div class="flex items-center text-2xl">
+    <div class="flex items-center">
         <span
             v-for="star in maxStars"
             :key="star"
-            class="cursor-pointer transition-colors duration-200 text-sm"
-            :class="{
-                'text-gray-700': star <= currentRating, // Заповнені зірки
-                'text-gray-300': star > currentRating, // Незаповнені зірки
-                'hover:text-gray-700': !readOnly, // Ефект при наведенні для інтерактивних зірок
-            }"
+            class="cursor-pointer transition-colors duration-200"
+            :class="starColorClass(star)"
+            @mouseenter="onHover(star)"
+            @mouseleave="onLeave"
             @click="setRating(star)"
-            @mouseover="hoverRating = star"
-            @mouseleave="hoverRating = 0"
         >
-            &#9733;
-        </span>
-        <span
-            v-if="showAverage && averageRating > 0"
-            class="ml-2 text-sm text-gray-600"
-        >
-            ({{ averageRating.toFixed(1) }})
+            <!-- Повна -->
+            <IconStarFilled v-if="star <= fullStars" :size="size" />
+
+            <!-- Половина -->
+            <IconStarHalfFilled
+                v-else-if="star === fullStars + 1 && hasHalfStar"
+                :size="size"
+            />
+
+            <!-- Порожня -->
+            <IconStar v-else :size="size" />
         </span>
     </div>
 </template>
 
 <script setup>
-import { ref, watch, computed } from "vue";
+import {
+    IconStar,
+    IconStarFilled,
+    IconStarHalfFilled,
+} from "@tabler/icons-vue";
+import { ref, computed } from "vue";
 
-// Визначення пропсів
 const props = defineProps({
-    modelValue: {
-        // Для v-model, якщо використовуємо для вводу
-        type: Number,
-        default: 0,
-    },
-    initialRating: {
-        // Для відображення вже існуючого рейтингу (read-only)
-        type: Number,
-        default: 0,
-    },
-    maxStars: {
-        type: Number,
-        default: 5,
-    },
-    readOnly: {
-        type: Boolean,
-        default: false,
-    },
-    showAverage: {
-        type: Boolean,
-        default: false,
-    },
-    averageRating: {
-        type: Number,
-        default: 0,
-    },
+    modelValue: { type: Number, default: 0 },
+    maxStars: { type: Number, default: 5 },
+    readOnly: { type: Boolean, default: true },
+    showAverage: { type: Boolean, default: true },
+    averageRating: { type: Number, default: 0 },
+    size: { type: [Number, String], default: 24 },
 });
 
-// Визначення емітів
 const emit = defineEmits(["update:modelValue", "rating-selected"]);
 
-// Реактивні змінні
-const internalRating = ref(props.modelValue || props.initialRating);
 const hoverRating = ref(0);
 
-// Обчислювана властивість для відображення зірок (враховує hover)
-const currentRating = computed(() => hoverRating.value || internalRating.value);
+// 🔢 Поточний рейтинг
+const currentRating = computed(() => {
+    if (hoverRating.value > 0) return hoverRating.value;
 
-// Спостерігач за modelValue або initialRating
-watch(
-    () => props.modelValue,
-    (newVal) => {
-        internalRating.value = newVal;
-    },
-);
+    if (props.modelValue > 0) return props.modelValue;
 
-watch(
-    () => props.initialRating,
-    (newVal) => {
-        if (props.readOnly) {
-            internalRating.value = newVal;
-        }
-    },
-);
+    if (props.readOnly && props.showAverage) {
+        return props.averageRating;
+    }
 
-// Методи
+    return 0;
+});
+
+// ⭐ Повні зірки
+const fullStars = computed(() => Math.floor(currentRating.value));
+
+// ⭐ Є половинка?
+const hasHalfStar = computed(() => currentRating.value % 1 >= 0.5);
+
+// 🎨 Колір
+const starColorClass = (star) => {
+    if (star <= Math.ceil(currentRating.value)) {
+        return ["text-orange-500", !props.readOnly && "hover:text-orange-400"];
+    }
+
+    return ["text-gray-300", !props.readOnly && "hover:text-orange-400"];
+};
+
+// 🖱 Hover
+const onHover = (star) => {
+    if (!props.readOnly) {
+        hoverRating.value = star;
+    }
+};
+
+const onLeave = () => {
+    if (!props.readOnly) {
+        hoverRating.value = 0;
+    }
+};
+
+// 🖱 Click
 const setRating = (star) => {
     if (!props.readOnly) {
-        internalRating.value = star;
         emit("update:modelValue", star);
         emit("rating-selected", star);
     }

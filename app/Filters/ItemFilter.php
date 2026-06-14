@@ -31,20 +31,51 @@ class ItemFilter extends QueryFilter
         return $this->builder->orderBy($value, $direction);
     }
 
-    public function min_price($value)
+    public function min_price($value = 0)
     {
         return $this->builder->where('price', '>=', $value);
     }
 
-    public function max_price($value)
+    public function max_price($value = 0)
     {
         return $this->builder->where('price', '<=', $value);
     }
 
-    public function manufacturers($value)
+    public function manufacturers($values)
     {
-        // Очікуємо масив ID: ?manufacturers[]=1&manufacturers[]=2
-        $ids = is_array($value) ? $value : explode(',', $value);
-        return $this->builder->whereIn('manufacturer_id', $ids);
+        return $this->builder->whereIn('manufacturer_id', (array) $values);
+    }
+
+    public function rating($value)
+    {
+        return $this->builder->where('rating', '>=', $value);
+    }
+
+    public function category_id($value)
+    {
+        // Знаходимо категорію, щоб отримати дерево
+        $category = \App\Models\Category::find($value);
+
+        if ($category) {
+            // Отримуємо масив ID: [1, 2, 5, 8...]
+            $allIds = $category->getAllChildrenIds();
+
+            // Використовуємо whereIn для вибірки товарів з усіх категорій
+            return $this->builder->whereIn('category_id', $allIds);
+        }
+
+        return $this->builder->where('category_id', $value);
+    }
+
+    public function promo($value = null)
+    {
+        // Якщо значення не передано або воно false/0, просто повертаємо builder
+        if (!$value || filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
+            return $this->builder;
+        }
+
+        return $this->builder
+            ->whereNotNull('old_price')
+            ->whereRaw('old_price > price');
     }
 }

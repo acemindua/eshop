@@ -1,7 +1,7 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Link } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
-import { IconUser, IconListCheck, IconUserFilled } from "@tabler/icons-vue";
+import { IconUser, IconUserFilled } from "@tabler/icons-vue";
 import AuthModal from "./Auth/AuthModal.vue";
 
 const page = usePage();
@@ -18,7 +18,7 @@ const openModal = () => {
         <Link
             v-if="user"
             :href="route('account')"
-            class="flex flex-col items-center hover:text-brand duration-150 rounded-lg"
+            class="flex items-center duration-150 rounded-lg gap-2"
             :class="{
                 'text-brand md:text-gray-800': $page.url.startsWith('/account'),
             }"
@@ -30,19 +30,21 @@ const openModal = () => {
             />
             <IconUser v-else :size="24" :stroke="2" />
 
-            <span class="text-xs font-semibold md:font-normal tracking-tight">{{
-                $t("Кабінет")
-            }}</span>
+            <span
+                class="hidden md:block text-sm font-semibold tracking-tight group-hover:underline"
+                >{{ $t("Кабінет") }}</span
+            >
         </Link>
         <button
             v-else
             @click="openModal"
-            class="flex flex-col items-center hover:text-brand duration-150"
+            class="flex items-center gap-2 duration-150 group"
         >
             <IconUser :size="24" :stroke="2" />
-            <span class="text-xs font-semibold md:font-normal tracking-tight">{{
-                $t("Увійти")
-            }}</span>
+            <span
+                class="hidden md:block text-sm font-semibold tracking-tight group-hover:underline"
+                >{{ $t("Login") }}</span
+            >
         </button>
     </div>
 

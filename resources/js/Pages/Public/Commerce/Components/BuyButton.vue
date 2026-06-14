@@ -46,7 +46,7 @@ const addToCart = () => {
     <button
         @click.stop="addToCart"
         :disabled="isProcessing || isInCart"
-        class="relative overflow-hidden flex items-center justify-center gap-2 px-5 py-2.5 rounded-full transition-all duration-300 focus:outline-none font-bold text-sm shadow-sm"
+        class="relative overflow-hidden flex items-center justify-center gap-2 px-2.5 md:px-5 py-2.5 rounded-full transition-all duration-300 focus:outline-none font-bold text-sm shadow-sm"
         :class="[
             isInCart
                 ? 'bg-gray-100 text-gray-600 cursor-default'

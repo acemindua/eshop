@@ -16,6 +16,9 @@ use Inertia\Response;
 
 class CategoryController extends Controller
 {
+
+    protected const DIRECTORY = 'Admin/Commerce/Categories';
+    protected const ROUTE_PREFIX = 'admin.commerce.categories';
     /**
      * Display a listing of categories.
      * Includes the parent relationship to show hierarchy in the table.
@@ -31,11 +34,12 @@ class CategoryController extends Controller
             ->paginate(Settings::get('items_per_page', 15))
             ->withQueryString();
 
-        return Inertia::render('Admin/Commerce/Categories/Index', [
+        return Inertia::render(self::DIRECTORY . '/Index', [
             'data' => [
-                'items' => CategoryResource::collection($categories)
+                'categories' => CategoryResource::collection($categories)
             ],
-            'filters' => request()->only(['search', 'status']),
+            'filters' => request()->all(['search', 'status', 'field', 'direction']),
+            'routePrefix' => self::ROUTE_PREFIX
         ]);
     }
 
@@ -46,12 +50,14 @@ class CategoryController extends Controller
     {
         Gate::authorize('create', Category::class);
 
-        return Inertia::render('Admin/Commerce/Categories/Create', [
+        return Inertia::render(self::DIRECTORY . '/Create', [
             'data' => [
                 'categories' => CategoryResource::collection($this->getParentOptions()),
                 'public'     => false,
                 'order'      => (Category::max('order') ?? 0) + 1,
             ],
+            'routePrefix' => self::ROUTE_PREFIX,
+            'isEditing' => false,
         ]);
     }
 
@@ -64,7 +70,7 @@ class CategoryController extends Controller
 
         $category = Category::create($request->validated());
 
-        return redirect()->route('admin.categories.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type'    => 'success',
                 'message' => "Category `{$category->title}` successfully created!",
@@ -79,7 +85,7 @@ class CategoryController extends Controller
     {
         Gate::authorize('view', $category);
 
-        return Inertia::render('Admin/Commerce/Categories/Show', [
+        return Inertia::render(self::DIRECTORY . '/Show', [
             'data' => [
                 'category' => new CategoryResource($category->load('parent'))
             ],
@@ -94,11 +100,13 @@ class CategoryController extends Controller
     {
         Gate::authorize('update', $category);
 
-        return Inertia::render('Admin/Commerce/Categories/Edit', [
+        return Inertia::render(self::DIRECTORY . '/Edit', [
             'data' => [
-                'category'   => new CategoryResource($category),
+                'category'   => $category,
                 'categories' => CategoryResource::collection($this->getParentOptions($category->id)),
             ],
+            'routePrefix' => self::ROUTE_PREFIX,
+            'isEditing' => true,
         ]);
     }
 
@@ -111,7 +119,7 @@ class CategoryController extends Controller
 
         $category->update($request->validated());
 
-        return redirect()->route('admin.categories.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type'    => 'success',
                 'message' => "Category `{$category->title}` successfully updated!",
@@ -129,7 +137,7 @@ class CategoryController extends Controller
         $category->clearMediaCollection('images');
         $category->delete();
 
-        return redirect()->route('admin.categories.index')->with([
+        return redirect()->route(self::ROUTE_PREFIX . '.index')->with([
             'alert' => [
                 'type'    => 'success',
                 'message' => "Category successfully deleted!",
@@ -144,12 +152,12 @@ class CategoryController extends Controller
      */
     private function getParentOptions(?int $excludeId = null)
     {
-        $query = Category::query()->select(['id', 'title', 'parent_id']);
+        $query = Category::all();
 
         if ($excludeId) {
             $query->where('id', '!=', $excludeId);
         }
 
-        return $query->get();
+        return $query;
     }
 }

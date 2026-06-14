@@ -31,14 +31,36 @@ onUnmounted(() => window.removeEventListener("keydown", handleEsc));
     <div class="relative font-['Exo_2']">
         <button
             @click="toggleCart"
-            class="p-2 transition-colors relative group"
-            :class="{ 'border-brand bg-brand/5': isOpen }"
+            class="p-2 transition-colors relative group flex items-center gap-2 border border-transparent rounded-lg"
+            :class="
+                isOpen
+                    ? 'border border-brand bg-gray-100'
+                    : cartTotal > 0
+                      ? 'bg-gray-50'
+                      : 'border'
+            "
         >
             <IconShoppingBag :stroke="1.5" :size="24" class="text-gray-700" />
 
+            <p
+                v-if="cartTotal > 0"
+                class="text-sm font-semibold text-brand relative"
+            >
+                <span class="text-xs text-gray-500 absolute -top-3 left-0"
+                    >Сума:</span
+                >
+                {{ $formatPrice(cartTotal) }}
+            </p>
+            <span
+                v-else
+                class="hidden md:block text-sm font-semibold tracking-tight group-hover:underline"
+            >
+                {{ $t("Cart") }}
+            </span>
+
             <span
                 v-if="cartCount > 0"
-                class="absolute -top-2 -right-2 bg-gray-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-sm"
+                class="absolute -top-1 -right-1 bg-brand text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-sm"
             >
                 {{ cartCount }}
             </span>
@@ -93,55 +115,50 @@ onUnmounted(() => window.removeEventListener("keydown", handleEsc));
                         </div>
                         <div class="flex-grow min-w-0">
                             <h4
-                                class="text-xs font-bold text-gray-900 truncate uppercase tracking-tight"
+                                class="text-xs font-bold text-gray-900 truncate uppercase"
                             >
                                 {{ item.name }}
                             </h4>
-                            <div class="text-[10px] text-gray-500 font-medium">
-                                {{ item.quantity }} × {{ item.price }} ₴
-                            </div>
+                            <p class="text-[10px] text-gray-500 font-medium">
+                                {{ item.quantity }} ×
+                                {{ $formatPrice(item.price) }}
+                            </p>
                         </div>
-                        <div
-                            class="text-sm font-black text-gray-900 whitespace-nowrap"
-                        >
-                            {{ item.price * item.quantity }} ₴
+                        <div class="text-sm font-black text-gray-900">
+                            {{ $formatPrice(item.price * item.quantity) }}
                         </div>
                     </div>
                 </div>
 
-                <div v-else class="p-10 text-center">
-                    <p class="text-gray-400 text-sm italic">
-                        {{ $t("Cart is empty") }}
-                    </p>
+                <div
+                    v-else
+                    class="p-10 text-center text-gray-400 text-sm italic"
+                >
+                    {{ $t("Cart is empty") }}
                 </div>
 
-                <div
-                    v-if="cartCount > 0"
-                    class="p-4 bg-white border-t space-y-2"
-                >
+                <div v-if="cartCount > 0" class="p-4 bg-white border-t">
                     <div class="flex justify-between items-center mb-4 px-1">
                         <span
                             class="text-gray-400 text-[10px] font-bold uppercase tracking-widest"
                             >{{ $t("Total") }}:</span
                         >
-                        <span
-                            class="text-xl font-black tracking-tighter text-indigo-700"
-                            >{{ cartTotal }} ₴</span
-                        >
+                        <span class="text-xl font-black text-indigo-700">{{
+                            $formatPrice(cartTotal)
+                        }}</span>
                     </div>
-
                     <div class="grid grid-cols-2 gap-2">
                         <Link
                             :href="route('cart.index')"
                             @click="closeCart"
-                            class="flex items-center justify-center bg-gray-100 text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition"
+                            class="flex justify-center bg-gray-100 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition"
                         >
                             {{ $t("View Cart") }}
                         </Link>
                         <Link
                             :href="route('checkout')"
                             @click="closeCart"
-                            class="flex items-center justify-center bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition shadow-lg shadow-gray-200"
+                            class="flex justify-center bg-black text-white py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition"
                         >
                             {{ $t("Checkout") }}
                         </Link>
@@ -150,11 +167,7 @@ onUnmounted(() => window.removeEventListener("keydown", handleEsc));
             </div>
         </transition>
 
-        <div
-            v-if="isOpen"
-            @click="closeCart"
-            class="fixed inset-0 z-40 bg-transparent"
-        ></div>
+        <div v-if="isOpen" @click="closeCart" class="fixed inset-0 z-40"></div>
     </div>
 </template>
 

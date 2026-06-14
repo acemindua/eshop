@@ -2,7 +2,7 @@
 import useApiResourceService from "@/Composables/useApiResourceService.js";
 import ProductCard from "./ProductCard.vue";
 import { ref, watch, computed, onMounted } from "vue";
-import { usePage } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-vue";
 import SkeletonProductCard from "./SkeletonProductCard.vue";
 
@@ -39,6 +39,31 @@ watch(
     },
     { immediate: true },
 );
+
+/* const schemaMarkup = computed(() => {
+    if (items.value.length === 0) return null;
+
+    return JSON.stringify({
+        "@context": "https://schema.org/",
+        "@type": "ItemList",
+        itemListElement: items.value.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+                "@type": "Product",
+                name: item.title,
+                url: route("page.show", item.slug),
+                image: item.images?.[0]?.url,
+                offers: {
+                    "@type": "Offer",
+                    priceCurrency: "UAH",
+                    price: item.price,
+                    availability: "https://schema.org/InStock",
+                },
+            },
+        })),
+    });
+}); */
 </script>
 
 <template>
@@ -46,6 +71,13 @@ watch(
         v-if="loading || items.length > 0"
         class="flex flex-col space-y-4 w-full overflow-hidden"
     >
+        <!-- <Head v-if="schemaMarkup">
+            <component
+                is="script"
+                type="application/ld+json"
+                v-html="schemaMarkup"
+            />
+        </Head> -->
         <h2 class="text-2xl font-semibold text-gray-800">
             {{ $t("Popular products") }}
         </h2>
@@ -59,14 +91,14 @@ watch(
 
         <div v-else class="relative border-t border-l w-full group/slider">
             <button
-                class="swiper-prev-btn absolute left-2 top-1/2 -translate-y-1/2 z-40 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-md transition-all border opacity-0 group-hover/slider:opacity-100 flex items-center justify-center w-10 h-10"
+                class="swiper-prev-btn absolute left-2 top-1/2 -translate-y-1/2 z-40 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-xl transition-all border opacity-0 group-hover/slider:opacity-100 flex items-center justify-center w-10 h-10"
                 aria-label="Previous slide"
             >
                 <IconChevronLeft class="w-6 h-6 stroke-[2]" />
             </button>
 
             <button
-                class="swiper-next-btn absolute right-2 top-1/2 -translate-y-1/2 z-40 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-md transition-all border opacity-0 group-hover/slider:opacity-100 flex items-center justify-center w-10 h-10"
+                class="swiper-next-btn absolute right-2 top-1/2 -translate-y-1/2 z-40 bg-white/90 hover:bg-white text-gray-800 p-2 rounded-full shadow-xl transition-all border opacity-0 group-hover/slider:opacity-100 flex items-center justify-center w-10 h-10"
                 aria-label="Next slide"
             >
                 <IconChevronRight class="w-6 h-6 stroke-[2]" />

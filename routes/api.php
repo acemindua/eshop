@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiItemsController;
+use App\Http\Controllers\Api\{CommerceController};
 use App\Http\Controllers\Api\HelpMainController;
 use App\Http\Controllers\Api\UploadImageController;
 use App\Http\Controllers\Api\MediaController;
@@ -15,7 +16,7 @@ Route::get('/commerce/popular', [ApiItemsController::class, 'popular'])->name('a
 /**
  * Commerce
  */
-Route::get('/commerce/items', [ApiItemsController::class, 'index'])->name('api.commerce.items');
+Route::get('/commerce/items', [CommerceController::class, 'getItems'])->name('api.commerce.items');
 
 Route::get('/menu', [HelpMainController::class, 'getMenu'])->name('api.menu');
 Route::get('/menu/categories', [HelpMainController::class, 'getCategories'])->name('api.get.categories');

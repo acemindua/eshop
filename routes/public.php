@@ -41,11 +41,12 @@ Route::controller(CartController::class)->group(function () {
 Route::controller(HomeController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/search', 'search')->name('search');
-    Route::get('/category__{category:slug}', 'categoryShow')->name('category.show');
+    //Route::get('/category__{category:slug}', 'category')->name('category.show');
     Route::get('/brand__{brand:slug}', 'brandShow')->name('brand.show');
 
-    // Динамічний роут має бути останнім, щоб не перехоплювати фіксовані адреси
-    Route::get('/{slug}/{optional?}', 'resolveDynamicRoute')
+
+
+    Route::get('/{slug}/{optional?}', 'resolve')
         ->where('slug', '[a-z0-9-]+')
-        ->name('page.show');
+        ->name('resolve.route');
 });

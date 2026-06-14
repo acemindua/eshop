@@ -53,10 +53,7 @@ const goSearch = (e) => {
 <template>
     <div class="flex flex-col w-full min-h-screen bg-gray-200 text-sm gap-2">
         <div>
-            <app-navigations
-                :slug="`header`"
-                :locale="$page.props?.config?.currentLocale || 'en'"
-            />
+          
         </div>
         <header class="bg-white p-4">
             <div class="w-full mx-auto">

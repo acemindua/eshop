@@ -3,12 +3,14 @@
         v-if="hasMultipleLocales"
         class="relative inline-block text-left text-sm"
     >
-        <Menu>
-            <MenuButton
-                class="py-2 uppercase inline-flex items-center "
-            >
-                <span>{{ currentMappedLocale }}</span>
-                <IconChevronDown stroke="{2}" />
+        <Menu v-slot="{ open }">
+            <MenuButton class="py-2 uppercase inline-flex items-center">
+                <span>{{ currentMappedLocale }}</span
+                ><IconChevronDown
+                    class="transition-transform duration-200"
+                    :class="open ? 'rotate-180' : ''"
+                    :stroke="1"
+                />
             </MenuButton>
 
             <transition

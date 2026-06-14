@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class CategoryResource extends JsonResource
 {
@@ -17,12 +18,13 @@ class CategoryResource extends JsonResource
         return [
             'id'        => $this->id,
             'title'     => $this->title,
+            'url'       => LaravelLocalization::getLocalizedURL(app()->getLocale(), route('resolve.route', ['slug' => $this->slug])),
             'slug'      => $this->slug,
             'public'    => $this->public,
             'parent'    => $this->whenLoaded('parent', fn() => new CategoryResource($this->parent)),
             'childs'    => CategoryResource::collection($this->whenLoaded('childs')),
             'items'     => ItemResource::collection($this->whenLoaded('items')),
-            'image'     => $this->image,
+            'images'    => $this->sorted_images ?? [],
         ];
     }
 }

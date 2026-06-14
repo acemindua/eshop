@@ -13,53 +13,45 @@ Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push(__('Home'), route('home'));
 });
 
-// Category Show
-Breadcrumbs::for('category.show', function (BreadcrumbTrail $trail, string $slug) {
-    $categorySlug = str_replace('category__', '', $slug);
-    $category = Category::whereTranslation('slug', $categorySlug)->firstOrFail();
-    $translation = $category->translations->first();
+Breadcrumbs::for(
+    'resolve.route',
+    function (BreadcrumbTrail $trail, string $slug) {
 
-    if ($category->parent) {
-        $parentSlug = $category->parent->translations->first()->slug;
-        $trail->parent('category.show', $parentSlug);
-    } else {
-        $trail->parent('home');
-    }
-
-    $title = $category->title ?? $translation->title;
-    $slugToUse = $category->slug ?? $translation->slug;
-
-    $trail->push($title, route('category.show', $slugToUse));
-});
-
-// Dynamic Page / Product Show
-Breadcrumbs::for('page.show', function (BreadcrumbTrail $trail, string $slug) {
-    // Item Route Handler
-    if ($item = Item::whereTranslation('slug', $slug)->first()) {
-        $translation = $item->translations->first();
-        $title = $item->title ?? $translation->title;
-
-        if ($item->category) {
-            $trail->parent('category.show', $item->category->slug);
-        } else {
+        if ($page = Page::whereTranslation('slug', $slug)->first()) {
+            $translation = $page->translations->first();
+            $title = $page->title ?? $translation->title;
             $trail->parent('home');
+            $trail->push($title, route('resolve.route', $slug));
         }
 
-        $trail->push($title, route('page.show', $slug));
+        if ($category = Category::whereTranslation('slug', $slug)->first()) {
+            $translation = $category->translations->first();
+            $title = $category->title ?? $translation->title;
+            if ($category->parent) {
+                $parentSlug = $category->parent->translations->first()->slug;
+                $trail->parent('resolve.route', $parentSlug);
+            } else {
+                $trail->parent('home');
+            }
+
+            $trail->push($title, route('resolve.route', $slug));
+        }
+
+
+        if ($item = Item::whereTranslation('slug', $slug)->first()) {
+            $translation = $item->translations->first();
+            $title = $item->title ?? $translation->title;
+
+            if ($item->category) {
+                $trail->parent('resolve.route', $item->category->slug);
+            } else {
+                $trail->parent('home');
+            }
+
+            $trail->push($title, route('resolve.route', $slug));
+        }
     }
-    // Static Page Route Handler
-    elseif ($page = Page::whereTranslation('slug', $slug)->first()) {
-        $trail->parent('home');
-        $translation = $page->translations->first();
-        $title = $page->title ?? $translation->title;
-        $trail->push($title, route('page.show', $slug));
-    }
-    // Fallback Handler
-    else {
-        $trail->parent('home');
-        $trail->push($slug, route('page.show', $slug));
-    }
-});
+);
 
 // --- ADMIN PANEL BREADCRUMBS ---
 

@@ -44,7 +44,7 @@ const title = computed(() => {
                 ]"
             >
                 <Transition name="sidebar-slide-fade">
-                    <div class="bg-gray-100 flex flex-col z-[60]">
+                    <div class="bg-gray-50 flex flex-col z-[60]">
                         <AdminSidebar />
                     </div>
                 </Transition>
@@ -73,7 +73,7 @@ const title = computed(() => {
                     <div
                         v-if="$slots.sidenav"
                         v-show="isSecondarySidebarVisible"
-                        class="w-[200px] border-l dark:border-slate-800 bg-white dark:bg-slate-900 z-50 relative"
+                        class="w-[200px] md:w-[280px] border-l dark:border-slate-800 bg-white dark:bg-slate-900 z-50 relative"
                     >
                         <slot name="sidenav" />
                     </div>

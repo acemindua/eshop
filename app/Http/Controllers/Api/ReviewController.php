@@ -7,6 +7,7 @@ use App\Http\Resources\ReviewResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -29,7 +30,12 @@ class ReviewController extends Controller
             // Завантажуємо відгуки. 
             // Спробуйте замінити 'author' на 'user', якщо виникне помилка
             $reviews = ReviewResource::collection($reviewable->getReviews());
-            return response()->json($reviews);
+            return response()->json([
+                'reviews'   => $reviews,
+                'total'     => $reviewable->totalReviews(),
+                'rating'    => $reviewable->overallAverageRating(),
+                'breakdown' => $reviewable->ratingCounts()
+            ]);
         } catch (\Exception $e) {
             Log::error("Reviews Error: " . $e->getMessage());
             return response()->json([

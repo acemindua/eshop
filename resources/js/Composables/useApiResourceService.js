@@ -78,10 +78,15 @@ export default function useApiResourceService() {
      * Send GET request to fetch data from API
      *
      * @param {String} url - API endpoint
+     * @param {Object} params - query parameters (optional)
      * @returns {Promise}
      */
-    const fetchData = (url) => {
-        return handleRequest(() => axios.get(url), "Failed to fetch data.");
+    const fetchData = (url, params = {}) => {
+        // axios.get приймає конфігурацію другим аргументом, де є ключ params
+        return handleRequest(
+            () => axios.get(url, { params }),
+            "Failed to fetch data.",
+        );
     };
 
     /**

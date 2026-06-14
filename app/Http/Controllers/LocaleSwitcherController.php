@@ -17,17 +17,15 @@ class LocaleSwitcherController extends Controller
      */
     public function change(string $locale)
     {
-        $locales = array_keys(LaravelLocalization::getSupportedLocales());
         try {
-            if (in_array($locale,  $locales)) {
+            if (in_array($locale,  array_keys(LaravelLocalization::getSupportedLocales()))) {
                 app()->setLocale($locale);
                 session()->put('locale', $locale);
             } else {
                 abort(404);
             }
-
             $currentUrl = url()->previous();
-            $url = LaravelLocalization::getLocalizedURL($locale, $currentUrl);
+            $url = LaravelLocalization::getLocalizedURL(app()->getLocale(), $currentUrl);
             return redirect()->to($url);
 
             // return redirect()->back();

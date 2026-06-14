@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full">
+    <div>
         <div
             v-if="loading && menuItems.length === 0"
             class="py-2 text-gray-400 italic text-xs"
