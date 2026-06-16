@@ -29,7 +29,7 @@ const discountPercentage = computed(() => {
 
 <template>
     <div
-        class="relative group h-full w-full overflow-hidden border-b border-r p-4 bg-white"
+        class="relative group h-full w-full overflow-hidden border-r border-b p-4 bg-white"
     >
         <div
             v-if="hasDiscount && data.quantity > 0"
@@ -40,7 +40,7 @@ const discountPercentage = computed(() => {
         <div class="flex flex-col">
             <!--images-->
             <div
-                class=" text-gray-300 flex items-center justify-center h-32 md:h-64 relative z-10 w-full"
+                class="text-gray-300 flex items-center justify-center h-32 md:h-64 relative z-10 w-full"
             >
                 <template v-if="imagesCount > 0">
                     <img
@@ -74,8 +74,8 @@ const discountPercentage = computed(() => {
             </div>
 
             <!--price&buy-->
-            <div class="grid grid-cols-2 h-12">
-                <div class="flex items-center">
+            <div class="flex items-center h-12">
+                <div class="flex flex-1 items-center">
                     <ProductPrice
                         :q="data.quantity || 0"
                         :has-discount="hasDiscount"

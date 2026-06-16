@@ -90,14 +90,13 @@ class TranslationController extends Controller
 
             $content = $file->getContents();
 
-            // Match both $t('...') and __('...') supporting single and double quotes cleanly
+            // Match both $t('...') and __('...')
             preg_match_all('/(?:\$t|__)\s*\(\s*(?:\'([^\']+)\'|"([^"]+)")\s*\)/', $content, $matches);
 
-            // Merge matches from single quotes (index 1) and double quotes (index 2)
             $mergedMatches = array_merge(array_filter($matches[1]), array_filter($matches[2]));
 
             foreach ($mergedMatches as $key) {
-                // Skip dynamic keys, concatenations, or template literals
+                // Skip dynamic keys
                 if (preg_match('/[\'"+`]/', $key)) {
                     continue;
                 }
@@ -117,9 +116,10 @@ class TranslationController extends Controller
 
             $changed = false;
             foreach ($foundKeys as $key) {
-                // New keys are initialized as empty strings to trigger filters/highlights in UI
-                if (!isset($existing[$key])) {
-                    $existing[$key] = "";
+                // Якщо ключа немає АБО значення порожнє (тільки пробіли)
+                // Записуємо сам ключ як значення за замовчуванням
+                if (!isset($existing[$key]) || trim((string)$existing[$key]) === '') {
+                    $existing[$key] = $key;
                     $changed = true;
                 }
             }
@@ -129,7 +129,7 @@ class TranslationController extends Controller
             }
         }
 
-        return back()->with('success', 'Scan completed successfully!');
+        return back()->with('success', 'Scan completed and keys synchronized successfully!');
     }
 
     /**

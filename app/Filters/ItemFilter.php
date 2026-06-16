@@ -2,6 +2,9 @@
 
 namespace App\Filters;
 
+use App\Models\Item;
+use Illuminate\Support\Facades\Log;
+
 class ItemFilter extends QueryFilter
 {
     public function search($search = '')
@@ -9,6 +12,8 @@ class ItemFilter extends QueryFilter
         return $this->builder
             ->whereTranslationLike('title', '%' . $search . '%');
     }
+
+
 
     public function field($value)
     {
@@ -41,14 +46,21 @@ class ItemFilter extends QueryFilter
         return $this->builder->where('price', '<=', $value);
     }
 
-    public function manufacturers($values)
+    public function rating($value = 0)
     {
-        return $this->builder->whereIn('manufacturer_id', (array) $values);
-    }
+        if (!$value || !is_numeric($value)) {
+            return $this->builder;
+        }
 
-    public function rating($value)
-    {
-        return $this->builder->where('rating', '>=', $value);
+        return $this->builder->whereExists(function ($query) use ($value) {
+            $query->selectRaw(1)
+                ->from('ratings')
+                ->join('reviews', 'reviews.id', '=', 'ratings.review_id')
+                ->whereColumn('reviews.reviewable_id', 'items.id')
+                ->where('reviews.reviewable_type', \App\Models\Item::class)
+                ->groupBy('reviews.reviewable_id')
+                ->havingRaw('AVG(ratings.value) >= ?', [(float) $value]);
+        });
     }
 
     public function category_id($value)
@@ -67,7 +79,7 @@ class ItemFilter extends QueryFilter
         return $this->builder->where('category_id', $value);
     }
 
-    public function promo($value = null)
+    public function sale($value = false)
     {
         // Якщо значення не передано або воно false/0, просто повертаємо builder
         if (!$value || filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
@@ -77,5 +89,37 @@ class ItemFilter extends QueryFilter
         return $this->builder
             ->whereNotNull('old_price')
             ->whereRaw('old_price > price');
+    }
+
+    public function in_stock($value = false)
+    {
+        if (!$value || filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === false) {
+            return $this->builder;
+        }
+
+        return $this->builder
+            ->whereRaw('quantity > 0');
+    }
+
+    public function brands($values = [])
+    {
+        $brandIds = is_array($values) ? $values : explode(',', $values);
+        return $this->builder->whereIn('brand_id', $brandIds);
+    }
+
+    public function sort($value = null)
+    {
+        return match ($value) {
+            'price_asc' => $this->builder->orderBy('price', 'asc'),
+            'price_desc' => $this->builder->orderBy('price', 'desc'),
+            'created_at_desc' => $this->builder->latest(),
+
+            // Використовуємо withAvg для підрахунку рейтингу без явних JOIN
+            'rating_desc' => $this->builder
+                ->withAvg('ratings as avg_rating', 'value') // Примусово називаємо поле 'avg_rating'
+                ->orderBy('avg_rating', 'desc'),
+
+            default => $this->builder->latest(),
+        };
     }
 }

@@ -1,7 +1,7 @@
 <script setup>
 import { usePage, router } from "@inertiajs/vue3";
 import {
-    IconShoppingBag,
+    IconShoppingBagPlus,
     IconShoppingBagCheck,
     IconLoader2,
 } from "@tabler/icons-vue";
@@ -46,7 +46,7 @@ const addToCart = () => {
     <button
         @click.stop="addToCart"
         :disabled="isProcessing || isInCart"
-        class="relative overflow-hidden flex items-center justify-center gap-2 px-2.5 md:px-5 py-2.5 rounded-full transition-all duration-300 focus:outline-none font-bold text-sm shadow-sm"
+        class="relative overflow-hidden flex items-center justify-center gap-2 px-2.5 md:pr-4 py-2.5 rounded-full transition-all duration-300 focus:outline-none font-bold text-sm shadow-sm"
         :class="[
             isInCart
                 ? 'bg-gray-100 text-gray-600 cursor-default'
@@ -55,10 +55,10 @@ const addToCart = () => {
     >
         <div class="shine-effect"></div>
 
-        <IconLoader2 v-if="isProcessing" class="w-5 h-5 animate-spin" />
+        <IconLoader2 v-if="isProcessing" class="w-6 h-6 animate-spin" />
         <template v-else>
-            <IconShoppingBagCheck v-if="isInCart" :stroke="2" class="w-5 h-5" />
-            <IconShoppingBag v-else :stroke="2" class="w-5 h-5" />
+            <IconShoppingBagCheck v-if="isInCart" :stroke="2" class="w-6 h-6" />
+            <IconShoppingBagPlus v-else :stroke="2" class="w-6 h-6" />
         </template>
         <span class="hidden md:block">
             {{ isInCart ? $t("In Cart") : $t("Buy") }}

@@ -1,4 +1,7 @@
 {
+    "Highest Rated": "Highest Rated",
+    "Sale": "Venta",
+    "Products": ":count producto|:count productos",
     "reviews": ":count reseña|:count reseñas|:count reseñas",
     "(and :count more error)": "(y :count error más)",
     "(and :count more errors)": "(y :count error más)|(y :count errores más)|(y :count errores más)",

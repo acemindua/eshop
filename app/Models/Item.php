@@ -48,7 +48,7 @@ class Item extends Model implements HasMedia, TranslatableContract
      */
     protected $fillable = [
         'category_id',
-        'manufacturer_id',
+        'brand_id',
         'country',
         'quantity',
         'price',
@@ -109,9 +109,9 @@ class Item extends Model implements HasMedia, TranslatableContract
     /**
      * 
      */
-    public function manufacturer()
+    public function brand(): BelongsTo
     {
-        return $this->belongsTo(Manufacturer::class);
+        return $this->belongsTo(Brand::class);
     }
 
     /**
@@ -153,6 +153,7 @@ class Item extends Model implements HasMedia, TranslatableContract
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
     }
+
 
     /**
      * Прямий зв'язок з відгуками

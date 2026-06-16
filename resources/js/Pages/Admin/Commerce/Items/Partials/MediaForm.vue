@@ -1,114 +1,63 @@
 <script setup>
-import { ref, onMounted, computed, readonly } from "vue";
+import { ref, shallowRef, onMounted, computed, readonly } from "vue";
 import useMediaService from "@/Composables/useMediaService";
 import ImageList from "@/Components/Admin/ImageList.vue";
 import ImageUploader from "@/Components/Admin/ImageUploader.vue";
 
-// Enforce strict component communication boundaries via TypeScript-like standard types
 const props = defineProps({
-    data: {
-        type: Object,
-        default: () => null,
-    },
-    isEditing: {
-        type: Boolean,
-        default: false,
-    },
-    modelType: {
-        type: String,
-        default: "Item",
-    },
-    collection: {
-        type: String,
-        default: "images",
-    },
+    data: { type: Object, default: () => null },
+    isEditing: { type: Boolean, default: false },
+    modelType: { type: String, default: "Item" },
+    collection: { type: String, default: "images" },
 });
 
-// Define explicit emits if this orchestrator scales into a wizard or sub-form pipeline
 const emit = defineEmits(["stateChange", "error"]);
 
-const images = ref([]);
+// Використовуємо shallowRef для великих масивів об'єктів
+const images = shallowRef([]);
 
-/**
- * Computed Guard: Memoizes and safely unpacks the host model record identifier.
- */
 const modelId = computed(() => Number(props.data?.item?.id) || null);
 
-/**
- * Resource Metadata: Abstracted polymorphic context block required by the network service.
- */
 const meta = computed(() => ({
     model_type: props.modelType,
     model_id: modelId.value,
     collection: props.collection,
 }));
 
-// Initialize unified reactive decoupling hook from composition layer
 const { uploadMedia, getMedia, deleteMedia, sortMedia, uploadErrors } =
     useMediaService(meta.value);
 
-/**
- * Life Cycle Hook: Orchestrates contextual data extraction or fallback mapping on mount.
- */
 onMounted(async () => {
-    const baselineImages = props.data?.item?.sorted_images;
+    const baselineImages = props.data?.item?.sorted_images || [];
 
+    // Якщо створюємо новий запис, просто встановлюємо базовий стан
     if (!props.isEditing || !modelId.value) {
-        if (baselineImages) {
-            images.value = [...baselineImages];
-        }
+        images.value = [...baselineImages];
         return;
     }
 
     try {
-        const params = new URLSearchParams({
-            model_type: props.modelType,
-            model_id: String(modelId.value),
-            collection: props.collection,
-        });
-
-        const response = await getMedia("/api/media", { params });
-        images.value = response?.media || baselineImages || [];
+        const response = await getMedia("/api/media", { params: meta.value });
+        images.value = response?.media ?? baselineImages;
     } catch (error) {
-        console.error(
-            "[MediaForm] API synchronization failed, executing local state hydration:",
-            error,
-        );
-        if (baselineImages) {
-            images.value = [...baselineImages];
-        }
-        emit("error", "Failed to pull cloud media assets.");
+        console.error("[MediaForm] Sync failed:", error);
+        images.value = [...baselineImages];
+        emit("error", "Failed to sync media from server.");
     }
 });
 
-/**
- * Handle Asset Ingestion: Processes incoming payloads sequentially, tracking progression states.
- * Uses atomic array indexing to mitigate race conditions during simultaneous asynchronous chunk streams.
- * * @param {FileList|Array<File>} files
- */
 const handleUpload = async (files) => {
-    const filesArray = files instanceof FileList ? Array.from(files) : files;
-
-    if (!filesArray || filesArray.length === 0) {
-        console.warn(
-            "[MediaForm] Asset upload rejected: Received void or corrupted target structures.",
-        );
-        return;
-    }
+    const filesArray = Array.isArray(files) ? files : Array.from(files);
 
     for (const file of filesArray) {
-        const objectUrl = URL.createObjectURL(file);
-        const tempId = `temp-${Math.random().toString(36).substring(2, 11)}`;
-
+        const tempId = `temp-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
         const tempImage = {
             id: tempId,
-            url: objectUrl,
+            url: URL.createObjectURL(file),
             progress: 0,
             isUploading: true,
-            name: file.name,
         };
 
-        // Thread-safe update of current media array pointer layout
         images.value = [...images.value, tempImage];
 
         try {
@@ -116,75 +65,57 @@ const handleUpload = async (files) => {
                 "/api/media",
                 [file],
                 (percent) => {
-                    // Micro-optimization: directly modify targeting element instance parameters to skip global array rebuilds
-                    const target = images.value.find(
-                        (img) => img.id === tempId,
+                    images.value = images.value.map((img) =>
+                        img.id === tempId ? { ...img, progress: percent } : img,
                     );
-                    if (target) {
-                        target.progress = percent;
-                    }
                 },
             );
 
-            if (result?.media && result.media.length > 0) {
+            // --- ДОДАЙТЕ ЦЕЙ LOG ТА ПЕРЕВІРТЕ КОНСОЛЬ ---
+            console.log("Отримано відповідь від сервера:", result);
+            // ------------------------------------------
+
+            // Логіка оновлення стану
+            // Перевіряємо, чи повернув сервер щось валідне
+            const mediaItem = result?.media?.[0] || result?.data?.[0] || result;
+
+            if (mediaItem && mediaItem.id) {
                 images.value = images.value.map((img) =>
                     img.id === tempId
-                        ? { ...result.media[0], isUploading: false }
+                        ? { ...mediaItem, isUploading: false, progress: 100 }
                         : img,
                 );
-                emit("stateChange", {
-                    action: "upload",
-                    data: result.media[0],
-                });
+                emit("stateChange", { action: "upload", data: mediaItem });
+            } else {
+                throw new Error("Invalid server response structure");
             }
         } catch (error) {
-            console.error(
-                `[MediaForm] Hard failure processing attachment binary: ${file.name}`,
-                error,
-            );
+            console.error("[MediaForm] Помилка обробки результату:", error);
             images.value = images.value.filter((img) => img.id !== tempId);
-        } finally {
-            URL.revokeObjectURL(objectUrl);
-        }
-    }
-};
-
-/**
- * Handle Sequence Alignment: Commits transactional reordering operations upstream.
- * * @param {Array<Object>} newImages
- */
-const handleReorder = async (newImages) => {
-    if (!Array.isArray(newImages)) return;
-
-    images.value = newImages;
-
-    // Filter local transient memory components to build a flat list of actual primary keys
-    const orderedIds = images.value
-        .filter((img) => img?.id && !String(img.id).startsWith("temp-"))
-        .map((img) => Number(img.id));
-
-    if (orderedIds.length > 1) {
-        try {
-            // Decoupled layer communication: service encapsulates meta mapping autonomously
-            await sortMedia("/api/media/sort", orderedIds);
-            emit("stateChange", { action: "reorder", data: orderedIds });
-        } catch (error) {
-            console.error(
-                "[MediaForm] Synchronous sorting transaction failed downstream:",
-                error,
+            emit(
+                "error",
+                "Завантаження завершено, але не вдалося оновити список.",
             );
         }
     }
 };
 
-/**
- * Handle Asset Purging: Performs hard database or temporary layout component extractions.
- * * @param {number|string} id
- */
-const handleDelete = async (id) => {
-    const isTransient = String(id).startsWith("temp-");
+const handleReorder = async (newImages) => {
+    images.value = newImages;
+    const orderedIds = newImages
+        .filter((img) => typeof img.id === "number")
+        .map((img) => img.id);
 
-    if (isTransient) {
+    try {
+        await sortMedia("/api/media/sort", orderedIds);
+        emit("stateChange", { action: "reorder", data: orderedIds });
+    } catch (error) {
+        emit("error", "Sorting update failed.");
+    }
+};
+
+const handleDelete = async (id) => {
+    if (String(id).startsWith("temp-")) {
         images.value = images.value.filter((img) => img.id !== id);
         return;
     }
@@ -194,32 +125,20 @@ const handleDelete = async (id) => {
         images.value = images.value.filter((img) => img.id !== id);
         emit("stateChange", { action: "delete", data: id });
     } catch (error) {
-        console.error(
-            `[MediaForm] Deletion contract rejected by upstream service for entity identifier: ${id}`,
-            error,
-        );
+        emit("error", "Deletion failed.");
     }
 };
 </script>
 
 <template>
-    <div class="media-orchestrator-layout space-y-6">
+    <div class="media-orchestrator space-y-6">
         <div
-            v-if="uploadErrors && Object.keys(uploadErrors).length > 0"
-            class="p-4 bg-red-50/80 backdrop-blur-sm border border-red-200 rounded-lg shadow-sm"
+            v-if="uploadErrors && Object.keys(uploadErrors).length"
+            class="p-4 bg-red-50 border border-red-200 rounded-lg"
         >
-            <h5
-                class="text-xs font-bold uppercase tracking-wider text-red-800 mb-2"
-            >
-                Media Upload Failures
-            </h5>
-            <ul class="list-disc pl-5 space-y-1">
-                <li
-                    v-for="(errors, key) in uploadErrors"
-                    :key="key"
-                    class="text-xs font-mono text-red-600"
-                >
-                    {{ errors[0] }}
+            <ul class="text-xs text-red-600">
+                <li v-for="(err, key) in uploadErrors" :key="key">
+                    {{ err[0] }}
                 </li>
             </ul>
         </div>
@@ -232,9 +151,9 @@ const handleDelete = async (id) => {
         />
 
         <ImageUploader
-            :errors="uploadErrors"
             :disabled="!modelId && props.isEditing"
             @uploaded="handleUpload"
+            @error="(errs) => emit('error', errs)"
         />
     </div>
 </template>

@@ -20,9 +20,6 @@ const selectedLocale = ref(usePage().props.config.locale);
 const props = defineProps({
     form: { type: Object },
     errors: { type: Object },
-    isEditing: {
-        type: Boolean,
-        default: false, // Якщо не передано — вважається "створення"
-    },
+    isEditing: { type: Boolean, default: false },
 });
 </script>

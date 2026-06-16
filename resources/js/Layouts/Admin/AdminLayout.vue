@@ -156,7 +156,7 @@ const title = computed(() => {
                             <div class="border-l border-r h-full p-4">
                                 <slot />
                                 <div class="mt-4">
-                                    <VarDump :data="$page" />
+                                    <VarDump :data="$page.props?.data" />
                                 </div>
                             </div>
                         </Transition>

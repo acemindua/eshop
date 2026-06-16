@@ -7,12 +7,12 @@ use App\Filters\ItemFilter;
 use App\Http\Controllers\Controller;
 use App\Models\Item;
 use App\Models\Category;
-use App\Models\Manufacturer;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Http\Resources\BrandResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
-use App\Http\Resources\ManufacturerResource;
+use App\Models\Brand;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -33,7 +33,7 @@ class ItemController extends Controller
         Gate::authorize('viewAny', Item::class);
 
         $items = Item::filter($filter)
-            ->with(['category', 'manufacturer']) // Prevent N+1 on relationships
+            ->with(['category', 'brand'])
             ->orderBy('public', 'desc')
             ->latest('updated_at')
             ->paginate(Settings::get('items_per_page', 15))
@@ -58,14 +58,14 @@ class ItemController extends Controller
         return Inertia::render(self::DIRECTORY . '/Create', [
             'data' => [
                 'categories'    => CategoryResource::collection($this->getActiveCategories()),
-                'manufacturers' => ManufacturerResource::collection($this->getActiveManufacturers()),
+                'brands'        => BrandResource::collection($this->getActiveBrands()),
                 'countries'     => $this->getCountriesList(),
-                'defaults' => [
-                    'order'    => (Item::max('order') ?? 0) + 1,
-                    'quantity' => 0,
-                    'price'    => 0,
-                    'public'   => false,
-                ],
+                'order'    => (Item::max('order') ?? 0) + 1,
+                'quantity' => 0,
+                'price'    => 0,
+                'old_price'    => 0,
+                'public'   => false,
+
             ],
             'routePrefix' => self::ROUTE_PREFIX,
             'isEditing' => false,
@@ -115,7 +115,7 @@ class ItemController extends Controller
             'data' => [
                 'item'          => $item,
                 'categories'    => CategoryResource::collection($this->getActiveCategories()),
-                'manufacturers' => ManufacturerResource::collection($this->getActiveManufacturers()),
+                'brands'        => BrandResource::collection($this->getActiveBrands()),
                 'countries'     => $this->getCountriesList(),
             ],
             'isEditing' => true,
@@ -165,9 +165,9 @@ class ItemController extends Controller
         return Category::where('public', true)->get(['id']);
     }
 
-    private function getActiveManufacturers()
+    private function getActiveBrands()
     {
-        return Manufacturer::where('public', true)->get(['id']);
+        return Brand::where('public', true)->get(['id']);
     }
 
     private function getCountriesList(): array

@@ -38,10 +38,10 @@ class StoreItemRequest extends FormRequest
                 'integer',
                 Rule::exists('categories', 'id'), // Перевірка, чи є такий ID у таблиці categories
             ],
-            'manufacturer_id'       => [
+            'brand_id'       => [
                 'nullable',
                 'integer',
-                Rule::exists('manufacturers', 'id'), // Перевірка, чи є такий ID у таблиці categories
+                Rule::exists('brands', 'id'), // Перевірка, чи є такий ID у таблиці categories
             ],
             'country' => ['nullable', 'string', 'size:2'],
             'quantity'              => ['nullable', 'integer', 'min:-9999'],

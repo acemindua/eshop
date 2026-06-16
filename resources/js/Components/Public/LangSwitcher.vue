@@ -4,10 +4,12 @@
         class="relative inline-block text-left text-sm"
     >
         <Menu v-slot="{ open }">
-            <MenuButton class="py-2 uppercase inline-flex items-center">
+            <MenuButton
+                class=" rounded-full pl-2 py-[2px] bg-gray-100 uppercase font-semibold text-gray-500 inline-flex items-center"
+            >
                 <span>{{ currentMappedLocale }}</span
                 ><IconChevronDown
-                    class="transition-transform duration-200"
+                    class="transition-transform text-gray-600 duration-200 w-4 h-4"
                     :class="open ? 'rotate-180' : ''"
                     :stroke="1"
                 />

@@ -18,7 +18,7 @@ const props = defineProps({
 
 <template>
     <ItemForm
-        :data="{}"
+        :data="props.data || {}"
         :route-prefix="props.routePrefix"
         :is-editing="props.isEditing"
         :errors="props.errors"

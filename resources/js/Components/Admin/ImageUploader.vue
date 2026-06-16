@@ -1,26 +1,43 @@
 <template>
     <div
-        class="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition"
+        class="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all duration-300 ease-in-out"
         :class="[
             isDragActive
                 ? 'border-indigo-500 bg-indigo-50 text-indigo-600'
-                : 'border-gray-300 hover:bg-gray-100 text-gray-500',
+                : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50 text-gray-500',
+            props.disabled ? 'opacity-50 cursor-not-allowed grayscale' : '',
         ]"
-        @click="onClick"
-        @dragover.prevent="onDragOver"
-        @dragenter.prevent="onDragEnter"
-        @dragleave.prevent="onDragLeave"
-        @drop.prevent="onDrop"
+        @click="!props.disabled && onClick()"
+        @dragover.prevent="!props.disabled && (isDragActive = true)"
+        @dragleave.prevent="isDragActive = false"
+        @drop.prevent="!props.disabled && onDrop($event)"
+        role="button"
+        aria-label="Upload images"
     >
         <div
-            class="flex flex-col items-center justify-center pt-5 pb-6 pointer-events-none"
+            class="flex flex-col items-center justify-center space-y-2 pointer-events-none"
         >
-            <p class="mb-2 text-sm">
-                <span class="font-semibold">{{ $t("Click to upload") }}</span>
-                {{ $t("or drag and drop") }}
+            <svg
+                class="w-8 h-8 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 4v16m8-8H4"
+                />
+            </svg>
+            <p class="text-sm font-medium">
+                {{ $t("Click to upload") }}
+                <span class="text-gray-400 font-normal">{{
+                    $t("or drag and drop")
+                }}</span>
             </p>
-            <p class="text-xs text-gray-400">
-                SVG, PNG, JPG or GIF (MAX. 800x800px)
+            <p class="text-[10px] text-gray-400 uppercase tracking-wide">
+                PNG, JPG, WEBP (MAX. 2MB PER FILE)
             </p>
         </div>
 
@@ -38,57 +55,44 @@
 <script setup>
 import { ref } from "vue";
 
-const emit = defineEmits(["uploaded"]);
+const props = defineProps({
+    disabled: { type: Boolean, default: false },
+});
 
+const emit = defineEmits(["uploaded", "error"]);
 const fileInput = ref(null);
-const isDragActive = ref(false); // Стан для динамічної зміни стилів рамки
+const isDragActive = ref(false);
 
-/**
- * Trigger file input click programmatically
- */
-const onClick = () => {
-    fileInput.value?.click();
+const MAX_SIZE_MB = 2;
+
+const onClick = () => fileInput.value?.click();
+
+const processFiles = (files) => {
+    const fileArray = Array.from(files);
+    const validFiles = [];
+    const errors = [];
+
+    fileArray.forEach((file) => {
+        if (!file.type.startsWith("image/")) {
+            errors.push(`File ${file.name} is not an image.`);
+        } else if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+            errors.push(`File ${file.name} exceeds ${MAX_SIZE_MB}MB.`);
+        } else {
+            validFiles.push(file);
+        }
+    });
+
+    if (errors.length) emit("error", errors);
+    if (validFiles.length) emit("uploaded", validFiles);
 };
 
-/**
- * Handle manual file selection via input
- */
 const handleFiles = (event) => {
-    const files = Array.from(event.target.files);
-    if (files.length) {
-        emit("uploaded", files);
-    }
-    event.target.value = null; // Reset input
-};
-
-/**
- * Drag & Drop handlers
- */
-const onDragEnter = () => {
-    isDragActive.value = true;
-};
-
-const onDragOver = () => {
-    isDragActive.value = true;
-};
-
-const onDragLeave = () => {
-    isDragActive.value = false;
+    processFiles(event.target.files);
+    event.target.value = null; // Обов'язковий скид для повторного вибору того ж файлу
 };
 
 const onDrop = (event) => {
     isDragActive.value = false;
-
-    // Витягуємо файли з об'єкта події drop
-    const files = Array.from(event.dataTransfer?.files || []);
-
-    // Фільтруємо, щоб переконуватися, що це саме зображення (якщо користувач кине txt-файл)
-    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-
-    if (imageFiles.length) {
-        emit("uploaded", imageFiles);
-    }
-
-    console.log("uploaded files", imageFiles);
+    processFiles(event.dataTransfer.files || []);
 };
 </script>

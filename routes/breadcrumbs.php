@@ -112,7 +112,7 @@ foreach ($settingsResources as $name => $title) {
 $commerceResources = [
     'items'         => __('Items'),
     'categories'    => __('Categories'),
-    'manufacturers' => __('Manufacturers'),
+    'brands'        => __('Brands'),
     'orders'        => __('Orders'),
     // Commerce settings
     'shippings'       => __('Shippings'),

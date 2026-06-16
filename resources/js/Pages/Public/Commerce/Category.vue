@@ -1,175 +1,133 @@
 <script setup>
-import { computed, ref, onMounted, watch } from "vue";
+import { ref, computed, reactive, watch } from "vue";
+import debounce from "lodash.debounce";
+import { wTransChoice } from "laravel-vue-i18n";
+
 import Layout from "@/Layouts/Public/DefaultLayout.vue";
+import SortDropdown from "./Components/SortDropdown.vue";
+import ProductFilters from "./Components/ProductFilters.vue";
 import SkeletonProductCard from "./Components/SkeletonProductCard.vue";
 import ProductCard from "./Components/ProductCard.vue";
-import useApiResourceService from "@/Composables/useApiResourceService";
-import Checkbox from "@/Components/UI/Checkbox.vue";
-import Slider from "@vueform/slider"; // Імпорт бібліотеки
-import "@vueform/slider/themes/default.css"; // Імпорт стилів
-import TextInput from "@/Components/UI/TextInput.vue";
+import { useCatalogApi } from "@/Composables/useCatalogApi";
+import { IconFlaskOff } from "@tabler/icons-vue";
+import { Head } from "@inertiajs/vue3";
+import SeoMeta from "@/Components/SeoMeta.vue";
 
 defineOptions({ layout: Layout });
+const props = defineProps({ data: Object, seo: Object, schema: Object });
 
-const props = defineProps({ data: Object });
-
+const loading = ref(true);
 const category = computed(() => props.data?.category?.data || null);
-const { loading, fetchData } = useApiResourceService();
-const items = ref([]);
-// Розраховуємо дефолтні значення
-const defaultMin = computed(() => props.data?.min_price || 0);
-const defaultMax = computed(() => props.data?.max_price || 50000);
+const priceMax = ref(props.data?.price_max || 50000);
 
-const manufacturers = computed(() => props.data?.manufacturers || []);
-// Стан форми
-const form = ref({
-    promo: route().params.promo == "1",
-    // Якщо в URL немає параметрів ціни, беремо значення з бази (props)
-    min_price: Number(route().params.min_price) || defaultMin.value,
-    max_price: Number(route().params.max_price) || defaultMax.value,
-    manufacturers: [],
+const sortOptions = [
+    { value: "rating_desc", label: "Highest Rated" },
+    { value: "price_asc", label: "Price: Low to High" },
+    { value: "price_desc", label: "Price: High to Low" },
+];
+
+const { items, meta, brands, fetchCatalog } = useCatalogApi();
+
+const form = reactive({
+    in_stock: route().params.in_stock == "1",
+    sale: route().params.sale == "1",
+    rating: route().params.rating || 0,
+    sort: route().params.sort || sortOptions[0].value,
+    brands: route().params.brands?.split(",").map(Number) || [],
+    min_price: Number(route().params.min_price) || 0,
+    max_price: Number(route().params.max_price) || priceMax.value,
 });
 
-// Масив для роботи слайдера
-const priceRange = computed({
-    get: () => [form.value.min_price, form.value.max_price],
-    set: (val) => {
-        form.value.min_price = val[0];
-        form.value.max_price = val[1];
-    },
-});
-
-const getData = async () => {
+const getRequest = async () => {
     try {
-        const response = await fetchData(route("api.commerce.items"), {
+        await fetchCatalog(route("api.commerce.items"), {
+            ...form,
             category_id: category.value?.id,
-            promo: form.value.promo ? 1 : 0,
-            min_price: form.value.min_price,
-            max_price: form.value.max_price,
         });
-        console.log(response.data);
-        items.value = response?.data?.items || [];
     } catch (error) {
-        console.error("Errors:", error);
+        // Тут можна додати сповіщення (toast) для користувача
+        console.error("Не вдалося оновити товари", error);
+    } finally {
+        loading.value = false;
     }
 };
+const updateDebounce = debounce(getRequest, 500);
 
-let timeout = null;
-const updateFilters = () => {
-    const params = {
-        ...route().params,
-        promo: form.value.promo ? 1 : 0,
-        min_price: form.value.min_price > 0 ? form.value.min_price : null,
-        max_price: form.value.max_price < 50000 ? form.value.max_price : null,
-    };
-
-    // Видаляємо null значення для чистих URL
-    Object.keys(params).forEach(
-        (key) => params[key] === null && delete params[key],
-    );
-
-    window.history.replaceState({}, "", route(route().current(), params));
-    getData();
-};
-
-// Спостерігачі
-watch(() => form.value.promo, updateFilters);
-watch([() => form.value.min_price, () => form.value.max_price], () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(updateFilters, 500);
-});
-
-onMounted(getData);
+watch(form, () => updateDebounce(), { deep: true, immediate: true });
 </script>
 
 <template>
-    <div>
-        <h1 class="text-xl font-semibold mb-6">
-            {{ category?.title || $t("Catalog") }}
+    <div class="pb-2 border-b">
+        <h1 class="text-2xl font-semibold">
+            {{ category?.seo?.title || category?.title || $t("Category") }}
         </h1>
 
-        <div class="flex flex-col md:flex-row">
-            <aside class="w-full md:w-64 flex-shrink-0 border-t p-4 space-y-8">
-                <label
-                    class="flex items-center gap-2 cursor-pointer text-sm text-gray-700"
-                >
-                    <Checkbox v-model:checked="form.promo" />
-                    <span>{{ $t("Sale") }}</span>
-                </label>
+        <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-600">
+                {{ $t("Found") }}
+                {{
+                    wTransChoice("Products", meta?.total || 0, {
+                        count: meta?.total || 0,
+                    })
+                }}
+            </p>
+            <SortDropdown v-model="form.sort" :options="sortOptions" />
+        </div>
+    </div>
 
-                <div class="pt-4 border-t">
-                    <label
-                        class="text-sm font-medium text-gray-700 mb-6 block"
-                        >{{ $t("Price Range") }}</label
-                    >
-                    <div class="flex items-center gap-2 w-full">
-                        <TextInput
-                            v-model.number="form.min_price"
-                            type="number"
-                            :placeholder="$t('Min price')"
-                        />
-                        -
-                        <TextInput
-                            v-model.number="form.max_price"
-                            type="number"
-                            :placeholder="$t('Max price')"
-                        />
-                    </div>
-                    <Slider
-                        v-model="priceRange"
-                        :min="defaultMin"
-                        :max="defaultMax"
-                        class="mt-6"
-                        :tooltips="false"
-                        :step="50"
-                    />
-                </div>
+    <div class="flex flex-col md:flex-row items-start divide-x">
+        <aside class="w-full md:w-64 shrink-0">
+            <div class="pr-8">
+                <ProductFilters
+                    v-model="form"
+                    :brands="brands"
+                    :default-max="priceMax"
+                />
+            </div>
+        </aside>
 
-                <div class="pt-4 border-t">
-                    <label class="text-sm font-medium text-gray-700 mb-2 block"
-                        >Brands</label
-                    >
-                    <div class="space-y-2">
-                        <label
-                            v-for="brand in manufacturers"
-                            :key="brand.id"
-                            class="flex items-center gap-2"
-                        >
-                            <Checkbox
-                                :value="brand.id"
-                                v-model:checked="form.manufacturers"
-                                @change="updateFilters"
-                            />
-                            <span class="text-sm">{{ brand.name }}</span>
-                        </label>
-                    </div>
-                </div>
-            </aside>
-
-            <main class="flex-grow">
-                <div
-                    v-if="loading"
-                    class="grid grid-cols-2 md:grid-cols-4 border-t border-l"
-                >
-                    <SkeletonProductCard
-                        v-for="n in 8"
-                        :key="'skeleton-' + n"
-                    />
-                </div>
-                <div
-                    v-else-if="items.length > 0"
-                    class="grid grid-cols-2 md:grid-cols-4 border-t border-l"
-                >
+        <div class="flex-1 w-full">
+            <div class="grid grid-cols-2 md:grid-cols-4">
+                <template v-if="loading">
+                    <SkeletonProductCard v-for="n in 4" :key="'skel-' + n" />
+                </template>
+                <template v-else-if="items.length > 0">
                     <ProductCard
                         v-for="item in items"
                         :key="item.id"
                         :data="item"
                     />
+                </template>
+            </div>
+            <div
+                v-if="!loading && items.length === 0"
+                class="w-full h-64 flex items-center justify-center text-gray-500"
+            >
+                <div class="flex flex-col items-center gap-4">
+                    <div
+                        class="flex items-center justify-center bg-gray-100 rounded-full p-4"
+                    >
+                        <IconFlaskOff
+                            stroke="{2}"
+                            class="text-brand w-16 h-16"
+                        />
+                    </div>
+                    <p>{{ $t("No products found...") }}</p>
                 </div>
-                <div v-else class="text-center py-20 border-t border-l">
-                    <p class="text-gray-500">{{ $t("No products found") }}</p>
-                </div>
-            </main>
+            </div>
         </div>
     </div>
+
+    <section
+        v-if="category?.seo?.description"
+        class="mt-16 pt-8 border-t border-gray-100"
+    >
+        <h4 class="text-lg font-semibold text-gray-800 mb-4">
+            {{ category.title }}
+        </h4>
+        <div
+            class="prose prose-sm max-w-none text-gray-600"
+            v-html="category.seo?.description"
+        />
+    </section>
 </template>

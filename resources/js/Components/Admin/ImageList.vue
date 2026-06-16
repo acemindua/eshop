@@ -14,6 +14,7 @@
         >
             <img
                 :src="image.url"
+                :alt="image.name || 'Product image'"
                 class="w-full h-full object-cover select-none transition-all duration-500"
                 :class="{
                     'grayscale blur-[2px] opacity-50': image.isUploading,
@@ -43,9 +44,9 @@
                             stroke-width="4"
                             fill="transparent"
                             stroke-linecap="round"
-                            :stroke-dasharray="2 * Math.PI * 28"
+                            :stroke-dasharray="175.93"
                             :stroke-dashoffset="
-                                2 * Math.PI * 28 * (1 - image.progress / 100)
+                                175.93 * (1 - image.progress / 100)
                             "
                             class="text-white transition-all duration-300 ease-out"
                         />
@@ -60,7 +61,7 @@
 
             <div
                 v-if="index === 0 && !image.isUploading"
-                class="absolute top-2 left-2 z-10 bg-blue-600 text-white text-[10px] uppercase font-bold px-2 py-1 rounded"
+                class="absolute top-2 left-2 z-10 bg-blue-600 text-white text-[10px] uppercase font-bold px-2 py-1 rounded shadow-md"
             >
                 Main
             </div>
@@ -68,8 +69,9 @@
             <button
                 v-if="!image.isUploading"
                 type="button"
+                aria-label="Delete image"
                 @click.stop="$emit('delete', image.id)"
-                class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
             >
                 ✕
             </button>
@@ -79,7 +81,7 @@
 
 <script setup>
 import Sortable from "sortablejs";
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, nextTick } from "vue";
 
 const props = defineProps({
     images: { type: Array, required: true },
@@ -96,36 +98,28 @@ onMounted(() => {
         animation: 250,
         ghostClass: "opacity-10",
         filter: ".cursor-wait",
-        onEnd: (evt) => {
+        onEnd: async (evt) => {
             const { oldIndex, newIndex } = evt;
             if (oldIndex === newIndex) return;
 
-            // Створюємо копію масиву
+            // 1. Блокуємо Sortable, щоб він не міняв DOM до того, як Vue перемалює список
+            sortableInstance.option("disabled", true);
+
+            // 2. Створюємо новий масив
             const updatedImages = [...props.images];
             const [movedItem] = updatedImages.splice(oldIndex, 1);
             updatedImages.splice(newIndex, 0, movedItem);
 
-            // Оскільки Vue 3 іноді втрачає синхронізацію з SortableJS,
-            // ми змушуємо Sortable скасувати переміщення в DOM,
-            // щоб Vue відрендерив новий масив самостійно і чисто.
-            const totalChildren = sortableContainer.value.children;
-            if (oldIndex < newIndex) {
-                sortableContainer.value.insertBefore(
-                    totalChildren[newIndex],
-                    totalChildren[oldIndex],
-                );
-            } else {
-                sortableContainer.value.insertBefore(
-                    totalChildren[newIndex],
-                    totalChildren[oldIndex + 1],
-                );
-            }
-
-            // Передаємо масив вгору, батько сформує orderMap
+            // 3. Емітимо оновлення батьківському компоненту
             emit("reorder", updatedImages);
+
+            // 4. Дочекаємося, поки Vue оновить DOM, і повертаємо контроль Sortable
+            await nextTick();
+            sortableInstance.option("disabled", false);
         },
     });
 });
+
 onUnmounted(() => {
     sortableInstance?.destroy();
 });

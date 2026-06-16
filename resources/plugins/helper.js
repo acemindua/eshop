@@ -39,7 +39,23 @@ const helper = {
         app.config.globalProperties.$formatDate = (date, options = {}) => {
             if (!date) return "";
 
-            const d = new Date(date);
+            // 1. Check if the format is DD.MM.YYYY
+            let d;
+            if (
+                typeof date === "string" &&
+                /^\d{2}\.\d{2}\.\d{4}$/.test(date)
+            ) {
+                const [day, month, year] = date.split(".");
+                d = new Date(`${year}-${month}-${day}`);
+            } else {
+                d = new Date(date);
+            }
+
+            // 2. Validate
+            if (isNaN(d.getTime())) {
+                console.warn("Invalid date provided:", date);
+                return "";
+            }
 
             return new Intl.DateTimeFormat("uk-UA", {
                 day: "2-digit",
@@ -48,7 +64,7 @@ const helper = {
                 ...options,
             })
                 .format(d)
-                .replace(" р.", ""); // прибираємо "р."
+                .replace(" р.", "");
         };
 
         // 📅 Коротка дата (аналог DD.MM.YY)

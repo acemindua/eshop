@@ -2,75 +2,65 @@
 
 namespace Database\Factories;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Item>
- */
 class ItemFactory extends Factory
 {
     protected $model = Item::class;
 
-    /**
-     * Define the model's default state.
-     * NOTE: This method must ONLY return an array of attributes for the main Page model.
-     */
     public function definition(): array
     {
-        $randomCategoryId = Category::inRandomOrder()->first()?->id;
-
-        $imageUrl = 'https://loremflickr.com/640/640/product';
-
         return [
-            'category_id'   => $this->faker->optional(0.8, null)->passthrough($randomCategoryId),
-            'price'         => $this->faker->randomFloat(2, 1, 1000),
-            'quantity'      => $this->faker->randomFloat(2, 1, 1000),
-            'public'        => $this->faker->boolean(80),
-            'order'         => $this->faker->unique()->numberBetween(1, 1000),
+            'price'      => $this->faker->randomFloat(2, 100, 50000),
+            'quantity'   => $this->faker->numberBetween(0, 100),
+            'public'     => true,
+            'order'      => $this->faker->unique()->numberBetween(1, 10000),
         ];
     }
 
     /**
-     * Configure the model factory.
-     * This is where translation logic goes, as it needs the model instance.
+     * @param string $title - назва товару
+     * @param int|null $categoryId
+     * @param int|null $brandId
+     * @param string|null $imageUrl - URL до зображення
      */
-    public function configure(): static
+    public function withRealisticData(string $title, ?int $categoryId = null, ?int $brandId = null, ?string $imageUrl = null): static
     {
+        return $this->state([
+            'category_id' => $categoryId,
+            'brand_id'    => $brandId,
+        ])->afterCreating(function (Item $item) use ($title, $imageUrl) {
 
-        return $this->afterCreating(function (Item $item) {
-
-            $imageUrl = 'https://picsum.photos/640/640'; // Випадкове зображення
-
-            try {
-                // Використовуємо fromUrl для завантаження та toMediaCollection для збереження
-                $item->addMediaFromUrl($imageUrl)
-                    ->toMediaCollection('images'); // 'images' - назва вашої медіа-колекції
-            } catch (\Exception $e) {
-                // Запобігання падінню фабрики, якщо зовнішній ресурс недоступний
-                // У продакшн коді варто розглянути більш детальний лог
-                echo "Помилка завантаження зображення для Item #{$item->id}: " . $e->getMessage() . "\n";
+            // 1. Media
+            if ($imageUrl) {
+                try {
+                    $item->addMediaFromUrl($imageUrl)->toMediaCollection('images');
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::warning("Item #{$item->id} image skip: " . $e->getMessage());
+                }
             }
 
-
+            // 2. Translations
             $locales = array_keys(LaravelLocalization::getSupportedLocales());
-            $translate = [];
+            $translations = [];
             foreach ($locales as $locale) {
-                $title = $locale . '-' . fake()->sentence(3);
-                $translate[] = [
-                    'locale' => $locale,
-                    'title' => $title,
-                    'slug' => \Illuminate\Support\Str::slug($title),
-                    'description' => fake()->text(100),
-                    'content' => fake()->paragraph,
-                    'meta_title' => fake()->sentence,
-                    'meta_description' => fake()->text(150),
-                    'meta_keywords' => fake()->words(5, true),
+                $translations[] = [
+                    'locale'           => $locale,
+                    'title'            => $title,
+                    'slug'             => Str::slug($title . '-' . uniqid()),
+                    'description'      => $this->faker->text(200),
+                    'content'          => $this->faker->paragraph(5),
+                    'meta_title'       => "Buy {$title} - Best Offer",
+                    'meta_description' => "High quality {$title} available now.",
+                    'meta_keywords'    => "shop, {$title}, product",
                 ];
             }
-            $item->translations()->createMany($translate);
+            $item->translations()->createMany($translations);
         });
     }
 }

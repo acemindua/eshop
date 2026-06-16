@@ -164,6 +164,7 @@ defineOptions({ layout: Layout });
                             />
                         </div>
                     </th>
+                    <th class="p-2 text-center w-48">{{ $t("Parent") }}</th>
                     <th class="p-2 text-center w-48">{{ $t("Status") }}</th>
                 </template>
 
@@ -182,6 +183,9 @@ defineOptions({ layout: Layout });
                         >
                             url: {{ `/${item.slug}` }}
                         </p>
+                    </td>
+                    <td class="p-2">
+                        {{ item.parent ? item.parent.title : "" }}
                     </td>
                     <td class="p-2">
                         <div class="flex justify-center">

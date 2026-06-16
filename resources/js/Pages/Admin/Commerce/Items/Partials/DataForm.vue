@@ -14,6 +14,7 @@ const props = defineProps({
     data: { type: [Object, Array], required: true },
     // Об'єкт помилок
     errors: { type: Object, default: () => ({}) },
+    isEditing: { type: Boolean, default: false },
 });
 
 // 1. ОПТИМІЗАЦІЯ: Спрощення двостороннього зв'язування для boolean "public"
@@ -111,16 +112,16 @@ const booleanPublic = computed({
                     class="flex flex-col text-xs font-semibold text-gray-600"
                 >
                     <span class="flex items-center leading-6 mb-1.5">{{
-                        $t("Manufacturer")
+                        $t("Brand")
                     }}</span>
 
                     <ComboboxSelect
-                        v-model="form.manufacturer_id"
-                        :items="data.manufacturers?.data || []"
-                        :class="{ 'border-red-500': errors.manufacturer_id }"
+                        v-model="form.brand_id"
+                        :items="data.brands?.data || []"
+                        :class="{ 'border-red-500': errors.brand_id }"
                     />
                 </InputLabel>
-                <InputError class="mt-2" :message="errors.manufacturer_id" />
+                <InputError class="mt-2" :message="errors.brand_id" />
             </div>
 
             <div>
@@ -128,7 +129,7 @@ const booleanPublic = computed({
                     class="flex flex-col text-xs font-semibold text-gray-600"
                 >
                     <span class="flex items-center leading-6 mb-1.5">{{
-                        $t("Parent category")
+                        $t("Category")
                     }}</span>
 
                     <ComboboxSelect

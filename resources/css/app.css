@@ -4,10 +4,13 @@
 
 @layer base {
     :root {
-        /* Основний колір (наприклад, Indigo) */
-        --brand-color: 40 125 245;
-        /* RGB формат для роботи з прозорістю */
-        --brand-color-hover: 67 56 202;
+        /* Формат для Tailwind: R G B */
+        --brand-color: 80 180 50;
+        --brand-hover: 70 160 40;
     }
 
+    .slider-brand {
+        --slider-connect-bg: rgb(var(--brand-color));
+        --slider-tooltip-bg: rgb(var(--brand-color));
+    }
 }

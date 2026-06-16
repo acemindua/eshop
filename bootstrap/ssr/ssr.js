@@ -8,6 +8,8 @@ import { createValidator, toSimpleValidationErrors, resolveName } from "laravel-
 import createServer from "@inertiajs/core/server";
 import { createPinia } from "pinia";
 import { getOverflowAncestors, offset, autoPlacement, shift, flip, arrow, size, computePosition } from "@floating-ui/dom";
+const Sale$5 = "Verkauf";
+const Products$5 = ":count Produkt|:count Produkte";
 const reviews$5 = ":count Bewertung|:count Bewertungen|:count Bewertungen";
 const Accept$5 = "Akzeptieren";
 const Accepted$5 = "Akzeptiert";
@@ -111,6 +113,9 @@ const User$5 = "Benutzer";
 const View$5 = "Ansicht";
 const Yes$5 = "Ja";
 const de$1 = {
+  "Highest Rated": "Highest Rated",
+  Sale: Sale$5,
+  Products: Products$5,
   reviews: reviews$5,
   "(and :count more error)": "(und :count weiterer Fehler)",
   "(and :count more errors)": "(und :count weiterer Fehler)|(und :count weitere Fehler)|(und :count weitere Fehler)",
@@ -441,10 +446,12 @@ const __vite_glob_1_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Preview: Preview$5,
   Price: Price$5,
   Processing: Processing$5,
+  Products: Products$5,
   Profile: Profile$5,
   Record: Record$5,
   Register: Register$5,
   Restore: Restore$5,
+  Sale: Sale$5,
   Save: Save$5,
   Search: Search$5,
   Select: Select$5,
@@ -488,7 +495,7 @@ const Add$4 = "Add";
 const Admin$4 = "Admin";
 const Agree$4 = "Agree";
 const Alias$2 = "Alias";
-const All$2 = "фівфів";
+const All$2 = "All";
 const Apply$2 = "Apply";
 const Apps$2 = "Apps";
 const Archive$4 = "Archive";
@@ -498,10 +505,12 @@ const Attach$4 = "Attach";
 const Back$2 = "Back";
 const Birthday$2 = "Birthday";
 const Bonuses$2 = "Bonuses";
+const Brand$1 = "Brand";
+const Brands$2 = "Brands";
 const Browse$4 = "Browse";
 const Buy$2 = "Buy";
 const Cancel$4 = "Cancel";
-const Cart$2 = "";
+const Cart$2 = "Cart";
 const Catalog$2 = "Catalog";
 const Categories$2 = "Categories";
 const Category$2 = "Category";
@@ -514,7 +523,7 @@ const Code$2 = "Code";
 const Collapse$4 = "Collapse";
 const Comment$4 = "Comment";
 const Commerce$2 = "Commerce";
-const Commit$2 = "";
+const Commit$2 = "Commit";
 const Configuration$2 = "Configuration";
 const Confirm$4 = "Confirm";
 const Conflict$4 = "Conflict";
@@ -538,7 +547,7 @@ const Draft$2 = "Draft";
 const Duplicate$4 = "Duplicate";
 const Edit$4 = "Edit";
 const Email$4 = "Email";
-const Empty$2 = "";
+const Empty$2 = "Empty";
 const Enable$4 = "Enable";
 const Expand$4 = "Expand";
 const Explanation$4 = "Explanation";
@@ -546,7 +555,7 @@ const Export$4 = "Export";
 const Fee$2 = "Fee";
 const File$4 = "File";
 const Files$4 = "Files";
-const Filled$2 = "";
+const Filled$2 = "Filled";
 const Finish$2 = "Finish";
 const Forbidden$4 = "Forbidden";
 const Found$4 = "Found";
@@ -558,7 +567,7 @@ const Hide$4 = "Hide";
 const Home$4 = "Home";
 const ID$2 = "ID";
 const Image$4 = "Image";
-const Img$2 = "";
+const Img$2 = "Img";
 const Impersonate$4 = "Impersonate";
 const Impersonation$4 = "Impersonation";
 const Import$4 = "Import";
@@ -577,9 +586,11 @@ const Logout$4 = "Logout";
 const Loyalty$2 = "Loyalty";
 const Manufacturer$2 = "Manufacturer";
 const Manufacturers$2 = "Manufacturers";
+const Max$1 = "Max";
 const Media$2 = "Media";
 const Menus$2 = "Menus";
 const Messages$2 = "Messages";
+const Min$1 = "Min";
 const Name$4 = "Name";
 const New$4 = "New";
 const No$4 = "No";
@@ -599,15 +610,18 @@ const Phone$2 = "Phone";
 const Preview$4 = "Preview";
 const Price$4 = "Price";
 const Processing$4 = "Processing";
+const Products$4 = ":count product|:count products";
 const Profile$4 = "Profile";
 const Quantity$2 = "Quantity";
+const Rating$1 = "Rating";
 const Record$4 = "Record";
 const Register$4 = "Register";
 const Remove$2 = "Remove";
 const Restore$4 = "Restore";
-const Role$2 = "";
+const Role$2 = "Role";
+const Sale$4 = "Sale";
 const Save$4 = "Save";
-const Schedule$2 = "";
+const Schedule$2 = "Schedule";
 const Search$4 = "Search";
 const Select$4 = "Select";
 const Send$4 = "Send";
@@ -628,13 +642,13 @@ const Switch$4 = "Switch";
 const System$2 = "System";
 const Tag$4 = "Tag";
 const Tags$4 = "Tags";
-const Target$2 = "";
+const Target$2 = "Target";
 const Title$2 = "Title";
 const Total$2 = "Total";
-const Transfer$2 = "";
+const Transfer$2 = "Transfer";
 const Translate$4 = "Translate";
 const Translations$2 = "Translations";
-const Type$2 = "";
+const Type$2 = "Type";
 const Unauthorized$4 = "Unauthorized";
 const Unpack$4 = "Unpack";
 const Unsubscribe$4 = "Unsubscribe";
@@ -652,7 +666,7 @@ const ava$2 = "ava";
 const email$4 = "The :attribute field must be a valid email address.";
 const errors$4 = "errors";
 const female$2 = "female";
-const img$2 = "";
+const img$2 = "img";
 const inStoke$2 = "inStoke";
 const male$2 = "male";
 const name$4 = "name";
@@ -661,9 +675,11 @@ const other$2 = "other";
 const password$4 = "The provided password is incorrect.";
 const results$4 = "results";
 const reviews$4 = ":count review|:count reviews|:count reviews";
+const stars$1 = "stars";
 const tasks$2 = "tasks";
 const to$4 = "to";
 const en = {
+  "Highest Rated": "Highest Rated",
   "#ID": "#ID",
   "(and :count more error)": "(and :count more error)",
   "(and :count more errors)": "(and :count more error)|(and :count more errors)|(and :count more errors)",
@@ -706,10 +722,14 @@ const en = {
   "Bad Gateway": "Bad Gateway",
   "Bad Request": "Bad Request",
   "Bandwidth Limit Exceeded": "Bandwidth Limit Exceeded",
-  "Be the first to review": "",
+  "Be the first to review": "Be the first to review",
   Birthday: Birthday$2,
   "Bonus Balance": "Bonus Balance",
   Bonuses: Bonuses$2,
+  Brand: Brand$1,
+  "Brand details": "Brand details",
+  "Brand details and settings management": "Brand details and settings management",
+  Brands: Brands$2,
   Browse: Browse$4,
   Buy: Buy$2,
   Cancel: Cancel$4,
@@ -718,8 +738,8 @@ const en = {
   Catalog: Catalog$2,
   Categories: Categories$2,
   Category: Category$2,
-  "Category details": "",
-  "Category details and settings management": "",
+  "Category details": "Category details",
+  "Category details and settings management": "Category details and settings management",
   Checkout: Checkout$2,
   Choose: Choose$4,
   "Choose :name": "Choose :name",
@@ -739,9 +759,9 @@ const en = {
   Commerce: Commerce$2,
   "Commission Percent (%)": "Commission Percent (%)",
   Commit: Commit$2,
-  "Communication Hub": "",
+  "Communication Hub": "Communication Hub",
   Configuration: Configuration$2,
-  "Configure Parameters": "",
+  "Configure Parameters": "Configure Parameters",
   Confirm: Confirm$4,
   "Confirm Order": "Confirm Order",
   "Confirm Password": "Confirm Password",
@@ -762,7 +782,7 @@ const en = {
   "Current Password": "Current Password",
   Dashboard: Dashboard$4,
   "Date": "Date",
-  "Date of Birth": "",
+  "Date of Birth": "Date of Birth",
   Delete: Delete$4,
   "Delete :name": "Delete :name",
   "Delete Account": "Delete Account",
@@ -782,7 +802,7 @@ const en = {
   "Edit :name": "Edit :name",
   "Edit Profile": "Edit Profile",
   Email: Email$4,
-  "Email Address": "",
+  "Email Address": "Email Address",
   "Email Password Reset Link": "Email Password Reset Link",
   "Email складу": "Email складу",
   Empty: Empty$2,
@@ -819,7 +839,7 @@ const en = {
   Gender: Gender$2,
   General: General$2,
   "General Data": "General Data",
-  "Global Options": "",
+  "Global Options": "Global Options",
   "Go Home": "Go Home",
   "Go to Checkout": "Go to Checkout",
   "Go to page :page": "Go to page :page",
@@ -833,7 +853,7 @@ const en = {
   "I'm a teapot": "I'm a teapot",
   ID: ID$2,
   "IM Used": "IM Used",
-  "Identity Preview": "",
+  "Identity Preview": "Identity Preview",
   "If you did not create an account, no further action is required.": "If you did not create an account, no further action is required.",
   "If you did not request a password reset, no further action is required.": "If you did not request a password reset, no further action is required.",
   'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below\ninto your web browser:': `If you're having trouble clicking the ":actionText" button, copy and paste the URL below
@@ -846,8 +866,8 @@ into your web browser:`,
   "Import :name": "Import :name",
   "In Cart": "In Cart",
   "In Progress": "In Progress",
-  "In progress": "",
-  "Initialize Target Version": "",
+  "In progress": "In progress",
+  "Initialize Target Version": "Initialize Target Version",
   "Insufficient Storage": "Insufficient Storage",
   "Internal Server Error": "Internal Server Error",
   Introduction: Introduction$4,
@@ -856,8 +876,8 @@ into your web browser:`,
   "Invalid filename.": "Invalid filename.",
   "Inventory Overview": "Inventory Overview",
   "Inventory Value": "Inventory Value",
-  "Item details": "",
-  "Item details and settings management": "",
+  "Item details": "Item details",
+  "Item details and settings management": "Item details and settings management",
   Items: Items$2,
   Language: Language$2,
   "Last Name": "Last Name",
@@ -881,17 +901,20 @@ into your web browser:`,
   "Loop Detected": "Loop Detected",
   Loyalty: Loyalty$2,
   "Maintenance Mode": "Maintenance Mode",
-  "Manage category content and structure": "",
+  "Manage brand content and structure": "Manage brand content and structure",
+  "Manage category content and structure": "Manage category content and structure",
   "Manage general product info and public status.": "Manage general product info and public status.",
   "Manage how your customers can pay for orders.": "Manage how your customers can pay for orders.",
-  "Manage item content and structure": "",
-  "Manage menu content and structure": "",
-  "Manage operational and personal parameters": "",
-  "Manage page content and structure": "",
-  "Manage user accounts, roles, and permissions": "",
-  "Manage warehous content and structure": "",
+  "Manage item content and structure": "Manage item content and structure",
+  "Manage menu content and structure": "Manage menu content and structure",
+  "Manage operational and personal parameters": "Manage operational and personal parameters",
+  "Manage page content and structure": "Manage page content and structure",
+  "Manage user accounts, roles, and permissions": "Manage user accounts, roles, and permissions",
+  "Manage warehous content and structure": "Manage warehous content and structure",
   Manufacturer: Manufacturer$2,
   Manufacturers: Manufacturers$2,
+  Max: Max$1,
+  "Max price": "Max price",
   Media: Media$2,
   Menus: Menus$2,
   Messages: Messages$2,
@@ -899,39 +922,43 @@ into your web browser:`,
   "Method Status": "Method Status",
   "Method is hidden from storefront": "Method is hidden from storefront",
   "Middle Name": "Middle Name",
+  Min: Min$1,
+  "Min price": "Min price",
   "Misdirected Request": "Misdirected Request",
-  "Modify Version Attributes": "",
-  "Move to another version": "",
+  "Modify Version Attributes": "Modify Version Attributes",
+  "Move to another version": "Move to another version",
   "Moved Permanently": "Moved Permanently",
   "Multi-Status": "Multi-Status",
   "Multiple Choices": "Multiple Choices",
   Name: Name$4,
-  "Navigations & Menus": "",
+  "Navigations & Menus": "Navigations & Menus",
   "Network Authentication Required": "Network Authentication Required",
   "Network Connect Timeout Error": "Network Connect Timeout Error",
   "Network Read Timeout Error": "Network Read Timeout Error",
   New: New$4,
   "New :name": "New :name",
-  "New Page": "",
+  "New Page": "New Page",
   "New Password": "New Password",
   "New Payment Method": "New Payment Method",
-  "New User Account": "",
-  "New Warehouse": "",
-  "New category": "",
-  "New item": "",
+  "New User Account": "New User Account",
+  "New Warehouse": "New Warehouse",
+  "New brand": "New brand",
+  "New category": "New category",
+  "New item": "New item",
   "Next step": "Next step",
   No: No$4,
   "No Content": "No Content",
   "No items found": "No items found",
   "No payment methods found.": "No payment methods found.",
-  "No popular products found.": "",
-  "No records found.": "",
-  "No records under this pipeline.": "",
-  "No translations found": "",
+  "No popular products found.": "No popular products found.",
+  "No products found": "No products found",
+  "No records found.": "No records found.",
+  "No records under this pipeline.": "No records under this pipeline.",
+  "No translations found": "No translations found",
   "No translations found.": "No translations found.",
   "No version history available": "No version history available",
-  "No version selected": "",
-  "No versions created yet.": "",
+  "No version selected": "No version selected",
+  "No versions created yet.": "No versions created yet.",
   "No versions found": "No versions found",
   "Non-Authoritative Information": "Non-Authoritative Information",
   "Not Acceptable": "Not Acceptable",
@@ -943,23 +970,23 @@ into your web browser:`,
   "Old Price": "Old Price",
   "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.",
   "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.": "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.",
-  "Only registered users can leave reviews.": "",
+  "Only registered users can leave reviews.": "Only registered users can leave reviews.",
   Open: Open$4,
   "Open in a current window": "Open in a current window",
   "Open in a new window": "Open in a new window",
   "Open in a parent frame": "Open in a parent frame",
   "Open in the topmost frame": "Open in the topmost frame",
   "Open on the website": "Open on the website",
-  "Option Categories": "",
+  "Option Categories": "Option Categories",
   Options: Options$2,
   Order: Order$2,
   "Order Summary": "Order Summary",
   Orders: Orders$2,
   "Origin Is Unreachable": "Origin Is Unreachable",
   "Out of stock": "Out of stock",
-  "Page Details": "",
+  "Page Details": "Page Details",
   "Page Expired": "Page Expired",
-  "Page details and settings management": "",
+  "Page details and settings management": "Page details and settings management",
   Pages: Pages$2,
   "Pagination Navigation": "Pagination Navigation",
   Parent: Parent$2,
@@ -977,7 +1004,7 @@ into your web browser:`,
   Petro: Petro$2,
   Petrovych: Petrovych$2,
   Phone: Phone$2,
-  "Phone Connection": "",
+  "Phone Connection": "Phone Connection",
   "Plan (Roadmap)": "Plan (Roadmap)",
   "Please click the button below to verify your email address.": "Please click the button below to verify your email address.",
   "Plus Code": "Plus Code",
@@ -986,9 +1013,11 @@ into your web browser:`,
   "Precondition Required": "Precondition Required",
   Preview: Preview$4,
   Price: Price$4,
+  "Price Range": "Price Range",
   "Private (Hidden)": "Private (Hidden)",
   Processing: Processing$4,
   "Processing...": "Processing...",
+  Products: Products$4,
   Profile: Profile$4,
   "Profile Information": "Profile Information",
   "Proxy Authentication Required": "Proxy Authentication Required",
@@ -996,6 +1025,7 @@ into your web browser:`,
   Quantity: Quantity$2,
   "Railgun Error": "Railgun Error",
   "Range Not Satisfiable": "Range Not Satisfiable",
+  Rating: Rating$1,
   "Recent Orders": "Recent Orders",
   "Recipient Last Name": "Recipient Last Name",
   "Recipient Name": "Recipient Name",
@@ -1006,10 +1036,10 @@ into your web browser:`,
   "Ref Району": "Ref Району",
   "Regards,": "Regards,",
   Register: Register$4,
-  "Register a secure user into the ecosystem": "",
+  "Register a secure user into the ecosystem": "Register a secure user into the ecosystem",
   "Release / Roadmap Progress": "Release / Roadmap Progress",
-  "Released on": "",
-  "Relocate Task": "",
+  "Released on": "Released on",
+  "Relocate Task": "Relocate Task",
   "Remember me": "Remember me",
   Remove: Remove$2,
   "Request Header Fields Too Large": "Request Header Fields Too Large",
@@ -1018,13 +1048,15 @@ into your web browser:`,
   "Reset Content": "Reset Content",
   "Reset Password": "Reset Password",
   "Reset Password Notification": "Reset Password Notification",
+  "Reset filters": "Reset filters",
   Restore: Restore$4,
   "Restore :name": "Restore :name",
   "Retry With": "Retry With",
   "Roadmap & versions": "Roadmap & versions",
   Role: Role$2,
-  "Role Selection": "",
+  "Role Selection": "Role Selection",
   "SSL Handshake Failed": "SSL Handshake Failed",
+  Sale: Sale$4,
   Save: Save$4,
   "Save & Close": "Save & Close",
   "Save & Return": "Save & Return",
@@ -1037,36 +1069,36 @@ into your web browser:`,
   Search: Search$4,
   "Search :name": "Search :name",
   "Search city...": "Search city...",
-  "Search translations...": "",
+  "Search translations...": "Search translations...",
   "Secure encrypted checkout": "Secure encrypted checkout",
-  "Security Credentials": "",
+  "Security Credentials": "Security Credentials",
   "See Other": "See Other",
   Select: Select$4,
   "Select All": "Select All",
   "Select city first": "Select city first",
   "Select how you want to receive your order": "Select how you want to receive your order",
-  "Select version...": "",
+  "Select version...": "Select version...",
   "Select warehouse...": "Select warehouse...",
   "Select your preferred payment method": "Select your preferred payment method",
   Send: Send$4,
-  "Send Review": "",
-  "Sending...": "",
+  "Send Review": "Send Review",
+  "Sending...": "Sending...",
   "Server Error": "Server Error",
   "Service Unavailable": "Service Unavailable",
   "Session Has Expired": "Session Has Expired",
   Settings: Settings$4,
-  "Share your experience...": "",
+  "Share your experience...": "Share your experience...",
   Shipping: Shipping$2,
   "Shipping Details": "Shipping Details",
   Shippings: Shippings$2,
   "Shopping Cart": "Shopping Cart",
-  "Short scope summary": "",
+  "Short scope summary": "Short scope summary",
   Show: Show$4,
   "Show :name": "Show :name",
   "Show All": "Show All",
   Showing: Showing$4,
   "Sign In": "Sign In",
-  "Sign in": "",
+  "Sign in": "Sign in",
   Solve: Solve$4,
   "Sort order": "Sort order",
   Start: Start$4,
@@ -1083,15 +1115,15 @@ into your web browser:`,
   "Switching Protocols": "Switching Protocols",
   System: System$2,
   "System Code": "System Code",
-  "System Group Assignment": "",
+  "System Group Assignment": "System Group Assignment",
   Tag: Tag$4,
   Tags: Tags$4,
   Target: Target$2,
-  "Target Milestone / Release": "",
+  "Target Milestone / Release": "Target Milestone / Release",
   "Technical Configuration": "Technical Configuration",
   "Temporary Redirect": "Temporary Redirect",
-  "Text for": "",
-  "Thank you for your feedback!": "",
+  "Text for": "Text for",
+  "Thank you for your feedback!": "Thank you for your feedback!",
   "Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.": "Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.",
   "The given data was invalid.": "The given data was invalid.",
   "The response is not a streamed response.": "The response is not a streamed response.",
@@ -1128,27 +1160,27 @@ into your web browser:`,
   "Use Proxy": "Use Proxy",
   User: User$4,
   "User Info": "User Info",
-  "User Profile": "",
+  "User Profile": "User Profile",
   Users: Users$2,
   "Variant Also Negotiates": "Variant Also Negotiates",
   "Verify Email Address": "Verify Email Address",
   Version: Version$2,
-  "Version closed.": "",
-  "Version tag": "",
+  "Version closed.": "Version closed.",
+  "Version tag": "Version tag",
   Versions: Versions$2,
   View: View$4,
   "View :name": "View :name",
   "View Cart": "View Cart",
   "View Full Roadmap & History": "View Full Roadmap & History",
   Warehouse: Warehouse$2,
-  "Warehouse / Address": "",
+  "Warehouse / Address": "Warehouse / Address",
   "Warehouse / Delivery Address": "Warehouse / Delivery Address",
-  "Warehouse details": "",
-  "Warehouse details and settings management": "",
+  "Warehouse details": "Warehouse details",
+  "Warehouse details and settings management": "Warehouse details and settings management",
   "Warehouse/Address": "Warehouse/Address",
   Warehouses: Warehouses$2,
   "Web Server is Down": "Web Server is Down",
-  "What was implemented or fixed?": "",
+  "What was implemented or fixed?": "What was implemented or fixed?",
   "Whoops!": "Whoops!",
   "Work hours": "Work hours",
   Yes: Yes$4,
@@ -1176,6 +1208,7 @@ into your web browser:`,
   "public": "public",
   results: results$4,
   reviews: reviews$4,
+  stars: stars$1,
   tasks: tasks$2,
   to: to$4,
   "Інформація": "Інформація",
@@ -1251,6 +1284,8 @@ const __vite_glob_1_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Back: Back$2,
   Birthday: Birthday$2,
   Bonuses: Bonuses$2,
+  Brand: Brand$1,
+  Brands: Brands$2,
   Browse: Browse$4,
   Buy: Buy$2,
   Cancel: Cancel$4,
@@ -1330,9 +1365,11 @@ const __vite_glob_1_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Loyalty: Loyalty$2,
   Manufacturer: Manufacturer$2,
   Manufacturers: Manufacturers$2,
+  Max: Max$1,
   Media: Media$2,
   Menus: Menus$2,
   Messages: Messages$2,
+  Min: Min$1,
   Name: Name$4,
   New: New$4,
   No: No$4,
@@ -1352,13 +1389,16 @@ const __vite_glob_1_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Preview: Preview$4,
   Price: Price$4,
   Processing: Processing$4,
+  Products: Products$4,
   Profile: Profile$4,
   Quantity: Quantity$2,
+  Rating: Rating$1,
   Record: Record$4,
   Register: Register$4,
   Remove: Remove$2,
   Restore: Restore$4,
   Role: Role$2,
+  Sale: Sale$4,
   Save: Save$4,
   Schedule: Schedule$2,
   Search: Search$4,
@@ -1415,9 +1455,12 @@ const __vite_glob_1_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   password: password$4,
   results: results$4,
   reviews: reviews$4,
+  stars: stars$1,
   tasks: tasks$2,
   to: to$4
 }, Symbol.toStringTag, { value: "Module" }));
+const Sale$3 = "Venta";
+const Products$3 = ":count producto|:count productos";
 const reviews$3 = ":count reseña|:count reseñas|:count reseñas";
 const Accept$3 = "Aceptar";
 const Accepted$3 = "Aceptado";
@@ -1521,6 +1564,9 @@ const User$3 = "Usuario";
 const View$3 = "Ver";
 const Yes$3 = "Sí";
 const es = {
+  "Highest Rated": "Highest Rated",
+  Sale: Sale$3,
+  Products: Products$3,
   reviews: reviews$3,
   "(and :count more error)": "(y :count error más)",
   "(and :count more errors)": "(y :count error más)|(y :count errores más)|(y :count errores más)",
@@ -1851,10 +1897,12 @@ const __vite_glob_1_2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Preview: Preview$3,
   Price: Price$3,
   Processing: Processing$3,
+  Products: Products$3,
   Profile: Profile$3,
   Record: Record$3,
   Register: Register$3,
   Restore: Restore$3,
+  Sale: Sale$3,
   Save: Save$3,
   Search: Search$3,
   Select: Select$3,
@@ -4351,6 +4399,7 @@ const __vite_glob_1_8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   __proto__: null,
   default: php_uk
 }, Symbol.toStringTag, { value: "Module" }));
+const Products$2 = ":count produkt|:count produkty|:count produktów";
 const Accept$2 = "Akceptuj";
 const Accepted$2 = "Zaakceptowano";
 const Action$2 = "Działanie";
@@ -4360,7 +4409,7 @@ const Add$2 = "Dodaj";
 const Admin$2 = "Administrator";
 const Agree$2 = "Zgadzam się";
 const Alias$1 = "Alias";
-const All$1 = "фівфів";
+const All$1 = "All";
 const Apply$1 = "Apply";
 const Apps$1 = "Apps";
 const Archive$2 = "Archiwizuj";
@@ -4370,10 +4419,11 @@ const Attach$2 = "Dołącz";
 const Back$1 = "Back";
 const Birthday$1 = "Birthday";
 const Bonuses$1 = "Bonuses";
+const Brands$1 = "Brands";
 const Browse$2 = "Przeglądaj";
 const Buy$1 = "Buy";
 const Cancel$2 = "Anuluj";
-const Cart$1 = "";
+const Cart$1 = "Cart";
 const Catalog$1 = "Catalog";
 const Categories$1 = "Categories";
 const Category$1 = "Category";
@@ -4386,7 +4436,7 @@ const Code$1 = "Code";
 const Collapse$2 = "Zwiń";
 const Comment$2 = "Skomentuj";
 const Commerce$1 = "Commerce";
-const Commit$1 = "";
+const Commit$1 = "Commit";
 const Configuration$1 = "Configuration";
 const Confirm$2 = "Potwierdź";
 const Conflict$2 = "Konflikt";
@@ -4410,7 +4460,7 @@ const Draft$1 = "Draft";
 const Duplicate$2 = "Duplikuj";
 const Edit$2 = "Edytuj";
 const Email$2 = "E-mail";
-const Empty$1 = "";
+const Empty$1 = "Empty";
 const Enable$2 = "Włącz";
 const Expand$2 = "Rozwiń";
 const Explanation$2 = "Wyjaśnienie";
@@ -4418,7 +4468,7 @@ const Export$2 = "Eksportuj";
 const Fee$1 = "Fee";
 const File$2 = "Plik";
 const Files$2 = "Pliki";
-const Filled$1 = "";
+const Filled$1 = "Filled";
 const Finish$1 = "Finish";
 const Forbidden$2 = "Zabronione";
 const Found$2 = "Znaleziono";
@@ -4430,7 +4480,7 @@ const Hide$2 = "Ukryj";
 const Home$2 = "Strona główna";
 const ID$1 = "ID";
 const Image$2 = "Obraz";
-const Img$1 = "";
+const Img$1 = "Img";
 const Impersonate$2 = "Podszywaj się pod";
 const Impersonation$2 = "Podszywanie się";
 const Import$2 = "Importuj";
@@ -4477,9 +4527,10 @@ const Record$2 = "Nagrywać";
 const Register$2 = "Zarejestruj się";
 const Remove$1 = "Remove";
 const Restore$2 = "Przywróć";
-const Role$1 = "";
+const Role$1 = "Role";
+const Sale$2 = "Sprzedaż";
 const Save$2 = "Zapisz";
-const Schedule$1 = "";
+const Schedule$1 = "Schedule";
 const Search$2 = "Szukaj";
 const Select$2 = "Wybierz";
 const Send$2 = "Wyślij";
@@ -4500,13 +4551,13 @@ const Switch$2 = "Przełącz";
 const System$1 = "System";
 const Tag$2 = "Tag";
 const Tags$2 = "Tagi";
-const Target$1 = "";
+const Target$1 = "Target";
 const Title$1 = "Title";
 const Total$1 = "Total";
-const Transfer$1 = "";
+const Transfer$1 = "Transfer";
 const Translate$2 = "Przetłumacz";
 const Translations$1 = "Translations";
-const Type$1 = "";
+const Type$1 = "Type";
 const Unauthorized$2 = "Nieautoryzowany Dostęp";
 const Unpack$2 = "Rozpakuj";
 const Unsubscribe$2 = "Wypisz się";
@@ -4524,7 +4575,7 @@ const ava$1 = "ava";
 const email$2 = "Pole :attribute nie jest poprawnym adresem e-mail.";
 const errors$2 = "błędy";
 const female$1 = "female";
-const img$1 = "";
+const img$1 = "img";
 const inStoke$1 = "inStoke";
 const male$1 = "male";
 const name$2 = "imię i nazwisko";
@@ -4536,6 +4587,8 @@ const reviews$2 = ":count opinia|:count opinie|:count opinii";
 const tasks$1 = "tasks";
 const to$2 = "do";
 const pl = {
+  "Highest Rated": "Highest Rated",
+  Products: Products$2,
   "#ID": "#ID",
   "(and :count more error)": "(i jeszcze :count błąd)",
   "(and :count more errors)": "(i jeszcze :count błąd)|(i jeszcze :count błędy)|(i jeszcze :count błędów)",
@@ -4578,10 +4631,11 @@ const pl = {
   "Bad Gateway": "Zła brama",
   "Bad Request": "Nieprawidłowe żądanie",
   "Bandwidth Limit Exceeded": "Przekroczono limit transferu danych",
-  "Be the first to review": "",
+  "Be the first to review": "Be the first to review",
   Birthday: Birthday$1,
   "Bonus Balance": "Bonus Balance",
   Bonuses: Bonuses$1,
+  Brands: Brands$1,
   Browse: Browse$2,
   Buy: Buy$1,
   Cancel: Cancel$2,
@@ -4590,8 +4644,8 @@ const pl = {
   Catalog: Catalog$1,
   Categories: Categories$1,
   Category: Category$1,
-  "Category details": "",
-  "Category details and settings management": "",
+  "Category details": "Category details",
+  "Category details and settings management": "Category details and settings management",
   Checkout: Checkout$1,
   Choose: Choose$2,
   "Choose :name": "Wybierz :name",
@@ -4611,9 +4665,9 @@ const pl = {
   Commerce: Commerce$1,
   "Commission Percent (%)": "Commission Percent (%)",
   Commit: Commit$1,
-  "Communication Hub": "",
+  "Communication Hub": "Communication Hub",
   Configuration: Configuration$1,
-  "Configure Parameters": "",
+  "Configure Parameters": "Configure Parameters",
   Confirm: Confirm$2,
   "Confirm Order": "Confirm Order",
   "Confirm Password": "Potwierdź Hasło",
@@ -4634,7 +4688,7 @@ const pl = {
   "Current Password": "Aktualne Hasło",
   Dashboard: Dashboard$2,
   "Date": "Date",
-  "Date of Birth": "",
+  "Date of Birth": "Date of Birth",
   Delete: Delete$2,
   "Delete :name": "Usuń :name",
   "Delete Account": "Usuń Konto",
@@ -4654,7 +4708,7 @@ const pl = {
   "Edit :name": "Edytuj :name",
   "Edit Profile": "Edit Profile",
   Email: Email$2,
-  "Email Address": "",
+  "Email Address": "Email Address",
   "Email Password Reset Link": "Wyślij Link Resetowania Hasła",
   "Email складу": "Email складу",
   Empty: Empty$1,
@@ -4691,7 +4745,7 @@ const pl = {
   Gender: Gender$1,
   General: General$1,
   "General Data": "General Data",
-  "Global Options": "",
+  "Global Options": "Global Options",
   "Go Home": "Przejdź do strony głównej",
   "Go to Checkout": "Go to Checkout",
   "Go to page :page": "Przejdź do strony :page",
@@ -4705,7 +4759,7 @@ const pl = {
   "I'm a teapot": "Jestem czajnikiem",
   ID: ID$1,
   "IM Used": "Użyto zasobów IM",
-  "Identity Preview": "",
+  "Identity Preview": "Identity Preview",
   "If you did not create an account, no further action is required.": "Jeśli nie stworzyłeś konta, zignoruj tę wiadomość.",
   "If you did not request a password reset, no further action is required.": "Jeśli nie chcesz resetować hasła, zignoruj tę wiadomość.",
   'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below\ninto your web browser:': 'Jeżeli masz problemy z kliknięciem przycisku ":actionText", skopiuj i wklej poniższy adres do pasku przeglądarki:',
@@ -4717,8 +4771,8 @@ const pl = {
   "Import :name": "Importuj :name",
   "In Cart": "In Cart",
   "In Progress": "In Progress",
-  "In progress": "",
-  "Initialize Target Version": "",
+  "In progress": "In progress",
+  "Initialize Target Version": "Initialize Target Version",
   "Insufficient Storage": "Niewystarczające miejsce do przechowywania",
   "Internal Server Error": "Wewnętrzny błąd serwera",
   Introduction: Introduction$2,
@@ -4727,8 +4781,8 @@ const pl = {
   "Invalid filename.": "Nieprawidłowa nazwa pliku.",
   "Inventory Overview": "Inventory Overview",
   "Inventory Value": "Inventory Value",
-  "Item details": "",
-  "Item details and settings management": "",
+  "Item details": "Item details",
+  "Item details and settings management": "Item details and settings management",
   Items: Items$1,
   Language: Language$1,
   "Last Name": "Last Name",
@@ -4752,17 +4806,19 @@ const pl = {
   "Loop Detected": "Wykryto pętlę",
   Loyalty: Loyalty$1,
   "Maintenance Mode": "Tryb konserwacji",
-  "Manage category content and structure": "",
+  "Manage brand content and structure": "Manage brand content and structure",
+  "Manage category content and structure": "Manage category content and structure",
   "Manage general product info and public status.": "Manage general product info and public status.",
   "Manage how your customers can pay for orders.": "Manage how your customers can pay for orders.",
-  "Manage item content and structure": "",
-  "Manage menu content and structure": "",
-  "Manage operational and personal parameters": "",
-  "Manage page content and structure": "",
-  "Manage user accounts, roles, and permissions": "",
-  "Manage warehous content and structure": "",
+  "Manage item content and structure": "Manage item content and structure",
+  "Manage menu content and structure": "Manage menu content and structure",
+  "Manage operational and personal parameters": "Manage operational and personal parameters",
+  "Manage page content and structure": "Manage page content and structure",
+  "Manage user accounts, roles, and permissions": "Manage user accounts, roles, and permissions",
+  "Manage warehous content and structure": "Manage warehous content and structure",
   Manufacturer: Manufacturer$1,
   Manufacturers: Manufacturers$1,
+  "Max price": "Max price",
   Media: Media$1,
   Menus: Menus$1,
   Messages: Messages$1,
@@ -4770,39 +4826,41 @@ const pl = {
   "Method Status": "Method Status",
   "Method is hidden from storefront": "Method is hidden from storefront",
   "Middle Name": "Middle Name",
+  "Min price": "Min price",
   "Misdirected Request": "Błędnie skierowane żądanie",
-  "Modify Version Attributes": "",
-  "Move to another version": "",
+  "Modify Version Attributes": "Modify Version Attributes",
+  "Move to another version": "Move to another version",
   "Moved Permanently": "Trwale przekierowano",
   "Multi-Status": "Wielostanowy",
   "Multiple Choices": "Wiele opcji do wyboru",
   Name: Name$2,
-  "Navigations & Menus": "",
+  "Navigations & Menus": "Navigations & Menus",
   "Network Authentication Required": "Wymagane uwierzytelnianie w sieci",
   "Network Connect Timeout Error": "Błąd limitu czasu połączenia sieciowego",
   "Network Read Timeout Error": "Błąd limitu czasu odczytu sieci",
   New: New$2,
   "New :name": "Nowy :name",
-  "New Page": "",
+  "New Page": "New Page",
   "New Password": "Nowe Hasło",
   "New Payment Method": "New Payment Method",
-  "New User Account": "",
-  "New Warehouse": "",
-  "New category": "",
-  "New item": "",
+  "New User Account": "New User Account",
+  "New Warehouse": "New Warehouse",
+  "New category": "New category",
+  "New item": "New item",
   "Next step": "Next step",
   No: No$2,
   "No Content": "Brak treści",
   "No items found": "No items found",
   "No payment methods found.": "No payment methods found.",
-  "No popular products found.": "",
-  "No records found.": "",
-  "No records under this pipeline.": "",
-  "No translations found": "",
+  "No popular products found.": "No popular products found.",
+  "No products found": "No products found",
+  "No records found.": "No records found.",
+  "No records under this pipeline.": "No records under this pipeline.",
+  "No translations found": "No translations found",
   "No translations found.": "No translations found.",
   "No version history available": "No version history available",
-  "No version selected": "",
-  "No versions created yet.": "",
+  "No version selected": "No version selected",
+  "No versions created yet.": "No versions created yet.",
   "No versions found": "No versions found",
   "Non-Authoritative Information": "Informacje niepotwierdzone",
   "Not Acceptable": "Niedopuszczalne",
@@ -4814,23 +4872,23 @@ const pl = {
   "Old Price": "Old Price",
   "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Po usunięciu konta wszystkie jego zasoby i dane zostaną trwale usunięte. Przed usunięciem konta pobierz wszelkie dane albo informacje, które chcesz zachować.",
   "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.": "Po usunięciu konta wszystkie jego zasoby i dane zostaną trwale usunięte. Wprowadź hasło, aby potwierdzić, że chcesz trwale usunąć swoje konto.",
-  "Only registered users can leave reviews.": "",
+  "Only registered users can leave reviews.": "Only registered users can leave reviews.",
   Open: Open$2,
   "Open in a current window": "Otwórz w bieżącym oknie",
   "Open in a new window": "Otwórz w nowym oknie",
   "Open in a parent frame": "Otwórz w ramce nadrzędnej",
   "Open in the topmost frame": "Otwórz w najwyższej ramce",
   "Open on the website": "Otwórz na stronie",
-  "Option Categories": "",
+  "Option Categories": "Option Categories",
   Options: Options$1,
   Order: Order$1,
   "Order Summary": "Order Summary",
   Orders: Orders$1,
   "Origin Is Unreachable": "Serwer źródłowy jest nieosiągalny",
   "Out of stock": "Out of stock",
-  "Page Details": "",
+  "Page Details": "Page Details",
   "Page Expired": "Strona Wygasła",
-  "Page details and settings management": "",
+  "Page details and settings management": "Page details and settings management",
   Pages: Pages$1,
   "Pagination Navigation": "Nawigacja Stron",
   Parent: Parent$1,
@@ -4848,7 +4906,7 @@ const pl = {
   Petro: Petro$1,
   Petrovych: Petrovych$1,
   Phone: Phone$1,
-  "Phone Connection": "",
+  "Phone Connection": "Phone Connection",
   "Plan (Roadmap)": "Plan (Roadmap)",
   "Please click the button below to verify your email address.": "Kliknij poniższy przycisk aby zweryfikować swój adres e-mail.",
   "Plus Code": "Plus Code",
@@ -4857,6 +4915,7 @@ const pl = {
   "Precondition Required": "Wymagany warunek wstępny",
   Preview: Preview$2,
   Price: Price$2,
+  "Price Range": "Price Range",
   "Private (Hidden)": "Private (Hidden)",
   Processing: Processing$2,
   "Processing...": "Processing...",
@@ -4877,10 +4936,10 @@ const pl = {
   "Ref Району": "Ref Району",
   "Regards,": "Z poważaniem,",
   Register: Register$2,
-  "Register a secure user into the ecosystem": "",
+  "Register a secure user into the ecosystem": "Register a secure user into the ecosystem",
   "Release / Roadmap Progress": "Release / Roadmap Progress",
-  "Released on": "",
-  "Relocate Task": "",
+  "Released on": "Released on",
+  "Relocate Task": "Relocate Task",
   "Remember me": "Zapamiętaj mnie",
   Remove: Remove$1,
   "Request Header Fields Too Large": "Za duże pola nagłówka żądania",
@@ -4894,8 +4953,9 @@ const pl = {
   "Retry With": "Spróbuj ponownie z użyciem",
   "Roadmap & versions": "Roadmap & versions",
   Role: Role$1,
-  "Role Selection": "",
+  "Role Selection": "Role Selection",
   "SSL Handshake Failed": "Nieudane uzgadnianie SSL",
+  Sale: Sale$2,
   Save: Save$2,
   "Save & Close": "Zapisz i zamknij",
   "Save & Return": "Zapisz i wróć",
@@ -4908,36 +4968,36 @@ const pl = {
   Search: Search$2,
   "Search :name": "Szukaj :name",
   "Search city...": "Search city...",
-  "Search translations...": "",
+  "Search translations...": "Search translations...",
   "Secure encrypted checkout": "Secure encrypted checkout",
-  "Security Credentials": "",
+  "Security Credentials": "Security Credentials",
   "See Other": "Zobacz inny zasób",
   Select: Select$2,
   "Select All": "Zaznacz wszystko",
   "Select city first": "Select city first",
   "Select how you want to receive your order": "Select how you want to receive your order",
-  "Select version...": "",
+  "Select version...": "Select version...",
   "Select warehouse...": "Select warehouse...",
   "Select your preferred payment method": "Select your preferred payment method",
   Send: Send$2,
-  "Send Review": "",
-  "Sending...": "",
+  "Send Review": "Send Review",
+  "Sending...": "Sending...",
   "Server Error": "Błąd Serwera",
   "Service Unavailable": "Serwis Niedostępny",
   "Session Has Expired": "Sesja wygasła – wymagane ponowne logowanie",
   Settings: Settings$2,
-  "Share your experience...": "",
+  "Share your experience...": "Share your experience...",
   Shipping: Shipping$1,
   "Shipping Details": "Shipping Details",
   Shippings: Shippings$1,
   "Shopping Cart": "Shopping Cart",
-  "Short scope summary": "",
+  "Short scope summary": "Short scope summary",
   Show: Show$2,
   "Show :name": "Pokaż :name",
   "Show All": "Pokaż wszystko",
   Showing: Showing$2,
   "Sign In": "Zalogować się",
-  "Sign in": "",
+  "Sign in": "Sign in",
   Solve: Solve$2,
   "Sort order": "Sort order",
   Start: Start$2,
@@ -4954,15 +5014,15 @@ const pl = {
   "Switching Protocols": "Przełączanie protokołów",
   System: System$1,
   "System Code": "System Code",
-  "System Group Assignment": "",
+  "System Group Assignment": "System Group Assignment",
   Tag: Tag$2,
   Tags: Tags$2,
   Target: Target$1,
-  "Target Milestone / Release": "",
+  "Target Milestone / Release": "Target Milestone / Release",
   "Technical Configuration": "Technical Configuration",
   "Temporary Redirect": "Tymczasowe przekierowanie",
-  "Text for": "",
-  "Thank you for your feedback!": "",
+  "Text for": "Text for",
+  "Thank you for your feedback!": "Thank you for your feedback!",
   "Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.": "Dziękujemy za zarejestrowanie się! Przed rozpoczęciem proszę zweryfikować swój adres e-mail, klikając w link, który właśnie wysłaliśmy do Ciebie e-mailem. Jeśli nie otrzymałeś e-maila, z przyjemnością prześlemy Ci kolejny.",
   "The given data was invalid.": "Podane dane były nieprawidłowe.",
   "The response is not a streamed response.": "Odpowiedź nie jest odpowiedzią przesyłaną strumieniowo.",
@@ -4999,27 +5059,27 @@ const pl = {
   "Use Proxy": "Użyj serwera proxy",
   User: User$2,
   "User Info": "User Info",
-  "User Profile": "",
+  "User Profile": "User Profile",
   Users: Users$1,
   "Variant Also Negotiates": "Wariant również prowadzi negocjacje",
   "Verify Email Address": "Zweryfikuj Adres E-mail",
   Version: Version$1,
-  "Version closed.": "",
-  "Version tag": "",
+  "Version closed.": "Version closed.",
+  "Version tag": "Version tag",
   Versions: Versions$1,
   View: View$2,
   "View :name": "Zobacz :name",
   "View Cart": "View Cart",
   "View Full Roadmap & History": "View Full Roadmap & History",
   Warehouse: Warehouse$1,
-  "Warehouse / Address": "",
+  "Warehouse / Address": "Warehouse / Address",
   "Warehouse / Delivery Address": "Warehouse / Delivery Address",
-  "Warehouse details": "",
-  "Warehouse details and settings management": "",
+  "Warehouse details": "Warehouse details",
+  "Warehouse details and settings management": "Warehouse details and settings management",
   "Warehouse/Address": "Warehouse/Address",
   Warehouses: Warehouses$1,
   "Web Server is Down": "Serwer sieciowy nie działa",
-  "What was implemented or fixed?": "",
+  "What was implemented or fixed?": "What was implemented or fixed?",
   "Whoops!": "Ups!",
   "Work hours": "Work hours",
   Yes: Yes$2,
@@ -5122,6 +5182,7 @@ const __vite_glob_1_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Back: Back$1,
   Birthday: Birthday$1,
   Bonuses: Bonuses$1,
+  Brands: Brands$1,
   Browse: Browse$2,
   Buy: Buy$1,
   Cancel: Cancel$2,
@@ -5223,6 +5284,7 @@ const __vite_glob_1_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Preview: Preview$2,
   Price: Price$2,
   Processing: Processing$2,
+  Products: Products$2,
   Profile: Profile$2,
   Quantity: Quantity$1,
   Record: Record$2,
@@ -5230,6 +5292,7 @@ const __vite_glob_1_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   Remove: Remove$1,
   Restore: Restore$2,
   Role: Role$1,
+  Sale: Sale$2,
   Save: Save$2,
   Schedule: Schedule$1,
   Search: Search$2,
@@ -5289,6 +5352,8 @@ const __vite_glob_1_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   tasks: tasks$1,
   to: to$2
 }, Symbol.toStringTag, { value: "Module" }));
+const Sale$1 = "Распродажа";
+const Products$1 = ":count товар|:count товара|:count товаров";
 const reviews$1 = ":count отзыв|:count отзыва|:count отзывов";
 const Accept$1 = "Принять";
 const Accepted$1 = "Принято";
@@ -5392,6 +5457,9 @@ const User$1 = "Пользователь";
 const View$1 = "Просмотр";
 const Yes$1 = "Да";
 const ru = {
+  "Highest Rated": "Highest Rated",
+  Sale: Sale$1,
+  Products: Products$1,
   reviews: reviews$1,
   "(and :count more error)": "(и ещё :count ошибка)",
   "(and :count more errors)": "(и ещё :count ошибка)|(и ещё :count ошибки)|(и ещё :count ошибок)",
@@ -5722,10 +5790,12 @@ const __vite_glob_1_10 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   Preview: Preview$1,
   Price: Price$1,
   Processing: Processing$1,
+  Products: Products$1,
   Profile: Profile$1,
   Record: Record$1,
   Register: Register$1,
   Restore: Restore$1,
+  Sale: Sale$1,
   Save: Save$1,
   Search: Search$1,
   Select: Select$1,
@@ -5769,7 +5839,7 @@ const Add = "Додати";
 const Admin = "адмін";
 const Agree = "Погодьтеся";
 const Alias = "Alias";
-const All = "1фвв фівф фівфів";
+const All = "Усі";
 const Apply = "Apply";
 const Apps = "Apps";
 const Archive = "Архів";
@@ -5779,10 +5849,12 @@ const Attach = "Прикріпити";
 const Back = "Back";
 const Birthday = "Birthday";
 const Bonuses = "Bonuses";
+const Brand = "Brand";
+const Brands = "Brands";
 const Browse = "переглядати";
 const Buy = "Купити";
 const Cancel = "Відмінити";
-const Cart = "";
+const Cart = "Кошик";
 const Catalog = "Catalog";
 const Categories = "Категорії";
 const Category = "Категорія";
@@ -5795,7 +5867,7 @@ const Code = "Code";
 const Collapse = "Згорнути";
 const Comment = "коментар";
 const Commerce = "Commerce";
-const Commit = "";
+const Commit = "Commit";
 const Configuration = "Configuration";
 const Confirm = "Підтвердити";
 const Conflict = "Конфлікт";
@@ -5819,7 +5891,7 @@ const Draft = "Draft";
 const Duplicate = "дублікат";
 const Edit = "Редагувати";
 const Email = "Електронна пошта";
-const Empty = "";
+const Empty = "Empty";
 const Enable = "Увімкнути";
 const Expand = "Розгорнути";
 const Explanation = "Пояснення";
@@ -5827,7 +5899,7 @@ const Export = "Експорт";
 const Fee = "Fee";
 const File = "Файл";
 const Files = "Файли";
-const Filled = "";
+const Filled = "Filled";
 const Finish = "Finish";
 const Forbidden = "Заборонено";
 const Found = "Знайдено";
@@ -5839,7 +5911,7 @@ const Hide = "Сховати";
 const Home = "Головна";
 const ID = "ID";
 const Image = "Зображення";
-const Img = "";
+const Img = "Img";
 const Impersonate = "Зайти під виглядом користувача";
 const Impersonation = "Уособлення";
 const Import = "Імпорт";
@@ -5858,9 +5930,11 @@ const Logout = "Вийти";
 const Loyalty = "Loyalty";
 const Manufacturer = "Manufacturer";
 const Manufacturers = "Виробники";
+const Max = "Max";
 const Media = "Media";
 const Menus = "Menus";
 const Messages = "Messages";
+const Min = "Min";
 const Name = "Ім'я";
 const New = "Новий";
 const No = "Ні";
@@ -5880,15 +5954,18 @@ const Phone = "Phone";
 const Preview = "Попередній перегляд";
 const Price = "Ціна";
 const Processing = "Йде обробка";
+const Products = ":count товар|:count товари|:count товарів";
 const Profile = "Профіль";
 const Quantity = "Quantity";
+const Rating = "Rating";
 const Record = "запис";
 const Register = "Реєстрація";
 const Remove = "Remove";
 const Restore = "Відновити";
-const Role = "";
+const Role = "Role";
+const Sale = "Акційна ціна";
 const Save = "Зберегти";
-const Schedule = "";
+const Schedule = "Schedule";
 const Search = "Пошук";
 const Select = "Вибрати";
 const Send = "Надіслати";
@@ -5909,13 +5986,13 @@ const Switch = "Перемикач";
 const System = "System";
 const Tag = "Тег";
 const Tags = "Теги";
-const Target = "";
+const Target = "Target";
 const Title = "Title";
 const Total = "Total";
-const Transfer = "";
+const Transfer = "Transfer";
 const Translate = "Перекласти";
 const Translations = "Переклади";
-const Type = "";
+const Type = "Type";
 const Unauthorized = "Неавторизований";
 const Unpack = "Розпакуйте";
 const Unsubscribe = "Відписатися";
@@ -5933,7 +6010,7 @@ const ava = "ava";
 const email = "Поле :attribute повинне містити коректну електронну адресу.";
 const errors = "помилки";
 const female = "female";
-const img = "";
+const img = "img";
 const inStoke = "В наявності";
 const male = "male";
 const name = "ім'я";
@@ -5942,9 +6019,11 @@ const other = "other";
 const password = "Пароль невірний.";
 const results = "результати";
 const reviews = ":count відгук|:count відгуки|:count відгуків";
+const stars = "stars";
 const tasks = "tasks";
 const to = "до";
 const uk = {
+  "Highest Rated": "За рейтингом",
   "#ID": "#ID",
   "(and :count more error)": "(та ще :count помилка)",
   "(and :count more errors)": "(та ще :count помилка)|(та ще :count помилки)|(та ще :count помилок)",
@@ -5987,10 +6066,14 @@ const uk = {
   "Bad Gateway": "Невірний шлюз",
   "Bad Request": "Поганий запит",
   "Bandwidth Limit Exceeded": "Перевищено обмеження пропускної здатності",
-  "Be the first to review": "",
+  "Be the first to review": "Be the first to review",
   Birthday,
   "Bonus Balance": "Bonus Balance",
   Bonuses,
+  Brand,
+  "Brand details": "Brand details",
+  "Brand details and settings management": "Brand details and settings management",
+  Brands,
   Browse,
   Buy,
   Cancel,
@@ -5999,8 +6082,8 @@ const uk = {
   Catalog,
   Categories,
   Category,
-  "Category details": "",
-  "Category details and settings management": "",
+  "Category details": "Category details",
+  "Category details and settings management": "Category details and settings management",
   Checkout,
   Choose,
   "Choose :name": "Виберіть :name",
@@ -6020,9 +6103,9 @@ const uk = {
   Commerce,
   "Commission Percent (%)": "Commission Percent (%)",
   Commit,
-  "Communication Hub": "",
+  "Communication Hub": "Communication Hub",
   Configuration,
-  "Configure Parameters": "",
+  "Configure Parameters": "Configure Parameters",
   Confirm,
   "Confirm Order": "Підтвердити замовлення",
   "Confirm Password": "Підтвердити пароль",
@@ -6043,7 +6126,7 @@ const uk = {
   "Current Password": "Поточний пароль",
   Dashboard,
   "Date": "Date",
-  "Date of Birth": "",
+  "Date of Birth": "Date of Birth",
   Delete,
   "Delete :name": "Видалити :name",
   "Delete Account": "Видалити обліковий запис",
@@ -6063,7 +6146,7 @@ const uk = {
   "Edit :name": "Редагувати :name",
   "Edit Profile": "Edit Profile",
   Email,
-  "Email Address": "",
+  "Email Address": "Email Address",
   "Email Password Reset Link": "Посилання для скидання пароля електронної пошти",
   "Email складу": "Email складу",
   Empty,
@@ -6100,7 +6183,7 @@ const uk = {
   Gender,
   General,
   "General Data": "General Data",
-  "Global Options": "",
+  "Global Options": "Global Options",
   "Go Home": "На головну",
   "Go to Checkout": "Go to Checkout",
   "Go to page :page": "Перейти на сторінку :page",
@@ -6114,7 +6197,7 @@ const uk = {
   "I'm a teapot": "Я чайник",
   ID,
   "IM Used": "Використано IM",
-  "Identity Preview": "",
+  "Identity Preview": "Identity Preview",
   "If you did not create an account, no further action is required.": "Якщо ви не створювали облікового запису, подальші дії не потрібні.",
   "If you did not request a password reset, no further action is required.": "Якщо ви не надсилали запит на скидання паролю, подальші дії не потрібні.",
   'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below\ninto your web browser:': 'Якщо у вас виникли проблеми з кнопкою ":actionText", скопіюйте та вставте нижчеподаний URL у свій браузер:',
@@ -6126,8 +6209,8 @@ const uk = {
   "Import :name": "Імпорт :name",
   "In Cart": "В кошику",
   "In Progress": "In Progress",
-  "In progress": "",
-  "Initialize Target Version": "",
+  "In progress": "In progress",
+  "Initialize Target Version": "Initialize Target Version",
   "Insufficient Storage": "Недостатньо місця",
   "Internal Server Error": "Внутрішня помилка сервера",
   Introduction,
@@ -6136,8 +6219,8 @@ const uk = {
   "Invalid filename.": "Недійсна назва файлу.",
   "Inventory Overview": "Inventory Overview",
   "Inventory Value": "Inventory Value",
-  "Item details": "",
-  "Item details and settings management": "",
+  "Item details": "Item details",
+  "Item details and settings management": "Item details and settings management",
   Items,
   Language,
   "Last Name": "Last Name",
@@ -6161,17 +6244,20 @@ const uk = {
   "Loop Detected": "Виявлено цикл",
   Loyalty,
   "Maintenance Mode": "Режим обслуговування",
-  "Manage category content and structure": "",
+  "Manage brand content and structure": "Manage brand content and structure",
+  "Manage category content and structure": "Manage category content and structure",
   "Manage general product info and public status.": "Manage general product info and public status.",
   "Manage how your customers can pay for orders.": "Manage how your customers can pay for orders.",
-  "Manage item content and structure": "",
-  "Manage menu content and structure": "",
-  "Manage operational and personal parameters": "",
-  "Manage page content and structure": "",
-  "Manage user accounts, roles, and permissions": "",
-  "Manage warehous content and structure": "",
+  "Manage item content and structure": "Manage item content and structure",
+  "Manage menu content and structure": "Manage menu content and structure",
+  "Manage operational and personal parameters": "Manage operational and personal parameters",
+  "Manage page content and structure": "Manage page content and structure",
+  "Manage user accounts, roles, and permissions": "Manage user accounts, roles, and permissions",
+  "Manage warehous content and structure": "Manage warehous content and structure",
   Manufacturer,
   Manufacturers,
+  Max,
+  "Max price": "Max price",
   Media,
   Menus,
   Messages,
@@ -6179,39 +6265,43 @@ const uk = {
   "Method Status": "Method Status",
   "Method is hidden from storefront": "Method is hidden from storefront",
   "Middle Name": "Middle Name",
+  Min,
+  "Min price": "Min price",
   "Misdirected Request": "Неправильний запит",
-  "Modify Version Attributes": "",
-  "Move to another version": "",
+  "Modify Version Attributes": "Modify Version Attributes",
+  "Move to another version": "Move to another version",
   "Moved Permanently": "Переміщено назавжди",
   "Multi-Status": "Мультистатус",
   "Multiple Choices": "Кілька варіантів",
   Name,
-  "Navigations & Menus": "",
+  "Navigations & Menus": "Navigations & Menus",
   "Network Authentication Required": "Потрібна мережева автентифікація",
   "Network Connect Timeout Error": "Сплив час підключення до мережі",
   "Network Read Timeout Error": "Сплив час читання мережі",
   New,
   "New :name": "Новий :name",
-  "New Page": "",
+  "New Page": "New Page",
   "New Password": "Новий пароль",
   "New Payment Method": "New Payment Method",
-  "New User Account": "",
-  "New Warehouse": "",
-  "New category": "",
-  "New item": "",
+  "New User Account": "New User Account",
+  "New Warehouse": "New Warehouse",
+  "New brand": "New brand",
+  "New category": "New category",
+  "New item": "New item",
   "Next step": "Next step",
   No,
   "No Content": "Немає вмісту",
   "No items found": "No items found",
   "No payment methods found.": "No payment methods found.",
-  "No popular products found.": "",
-  "No records found.": "",
-  "No records under this pipeline.": "",
-  "No translations found": "",
+  "No popular products found.": "No popular products found.",
+  "No products found": "No products found",
+  "No records found.": "No records found.",
+  "No records under this pipeline.": "No records under this pipeline.",
+  "No translations found": "No translations found",
   "No translations found.": "No translations found.",
   "No version history available": "No version history available",
-  "No version selected": "",
-  "No versions created yet.": "",
+  "No version selected": "No version selected",
+  "No versions created yet.": "No versions created yet.",
   "No versions found": "No versions found",
   "Non-Authoritative Information": "Інформація не авторитетна",
   "Not Acceptable": "Не прийнятний",
@@ -6223,23 +6313,23 @@ const uk = {
   "Old Price": "Old Price",
   "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Після видалення вашого облікового запису всі його ресурси та дані будуть видалені назавжди. Перш ніж видалити свій обліковий запис, завантажте будь-які дані чи інформацію, які ви хочете зберегти.",
   "Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.": "Після видалення вашого облікового запису всі його ресурси та дані буде видалено назавжди. Будь ласка, введіть свій пароль, щоб підтвердити, що ви хочете повністю видалити свій обліковий запис.",
-  "Only registered users can leave reviews.": "",
+  "Only registered users can leave reviews.": "Only registered users can leave reviews.",
   Open,
   "Open in a current window": "Відкрити в поточному вікні",
   "Open in a new window": "Відкрити в новому вікні",
   "Open in a parent frame": "Відкрити в батьківському фреймі",
   "Open in the topmost frame": "Відкрити в самому верхньому кадрі",
   "Open on the website": "Відкрити на сайті",
-  "Option Categories": "",
+  "Option Categories": "Option Categories",
   Options,
   Order,
   "Order Summary": "Order Summary",
   Orders,
   "Origin Is Unreachable": "Джерело недоступне",
   "Out of stock": "Out of stock",
-  "Page Details": "",
+  "Page Details": "Page Details",
   "Page Expired": "Час сесії минув",
-  "Page details and settings management": "",
+  "Page details and settings management": "Page details and settings management",
   Pages,
   "Pagination Navigation": "Навігація пагінацією",
   Parent,
@@ -6257,7 +6347,7 @@ const uk = {
   Petro,
   Petrovych,
   Phone,
-  "Phone Connection": "",
+  "Phone Connection": "Phone Connection",
   "Plan (Roadmap)": "Plan (Roadmap)",
   "Please click the button below to verify your email address.": "Будь ласка, натисніть кнопку нижче, щоб підтвердити свою електронну адресу.",
   "Plus Code": "Plus Code",
@@ -6266,9 +6356,11 @@ const uk = {
   "Precondition Required": "Необхідна передумова",
   Preview,
   Price,
+  "Price Range": "Price Range",
   "Private (Hidden)": "Private (Hidden)",
   Processing,
   "Processing...": "Processing...",
+  Products,
   Profile,
   "Profile Information": "Інформація про профіль",
   "Proxy Authentication Required": "Потрібна автентифікація проксі",
@@ -6276,6 +6368,7 @@ const uk = {
   Quantity,
   "Railgun Error": "Помилка Railgun",
   "Range Not Satisfiable": "Діапазон недосяжний",
+  Rating,
   "Recent Orders": "Recent Orders",
   "Recipient Last Name": "Recipient Last Name",
   "Recipient Name": "Recipient Name",
@@ -6286,10 +6379,10 @@ const uk = {
   "Ref Району": "Ref Району",
   "Regards,": "З повагою,",
   Register,
-  "Register a secure user into the ecosystem": "",
+  "Register a secure user into the ecosystem": "Register a secure user into the ecosystem",
   "Release / Roadmap Progress": "Release / Roadmap Progress",
-  "Released on": "",
-  "Relocate Task": "",
+  "Released on": "Released on",
+  "Relocate Task": "Relocate Task",
   "Remember me": "Запам'ятати мене",
   Remove,
   "Request Header Fields Too Large": "Завеликі поля заголовка запиту",
@@ -6298,13 +6391,15 @@ const uk = {
   "Reset Content": "Скинути вміст",
   "Reset Password": "Скинути пароль",
   "Reset Password Notification": "Сповіщення про скидання пароля",
+  "Reset filters": "Reset filters",
   Restore,
   "Restore :name": "Відновити :name",
   "Retry With": "Повторити з",
   "Roadmap & versions": "Roadmap & versions",
   Role,
-  "Role Selection": "",
+  "Role Selection": "Role Selection",
   "SSL Handshake Failed": "Помилка рукостискання SSL",
+  Sale,
   Save,
   "Save & Close": "Зберегти та закрити",
   "Save & Return": "Зберегти та повернути",
@@ -6317,36 +6412,36 @@ const uk = {
   Search,
   "Search :name": "Пошук :name",
   "Search city...": "Search city...",
-  "Search translations...": "",
+  "Search translations...": "Search translations...",
   "Secure encrypted checkout": "Secure encrypted checkout",
-  "Security Credentials": "",
+  "Security Credentials": "Security Credentials",
   "See Other": "Дивіться інше",
   Select,
   "Select All": "Вибрати все",
   "Select city first": "Select city first",
   "Select how you want to receive your order": "Select how you want to receive your order",
-  "Select version...": "",
+  "Select version...": "Select version...",
   "Select warehouse...": "Select warehouse...",
   "Select your preferred payment method": "Select your preferred payment method",
   Send,
-  "Send Review": "",
-  "Sending...": "",
+  "Send Review": "Send Review",
+  "Sending...": "Sending...",
   "Server Error": "Помилка серверу",
   "Service Unavailable": "Сервіс недоступний",
   "Session Has Expired": "Сеанс закінчився",
   Settings,
-  "Share your experience...": "",
+  "Share your experience...": "Share your experience...",
   Shipping,
   "Shipping Details": "Shipping Details",
   Shippings,
   "Shopping Cart": "Shopping Cart",
-  "Short scope summary": "",
+  "Short scope summary": "Short scope summary",
   Show,
   "Show :name": "Показати :name",
   "Show All": "Покажи все",
   Showing,
   "Sign In": "Увійти",
-  "Sign in": "",
+  "Sign in": "Sign in",
   Solve,
   "Sort order": "Sort order",
   Start,
@@ -6363,15 +6458,15 @@ const uk = {
   "Switching Protocols": "Перемикання протоколів",
   System,
   "System Code": "System Code",
-  "System Group Assignment": "",
+  "System Group Assignment": "System Group Assignment",
   Tag,
   Tags,
   Target,
-  "Target Milestone / Release": "",
+  "Target Milestone / Release": "Target Milestone / Release",
   "Technical Configuration": "Technical Configuration",
   "Temporary Redirect": "Тимчасове перенаправлення",
-  "Text for": "",
-  "Thank you for your feedback!": "",
+  "Text for": "Text for",
+  "Thank you for your feedback!": "Thank you for your feedback!",
   "Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.": "Дякуємо за реєстрацію! Перед початком роботи, підтвердіть свою електронну адресу, натиснувши посилання, яке ми щойно надіслали вам. Якщо ви не отримали листа, ми із задоволенням надішлемо вам ще один.",
   "The given data was invalid.": "Надані дані були недійсними.",
   "The response is not a streamed response.": "Відповідь не є потоковою відповіддю.",
@@ -6408,27 +6503,27 @@ const uk = {
   "Use Proxy": "Використовуйте проксі",
   User,
   "User Info": "Користувач",
-  "User Profile": "",
+  "User Profile": "User Profile",
   Users,
   "Variant Also Negotiates": "Варіант також веде переговори",
   "Verify Email Address": "Підтвердьте електронну адресу",
   Version,
-  "Version closed.": "",
-  "Version tag": "",
+  "Version closed.": "Version closed.",
+  "Version tag": "Version tag",
   Versions,
   View,
   "View :name": "Переглянути :name",
   "View Cart": "View Cart",
   "View Full Roadmap & History": "View Full Roadmap & History",
   Warehouse,
-  "Warehouse / Address": "",
+  "Warehouse / Address": "Warehouse / Address",
   "Warehouse / Delivery Address": "Warehouse / Delivery Address",
-  "Warehouse details": "",
-  "Warehouse details and settings management": "",
+  "Warehouse details": "Warehouse details",
+  "Warehouse details and settings management": "Warehouse details and settings management",
   "Warehouse/Address": "Warehouse/Address",
   Warehouses,
   "Web Server is Down": "Веб-сервер не працює",
-  "What was implemented or fixed?": "",
+  "What was implemented or fixed?": "What was implemented or fixed?",
   "Whoops!": "Упс!",
   "Work hours": "Work hours",
   Yes,
@@ -6456,6 +6551,7 @@ const uk = {
   "public": "public",
   results,
   reviews,
+  stars,
   tasks,
   to,
   "Інформація": "Інформація",
@@ -6531,6 +6627,8 @@ const __vite_glob_1_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   Back,
   Birthday,
   Bonuses,
+  Brand,
+  Brands,
   Browse,
   Buy,
   Cancel,
@@ -6610,9 +6708,11 @@ const __vite_glob_1_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   Loyalty,
   Manufacturer,
   Manufacturers,
+  Max,
   Media,
   Menus,
   Messages,
+  Min,
   Name,
   New,
   No,
@@ -6632,13 +6732,16 @@ const __vite_glob_1_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   Preview,
   Price,
   Processing,
+  Products,
   Profile,
   Quantity,
+  Rating,
   Record,
   Register,
   Remove,
   Restore,
   Role,
+  Sale,
   Save,
   Schedule,
   Search,
@@ -6695,6 +6798,7 @@ const __vite_glob_1_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   password,
   results,
   reviews,
+  stars,
   tasks,
   to
 }, Symbol.toStringTag, { value: "Module" }));
@@ -11796,7 +11900,17 @@ const helper = {
     };
     app.config.globalProperties.$formatDate = (date, options = {}) => {
       if (!date) return "";
-      const d2 = new Date(date);
+      let d2;
+      if (typeof date === "string" && /^\d{2}\.\d{2}\.\d{4}$/.test(date)) {
+        const [day, month, year] = date.split(".");
+        d2 = /* @__PURE__ */ new Date(`${year}-${month}-${day}`);
+      } else {
+        d2 = new Date(date);
+      }
+      if (isNaN(d2.getTime())) {
+        console.warn("Invalid date provided:", date);
+        return "";
+      }
       return new Intl.DateTimeFormat("uk-UA", {
         day: "2-digit",
         month: "long",
@@ -11821,7 +11935,7 @@ createServer(
     title: (title) => title,
     resolve: (name2) => resolvePageComponent(
       `./Pages/${name2}.vue`,
-      /* @__PURE__ */ Object.assign({ "./Pages/Admin/Commerce/Categories/Components/CategoryForm.vue": () => import("./assets/CategoryForm-DRMDNMeF.js"), "./Pages/Admin/Commerce/Categories/Create.vue": () => import("./assets/Create-DSlXNadf.js"), "./Pages/Admin/Commerce/Categories/Edit.vue": () => import("./assets/Edit-CMtVHcwr.js"), "./Pages/Admin/Commerce/Categories/Index.vue": () => import("./assets/Index-BBBuaeHP.js"), "./Pages/Admin/Commerce/Categories/Partials/DataForm.vue": () => import("./assets/DataForm-BUKIS5db.js"), "./Pages/Admin/Commerce/Categories/Partials/DataTable.vue": () => import("./assets/DataTable-aYjtOGuM.js"), "./Pages/Admin/Commerce/Categories/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-yINx4z3W.js"), "./Pages/Admin/Commerce/Categories/Partials/MediaForm.vue": () => import("./assets/MediaForm-BK8PJhWn.js"), "./Pages/Admin/Commerce/Categories/Partials/SEOForm.vue": () => import("./assets/SEOForm-C8A91PPK.js"), "./Pages/Admin/Commerce/Categories/Show.vue": () => import("./assets/Show--H7XP0De.js"), "./Pages/Admin/Commerce/Items/Components/ItemForm.vue": () => import("./assets/ItemForm-nqW-dvcH.js"), "./Pages/Admin/Commerce/Items/Create.vue": () => import("./assets/Create-DzIRnA3f.js"), "./Pages/Admin/Commerce/Items/Edit.vue": () => import("./assets/Edit-B6Suf1Km.js"), "./Pages/Admin/Commerce/Items/Index.vue": () => import("./assets/Index-CKg-rgVa.js"), "./Pages/Admin/Commerce/Items/Partials/DataForm.vue": () => import("./assets/DataForm-3lbwG0ON.js"), "./Pages/Admin/Commerce/Items/Partials/DataTable.vue": () => import("./assets/DataTable-DbTvLy0c.js"), "./Pages/Admin/Commerce/Items/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-Cn1tjkZN.js"), "./Pages/Admin/Commerce/Items/Partials/MediaForm.vue": () => import("./assets/MediaForm-C3yVoGZk.js"), "./Pages/Admin/Commerce/Items/Partials/SEOForm.vue": () => import("./assets/SEOForm-pLY_7DV4.js"), "./Pages/Admin/Commerce/Items/Show.vue": () => import("./assets/Show-Dww4OjbK.js"), "./Pages/Admin/Commerce/Manufacturers/Create.vue": () => import("./assets/Create-COZTyjnI.js"), "./Pages/Admin/Commerce/Manufacturers/Edit.vue": () => import("./assets/Edit-C_XIozWx.js"), "./Pages/Admin/Commerce/Manufacturers/Index.vue": () => import("./assets/Index-DyjnOFga.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/DataForm.vue": () => import("./assets/DataForm-Dge5wuvW.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/DataTable.vue": () => import("./assets/DataTable-Drg1VI7H.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-BkcYMPM1.js"), "./Pages/Admin/Commerce/Manufacturers/Partials/SEOForm.vue": () => import("./assets/SEOForm-BywiiR1v.js"), "./Pages/Admin/Commerce/Manufacturers/Show.vue": () => import("./assets/Show-Dm21z19N.js"), "./Pages/Admin/Commerce/Orders/Create.vue": () => import("./assets/Create-BFztKdkH.js"), "./Pages/Admin/Commerce/Orders/Edit.vue": () => import("./assets/Edit-ByHXykiV.js"), "./Pages/Admin/Commerce/Orders/Index.vue": () => import("./assets/Index-CeHbHAEK.js"), "./Pages/Admin/Commerce/Orders/Partials/DataForm.vue": () => import("./assets/DataForm-CHnfIpJK.js"), "./Pages/Admin/Commerce/Orders/Partials/DataTable.vue": () => import("./assets/DataTable-CnUNAvfK.js"), "./Pages/Admin/Commerce/Orders/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-CPUYmCCX.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Components/WarehouseForm.vue": () => import("./assets/WarehouseForm-DtqIL-vL.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Create.vue": () => import("./assets/Create-CpVmfii8.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Edit.vue": () => import("./assets/Edit-BKz2Lxel.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Index.vue": () => import("./assets/Index-DMj9ZnHV.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Show.vue": () => import("./assets/Show-Bgrd1Dfb.js"), "./Pages/Admin/Core/Menus/Components/MenuForm.vue": () => import("./assets/MenuForm-DfBF_qvk.js"), "./Pages/Admin/Core/Menus/Components/NestedMenuItems.vue": () => import("./assets/NestedMenuItems-DzxcM-wQ.js"), "./Pages/Admin/Core/Menus/Create.vue": () => import("./assets/Create-BGI5Zb0B.js"), "./Pages/Admin/Core/Menus/Edit.vue": () => import("./assets/Edit-CS_R9KKP.js"), "./Pages/Admin/Core/Menus/Index.vue": () => import("./assets/Index-CpNbkLSS.js"), "./Pages/Admin/Core/Pages/Components/PageForm.vue": () => import("./assets/PageForm-DdACNmck.js"), "./Pages/Admin/Core/Pages/Create.vue": () => import("./assets/Create-B0aqcEoa.js"), "./Pages/Admin/Core/Pages/Edit.vue": () => import("./assets/Edit-DwGs2KFV.js"), "./Pages/Admin/Core/Pages/Index.vue": () => import("./assets/Index-B3SMTXRD.js"), "./Pages/Admin/Core/Pages/Partials/DataForm.vue": () => import("./assets/DataForm-C-hZsrXF.js"), "./Pages/Admin/Core/Pages/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-AWfymvZT.js"), "./Pages/Admin/Core/Pages/Partials/SeoForm.vue": () => import("./assets/SeoForm-D9OPhUgN.js"), "./Pages/Admin/Core/Pages/Show.vue": () => import("./assets/Show-BjYI_imF.js"), "./Pages/Admin/Core/Users/Components/UserForm.vue": () => import("./assets/UserForm-A2MD-aNm.js"), "./Pages/Admin/Core/Users/Create.vue": () => import("./assets/Create-CTWiAvic.js"), "./Pages/Admin/Core/Users/Edit.vue": () => import("./assets/Edit-DbPNvI7-.js"), "./Pages/Admin/Core/Users/Index.vue": () => import("./assets/Index-BtzTTvY7.js"), "./Pages/Admin/Core/Users/Show.vue": () => import("./assets/Show-Bvd_vJ66.js"), "./Pages/Admin/Dashboard.vue": () => import("./assets/Dashboard-L0Y9Ymi-.js"), "./Pages/Admin/Settings/Options.vue": () => import("./assets/Options-B0m-JVgC.js"), "./Pages/Admin/Settings/PaymentMethods/Create.vue": () => import("./assets/Create-BILfsh9d.js"), "./Pages/Admin/Settings/PaymentMethods/Edit.vue": () => import("./assets/Edit-k_T0mZTX.js"), "./Pages/Admin/Settings/PaymentMethods/Index.vue": () => import("./assets/Index-DiKkfcuc.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataForm.vue": () => import("./assets/DataForm-DiJO29ra.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataTable.vue": () => import("./assets/DataTable-D8OyTDP-.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-B31I56KI.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/TranslationContent.vue": () => import("./assets/TranslationContent-nLQmf3p3.js"), "./Pages/Admin/Settings/Shippings/Edit.vue": () => import("./assets/Edit-D6NvBSSK.js"), "./Pages/Admin/Settings/Shippings/Index.vue": () => import("./assets/Index-DBGDAUFM.js"), "./Pages/Admin/Settings/Shippings/Partials/DataTable.vue": () => import("./assets/DataTable-p9O7Adf-.js"), "./Pages/Admin/Settings/Translations/Form.vue": () => import("./assets/Form-DK5iyRUl.js"), "./Pages/Admin/Settings/Versions/Form.vue": () => import("./assets/Form-DnQYuJeK.js"), "./Pages/Auth/AuthUserForm.vue": () => import("./assets/AuthUserForm-BM4JSyi8.js"), "./Pages/Auth/Login.vue": () => import("./assets/Login-Cq1qyTnU.js"), "./Pages/Public/Account/Index.vue": () => import("./assets/Index-BwdEAGg7.js"), "./Pages/Public/Commerce/Cart.vue": () => import("./assets/Cart-DPxEul3W.js"), "./Pages/Public/Commerce/CategoryShow.vue": () => import("./assets/CategoryShow-T3HFAZpE.js"), "./Pages/Public/Commerce/Checkout/Index.vue": () => import("./assets/Index-_y8bPNRj.js"), "./Pages/Public/Commerce/Checkout/Partials/OrderSummary.vue": () => import("./assets/OrderSummary-CLW2Cav3.js"), "./Pages/Public/Commerce/Checkout/Steps/StepContact.vue": () => import("./assets/StepContact-LxNsNWtk.js"), "./Pages/Public/Commerce/Checkout/Steps/StepDelivery.vue": () => import("./assets/StepDelivery-BMImZW47.js"), "./Pages/Public/Commerce/Checkout/Steps/StepPayment.vue": () => import("./assets/StepPayment-EvwzxruV.js"), "./Pages/Public/Commerce/Checkout/layout/DefaultCheckoutLayout.vue": () => import("./assets/DefaultCheckoutLayout-BfVICHWE.js"), "./Pages/Public/Commerce/CheckoutOld.vue": () => import("./assets/CheckoutOld-E8MU2h3H.js"), "./Pages/Public/Commerce/Components/BuyButton.vue": () => import("./assets/BuyButton-JQnkdb_2.js"), "./Pages/Public/Commerce/Components/PopularProducts.vue": () => import("./assets/PopularProducts-w3Nfb6j8.js"), "./Pages/Public/Commerce/Components/ProductCard.vue": () => import("./assets/ProductCard-2s9tQvH7.js"), "./Pages/Public/Commerce/Components/SkeletonProductCard.vue": () => import("./assets/SkeletonProductCard-DC70LTym.js"), "./Pages/Public/Commerce/Components/View/ProductPrice.vue": () => import("./assets/ProductPrice-BQZjVJ64.js"), "./Pages/Public/Commerce/Components/View/QuantityStatus.vue": () => import("./assets/QuantityStatus-Wz7Unz6U.js"), "./Pages/Public/Commerce/Components/View/StatsRating.vue": () => import("./assets/StatsRating-Cjhsk8Tq.js"), "./Pages/Public/Commerce/Partials/ContactInfo.vue": () => import("./assets/ContactInfo-CigWYlzz.js"), "./Pages/Public/Commerce/Partials/PaymentMethods.vue": () => import("./assets/PaymentMethods-BHqJDXf_.js"), "./Pages/Public/Commerce/Partials/ShippingInfo.vue": () => import("./assets/ShippingInfo-Db75YONL.js"), "./Pages/Public/Commerce/View.vue": () => import("./assets/View-C4GmbSoY.js"), "./Pages/Public/Commerce/View_.vue": () => import("./assets/View_-DYaGHNh1.js"), "./Pages/Public/Home.vue": () => import("./assets/Home-Csn5Vit3.js"), "./Pages/Public/Index.vue": () => import("./assets/Index-C57TP1Y1.js"), "./Pages/Public/Old.vue": () => import("./assets/Old-BOfY50BN.js"), "./Pages/Public/PageShow.vue": () => import("./assets/PageShow-C0Y275_i.js"), "./Pages/Public/Search.vue": () => import("./assets/Search-CzvyTzXH.js") })
+      /* @__PURE__ */ Object.assign({ "./Pages/Admin/Commerce/Brands/Components/BrandForm.vue": () => import("./assets/BrandForm-Dwr7c3x_.js"), "./Pages/Admin/Commerce/Brands/Create.vue": () => import("./assets/Create-DLlWR8rS.js"), "./Pages/Admin/Commerce/Brands/Edit.vue": () => import("./assets/Edit-D0G6tdsl.js"), "./Pages/Admin/Commerce/Brands/Index.vue": () => import("./assets/Index-CHH_S8qX.js"), "./Pages/Admin/Commerce/Brands/Partials/DataForm.vue": () => import("./assets/DataForm-YAJ8z_Ra.js"), "./Pages/Admin/Commerce/Brands/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-DqbuB5Ed.js"), "./Pages/Admin/Commerce/Brands/Partials/MediaForm.vue": () => import("./assets/MediaForm-CHxeVoAB.js"), "./Pages/Admin/Commerce/Brands/Partials/SEOForm.vue": () => import("./assets/SEOForm-BvRWdGLK.js"), "./Pages/Admin/Commerce/Brands/Show.vue": () => import("./assets/Show-CmgppEJp.js"), "./Pages/Admin/Commerce/Categories/Components/CategoryForm.vue": () => import("./assets/CategoryForm-BYvXAi7A.js"), "./Pages/Admin/Commerce/Categories/Create.vue": () => import("./assets/Create-BQl-zI6G.js"), "./Pages/Admin/Commerce/Categories/Edit.vue": () => import("./assets/Edit-6FY5A_up.js"), "./Pages/Admin/Commerce/Categories/Index.vue": () => import("./assets/Index-DPRz5uY1.js"), "./Pages/Admin/Commerce/Categories/Partials/DataForm.vue": () => import("./assets/DataForm--yk2mLmj.js"), "./Pages/Admin/Commerce/Categories/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-ClMFkXPm.js"), "./Pages/Admin/Commerce/Categories/Partials/MediaForm.vue": () => import("./assets/MediaForm-BVo6Fddm.js"), "./Pages/Admin/Commerce/Categories/Partials/SEOForm.vue": () => import("./assets/SEOForm-DSLksbwx.js"), "./Pages/Admin/Commerce/Categories/Show.vue": () => import("./assets/Show-BWvdUaBi.js"), "./Pages/Admin/Commerce/Items/Components/ItemForm.vue": () => import("./assets/ItemForm-CezhbdNC.js"), "./Pages/Admin/Commerce/Items/Create.vue": () => import("./assets/Create-CbH4gNCp.js"), "./Pages/Admin/Commerce/Items/Edit.vue": () => import("./assets/Edit-C1Yj-8nw.js"), "./Pages/Admin/Commerce/Items/Index.vue": () => import("./assets/Index-BJ61gKU0.js"), "./Pages/Admin/Commerce/Items/Partials/DataForm.vue": () => import("./assets/DataForm-DhJ3m80V.js"), "./Pages/Admin/Commerce/Items/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-DxnqJGfD.js"), "./Pages/Admin/Commerce/Items/Partials/MediaForm.vue": () => import("./assets/MediaForm-B6SY_Zjz.js"), "./Pages/Admin/Commerce/Items/Partials/SEOForm.vue": () => import("./assets/SEOForm-Dlhz1qo3.js"), "./Pages/Admin/Commerce/Items/Show.vue": () => import("./assets/Show-DHyspZvm.js"), "./Pages/Admin/Commerce/Orders/Create.vue": () => import("./assets/Create-BQyvJnaM.js"), "./Pages/Admin/Commerce/Orders/Edit.vue": () => import("./assets/Edit-ByHXykiV.js"), "./Pages/Admin/Commerce/Orders/Index.vue": () => import("./assets/Index-BZnFynQ9.js"), "./Pages/Admin/Commerce/Orders/Partials/DataForm.vue": () => import("./assets/DataForm-CHnfIpJK.js"), "./Pages/Admin/Commerce/Orders/Partials/DataTable.vue": () => import("./assets/DataTable-CnUNAvfK.js"), "./Pages/Admin/Commerce/Orders/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-CXBHik4-.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Components/WarehouseForm.vue": () => import("./assets/WarehouseForm-yd7zcKoe.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Create.vue": () => import("./assets/Create-CJM0RuwM.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Edit.vue": () => import("./assets/Edit-D2AgGQ3i.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Index.vue": () => import("./assets/Index-BCtzVUwn.js"), "./Pages/Admin/Commerce/Settings/Warehouses/Show.vue": () => import("./assets/Show-ClViyP6q.js"), "./Pages/Admin/Core/Menus/Components/MenuForm.vue": () => import("./assets/MenuForm-DfBF_qvk.js"), "./Pages/Admin/Core/Menus/Components/NestedMenuItems.vue": () => import("./assets/NestedMenuItems-DzxcM-wQ.js"), "./Pages/Admin/Core/Menus/Create.vue": () => import("./assets/Create-CugxQ7BG.js"), "./Pages/Admin/Core/Menus/Edit.vue": () => import("./assets/Edit-DJUPC0qd.js"), "./Pages/Admin/Core/Menus/Index.vue": () => import("./assets/Index-DseX2xh4.js"), "./Pages/Admin/Core/Pages/Components/PageForm.vue": () => import("./assets/PageForm-DWjSjgmA.js"), "./Pages/Admin/Core/Pages/Create.vue": () => import("./assets/Create-CUc7s83w.js"), "./Pages/Admin/Core/Pages/Edit.vue": () => import("./assets/Edit-B2xup5f1.js"), "./Pages/Admin/Core/Pages/Index.vue": () => import("./assets/Index-DQnX2rGM.js"), "./Pages/Admin/Core/Pages/Partials/DataForm.vue": () => import("./assets/DataForm-gtGf74ma.js"), "./Pages/Admin/Core/Pages/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-BBRbtJe1.js"), "./Pages/Admin/Core/Pages/Partials/SeoForm.vue": () => import("./assets/SeoForm-Kxas2AYK.js"), "./Pages/Admin/Core/Pages/Show.vue": () => import("./assets/Show-BV1xrBEQ.js"), "./Pages/Admin/Core/Users/Components/UserForm.vue": () => import("./assets/UserForm-BWYhZ3g0.js"), "./Pages/Admin/Core/Users/Create.vue": () => import("./assets/Create-mztv3Rtc.js"), "./Pages/Admin/Core/Users/Edit.vue": () => import("./assets/Edit-BLs2bq4I.js"), "./Pages/Admin/Core/Users/Index.vue": () => import("./assets/Index-B2Rx0gYO.js"), "./Pages/Admin/Core/Users/Show.vue": () => import("./assets/Show-Cm_ou4wH.js"), "./Pages/Admin/Dashboard.vue": () => import("./assets/Dashboard-CY688tlD.js"), "./Pages/Admin/Settings/Options.vue": () => import("./assets/Options-BoBeGl84.js"), "./Pages/Admin/Settings/PaymentMethods/Create.vue": () => import("./assets/Create-DI4f_K5r.js"), "./Pages/Admin/Settings/PaymentMethods/Edit.vue": () => import("./assets/Edit-BIpNgH3O.js"), "./Pages/Admin/Settings/PaymentMethods/Index.vue": () => import("./assets/Index-j_9ExhnW.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataForm.vue": () => import("./assets/DataForm-CdievclL.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/DataTable.vue": () => import("./assets/DataTable-D8OyTDP-.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/GeneralForm.vue": () => import("./assets/GeneralForm-C2ssZB4Q.js"), "./Pages/Admin/Settings/PaymentMethods/Partials/TranslationContent.vue": () => import("./assets/TranslationContent-DPs0kTDb.js"), "./Pages/Admin/Settings/Shippings/Edit.vue": () => import("./assets/Edit-BUHLtuK_.js"), "./Pages/Admin/Settings/Shippings/Index.vue": () => import("./assets/Index-PEZkTRnH.js"), "./Pages/Admin/Settings/Shippings/Partials/DataTable.vue": () => import("./assets/DataTable-p9O7Adf-.js"), "./Pages/Admin/Settings/Translations/Form.vue": () => import("./assets/Form-ce_mQ9ZF.js"), "./Pages/Admin/Settings/Versions/Form.vue": () => import("./assets/Form-BRfSTOr3.js"), "./Pages/Auth/AuthUserForm.vue": () => import("./assets/AuthUserForm-C_FpWsCB.js"), "./Pages/Auth/Login.vue": () => import("./assets/Login-B48L1F2H.js"), "./Pages/Public/Account/Index.vue": () => import("./assets/Index-CXHflkHW.js"), "./Pages/Public/Commerce/Cart.vue": () => import("./assets/Cart-B5G-I-if.js"), "./Pages/Public/Commerce/Category.vue": () => import("./assets/Category-DVTEg4l7.js"), "./Pages/Public/Commerce/Categoryold.vue": () => import("./assets/Categoryold-DF-OrBj8.js"), "./Pages/Public/Commerce/Checkout/Index.vue": () => import("./assets/Index-kqTOh0ND.js"), "./Pages/Public/Commerce/Checkout/Partials/OrderSummary.vue": () => import("./assets/OrderSummary-CLW2Cav3.js"), "./Pages/Public/Commerce/Checkout/Steps/StepContact.vue": () => import("./assets/StepContact-LxNsNWtk.js"), "./Pages/Public/Commerce/Checkout/Steps/StepDelivery.vue": () => import("./assets/StepDelivery-BMImZW47.js"), "./Pages/Public/Commerce/Checkout/Steps/StepPayment.vue": () => import("./assets/StepPayment-EvwzxruV.js"), "./Pages/Public/Commerce/Checkout/layout/DefaultCheckoutLayout.vue": () => import("./assets/DefaultCheckoutLayout-BfVICHWE.js"), "./Pages/Public/Commerce/CheckoutOld.vue": () => import("./assets/CheckoutOld-E8MU2h3H.js"), "./Pages/Public/Commerce/Components/BuyButton.vue": () => import("./assets/BuyButton-DUOvnVt-.js"), "./Pages/Public/Commerce/Components/PopularProducts.vue": () => import("./assets/PopularProducts-BEiqbSSr.js"), "./Pages/Public/Commerce/Components/ProductCard.vue": () => import("./assets/ProductCard-COylpu_H.js"), "./Pages/Public/Commerce/Components/ProductFilters.vue": () => import("./assets/ProductFilters-Byav0S3x.js"), "./Pages/Public/Commerce/Components/ProductFiltersOld.vue": () => import("./assets/ProductFiltersOld-K51yLx9B.js"), "./Pages/Public/Commerce/Components/SkeletonProductCard.vue": () => import("./assets/SkeletonProductCard-0R0RYbYz.js"), "./Pages/Public/Commerce/Components/SortDropdown.vue": () => import("./assets/SortDropdown-CL6wpuCI.js"), "./Pages/Public/Commerce/Components/View/ProductPrice.vue": () => import("./assets/ProductPrice-B0kbdA1m.js"), "./Pages/Public/Commerce/Components/View/QuantitySelector.vue": () => import("./assets/QuantitySelector-DyCV-Jzo.js"), "./Pages/Public/Commerce/Components/View/QuantityStatus.vue": () => import("./assets/QuantityStatus-BjP6BbJj.js"), "./Pages/Public/Commerce/Components/View/StatsRating.vue": () => import("./assets/StatsRating-CKI7axxr.js"), "./Pages/Public/Commerce/Pagination.vue": () => import("./assets/Pagination-VZqicp2n.js"), "./Pages/Public/Commerce/Partials/ContactInfo.vue": () => import("./assets/ContactInfo-CigWYlzz.js"), "./Pages/Public/Commerce/Partials/PaymentMethods.vue": () => import("./assets/PaymentMethods-BHqJDXf_.js"), "./Pages/Public/Commerce/Partials/ShippingInfo.vue": () => import("./assets/ShippingInfo-Db75YONL.js"), "./Pages/Public/Commerce/View.vue": () => import("./assets/View-DnXGY2Je.js"), "./Pages/Public/Commerce/View_.vue": () => import("./assets/View_-BUOYGTCT.js"), "./Pages/Public/Home.vue": () => import("./assets/Home-IAMIxKYx.js"), "./Pages/Public/Index.vue": () => import("./assets/Index-C3LsR2bq.js"), "./Pages/Public/Old.vue": () => import("./assets/Old-BEm6pdwi.js"), "./Pages/Public/PageShow.vue": () => import("./assets/PageShow-CgVvvHLy.js"), "./Pages/Public/Search.vue": () => import("./assets/Search-Dpgmaku0.js") })
     ),
     setup({ App: App2, props, plugin: plugin2 }) {
       const pinia = createPinia();

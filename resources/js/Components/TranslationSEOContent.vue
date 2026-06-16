@@ -23,7 +23,7 @@
         >
             <!-- URL Slug Section -->
             <div
-                v-if="'slug' in model"
+                v-if="'slug' in model && isEditing"
                 class="space-y-2 pb-6 border-b border-slate-100"
             >
                 <InputLabel

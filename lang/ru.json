@@ -1,4 +1,7 @@
 {
+    "Highest Rated": "Highest Rated",
+    "Sale": "Распродажа",
+    "Products": ":count товар|:count товара|:count товаров",
     "reviews": ":count отзыв|:count отзыва|:count отзывов",
     "(and :count more error)": "(и ещё :count ошибка)",
     "(and :count more errors)": "(и ещё :count ошибка)|(и ещё :count ошибки)|(и ещё :count ошибок)",

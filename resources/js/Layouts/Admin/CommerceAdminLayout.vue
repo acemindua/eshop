@@ -49,6 +49,24 @@
 
                     {{ $t("Categories") }}
                 </AdminNavLink>
+                <AdminNavLink
+                    :href="route('admin.commerce.brands.index')"
+                    :active="$page.url.startsWith('/commerce/brands')"
+                >
+                    <template #icon>
+                        <component
+                            :is="
+                                $page.url.startsWith('/commerce/brands')
+                                    ? IconBrandAppleFilled
+                                    : IconBrandApple
+                            "
+                            stroke="1"
+                            class="w-5 h-5"
+                        />
+                    </template>
+
+                    {{ $t("Brands") }}
+                </AdminNavLink>
             </ul>
         </template>
 
@@ -150,6 +168,8 @@ import AdminLayout from "@/Layouts/Admin/AdminLayout.vue";
 import {
     IconBasket,
     IconBasketFilled,
+    IconBrandApple,
+    IconBrandAppleFilled,
     IconCategory,
     IconCategoryFilled,
 } from "@tabler/icons-vue";

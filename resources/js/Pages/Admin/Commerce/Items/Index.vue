@@ -163,24 +163,48 @@ defineOptions({ layout: Layout });
                             />
                         </div>
                     </th>
+                    <th class="p-2 text-center">{{ $t("Category") }}</th>
+                    <th class="p-2 text-center">{{ $t("Price") }}</th>
+                    <th class="p-2 text-center">{{ $t("Quantity") }}</th>
                     <th class="p-2 text-center w-48">{{ $t("Status") }}</th>
                 </template>
 
                 <template #item-data="{ item }">
                     <td>
                         <ImageDataView
-                            :src="item?.images?.[0].preview"
+                            :src="item?.images?.[0]?.preview"
                             :configs="{ width: '32px', height: '32px' }"
                             class="rounded-full shadow-sm object-cover"
                         />
                     </td>
                     <td class="p-2">
-                        <p>{{ item.title }}</p>
+                        <p class="font-semibold">{{ item.title }}</p>
                         <p
                             class="text-xs text-gray-500 hover:text-indigo-400 duration-150 transition"
                         >
                             url: {{ `/${item.slug}` }}
                         </p>
+                    </td>
+
+                    <td class="p-2">
+                        <span class="text-gray-600 italic">{{
+                            item.category ? item.category.title : ""
+                        }}</span>
+                    </td>
+                    <td class="p-2">
+                        {{ item.price }}
+                    </td>
+                    <td class="p-2 flex items-center justify-center">
+                        <span
+                            class="block border px-2 text-sm rounded-lg"
+                            :class="
+                                item.quantity <= 10
+                                    ? 'bg-yellow-100 border-yellow-200 text-red-700'
+                                    : 'bg-green-50 border-green-100 text-green-600'
+                            "
+                        >
+                            {{ item.quantity }}
+                        </span>
                     </td>
                     <td class="p-2">
                         <div class="flex justify-center">

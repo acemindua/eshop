@@ -34,7 +34,7 @@ const tabs = [
         key: "data",
         label: "Data",
         component: DataForm,
-        fields: ["public", "order"], // Системні поля
+        fields: ["public", "order", "quantity", ""], // Системні поля
     },
     {
         key: "media",

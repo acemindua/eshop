@@ -99,6 +99,14 @@ const discountPercentage = computed(() => {
                 </div>
                 <div class="bg-white p-4 grow"></div>
             </div>
+
+            <div class="bg-white p-4 col-span-2">
+                <Reviews
+                    model-type="Item"
+                    :model-id="item.id"
+                    :model-title="item.title"
+                />
+            </div>
         </div>
     </div>
     <div class="h-screen"></div>

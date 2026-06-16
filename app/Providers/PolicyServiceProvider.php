@@ -2,26 +2,31 @@
 
 namespace App\Providers;
 
-use App\Models\AppVersion;
-use App\Models\Category;
-use App\Models\Item;
-use App\Models\Manufacturer;
-use App\Models\Menu;
-use App\Models\Page;
-use App\Models\User;
-use App\Models\PaymentMethod; // Імпортуємо модель
-use App\Models\Shipping;
-use App\Policies\AppVersionPolicy;
-use App\Policies\CategoryPolicy;
-use App\Policies\ItemPolicy;
-use App\Policies\ManufacturerPolicy;
-use App\Policies\MenuPolicy;
-use App\Policies\PagePolicy;
-use App\Policies\UserPolicy;
-use App\Policies\PaymentMethodPolicy; // Імпортуємо політику
-use App\Policies\ShippingPolicy;
-use Illuminate\Support\ServiceProvider;
+use App\Models\{
+    AppVersion,
+    Brand,
+    Category,
+    Item,
+    Menu,
+    Page,
+    User,
+    PaymentMethod,
+    Shipping
+};
+use App\Policies\{
+    AppVersionPolicy,
+    BrandPolicy,
+    CategoryPolicy,
+    ItemPolicy,
+    MenuPolicy,
+    PagePolicy,
+    UserPolicy,
+    PaymentMethodPolicy,
+    ShippingPolicy
+};
+
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class PolicyServiceProvider extends ServiceProvider
 {
@@ -46,7 +51,7 @@ class PolicyServiceProvider extends ServiceProvider
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Item::class, ItemPolicy::class);
         Gate::policy(Page::class, PagePolicy::class);
-        Gate::policy(Manufacturer::class, ManufacturerPolicy::class);
+        Gate::policy(Brand::class, BrandPolicy::class);
         Gate::policy(PaymentMethod::class, PaymentMethodPolicy::class);
         Gate::policy(AppVersion::class, AppVersionPolicy::class);
         Gate::policy(Shipping::class, ShippingPolicy::class);

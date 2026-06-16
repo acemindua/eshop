@@ -19,6 +19,10 @@ class CategoryResource extends JsonResource
             'id'        => $this->id,
             'title'     => $this->title,
             'url'       => LaravelLocalization::getLocalizedURL(app()->getLocale(), route('resolve.route', ['slug' => $this->slug])),
+            'seo'       => [
+                'title'         => $this->meta_title ?? $this->title,
+                'description'   => $this->description,
+            ],
             'slug'      => $this->slug,
             'public'    => $this->public,
             'parent'    => $this->whenLoaded('parent', fn() => new CategoryResource($this->parent)),

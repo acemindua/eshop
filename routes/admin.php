@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\Commerce\{ItemController, CategoryController};
+use App\Http\Controllers\Admin\Commerce\{
+    ItemController,
+    CategoryController,
+    BrandController
+};
 use App\Http\Controllers\Admin\Core\{
     PageController,
     UserController,
@@ -39,7 +43,7 @@ Route::prefix('commerce')->name('commerce.')->group(function () {
     Route::resources([
         'categories'    => CategoryController::class,
         'items'         => ItemController::class,
-        //'manufacturers' => ManufacturerController::class,
+        'brands'        => BrandController::class,
         //'orders'        => OrderController::class,
     ]);
 });

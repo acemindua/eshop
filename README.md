@@ -1,3 +1,16 @@
+# Release v1.11.8
+
+```bash
+# translatable Brand:
+php artisan make:model Brand -m
+php artisan make:model BrandTranslation -m
+php artisan make:controller Admin\Commerce\BrandController --model=Brand --resource --requests
+
+php artisan make:resource BrandResource
+php artisan make:policy BrandPolicy --model=Brand
+php artisan make:seeder BrandSeeder
+php artisan make:factory BrandFactory
+```
 
 # Release v1.11.7 🛒 E-commerce Catalog & Filtering System
 
@@ -8,32 +21,33 @@
 ## 🛠 Ключові можливості
 
 ### 1. Система динамічної фільтрації
-* **Динамічні цінові межі:** Система автоматично розраховує мінімальні та максимальні ціни на основі результатів вибірки товарів.
-* **Інтерактивний слайдер:** Використано `@vueform/slider` для зручного візуального вибору діапазону ціни.
-* **Синхронізація з URL:** Стан фільтрів (промо, ціни, бренди) автоматично відображається в адресному рядку браузера. Користувачі можуть копіювати посилання на відфільтрований список.
-* **Debounce-обробка:** Впроваджено затримку (500мс) перед відправкою запиту до API, що забезпечує плавну роботу інтерфейсу при перетягуванні повзунка.
 
-
+- **Динамічні цінові межі:** Система автоматично розраховує мінімальні та максимальні ціни на основі результатів вибірки товарів.
+- **Інтерактивний слайдер:** Використано `@vueform/slider` для зручного візуального вибору діапазону ціни.
+- **Синхронізація з URL:** Стан фільтрів (промо, ціни, бренди) автоматично відображається в адресному рядку браузера. Користувачі можуть копіювати посилання на відфільтрований список.
+- **Debounce-обробка:** Впроваджено затримку (500мс) перед відправкою запиту до API, що забезпечує плавну роботу інтерфейсу при перетягуванні повзунка.
 
 ### 2. API та Backend-логіка
-* **Query Filtering:** Впроваджено патерн `QueryFilter`, що дозволяє легко додавати нові фільтри до Eloquent-запитів.
-* **API Resources:** Використання `ItemResource` для стандартизації відповідей сервера. Додано обчислення динамічних даних (знижки, рейтинг, наявність).
-* **Smart Routing (Resolve):** Налаштовано єдину точку входу для динамічних сторінок, яка автоматично розпізнає контент (Категорія, Товар або Page) за його `slug`.
+
+- **Query Filtering:** Впроваджено патерн `QueryFilter`, що дозволяє легко додавати нові фільтри до Eloquent-запитів.
+- **API Resources:** Використання `ItemResource` для стандартизації відповідей сервера. Додано обчислення динамічних даних (знижки, рейтинг, наявність).
+- **Smart Routing (Resolve):** Налаштовано єдину точку входу для динамічних сторінок, яка автоматично розпізнає контент (Категорія, Товар або Page) за його `slug`.
 
 ### 3. Frontend-інтеграція
-* **Динамічний стан:** Використання `ref`, `computed` та `watch` у Vue 3 для миттєвої реакції на дії користувача.
-* **Стандарт завантаження:** Композабл `useApiResourceService` для стандартизованого керування станами `loading` та обробки помилок.
-* **Адаптивний UI:** Розмітка на Tailwind CSS, оптимізована для мобільних пристроїв та десктопів.
+
+- **Динамічний стан:** Використання `ref`, `computed` та `watch` у Vue 3 для миттєвої реакції на дії користувача.
+- **Стандарт завантаження:** Композабл `useApiResourceService` для стандартизованого керування станами `loading` та обробки помилок.
+- **Адаптивний UI:** Розмітка на Tailwind CSS, оптимізована для мобільних пристроїв та десктопів.
 
 ---
 
 ## 🚀 Технологічний стек
 
-| Сфера | Технології |
-| :--- | :--- |
-| **Backend** | Laravel 10/11, Eloquent ORM |
-| **Frontend** | Vue 3 (Composition API), Inertia.js |
-| **UI** | Tailwind CSS, `@vueform/slider` |
+| Сфера                | Технології                                  |
+| :------------------- | :------------------------------------------ |
+| **Backend**          | Laravel 10/11, Eloquent ORM                 |
+| **Frontend**         | Vue 3 (Composition API), Inertia.js         |
+| **UI**               | Tailwind CSS, `@vueform/slider`             |
 | **SEO & Navigation** | Laravel Localization, Diglactic Breadcrumbs |
 
 ---
@@ -47,14 +61,12 @@
 3. **Запит** йде до API, який повертає відфільтровані дані (`items`) та оновлені межі фільтрації (`min_price`, `max_price`).
 4. **Компоненти** Vue автоматично оновлюються завдяки реактивному зв'язку.
 
-
-
 ---
 
 ## 🔧 Як розширити?
 
-* **Додавання фільтрів:** Додайте метод у `ItemFilter` (наприклад, для брендів або характеристик) та відповідний `input` у компонент `Catalog.vue`.
-* **Додавання сортування:** Легко реалізується через розширення `ItemFilter` параметром `sort`.
+- **Додавання фільтрів:** Додайте метод у `ItemFilter` (наприклад, для брендів або характеристик) та відповідний `input` у компонент `Catalog.vue`.
+- **Додавання сортування:** Легко реалізується через розширення `ItemFilter` параметром `sort`.
 
 # Release v1.11.6
 
@@ -69,7 +81,9 @@
 **Target:** Core Media Management Engine & Form Accessibility Layer
 
 This release focuses on global architectural refactoring of the polymorphic media management system (Laravel + Vue 3), removing recursive payload anomalies, optimizing database interaction, and achieving strict compliance with modern web accessibility (a11y) and security standards.
+
 # Release v1.11.5 — Refactors Settings 🚀
+
 ---
 
 ## 🛠 What's Changed

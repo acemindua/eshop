@@ -27,7 +27,7 @@ class ItemResource extends JsonResource
             'images'       => $this->sorted_images ?? [],
             'public'       => $this->public,
             'category'     => $this->whenLoaded('category', fn() => new CategoryResource($this->category)),
-            'manufacturer' => $this->whenLoaded('manufacturer', fn() => new ManufacturerResource($this->manufacturer)),
+            'brand'         => $this->whenLoaded('brand', fn() => new BrandResource($this->brand)),
             'seo'          => [
                 'title' => $this->meta_title
             ],
