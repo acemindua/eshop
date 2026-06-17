@@ -1,7 +1,8 @@
 import "../css/app.css";
 import "./bootstrap";
 
-import { createInertiaApp, Head, Link, usePage, router } from "@inertiajs/vue3";
+import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
+import { createHead } from "@unhead/vue/client";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
@@ -15,7 +16,10 @@ import helper from "../plugins/helper";
 import "floating-vue/dist/style.css";
 
 let appName = import.meta.env.VITE_APP_NAME || "Laravel";
+
+//const
 const pinia = createPinia();
+const head = createHead();
 
 createInertiaApp({
     title: (title) => title,
@@ -27,6 +31,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(head)
             .use(ZiggyVue)
             .use(i18nVue, {
                 resolve: async (lang) => {
@@ -48,18 +53,4 @@ createInertiaApp({
     progress: {
         color: "rgb(var(--brand-color))",
     },
-});
-
-router.on("navigate", (event) => {
-    if (window.gtag) {
-        window.gtag("config", "G-XXXXXXXX", {
-            page_location: event.detail.page.url,
-            page_title: document.title,
-        });
-    }
-
-    // Для Facebook Pixel
-    if (window.fbq) {
-        window.fbq("track", "PageView");
-    }
 });

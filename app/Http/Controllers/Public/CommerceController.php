@@ -7,6 +7,7 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ItemResource;
 use App\Models\Category;
 use App\Models\Item;
+use App\Services\SchemaService;
 use App\Services\SeoService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,29 +16,28 @@ use Inertia\Response;
 class CommerceController extends Controller
 {
 
-    protected SeoService $seoService;
-
-    public function __construct(SeoService $seoService)
-    {
-        $this->seoService = $seoService;
-    }
+    public function __construct(
+        protected SchemaService $schemaService,
+        protected SeoService $seoService
+    ) {}
 
     /**
      * Product page
      */
-    protected const DIRECTORY = 'Public/Commerce';
+    protected const DIRECTORY = 'Public/Commerce/Pages/';
 
     public function view(Item $item): Response
     {
-        return Inertia::render(self::DIRECTORY . '/View', [
-
+        return Inertia::render(self::DIRECTORY . 'View', [
             'data'   => [
                 'locale' => app()->getLocale(),
                 'item'   => new ItemResource($item),
             ],
-            // SEO 
-            'seo'    => $this->seoService->generate($item),
-            'schema' => $this->seoService->generateSchema($item),
+            'schema' => $this->schemaService->generateGraph([
+                $this->schemaService->generateBreadcrumbs(),
+                $this->schemaService->forProduct($item)
+            ]),
+            'seo' => $this->seoService->generate($item),
         ]);
     }
 
@@ -53,15 +53,17 @@ class CommerceController extends Controller
             ->whereIn('category_id', $allIds)
             ->max('price');
 
-        return Inertia::render(self::DIRECTORY . '/Category', [
+        return Inertia::render(self::DIRECTORY . 'Category', [
             'data' => [
                 'locale'        => app()->getLocale(),
                 'category'      => new CategoryResource($category),
                 'price_max'     => (float) $maxPrice ?? 500000,
             ],
-            // SEO
-            'seo'    => $this->seoService->generate($category),
-            'schema' => $this->seoService->generateSchema($category),
+            'schema' => $this->schemaService->generateGraph([
+                $this->schemaService->generateBreadcrumbs(),
+                $this->schemaService->forCategory($category)
+            ]),
+            'seo' => $this->seoService->generate($category),
         ]);
     }
 }

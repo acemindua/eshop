@@ -1,4 +1,5 @@
 import { createSSRApp, h } from "vue";
+import { createHead } from "@unhead/vue/server";
 import { renderToString } from "@vue/server-renderer";
 import { createInertiaApp, Head, Link } from "@inertiajs/vue3";
 import createServer from "@inertiajs/vue3/server";
@@ -21,6 +22,7 @@ createServer((page) =>
             ),
         setup({ App, props, plugin }) {
             const pinia = createPinia();
+            const head = createHead();
 
             return createSSRApp({ render: () => h(App, props) })
                 .use(plugin)
@@ -38,6 +40,7 @@ createServer((page) =>
                     },
                 })
                 .use(pinia)
+                .use(head)
                 .use(FloatingVue)
                 .use(helper)
                 .component("Head", Head)

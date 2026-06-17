@@ -4,114 +4,176 @@ namespace App\Services;
 
 use App\Facades\Settings;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Illuminate\Support\Str;
+use Throwable;
 
 class SeoService
 {
-    public function generate($manualModel = null): array
+    /**
+     * SEO generator
+     */
+    public function generate(?Model $model = null): array
     {
+        try {
+            $host = request()->getHost();
+            $appHost = parse_url(config('app.url') ?? '', PHP_URL_HOST);
 
-
-        // 1. Якщо модель передана вручну в контролері
-        $model = $manualModel;
-
-
-
-        // 2. Якщо не передана — шукаємо в параметрах поточного роуту
-        if (!$model) {
-            $model = collect(Route::current()?->parameters())->first(function ($param) {
-                return $param instanceof Model;
-            });
-        }
-
-
-
-        // ВАЖЛИВО: Отримуємо налаштування всередині сервісу
-        $settings = Settings::all();
-
-        $title = '';
-        $description = '';
-        if ($model instanceof \Illuminate\Support\Collection) {
-            $title = $model->get('title');
-            $description = $model->get('site_tagline');
-        } elseif (is_object($model)) {
-            $title = $model->title ?? '';
-            $description = $model->description ?? '';
-        } elseif (is_array($model)) {
-            $title = $model['title'] ?? '';
-            $description = $model['description'] ?? '';
-        }
-        $seo = [
-            'title'         => $title ?: ($settings['site_name'] ?? config('app.name')),
-            'description'   => $description ?: ($settings['site_tagline'] ?? ""),
-            'robots'      => 'index, follow', // За замовчуванням
-            'canonical'   => request()->url(),
-            'twitter_site'    => '@your_brand_handle', // Назва вашого акаунту
-            'twitter_creator' => '@your_brand_handle',
-            'twitter_card'    => 'summary_large_image', // Режим великого прев'ю
-        ];
-
-        if ($model && method_exists($model, 'getSeoMetadata')) {
-            $seo = array_merge($seo, $model->getSeoMetadata());
-        }
-
-        // ЛОГІКА ДЛЯ РОБОТІВ:
-        // Якщо це сторінка пошуку або сторінка з пагінацією (опціонально)
-        if (request()->routeIs('search') || request()->has('page')) {
-            $seo['robots'] = 'noindex, follow';
-        }
-        $locales = LaravelLocalization::getSupportedLanguagesKeys();
-
-        foreach ($locales as $locale) {
-            if ($model && is_object($model) && method_exists($model, 'getTranslation')) {
-                // Логіка для товарів/категорій зі своїми слагами
-                $translation = $model->translate($locale);
-                if ($translation && isset($translation->slug)) {
-                    // Отримуємо URL для конкретного перекладу моделі
-                    $hreflangs[$locale] = LaravelLocalization::getLocalizedURL($locale, $translation->slug);
-                }
-            } else {
-                // Для статичних сторінок (Головна, Кошик тощо)
-                // Цей метод автоматично візьме поточний URL і замінить мовний префікс
-                $hreflangs[$locale] = LaravelLocalization::getLocalizedURL($locale, null, [], true);
+            // Admin noindex protection
+            if ($appHost && $host === 'app.' . $appHost) {
+                return [
+                    'meta' => [
+                        'robots' => 'noindex, nofollow',
+                    ],
+                    'links' => [],
+                ];
             }
-        }
 
-        $seo['hreflangs'] = $hreflangs;
+            // Auto-resolve model from route
+            if (!$model) {
+                $model = collect(Route::current()?->parameters() ?? [])
+                    ->first(fn($p) => $p instanceof Model);
+            }
 
-        return $seo;
-    }
+            return [
+                'meta'  => $this->generateMeta($model),
+                'links' => $this->generateLinks($model),
+            ];
+        } catch (Throwable $e) {
+            report($e);
 
-    public function generateSchema($model = null): array
-    {
-        $schemas = [];
-
-        // 1. WebSite & SearchAction (для головної)
-        $schemas[] = [
-            '@context' => 'https://schema.org',
-            '@type' => 'WebSite',
-            'url' => config('app.url'),
-            'potentialAction' => [
-                '@type' => 'SearchAction',
-                'target' => config('app.url') . '/search?q={search_term_string}',
-                'query-input' => 'required name=search_term_string',
-            ],
-        ];
-
-        // 2. BreadcrumbList
-        if ($model) {
-            $schemas[] = [
-                '@context' => 'https://schema.org',
-                '@type' => 'BreadcrumbList',
-                'itemListElement' => [
-                    ['@type' => 'ListItem', 'position' => 1, 'name' => 'Головна', 'item' => url('/')],
-                    ['@type' => 'ListItem', 'position' => 2, 'name' => $model->title ?? 'Товар', 'item' => request()->url()],
+            return [
+                'meta' => [
+                    'title' => config('app.name'),
+                    'description' => '',
+                    'robots' => 'index, follow',
                 ],
+                'links' => [],
             ];
         }
+    }
 
-        return $schemas;
+    /**
+     * Meta tags
+     */
+    public function generateMeta(?Model $model): array
+    {
+        $siteName = $this->settings('site_name') ?: config('app.name');
+
+        $title = $siteName;
+        $description = $this->settings('site_tagline') ?: '';
+        $image = 'https://placehold.co/1200x630?text=' . urlencode($siteName);
+
+        try {
+            if ($model && method_exists($model, 'translate')) {
+                $t = $model->translate();
+
+                if ($t) {
+                    $title = ($t->title ?? $title) . ' | ' . $siteName;
+
+                    $rawText = $t->content ?? $t->description ?? '';
+                    $description = $t->meta_description
+                        ?: Str::limit(strip_tags($rawText), 155);
+
+                    if (method_exists($model, 'getFirstMediaUrl')) {
+                        $image = $model->getFirstMediaUrl('images') ?: $image;
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            report($e);
+        }
+
+        return [
+            'title' => $title,
+            'description' => $description,
+
+            'ogTitle' => $title,
+            'ogDescription' => $description,
+            'ogImage' => $image,
+            'ogUrl' => request()->url() ?? '',
+            'ogType' => 'website',
+            'ogSiteName' => $siteName,
+
+            'robots' => 'index, follow',
+
+            // Twitter
+            'twitterCard' => 'summary_large_image',
+            'twitterTitle' => $title,
+            'twitterDescription' => $description,
+            'twitterImage' => $image,
+            'twitterSite' => '@YourTwitterHandle',
+            'twitterCreator' => '@AuthorHandle',
+        ];
+    }
+
+    /**
+     * Canonical + hreflang
+     */
+    public function generateLinks(?Model $model): array
+    {
+        try {
+            $canonical = LaravelLocalization::getNonLocalizedURL();
+            $hreflangs = [];
+
+            // Canonical with model
+            if ($model && method_exists($model, 'translate')) {
+                $translation = $model->translate();
+
+                if ($translation?->slug) {
+                    $canonical = LaravelLocalization::getLocalizedURL(
+                        app()->getLocale(),
+                        $translation->slug
+                    );
+                }
+            }
+
+            foreach (LaravelLocalization::getSupportedLanguagesKeys() as $locale) {
+                $slug = null;
+
+                if ($model && method_exists($model, 'translate')) {
+                    $slug = $model->translate($locale)?->slug ?? null;
+                }
+
+                $hreflangs[$locale] = LaravelLocalization::getLocalizedURL(
+                    $locale,
+                    $slug,
+                    [],
+                    true
+                );
+            }
+
+            return [
+                'canonical' => $canonical,
+                'hreflangs' => $hreflangs,
+            ];
+        } catch (Throwable $e) {
+            report($e);
+
+            return [
+                'canonical' => request()->url() ?? '',
+                'hreflangs' => [],
+            ];
+        }
+    }
+
+    /**
+     * Safe settings getter (cached-friendly)
+     */
+    protected function settings(?string $key = null): string
+    {
+        try {
+            $all = Settings::all();
+
+            if (!is_array($all)) {
+                return '';
+            }
+
+            return $all[$key] ?? '';
+        } catch (Throwable $e) {
+            report($e);
+            return '';
+        }
     }
 }

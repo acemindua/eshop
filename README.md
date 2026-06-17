@@ -1,6 +1,20 @@
 # Release v1.11.8
 
 ```bash
+composer require spatie/schema-org
+```
+
+Sitemap
+
+Schedule::command('sitemap:generate')->everyMinute();
+Schedule::command('sitemap:generate')->daily();
+
+```bash
+php artisan schedule:work
+php artisan sitemap:generate
+```
+
+```bash
 # translatable Brand:
 php artisan make:model Brand -m
 php artisan make:model BrandTranslation -m

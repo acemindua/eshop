@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Filters\QueryFilter;
-use App\Traits\HasSeo;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,8 +22,7 @@ class Item extends Model implements HasMedia, TranslatableContract
 {
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use Translatable, HasFactory, InteractsWithMedia, HasSeo;
-    use ReviewRateable;
+    use Translatable, HasFactory, InteractsWithMedia, ReviewRateable;
 
     /**
      * The attributes that are translated.
