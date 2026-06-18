@@ -175,4 +175,9 @@ class Item extends Model implements HasMedia, TranslatableContract
             'id'             // Локальний ключ у таблиці reviews
         )->where('reviewable_type', Item::class);
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('public', true);
+    }
 }

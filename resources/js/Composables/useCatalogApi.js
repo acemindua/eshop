@@ -6,6 +6,7 @@ export function useCatalogApi() {
     const meta = ref({});
     const loading = ref(false);
     const brands = ref([]);
+    const categories = ref([]);
     const price = ref({ min: 0, max: 0 });
 
     const fetchCatalog = async (url, params) => {
@@ -15,6 +16,7 @@ export function useCatalogApi() {
             items.value = data.items;
             meta.value = data.meta;
             brands.value = data.brands || [];
+            categories.value = data.categories || [];
 
             if (data.price) {
                 price.value = { ...data.price };
@@ -30,5 +32,5 @@ export function useCatalogApi() {
         }
     };
 
-    return { items, meta, loading, brands, price, fetchCatalog };
+    return { items, meta, loading, brands, categories, price, fetchCatalog };
 }

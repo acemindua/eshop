@@ -113,8 +113,7 @@ class Category extends Model implements HasMedia, TranslatableContract
     {
         // Додаємо вкладеність, щоб будувати дерево будь-якої глибини
         return $this->hasMany(Category::class, 'category_id', 'id')
-            ->with('childs')
-            ->orderBy('order');
+            ->with('childs');
     }
 
     public function getAllChildrenIds(): array

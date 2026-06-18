@@ -25,7 +25,7 @@ const sortOptions = [
     { value: "price_desc", label: "Price: High to Low" },
 ];
 
-const { items, meta, brands, fetchCatalog } = useCatalogApi();
+const { items, meta, brands, categories, fetchCatalog } = useCatalogApi();
 
 const form = reactive({
     in_stock: route().params.in_stock == "1",
@@ -33,6 +33,7 @@ const form = reactive({
     rating: route().params.rating || 0,
     sort: route().params.sort || sortOptions[0].value,
     brands: route().params.brands?.split(",").map(Number) || [],
+    categories: route().params.categories?.split(",").map(Number) || [],
     min_price: Number(route().params.min_price) || 0,
     max_price: Number(route().params.max_price) || priceMax.value,
 });
@@ -98,6 +99,7 @@ useSeoMeta(props.seo.meta);
                 <ProductFilters
                     v-model="form"
                     :brands="brands"
+                    :categories="categories"
                     :default-max="priceMax"
                 />
             </div>

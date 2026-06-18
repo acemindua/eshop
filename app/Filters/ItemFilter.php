@@ -63,6 +63,12 @@ class ItemFilter extends QueryFilter
         });
     }
 
+    public  function categories($values = [])
+    {
+        $ids = is_array($values) ? $values : explode(',', $values);
+        return $this->builder->whereIn('category_id', $ids);
+    }
+
     public function category_id($value)
     {
         // Знаходимо категорію, щоб отримати дерево

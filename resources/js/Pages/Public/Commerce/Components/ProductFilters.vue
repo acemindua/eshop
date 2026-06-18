@@ -12,6 +12,7 @@ import RadioButton from "@/Components/UI/RadioButton.vue";
 const props = defineProps({
     modelValue: Object,
     brands: Array,
+    categories: Array,
     defaultMax: { type: Number, default: 50000 },
 });
 
@@ -118,13 +119,33 @@ const ratingOptions = [
         <!--brand-->
         <div class="py-4">
             <InputLabel
+                :value="$t('Categories')"
+                class="text-sm mb-2 text-gray-800"
+            />
+            <label
+                v-for="category in props.categories"
+                :key="category.id"
+                class="text-sm mb-2 text-gray-800 flex items-center gap-2"
+            >
+                <Checkbox
+                    :value="category.id"
+                    v-model:checked="localForm.categories"
+                />
+                <span class="text-sm whitespace-nowrap">
+                    {{ category.title }} ({{ category.count }})
+                </span>
+            </label>
+        </div>
+
+        <!--brand-->
+        <div class="py-4">
+            <InputLabel
                 :value="$t('Brands')"
                 class="text-sm mb-2 text-gray-800"
             />
             <label
                 v-for="brand in props.brands"
                 :key="brand.id"
-                :value="$t('Brand')"
                 class="text-sm mb-2 text-gray-800 flex items-center gap-2"
             >
                 <Checkbox

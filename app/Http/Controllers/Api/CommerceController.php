@@ -6,8 +6,9 @@ use App\Facades\Settings;
 use App\Filters\ItemFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ItemResource;
-use App\Models\{Brand, Item};
+use App\Models\{Brand, Category, Item};
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class CommerceController extends Controller
@@ -15,47 +16,38 @@ class CommerceController extends Controller
     public function getItems(ItemFilter $filter): JsonResponse
     {
         try {
-            $category = \App\Models\Category::find(request()->category_id);
-            $allCategoryIds = $category ? $category->getAllChildrenIds() : \App\Models\Category::pluck('id');
+            $query = Item::active()->filter($filter);
+            $category = collect();
 
-            // 1. Отримуємо параметри запиту, видаляємо 'brands' для підрахунку
-            $filterData = request()->all();
-            unset($filterData['brands']);
-            unset($filterData['sort']);
-            //unset($filterData['rating']);
-            // 2. Створюємо "чистий" об'єкт фільтра для підрахунку
-            // Ми використовуємо Request, щоб створити новий фільтр без брендів
-            $countFilter = new ItemFilter(new \Illuminate\Http\Request($filterData));
-
-            // 3. Підрахунок (Count Query)
-            $brandCounts = Item::query()
-                ->where('public', true)
-                ->whereIn('category_id', $allCategoryIds)
-                ->filter($countFilter) // Цей фільтр НЕ містить брендів, тому помилки не буде
-                ->selectRaw('brand_id, count(*) as count')
+            $filterForBrand = request()->except(['brands', 'sort']);
+            $countFilterBrand = new ItemFilter(new Request($filterForBrand));
+            $brandCounts = Item::query()->active()
+                ->filter($countFilterBrand)
+                ->selectRaw('brand_id, COUNT(*) as count')
                 ->groupBy('brand_id')
                 ->pluck('count', 'brand_id');
+            $brands = Brand::whereIn('id', $brandCounts->keys())->get()->map(fn($brand) => [
+                'id'    => $brand->id,
+                'title' => $brand->title,
+                'count' => $brandCounts[$brand->id] ?? 0,
+            ])->values();
 
-            // 4. Отримуємо товари (Item Query) - тут застосовуємо ПОВНИЙ фільтр
-            $items = Item::query()
-                ->where('public', true)
-                ->whereIn('category_id', $allCategoryIds)
-                ->filter($filter) // Тут фільтр з брендами працює як треба
-                ->with(['category', 'brand'])
-                ->paginate(Settings::get('items_per_page', 16));
-            $items->withPath(route('resolve.route', $category));
-            // 5. Список брендів (стабільний)
-            $allBrandIdsInCurrentCategory = Item::whereIn('category_id', $allCategoryIds)
-                ->distinct()
-                ->pluck('brand_id');
+            $filterForCat = request()->except(['categories', 'sort']);
+            $countFilterCat = new ItemFilter(new Request($filterForCat));
+            $catCounts = Item::query()->active()
+                ->filter($countFilterCat)
+                ->selectRaw('category_id, COUNT(*) as count')
+                ->groupBy('category_id')
+                ->pluck('count', 'category_id');
+            $categories = Category::whereIn('id', $catCounts->keys())->get()->map(fn($cat) => [
+                'id'    => $cat->id,
+                'title' => $cat->title,
+                'count' => $catCounts[$cat->id] ?? 0,
+            ])->values();
 
-            $brands = Brand::whereIn('id', $allBrandIdsInCurrentCategory)
-                ->get()
-                ->map(fn($brand) => [
-                    'id'    => $brand->id,
-                    'title' => $brand->title,
-                    'count' => $brandCounts[$brand->id] ?? 0,
-                ]);
+            $items = $query
+                ->paginate(Settings::get('items_per_page', 16))
+                ->withPath(route('resolve.route', $category)) ?? collect();
 
             return response()->json([
                 'items'     => ItemResource::collection($items),
@@ -68,6 +60,7 @@ class CommerceController extends Controller
                     'total' => $items->total(),
                 ],
                 'brands'  => $brands,
+                'categories' => $categories,
                 'message' => 'Success'
             ], 200);
         } catch (\Exception $e) {

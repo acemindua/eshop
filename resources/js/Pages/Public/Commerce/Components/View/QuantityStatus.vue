@@ -28,8 +28,8 @@ const status = computed(() => {
     return {
         icon: isInStock ? IconChecks : IconCancel,
         label: isInStock ? "inStoke" : "Out of stock",
-        textColor: isInStock ? "text-green-600" : "text-gray-400",
-        iconColor: isInStock ? "text-green-600" : "text-gray-400",
+        textColor: isInStock ? "text-brand" : "text-gray-400",
+        iconColor: isInStock ? "text-brand" : "text-gray-400",
     };
 });
 </script>
